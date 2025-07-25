@@ -136,14 +136,23 @@ def paypal_return(request):
                 messages.error(request, "Payment session expired. Please log in to continue.")
                 return redirect('sitevisitor:login')
 
-        # For NCP buttons - mark as processing immediately (no execution needed)
+        # For NCP buttons - mark as completed and auto-activate immediately
         if tx or st == 'Completed':
-            order.status = 'processing'
-            order.paypal_txn_id = tx or token or f"ncp-{timezone.now().strftime('%Y%m%d%H%M%S')}"
+            order.status = 'completed'  # Changed to completed immediately
+            order.paypal_txn_id = tx or token or "ncp-{}".format(timezone.now().strftime('%Y%m%d%H%M%S'))
+            # Reset order_id for proper numbering
+            if order.order_id.startswith('P'):
+                order.order_id = ''
             order.save()
             
-            logger.info(f"NCP payment processed: {tx or token}")
-            messages.success(request, "Payment processed! Your subscription will be activated shortly.")
+            # Auto-process subscription immediately for NCP payments
+            try:
+                process_subscription_after_payment(order.user, order)
+                logger.info("NCP payment completed and subscription activated: {}".format(tx or token))
+                messages.success(request, "Payment successful! Your PRO subscription is now active.")
+            except Exception as e:
+                logger.error("Failed to process subscription for NCP payment: {}".format(e))
+                messages.success(request, "Payment processed! Your subscription will be activated shortly.")
         
         # For REST API payments - execute first
         elif payment_id and payer_id:
@@ -153,12 +162,21 @@ def paypal_return(request):
             execution_result = paypal_api.execute_payment(payment_id, payer_id)
             
             if execution_result and execution_result.get('state') == 'approved':
-                order.status = 'processing'
+                order.status = 'completed'  # Changed to completed immediately
                 order.paypal_txn_id = payment_id
+                # Reset order_id for proper numbering
+                if order.order_id.startswith('P'):
+                    order.order_id = ''
                 order.save()
                 
-                logger.info(f"REST API payment executed: {payment_id}")
-                messages.success(request, "Payment processed! Your subscription will be activated shortly.")
+                # Auto-process subscription immediately for REST API payments
+                try:
+                    process_subscription_after_payment(order.user, order)
+                    logger.info("REST API payment completed and subscription activated: {}".format(payment_id))
+                    messages.success(request, "Payment successful! Your PRO subscription is now active.")
+                except Exception as e:
+                    logger.error("Failed to process subscription for REST API payment: {}".format(e))
+                    messages.success(request, "Payment processed! Your subscription will be activated shortly.")
             else:
                 logger.error(f"Payment execution failed: {execution_result}")
                 messages.error(request, "Payment execution failed. Please try again.")

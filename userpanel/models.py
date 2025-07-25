@@ -38,16 +38,16 @@ class Order(models.Model):
         if not self.order_id:
             if self.status == 'completed':
                 year = datetime.now().strftime('%Y')
-                count = Order.objects.filter(order_id__startswith=f'#{year}', status='completed').count() + 1
-                self.order_id = f'#{year}{count:06d}'
+                count = Order.objects.filter(order_id__startswith='#{}'.format(year), status='completed').count() + 1
+                self.order_id = '#{}{:06d}'.format(year, count)
             else:
                 # Use short UUID for pending orders
                 import uuid
-                self.order_id = f'P{str(uuid.uuid4())[:8].upper()}'
+                self.order_id = 'P{}'.format(str(uuid.uuid4())[:8].upper())
         super().save(*args, **kwargs)
     
     def __str__(self):
-        return f'{self.order_id} - {self.user.email}'
+        return '{} - {}'.format(self.order_id, self.user.email)
 
 
 class OrderItem(models.Model):
@@ -63,7 +63,7 @@ class OrderItem(models.Model):
         super().save(*args, **kwargs)
     
     def __str__(self):
-        return f'{self.product_name} ({self.quantity}) - {self.order.order_id}'
+        return '{} ({}) - {}'.format(self.product_name, self.quantity, self.order.order_id)
 
 
 class Address(models.Model):
@@ -84,7 +84,7 @@ class Address(models.Model):
         ordering = ['-is_default_shipping', '-is_default_billing', '-created_at']
 
     def __str__(self):
-        return f"{self.address_line_1}, {self.city}, {self.user.email}"
+        return "{}, {}, {}".format(self.address_line_1, self.city, self.user.email)
 
     def save(self, *args, **kwargs):
         # Ensure only one default shipping address per user
