@@ -61,12 +61,41 @@ class CustomUserAdmin(UserAdmin):
             from django.contrib import messages
             messages.error(request, f"Error deleting users: {str(e)}")
 
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'date_joined', 'free_trial_start', 'free_trial_end', 'on_free_trial')
+    list_filter = ('free_trial_start', 'free_trial_end')
+    search_fields = ('user__email', 'user__full_name')
+    readonly_fields = ('date_joined',)
+
+@admin.register(WhatsAppNumber)
+class WhatsAppNumberAdmin(admin.ModelAdmin):
+    list_display = ('number', 'profile', 'is_verified', 'is_primary', 'is_active', 'created_at')
+    list_filter = ('is_verified', 'is_primary', 'is_active')
+    search_fields = ('number', 'profile__user__email')
+
+@admin.register(FreeTrialPhone)
+class FreeTrialPhoneAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'user', 'used_at')
+    list_filter = ('used_at',)
+    search_fields = ('phone', 'user__email')
+    readonly_fields = ('used_at',)
+
+@admin.register(NewsletterSubscriber)
+class NewsletterSubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'subscribed_at')
+    list_filter = ('subscribed_at',)
+    search_fields = ('email',)
+    readonly_fields = ('subscribed_at',)
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'timestamp', 'is_read')
+    list_filter = ('is_read', 'timestamp')
+    search_fields = ('name', 'email', 'subject')
+    readonly_fields = ('timestamp',)
+
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Profile)
-admin.site.register(WhatsAppNumber)
 admin.site.register(EmailVerification)
 admin.site.register(PasswordReset)
 admin.site.register(OTPVerification)
-admin.site.register(FreeTrialPhone)
-admin.site.register(NewsletterSubscriber)
-admin.site.register(ContactMessage)

@@ -24,8 +24,8 @@ def paypal_webhook_handler(request):
         logger.info(f"PayPal Webhook received: {event_type}")
         logger.info(f"Webhook data: {json.dumps(webhook_data, indent=2)}")
         
-        # Handle payment events
-        if event_type in ['PAYMENT.SALE.COMPLETED', 'PAYMENT.CAPTURE.COMPLETED', 'CHECKOUT.ORDER.COMPLETED']:
+        # Handle payment events - include HELD payments as successful
+        if event_type in ['PAYMENT.SALE.COMPLETED', 'PAYMENT.CAPTURE.COMPLETED', 'CHECKOUT.ORDER.COMPLETED', 'PAYMENT.SALE.PENDING']:
             return handle_payment_success(webhook_data)
         elif event_type in ['PAYMENT.SALE.DENIED', 'PAYMENT.CAPTURE.DENIED', 'PAYMENT.CAPTURE.DECLINED', 'CHECKOUT.ORDER.DECLINED']:
             return handle_payment_failed(webhook_data)

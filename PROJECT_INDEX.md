@@ -1,15 +1,14 @@
 # WA Campaign Sender - Project Index
 
 ## Project Overview
-A Django-based WhatsApp campaign management system with subscription-based access, PayPal integration, and Google OAuth2 authentication.
+A Django-based WhatsApp campaign sender application with subscription management, PayPal integration, and Google OAuth2 authentication.
 
 ## Technology Stack
 - **Framework**: Django 5.2.2
-- **Database**: SQLite (development) / MySQL (production)
+- **Database**: SQLite (dev) / MySQL (production)
 - **Authentication**: Custom User Model + Google OAuth2
 - **Payment**: PayPal REST API
 - **Email**: SendGrid via django-anymail
-- **Frontend**: HTML/CSS/JavaScript
 - **Deployment**: PythonAnywhere
 
 ## Project Structure
@@ -17,254 +16,208 @@ A Django-based WhatsApp campaign management system with subscription-based acces
 ### Core Django Apps
 
 #### 1. `sitevisitor/` - Public Website & Authentication
-**Purpose**: Handles public-facing pages, user registration, authentication, and basic user management.
+**Purpose**: Handles public pages, user authentication, and visitor management
 
 **Key Models**:
 - `CustomUser` - Extended user model with email as username
-- `Profile` - User profile with free trial tracking
-- `WhatsAppNumber` - User's WhatsApp numbers with verification status
+- `Profile` - User profile with free trial management
+- `WhatsAppNumber` - User's WhatsApp numbers with verification
 - `EmailVerification` - Email verification tokens
-- `PasswordReset` - Password reset tokens
-- `OTPVerification` - OTP verification system
-- `FreeTrialPhone` - Tracks used free trial phone numbers
-- `NewsletterSubscriber` - Newsletter subscriptions
 - `ContactMessage` - Contact form submissions
+- `NewsletterSubscriber` - Newsletter subscriptions
 
 **Key Features**:
 - Custom user authentication system
-- Google OAuth2 integration
-- Email verification
-- Password reset functionality
+- Email verification workflow
 - Free trial management (14-day trial)
-- Contact form and newsletter
-- SEO optimization middleware
-- Blog system with best practices content
+- Contact forms and newsletter
+- SEO middleware and sitemaps
+- Blog system with static content
+- Error handling (400, 401, 403, 404, 429, 500, 503)
 
-**Templates**:
-- Public pages: home, about, pricing, contact, FAQs
-- Authentication: login, signup, password reset
-- Blog posts about WhatsApp marketing
-- Error pages (400, 401, 403, 404, 429, 500, 503)
+**Templates**: Public pages (home, about, pricing, login, signup, blogs, etc.)
 
-#### 2. `userpanel/` - User Dashboard & Subscription Management
-**Purpose**: Authenticated user interface for managing subscriptions, orders, and account settings.
+#### 2. `userpanel/` - User Dashboard & Orders
+**Purpose**: User dashboard, subscription management, and order processing
 
 **Key Models**:
-- `Order` - Purchase orders with PayPal integration
+- `Order` - User orders with PayPal integration
 - `OrderItem` - Individual items in orders
 - `Address` - User shipping/billing addresses
 
 **Key Features**:
-- User dashboard
-- Subscription management
-- PayPal payment processing
-- Order history and invoices
-- Address management
-- Email notifications for payments
-- Timezone handling
+- User dashboard with subscription status
+- PayPal payment integration
+- Order management and invoicing
 - PDF invoice generation
+- Email notifications for payments
+- Timezone handling for users
+- Real-time chat functionality
 
-**Templates**:
-- Dashboard, settings, pricing
-- Order management and invoices
-- Payment success/cancel pages
-- Email templates for notifications
+**Templates**: Dashboard, orders, payments, settings, invoices
 
-#### 3. `adminpanel/` - Administrative Interface
-**Purpose**: Admin tools for managing users, subscriptions, payments, and system settings.
+#### 3. `adminpanel/` - Admin Management
+**Purpose**: Administrative interface for managing users, subscriptions, and payments
 
 **Key Models**:
-- `Subscription` - User subscriptions with status tracking
+- `Subscription` - User subscriptions with plans
 - `Payment` - Payment records
-- `Invoice` - Invoice generation
+- `Invoice` - Invoice management
 - `SubscriptionPlan` - Available subscription plans
 
 **Key Features**:
-- User management
-- Subscription administration
-- Payment tracking
-- Invoice management
-- Contact message handling
+- Admin dashboard with analytics
+- User management (view, edit, grant subscriptions)
+- Subscription management (create, cancel, modify)
+- Payment tracking and invoicing
+- Contact message management
 - Newsletter subscriber management
-- System settings
 - Webhook handling for payments
 
 **Management Commands**:
 - `seed_subscription_plans.py` - Initialize subscription plans
-- `update_subscription_prices.py` - Update pricing
-- `send_pro_reminders.py` - Send upgrade reminders
+- `send_pro_reminders.py` - Send reminder emails
 - `send_trial_reminders.py` - Send trial expiration reminders
 
-### Configuration Files
+#### 4. `wa_campiagn_sender/` - Django Configuration
+**Purpose**: Main Django project configuration
 
-#### `settings.py` - Main Configuration
-**Key Settings**:
-- Database configuration (SQLite/MySQL)
-- Email backend (SendGrid)
-- PayPal API configuration
-- Google OAuth2 settings
-- Static/media file handling
-- Logging configuration
-- Session management
-- Security settings
+**Files**:
+- `settings.py` - Development settings
+- `setting_pythonanywhere.py` - Production settings for PythonAnywhere
+- `urls.py` - Main URL routing
+- `wsgi.py` / `asgi.py` - WSGI/ASGI configuration
 
-#### Environment Variables (`.env`)
-**Required Variables**:
-- `DJANGO_SECRET_KEY` - Django secret key
-- `SENDGRID_API_KEY` - Email service API key
-- `PAYPAL_CLIENT_ID_SANDBOX/LIVE` - PayPal credentials
-- `PAYPAL_CLIENT_SECRET_SANDBOX/LIVE` - PayPal secrets
-- `GOOGLE_OAUTH2_CLIENT_ID` - Google OAuth2 client ID
-- `GOOGLE_OAUTH2_CLIENT_SECRET` - Google OAuth2 secret
-- `DEFAULT_FROM_EMAIL` - Default sender email
+## Key Configuration Files
+
+### Environment & Dependencies
+- `.env` - Environment variables (API keys, database config)
+- `requirements.txt` - Python dependencies
+- `manage.py` - Django management script
 
 ### Static Assets
+- `static/` - CSS, JavaScript, images
+- `staticfiles/` - Collected static files for production
+- `media/` - User uploaded files (profile pictures)
 
-#### `static/` - Development Assets
-- `css/home.css` - Main stylesheet
-- `js/index.js` - Main JavaScript functionality
-- `js/timezone_detector.js` - Timezone detection
-- `image/` - Logo, favicons, blog images, tutorial screenshots
-- `robots.txt`, `security.txt`, `site.webmanifest`
+## Database Schema
 
-#### `staticfiles/` - Production Assets
-- Collected static files for production deployment
-- Django admin assets
-- User panel JavaScript for real-time features
+### User Management
+- **CustomUser**: Email-based authentication
+- **Profile**: User profiles with trial management
+- **WhatsAppNumber**: Multiple WhatsApp numbers per user
 
-### Templates Structure
+### Subscription System
+- **SubscriptionPlan**: Available plans (Basic, Pro, etc.)
+- **Subscription**: User subscriptions with status tracking
+- **Payment**: Payment records with PayPal integration
+- **Invoice**: Generated invoices
 
-#### Public Templates (`sitevisitor/templates/`)
-- **Main Pages**: home.html, about.html, pricing.html, contact.html
-- **Authentication**: login.html, signup.html, password reset flow
-- **Blog**: Multiple blog post templates about WhatsApp marketing
-- **Emails**: Verification and password reset email templates
-- **Errors**: Comprehensive error page templates
+### Order Management
+- **Order**: User orders with shipping info
+- **OrderItem**: Individual order items
+- **Address**: User addresses
 
-#### User Panel Templates (`userpanel/templates/`)
-- **Dashboard**: Main user interface
-- **Orders**: Order management and invoice templates
-- **Settings**: Account and address management
-- **Emails**: Payment notification templates
+### Communication
+- **ContactMessage**: Contact form submissions
+- **NewsletterSubscriber**: Newsletter subscriptions
+- **EmailVerification**: Email verification tokens
 
-#### Admin Panel Templates (`adminpanel/templates/`)
-- **Management**: User, subscription, and payment management
-- **Reports**: System analytics and reporting
-- **Settings**: System configuration interface
+## Key Features
 
-### Key Features & Functionality
-
-#### Authentication System
-- Custom user model with email as primary identifier
-- Google OAuth2 integration with account linking
+### Authentication & User Management
+- Custom user model with email as username
+- Google OAuth2 integration
 - Email verification system
 - Password reset functionality
-- Session management for PayPal redirects
+- Profile management with pictures
 
-#### Subscription Management
-- 14-day free trial system
+### Subscription System
+- 14-day free trial (one-time per phone number)
 - Multiple subscription plans
 - PayPal payment integration
-- Automatic subscription renewal
-- Trial expiration reminders
-- Subscription cancellation handling
+- Automatic subscription management
+- Invoice generation (PDF)
 
-#### Payment Processing
-- PayPal REST API integration
-- Sandbox and live environment support
-- Order tracking and invoice generation
-- Payment failure handling
-- Webhook processing for payment updates
+### WhatsApp Integration
+- Multiple WhatsApp number support
+- Number verification system
+- Campaign sending capabilities (via browser extension)
 
-#### User Experience
-- Responsive design
-- Timezone-aware functionality
-- Real-time chat features
-- SEO optimization
-- Comprehensive error handling
-- Email notifications
-
-#### Administrative Tools
-- User management interface
-- Subscription administration
+### Admin Features
+- Comprehensive admin dashboard
+- User and subscription management
 - Payment tracking
 - Contact message handling
 - Newsletter management
-- System analytics
 
-### Database Schema
+### SEO & Marketing
+- Sitemap generation
+- Blog system
+- Newsletter subscription
+- Contact forms
+- Security.txt implementation
 
-#### User Management
-- `CustomUser` - Core user data
-- `Profile` - Extended user information and trial tracking
-- `WhatsAppNumber` - User's WhatsApp numbers
+## Deployment Configuration
 
-#### Subscription System
-- `SubscriptionPlan` - Available plans
-- `Subscription` - User subscriptions
-- `Payment` - Payment records
-- `Invoice` - Invoice generation
-
-#### Order Management
-- `Order` - Purchase orders
-- `OrderItem` - Order line items
-- `Address` - User addresses
-
-#### Communication
-- `ContactMessage` - Contact form submissions
-- `NewsletterSubscriber` - Newsletter subscriptions
-- `EmailVerification` - Email verification tokens
-
-### Deployment Configuration
-
-#### Development
+### Development
 - SQLite database
 - Debug mode enabled
 - Local PayPal sandbox
-- Local static file serving
+- Development email backend
 
-#### Production (PythonAnywhere)
+### Production (PythonAnywhere)
 - MySQL database
-- Debug mode disabled
-- Live PayPal environment
-- Collected static files
-- Environment variable configuration
+- Debug disabled
+- Live PayPal integration
+- SendGrid email backend
+- Static file serving
+- Domain-specific settings
 
-### Security Features
+## Security Features
 - CSRF protection
 - Secure session handling
-- Environment variable configuration
-- SQL injection prevention
-- XSS protection
-- Secure password hashing
+- Email verification
+- Rate limiting (429 errors)
+- Secure cookie configuration
+- Environment variable protection
 
-### Monitoring & Logging
-- Django error logging to files
-- Payment transaction logging
-- User activity tracking
-- Email delivery monitoring
+## API Endpoints
+- `/api/verify-license/` - License verification for browser extension
+- Social auth endpoints via `social_django`
+- PayPal webhook endpoints
 
-### API Integrations
-- **PayPal REST API** - Payment processing
-- **SendGrid API** - Email delivery
-- **Google OAuth2 API** - Social authentication
+## Browser Extension Integration
+- License verification system
+- WhatsApp Web integration
+- Campaign sending functionality
+- User authentication sync
 
-### File Structure Summary
+## Email System
+- SendGrid integration for transactional emails
+- Email templates for various notifications
+- Newsletter functionality
+- Password reset emails
+- Payment confirmation emails
+
+## Logging & Monitoring
+- Django error logging
+- File-based log storage
+- Console logging for development
+- Request logging for debugging
+
+## File Structure Summary
 ```
 wa_campiagn_sender/
-├── adminpanel/          # Admin management interface
-├── sitevisitor/         # Public website & auth
-├── userpanel/           # User dashboard & subscriptions
-├── wa_campiagn_sender/  # Django project settings
-├── static/              # Development static files
-├── staticfiles/         # Production static files
-├── templates/           # Global templates
-├── media/               # User uploaded files
+├── adminpanel/          # Admin management
+├── sitevisitor/         # Public site & auth
+├── userpanel/           # User dashboard
+├── wa_campiagn_sender/  # Django config
+├── static/              # Static assets
+├── media/               # User uploads
 ├── logs/                # Application logs
-├── manage.py            # Django management script
-├── requirements.txt     # Python dependencies
-├── .env                 # Environment variables
-└── README.md           # Setup instructions
+├── templates/           # Global templates
+└── requirements.txt     # Dependencies
 ```
 
-This project implements a complete SaaS solution for WhatsApp campaign management with subscription billing, user management, and administrative tools.
+This project implements a complete SaaS solution for WhatsApp campaign management with subscription billing, user management, and browser extension integration.

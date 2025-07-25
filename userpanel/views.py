@@ -1139,7 +1139,7 @@ def settings_view(request):
             else:
                 messages.error(request, 'No primary WhatsApp number found to update.')
 
-    # Subscription details - check both active status and end_date
+    # Subscription details - check both active status and processing orders
     from django.utils import timezone
     from .timezone_utils import convert_to_user_timezone
     now = timezone.now()
@@ -1152,6 +1152,13 @@ def settings_view(request):
     # If no active subscription, check for any subscription (including admin granted)
     if not subscription:
         subscription = Subscription.objects.filter(user=request.user).order_by('-created_at').first()
+        
+    # Also check for processing orders (PayPal payment received but held)
+    has_processing_order = Order.objects.filter(
+        user=request.user,
+        status__in=['processing', 'completed'],
+        paypal_txn_id__isnull=False
+    ).exists()
 
     # WhatsApp Number Management - Default to 1 for free users, more for PRO
     max_whatsapp_numbers = 1  # Default for free users
@@ -1220,6 +1227,7 @@ def settings_view(request):
         'profile_form': profile_form,
         'whatsapp_number_form': whatsapp_number_form,
         'subscription': subscription,
+        'has_processing_order': has_processing_order,
         'max_whatsapp_numbers': max_whatsapp_numbers,
         'current_whatsapp_numbers_count': current_whatsapp_numbers_count,
         'remaining_whatsapp_numbers': max(max_whatsapp_numbers - current_whatsapp_numbers_count, 0),

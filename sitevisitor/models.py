@@ -113,16 +113,23 @@ class Profile(models.Model):
     @property
     def has_active_subscription(self):
         """
-        Returns True if the user has an active paid subscription.
-        This is a placeholder and should be replaced with actual subscription logic.
-        For now, it checks if there's any 'delivered' order.
+        Returns True if the user has an active paid subscription OR processing payment.
+        Processing means PayPal payment received but held - user should get access.
         """
         from django.utils import timezone
-        from adminpanel.models import Subscription # Import the Subscription model
+        from adminpanel.models import Subscription
+        from userpanel.models import Order
 
-        # Check for an active subscription with an end_date in the future or today
-        # Consider any subscription with status 'active' as valid. Adjust if partial cancellations exist.
-        return Subscription.objects.filter(user=self.user, status='active').exists()
+        # Check for active subscription
+        if Subscription.objects.filter(user=self.user, status='active').exists():
+            return True
+            
+        # Also check for processing orders (PayPal payment received but held)
+        return Order.objects.filter(
+            user=self.user, 
+            status__in=['processing', 'completed'],
+            paypal_txn_id__isnull=False
+        ).exists()
 
     @property
     def whatsapp_number(self):
