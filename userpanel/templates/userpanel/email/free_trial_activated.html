@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Free Trial is Active</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        .header {
+            background-color: #25D366; /* WhatsApp green */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 20px;
+            background: #ffffff;
+        }
+        .trial-info {
+            background-color: #DCF8C6; /* WhatsApp chat bubble color */
+            border-left: 4px solid #25D366;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #25D366; /* WhatsApp green */
+            color: #fff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        .highlight {
+            color: #25D366; /* WhatsApp green */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">WA Campaign Sender</div>
+            <div>Your {{ trial_days }}-day free trial is active</div>
+        </div>
+
+        <div class="content">
+            <p>Hi {{ user.full_name|default:user.email }},</p>
+            
+            <p>Great news! Your <span class="highlight">{{ trial_days }}-day free trial</span> has been activated by our admin team. Your trial begins today, {{ start_date|date:"F d, Y" }}, and will expire on {{ end_date|date:"F d, Y" }}.</p>
+            
+            <div class="trial-info">
+                <h3 style="margin-top: 0; color: #25D366;">🎉 Trial Details</h3>
+                <p><strong>Start Date:</strong> {{ start_date|date:"F d, Y" }}</p>
+                <p><strong>Duration:</strong> {{ trial_days }} days</p>
+                <p><strong>End Date:</strong> {{ end_date|date:"F d, Y" }}</p>
+                <p><strong>Days Remaining:</strong> {{ days_remaining }} days</p>
+                <p><strong>Access Level:</strong> Full premium features</p>
+            </div>
+            
+            <p><strong>What you can do during your trial:</strong></p>
+            <ul>
+                <li>✅ Send unlimited WhatsApp campaigns</li>
+                <li>✅ Import contacts from CSV/Excel files</li>
+                <li>✅ Use message personalization variables</li>
+                <li>✅ Send file attachments (images, videos, PDFs)</li>
+                <li>✅ Access all safety features and controls</li>
+            </ul>
+            
+            <p>
+                <a href="https://{{ domain }}/login/?next=/userpanel/" class="button">Access Your Dashboard</a>
+            </p>
+            
+            <p><strong>Need the browser extension?</strong><br>
+            Download and install our Chrome extension from your dashboard to start sending campaigns.</p>
+            
+            <p>If you have any questions or need assistance, simply reply to this email and our support team will help you get started.</p>
+            
+            <p>Make the most of your trial period! Remember, you have only {{ days_remaining }} days to explore all our premium features before your trial expires on {{ end_date|date:"F d, Y" }}.</p>
+            
+            <p>Best regards,<br>
+            <strong>WA Campaign Sender Team</strong></p>
+        </div>
+
+        <div class="footer">
+            &copy; {{ now|date:"Y" }} WA Campaign Sender. All rights reserved.<br>
+            <small>This trial was granted by admin on {{ start_date|date:"F d, Y" }} and will expire on {{ end_date|date:"F d, Y" }}. Contact support for any questions.</small>
+        </div>
+    </div>
+</body>
+</html>

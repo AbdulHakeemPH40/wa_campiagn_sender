@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Free Trial Ends Tomorrow!</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#FFC107;color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">Action Required: Your Free Trial is Ending Soon!</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px;text-align:left;line-height:1.6;">
+                            <p style="margin:0 0 15px;">Dear {{ user.full_name }},</p>
+                            <p style="margin:0 0 15px;">This is a friendly reminder that your 14-day free trial for WA Campaign Sender will expire tomorrow, on <strong>{{ free_trial_end|date:"F j, Y" }}</strong>.</p>
+                            <p style="margin:0 0 25px;">Don't let your access to premium features run out! Upgrade to a paid plan today to continue enjoying uninterrupted service and all our powerful tools.</p>
+                            <p style="margin:0 0 25px; text-align:center;">
+                                <a href="https://www.wacampaignsender.com/login/?next=/userpanel/pricing/" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Upgrade Your Plan Now</a>
+                            </p>
+                            <p style="margin:0 0 15px;">If you have any questions or need assistance, please contact our support team.</p>
+                            <p style="margin:0;">Best regards,<br>The WA Campaign Sender Team</p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {{ current_year }} WA Campaign Sender. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,1408 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}WhatsApp Campaign Best Practices - Avoid Bans & Scale Safely{% endblock %}
+{% block description %}Complete guide to WhatsApp marketing best practices. Learn how to avoid bans, scale campaigns safely, and maximize ROI with WA Campaign Sender.{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-7xl mx-auto px-6">
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full mb-6">
+                <i class="ri-shield-check-line text-3xl text-white"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">WhatsApp Campaign Best Practices</h1>
+            <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">Master the art of compliant WhatsApp marketing. Learn proven strategies to avoid bans, scale safely, and achieve maximum ROI with minimal costs.</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid md:grid-cols-4 gap-6 mb-16">
+            <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-green-600 mb-2">High</div>
+                <div class="text-sm text-gray-600">Account Safety</div>
+            </div>
+            <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-blue-600 mb-2">2,000</div>
+                <div class="text-sm text-gray-600">Max Daily Messages</div>
+            </div>
+            <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-purple-600 mb-2">$0.0002-0.0006</div>
+                <div class="text-sm text-gray-600">Est. Cost Per Message</div>
+            </div>
+            <div class="bg-white rounded-lg p-6 text-center shadow-lg">
+                <div class="text-3xl font-bold text-orange-600 mb-2">3 Min</div>
+                <div class="text-sm text-gray-600">Setup Time</div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs - Mobile Friendly -->
+        <div class="bg-white rounded-lg shadow-lg mb-8 overflow-hidden">
+            <div class="border-b border-gray-200 overflow-x-auto">
+                <nav class="flex flex-nowrap md:justify-start px-2 md:px-6" aria-label="Tabs">
+                    <button class="tab-button active whitespace-nowrap py-3 md:py-4 px-3 md:px-4 border-b-2 border-green-500 font-medium text-sm text-green-600 flex-shrink-0" data-tab="overview">
+                        Overview
+                    </button>
+                    <button class="tab-button whitespace-nowrap py-3 md:py-4 px-3 md:px-4 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 flex-shrink-0" data-tab="setup">
+                        Account Setup
+                    </button>
+                    <button class="tab-button whitespace-nowrap py-3 md:py-4 px-3 md:px-4 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 flex-shrink-0" data-tab="campaigns">
+                        Campaign Strategy
+                    </button>
+                    <button class="tab-button whitespace-nowrap py-3 md:py-4 px-3 md:px-4 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 flex-shrink-0" data-tab="compliance">
+                        Compliance
+                    </button>
+                    <button class="tab-button whitespace-nowrap py-3 md:py-4 px-3 md:px-4 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 flex-shrink-0" data-tab="scaling">
+                        Scaling
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="p-8">
+                <!-- Overview Tab -->
+                <div id="overview" class="tab-content">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Why Best Practices Matter</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8 mb-8">
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-red-800 mb-4 flex items-center">
+                                <i class="ri-error-warning-line mr-2"></i>
+                                Without Best Practices
+                            </h3>
+                            <ul class="space-y-2 text-red-700">
+                                <li class="flex items-start">
+                                    <i class="ri-close-circle-line mr-2 mt-1 text-red-500"></i>
+                                    Account bans within 24-48 hours
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="ri-close-circle-line mr-2 mt-1 text-red-500"></i>
+                                    Message delivery rates below 30%
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="ri-close-circle-line mr-2 mt-1 text-red-500"></i>
+                                    Wasted time and resources
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="ri-close-circle-line mr-2 mt-1 text-red-500"></i>
+                                    Damaged business reputation
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-green-800 mb-4 flex items-center">
+                                <i class="ri-checkbox-circle-line mr-2"></i>
+                                With Best Practices
+                            </h3>
+                            <ul class="space-y-2 text-green-700">
+                                <li class="flex items-start">
+                                    <i class="ri-check-line mr-2 mt-1 text-green-500"></i>
+                                    Improved account safety
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="ri-check-line mr-2 mt-1 text-green-500"></i>
+                                    Better message delivery rates
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="ri-check-line mr-2 mt-1 text-green-500"></i>
+                                    Sustainable long-term growth
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="ri-check-line mr-2 mt-1 text-green-500"></i>
+                                    Professional brand image
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-blue-800 mb-4">WhatsApp Messaging Options: Honest Comparison</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full">
+                                <thead>
+                                    <tr class="border-b border-blue-200">
+                                        <th class="text-left py-2 text-blue-800">Method</th>
+                                        <th class="text-left py-2 text-blue-800">Setup Cost</th>
+                                        <th class="text-left py-2 text-blue-800">Per Message</th>
+                                        <th class="text-left py-2 text-blue-800">Ban Risk</th>
+                                        <th class="text-left py-2 text-blue-800">Scalability</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-blue-700">
+                                    <tr class="border-b border-blue-100">
+                                        <td class="py-2">Manual Messaging</td>
+                                        <td class="py-2">$0</td>
+                                        <td class="py-2">Time cost</td>
+                                        <td class="py-2">Low</td>
+                                        <td class="py-2">Very Limited</td>
+                                    </tr>
+                                    <tr class="border-b border-blue-100">
+                                        <td class="py-2">WhatsApp Business API</td>
+                                        <td class="py-2">$500+</td>
+                                        <td class="py-2">$0.01-0.05</td>
+                                        <td class="py-2">Very Low*</td>
+                                        <td class="py-2">High</td>
+                                    </tr>
+                                    <tr class="border-b border-blue-100">
+                                        <td class="py-2">Other Bulk Tools</td>
+                                        <td class="py-2">$50-200</td>
+                                        <td class="py-2">$0.01</td>
+                                        <td class="py-2">Medium-High**</td>
+                                        <td class="py-2">Medium</td>
+                                    </tr>
+                                    <tr class="bg-blue-100">
+                                        <td class="py-2 font-semibold">WA Campaign Sender</td>
+                                        <td class="py-2 font-semibold">$15-99</td>
+                                        <td class="py-2 font-semibold">$0.0002-0.0006</td>
+                                        <td class="py-2 font-semibold">Medium***</td>
+                                        <td class="py-2 font-semibold">Medium-High</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4 text-sm text-blue-700">
+                            <p class="mb-2">* <strong>WhatsApp Business API</strong>: Official solution with lowest ban risk but requires business verification and higher setup costs.</p>
+                            <p class="mb-2">** <strong>Other Bulk Tools</strong>: Ban risk varies widely based on sending patterns and compliance with WhatsApp policies.</p>
+                            <p class="mb-2">*** <strong>WA Campaign Sender</strong>: All bulk messaging tools carry some ban risk. Following our best practices helps reduce (but cannot eliminate) this risk.</p>
+                            <p class="font-medium mt-3">Important: WhatsApp regularly updates its policies. All bulk messaging carries inherent risks regardless of the tool used. Always follow WhatsApp's Terms of Service.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Key Success Factors -->
+                    <div class="mt-8 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Key Success Factors</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-medium text-gray-800 mb-3">Account Preparation</h4>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Use 3+ month old WhatsApp accounts only
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Complete business profile with logo
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Gradual warm-up: 20→500→2000 messages/day
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Sync contacts via Google Contacts
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-800 mb-3">Campaign Execution</h4>
+                                <ul class="space-y-2 text-gray-700">
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Split campaigns across multiple numbers
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Use personalized messages with names
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Optimal timing: 10AM-12PM, 4-6PM
+                                    </li>
+                                    <li class="flex items-start">
+                                        <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                        Rest on Sundays to avoid pattern detection
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Setup Tab -->
+                <div id="setup" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Setup & Preparation</h2>
+                    
+                    <div class="space-y-8">
+                        <!-- Account Requirements -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Account Requirements</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Minimum Requirements</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-center">
+                                            <i class="ri-check-line text-green-500 mr-2"></i>
+                                            Account age: 3+ months
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-check-line text-green-500 mr-2"></i>
+                                            WhatsApp Business profile
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-check-line text-green-500 mr-2"></i>
+                                            Verified phone number
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-check-line text-green-500 mr-2"></i>
+                                            Complete profile setup
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Recommended Setup</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-center">
+                                            <i class="ri-star-line text-yellow-500 mr-2"></i>
+                                            Business logo and description
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-star-line text-yellow-500 mr-2"></i>
+                                            Catalog with products/services
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-star-line text-yellow-500 mr-2"></i>
+                                            Regular organic usage history
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-star-line text-yellow-500 mr-2"></i>
+                                            Multiple contact sources
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Warm-up Schedule -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Account Warm-up Schedule</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr class="border-b border-gray-200">
+                                            <th class="text-left py-3 text-gray-800">Timeframe</th>
+                                            <th class="text-left py-3 text-gray-800">Daily Limit</th>
+                                            <th class="text-left py-3 text-gray-800">Content Type</th>
+                                            <th class="text-left py-3 text-gray-800">Focus</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3 font-medium">Week 1</td>
+                                            <td class="py-3">20-30 messages</td>
+                                            <td class="py-3">Text only</td>
+                                            <td class="py-3">Personal conversations</td>
+                                        </tr>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3 font-medium">Week 2 (after Sunday rest)</td>
+                                            <td class="py-3">40-60 messages</td>
+                                            <td class="py-3">Text + Images</td>
+                                            <td class="py-3">Mix personal & business</td>
+                                        </tr>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3 font-medium">Week 3+</td>
+                                            <td class="py-3">100-200 messages</td>
+                                            <td class="py-3">All media types</td>
+                                            <td class="py-3">Business campaigns</td>
+                                        </tr>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3 font-medium">Month 1+ (Warmed)</td>
+                                            <td class="py-3">Up to 500/day max</td>
+                                            <td class="py-3">Full features</td>
+                                            <td class="py-3">Regular campaigns</td>
+                                        </tr>
+                                        <tr class="bg-yellow-50">
+                                            <td class="py-3 font-medium">Month 3+ (Fully Warmed)</td>
+                                            <td class="py-3">2,000/day (weekly once only)</td>
+                                            <td class="py-3">Promotional campaigns</td>
+                                            <td class="py-3">Weekly promo sending only</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Important Notes -->
+                            <div class="mt-4 space-y-3">
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <h4 class="font-medium text-blue-800 mb-2">📅 Sunday Rest Rule</h4>
+                                    <p class="text-blue-700 text-sm">Always take Sunday off during warm-up. Start Week 2 with 40-60 messages after Sunday rest.</p>
+                                </div>
+                                <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                                    <h4 class="font-medium text-orange-800 mb-2">⚠️ 2,000 Message Rule</h4>
+                                    <p class="text-orange-700 text-sm">After 3+ months: 2,000 messages allowed <strong>only once per week</strong> for promotional campaigns. Not daily!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Management -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Smart Contact Management</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Google Contacts Integration</h4>
+                                    <p class="text-gray-600 mb-4">Sync your contacts with Google for better deliverability and account trust.</p>
+                                    <a href="https://contacts.google.com" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                        <i class="ri-external-link-line mr-1"></i>
+                                        Access Google Contacts
+                                    </a>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Bulk Contact Tools</h4>
+                                    <p class="text-gray-600 mb-4">Use Google Sheets for managing large contact lists efficiently.</p>
+                                    <a href="https://sheets.google.com" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                        <i class="ri-external-link-line mr-1"></i>
+                                        Google Sheets Templates
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Campaign Splitting Strategy -->
+                            <div class="mt-6 bg-gray-50 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-800 mb-3">📊 Campaign Splitting Example</h4>
+                                <div class="bg-white rounded border p-4">
+                                    <p class="text-gray-700 mb-3"><strong>Scenario:</strong> You have 6,000 contacts and 1-Month Plan (3 licenses)</p>
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-2">Split Strategy:</h5>
+                                            <ul class="text-gray-600 space-y-1">
+                                                <li>• Day 1: 3 numbers × 1,000 = 3,000 contacts</li>
+                                                <li>• Day 2: 3 numbers × 1,000 = 3,000 contacts</li>
+                                                <li>• Total: 6,000 contacts in 2 days</li>
+                                                <li>• Each number stays under 1,000/day limit</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-2">Safety Benefits:</h5>
+                                            <ul class="text-gray-600 space-y-1">
+                                                <li>• No single number overloaded</li>
+                                                <li>• Risk distributed across accounts</li>
+                                                <li>• Faster campaign completion</li>
+                                                <li>• Better deliverability rates</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign Strategy Tab -->
+                <div id="campaigns" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Campaign Strategy & Execution</h2>
+                    
+                    <div class="space-y-8">
+                        <!-- Campaign Planning -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Smart Campaign Planning</h3>
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="ri-target-line text-2xl text-blue-600"></i>
+                                    </div>
+                                    <h4 class="font-medium text-gray-800 mb-2">Define Goals</h4>
+                                    <p class="text-sm text-gray-600">Set clear objectives and KPIs for each campaign</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="ri-group-line text-2xl text-green-600"></i>
+                                    </div>
+                                    <h4 class="font-medium text-gray-800 mb-2">Segment Audience</h4>
+                                    <p class="text-sm text-gray-600">Group contacts by interests, behavior, or demographics</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <i class="ri-message-line text-2xl text-purple-600"></i>
+                                    </div>
+                                    <h4 class="font-medium text-gray-800 mb-2">Craft Messages</h4>
+                                    <p class="text-sm text-gray-600">Create personalized, value-driven content</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Message Templates -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">High-Converting Message Templates</h3>
+                            <div class="space-y-4">
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h4 class="font-medium text-gray-800 mb-2">Product Launch Template</h4>
+                                    <div class="bg-white rounded border p-3 text-sm">
+                                        <p class="mb-2">Hi <code>{% verbatim %}{{Name}}{% endverbatim %}</code>! 👋</p>
+                                        <p class="mb-2">Exciting news! We just launched {% verbatim %}{{Product Name}}{% endverbatim %} - something I think you'll love based on your interest in {% verbatim %}{{Category}}{% endverbatim %}.</p>
+                                        <p class="mb-2">🎉 Special launch offer: {% verbatim %}{{Discount}}{% endverbatim %}% off for the first 48 hours!</p>
+                                        <p>Ready to check it out? {% verbatim %}{{Link}}{% endverbatim %}</p>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-4">
+                                    <h4 class="font-medium text-gray-800 mb-2">Event Invitation Template</h4>
+                                    <div class="bg-white rounded border p-3 text-sm">
+                                        <p class="mb-2">Hello <code>{% verbatim %}{{Name}}{% endverbatim %}</code>! 🌟</p>
+                                        <p class="mb-2">You're invited to our exclusive {% verbatim %}{{Event Name}}{% endverbatim %} on {% verbatim %}{{Date}}{% endverbatim %} at {% verbatim %}{{Time}}{% endverbatim %}.</p>
+                                        <p class="mb-2">What you'll get: {% verbatim %}{{Benefits}}{% endverbatim %}</p>
+                                        <p>RSVP here: {% verbatim %}{{Link}}{% endverbatim %} (Limited seats available!)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timing Strategy -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Optimal Timing Strategy</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Best Sending Times</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-center">
+                                            <i class="ri-time-line text-blue-500 mr-2"></i>
+                                            Monday-Friday: 10 AM - 12 PM
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-time-line text-blue-500 mr-2"></i>
+                                            Monday-Friday: 4 PM - 6 PM
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-time-line text-blue-500 mr-2"></i>
+                                            Saturday: 11 AM - 2 PM
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-close-line text-red-500 mr-2"></i>
+                                            Avoid: Sunday, late evenings
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Campaign Frequency</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-center">
+                                            <i class="ri-calendar-line text-green-500 mr-2"></i>
+                                            Promotional: 1-2 times per week
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-calendar-line text-green-500 mr-2"></i>
+                                            Educational: 2-3 times per week
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-calendar-line text-green-500 mr-2"></i>
+                                            Updates: As needed
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="ri-calendar-line text-green-500 mr-2"></i>
+                                            Rest day: Sunday recommended
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Compliance Tab -->
+                <div id="compliance" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">WhatsApp Compliance & Policy Updates</h2>
+                    
+                    <div class="space-y-8">
+                        <!-- Policy Updates -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-blue-800 mb-4 flex items-center">
+                                <i class="ri-information-line mr-2"></i>
+                                WhatsApp Policy Guidelines
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                                    <h4 class="font-medium text-blue-800 mb-2">WhatsApp Broadcast Feature Updates</h4>
+                                    <p class="text-blue-700 mb-3">WhatsApp has updated its broadcast functionality for business accounts. Understanding these changes is important for maintaining compliance with WhatsApp's terms of service.</p>
+                                    
+                                    <!-- Detailed Explanation -->
+                                    <div class="bg-blue-50 rounded p-4 mb-4">
+                                        <h5 class="font-medium text-blue-800 mb-2">Important Information:</h5>
+                                        <ul class="text-sm text-blue-700 space-y-2">
+                                            <li>• Do not use old-style broadcast groups or 256-member groups to send bulk messages as this may violate WhatsApp's terms of service</li>
+                                            <li>• Using broadcast lists for internal team communication is not recommended</li>
+                                            <li>• Ensure your WhatsApp application is updated to the latest version</li>
+                                            <li>• Using outdated broadcast features may affect your account status</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <!-- WhatsApp Messaging Guidelines -->
+                                    <div class="bg-white border border-blue-200 rounded p-4 mb-4">
+                                        <h5 class="font-medium text-blue-800 mb-2">WhatsApp Messaging Options:</h5>
+                                        <div class="grid md:grid-cols-2 gap-4">
+                                            <div>
+                                                <h6 class="font-medium text-gray-800 mb-2">Standard Account Features:</h6>
+                                                <ul class="text-sm text-gray-700 space-y-1">
+                                                    <li>• Limited to 256 contacts per broadcast</li>
+                                                    <li>• Media restrictions apply to broadcasts</li>
+                                                    <li>• Each broadcast must be created individually</li>
+                                                    <li>• No permanent broadcast groups</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h6 class="font-medium text-gray-800 mb-2">Business API Benefits:</h6>
+                                                <ul class="text-sm text-gray-700 space-y-1">
+                                                    <li>• Per-message pricing structure</li>
+                                                    <li>• Regional pricing varies by country</li>
+                                                    <li>• Pre-approved templates required</li>
+                                                    <li>• Higher volume messaging capabilities</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <a href="https://business.whatsapp.com/products/platform-pricing" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm">
+                                                <i class="ri-external-link-line mr-1"></i>
+                                                Official WhatsApp Business API Pricing
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Recommended Actions -->
+                                    <div class="bg-blue-100 rounded p-3 mb-3">
+                                        <p class="text-blue-800 font-medium mb-2">Recommended Actions:</p>
+                                        <ul class="text-sm text-blue-700 space-y-1">
+                                            <li>• Review and update your messaging practices</li>
+                                            <li>• Keep WhatsApp Business updated to the latest version</li>
+                                            <li>• Consider alternative methods for team communication</li>
+                                            <li>• Use text and links for message content</li>
+                                            <li>• Follow WhatsApp's official guidelines</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white rounded-lg p-4 border-l-4 border-orange-500">
+                                    <h4 class="font-medium text-orange-800 mb-2">WhatsApp Policy Enforcement</h4>
+                                    <p class="text-orange-700 mb-3">WhatsApp enforces its policies through automated systems and manual reviews to maintain platform integrity.</p>
+                                    
+                                    <div class="bg-orange-50 rounded p-3 mb-3">
+                                        <p class="text-orange-800 font-medium mb-2">Policy Enforcement Methods:</p>
+                                        <ul class="text-sm text-orange-700 space-y-1">
+                                            <li>• Automated pattern detection systems</li>
+                                            <li>• Regular account reviews</li>
+                                            <li>• Strict enforcement of terms of service</li>
+                                            <li>• Cross-platform monitoring</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-medium text-orange-800 mb-2">Activities to Avoid:</h5>
+                                            <ul class="text-sm text-orange-700 space-y-1">
+                                                <li>• Using outdated messaging features</li>
+                                                <li>• Using the same number on multiple devices simultaneously</li>
+                                                <li>• Excessive message forwarding</li>
+                                                <li>• Repetitive messaging patterns</li>
+                                                <li>• High-volume daily messaging</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-orange-800 mb-2">Detection Methods:</h5>
+                                            <ul class="text-sm text-orange-700 space-y-1">
+                                                <li>• Real-time pattern recognition</li>
+                                                <li>• Message content analysis</li>
+                                                <li>• Sending frequency monitoring</li>
+                                                <li>• Device fingerprinting</li>
+                                                <li>• Contact list analysis</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-3 p-3 bg-orange-100 rounded">
+                                        <p class="text-orange-800 text-sm font-medium">
+                                            <strong>Key Message:</strong> Your WhatsApp number is a valuable business communication asset. Follow best practices to maintain account health and optimize message delivery.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white rounded-lg p-4 border-l-4 border-blue-500">
+                                    <h4 class="font-medium text-blue-800 mb-2">Contact Management Best Practices</h4>
+                                    <p class="text-blue-700 mb-3">Synchronizing your contact list with Google Contacts offers several benefits:</p>
+                                    <ul class="text-sm text-blue-700 space-y-1">
+                                        <li>• Improves contact recognition within WhatsApp</li>
+                                        <li>• Enhances message delivery rates</li>
+                                        <li>• Provides better organization than manual contact imports</li>
+                                    </ul>
+                                    <div class="mt-3">
+                                        <a href="https://contacts.google.com" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 text-sm">
+                                            <i class="ri-external-link-line mr-1"></i>
+                                            Access Google Contacts
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp Pricing -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Official WhatsApp Business Pricing</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr class="border-b border-gray-200">
+                                            <th class="text-left py-3 text-gray-800">Region</th>
+                                            <th class="text-left py-3 text-gray-800">Marketing Messages</th>
+                                            <th class="text-left py-3 text-gray-800">Utility Messages</th>
+                                            <th class="text-left py-3 text-gray-800">Authentication</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3">North America</td>
+                                            <td class="py-3">$0.0255</td>
+                                            <td class="py-3">$0.0105</td>
+                                            <td class="py-3">$0.0055</td>
+                                        </tr>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3">Europe</td>
+                                            <td class="py-3">$0.0192</td>
+                                            <td class="py-3">$0.0088</td>
+                                            <td class="py-3">$0.0045</td>
+                                        </tr>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3">Asia Pacific</td>
+                                            <td class="py-3">$0.0165</td>
+                                            <td class="py-3">$0.0075</td>
+                                            <td class="py-3">$0.0040</td>
+                                        </tr>
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-3">Middle East & Africa</td>
+                                            <td class="py-3">$0.0140</td>
+                                            <td class="py-3">$0.0065</td>
+                                            <td class="py-3">$0.0035</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4">
+                                <a href="https://business.whatsapp.com/products/platform-pricing" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+                                    <i class="ri-external-link-line mr-1"></i>
+                                    View Official WhatsApp Pricing
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Best Practices Summary -->
+                        <div class="bg-blue-50 border border-blue-300 rounded-lg p-6 mb-6">
+                            <h3 class="text-xl font-semibold text-blue-800 mb-4 flex items-center">
+                                <i class="ri-shield-check-line mr-2"></i>
+                                WhatsApp Business Best Practices
+                            </h3>
+                            <div class="bg-white rounded-lg p-4 border border-blue-200">
+                                <p class="text-blue-700 mb-4">Your WhatsApp business number is a valuable communication asset. Following these best practices helps maintain account health and optimize message delivery.</p>
+                                
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <h4 class="font-medium text-blue-800 mb-2">Activities to Avoid:</h4>
+                                        <ul class="text-sm text-blue-700 space-y-1">
+                                            <li>• Excessive message volume (over 1,000 messages/day)</li>
+                                            <li>• Repetitive messaging patterns</li>
+                                            <li>• Identical messages to multiple contacts</li>
+                                            <li>• Using deprecated messaging features</li>
+                                            <li>• Using the same number on multiple devices simultaneously</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-medium text-blue-800 mb-2">Recommended Practices:</h4>
+                                        <ul class="text-sm text-blue-700 space-y-1">
+                                            <li>• Focus on quality over quantity in your contact list</li>
+                                            <li>• Schedule campaigns weekly rather than daily</li>
+                                            <li>• Distribute messaging across multiple numbers</li>
+                                            <li>• Personalize messages with recipient information</li>
+                                            <li>• Monitor message delivery rates regularly</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4 p-3 bg-blue-100 rounded border border-blue-200">
+                                    <p class="text-blue-800 text-sm text-center">
+                                        Use WhatsApp Business responsibly and in accordance with the platform's terms of service.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Ban Prevention -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Account Health Guidelines</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-medium text-green-800 mb-3 flex items-center">
+                                        <i class="ri-check-line mr-2"></i>
+                                        Recommended Practices
+                                    </h4>
+                                    <ul class="space-y-2 text-green-700">
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Use 3+ month old accounts
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Follow warm-up schedule
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Sync contacts via Google
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Update WhatsApp regularly
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Use one device per number
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-red-800 mb-3 flex items-center">
+                                        <i class="ri-close-line mr-2"></i>
+                                        Practices to Avoid
+                                    </h4>
+                                    <ul class="space-y-2 text-red-700">
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-red-500"></i>
+                                            Use new numbers for bulk messaging
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-red-500"></i>
+                                            Send from old broadcast lists
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-red-500"></i>
+                                            Forward messages during campaigns
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-red-500"></i>
+                                            Use same number on multiple devices
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-red-500"></i>
+                                            Send 1000+ messages on day 1
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Common Marketing Mistakes -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6 mt-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Common WhatsApp Marketing Mistakes</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Message Content Mistakes</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Sending generic, non-personalized messages
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Using excessive emojis or ALL CAPS text
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Including too many links or attachments
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Writing overly long messages that require scrolling
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">Campaign Strategy Mistakes</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Messaging at inappropriate times (late night/early morning)
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Sending too many messages in a short timeframe
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Not segmenting your audience properly
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-error-warning-line mr-2 mt-1 text-orange-500"></i>
+                                            Failing to track and analyze campaign results
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="mt-4 bg-orange-50 rounded-lg p-4 border border-orange-200">
+                                <h4 class="font-medium text-orange-800 mb-2">Compliance Mistakes to Avoid</h4>
+                                <ul class="text-sm text-orange-700 space-y-1">
+                                    <li>• Messaging users without explicit opt-in consent</li>
+                                    <li>• Not providing a clear opt-out option in your messages</li>
+                                    <li>• Sharing customer data without proper authorization</li>
+                                    <li>• Ignoring local data protection regulations (GDPR, CCPA, etc.)</li>
+                                    <li>• Not maintaining proper records of user consent</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scaling Tab -->
+                <div id="scaling" class="tab-content hidden">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Scaling Your WhatsApp Campaigns</h2>
+                    
+                    <div class="space-y-8">
+                        <!-- Multi-Number Strategy -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Multi-Number Campaign Strategy</h3>
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div class="text-center p-4 bg-blue-50 rounded-lg border">
+                                    <div class="text-2xl font-bold text-blue-600 mb-2">3 Numbers</div>
+                                    <div class="text-lg font-semibold text-blue-800 mb-1">$15/month</div>
+                                    <div class="text-sm text-blue-600 mb-2">1-Month Plan</div>
+                                    <div class="text-xs text-blue-500">4,500 contacts/day safely</div>
+                                    <div class="text-xs text-blue-500">1,500 per number</div>
+                                </div>
+                                <div class="text-center p-4 bg-green-50 rounded-lg border">
+                                    <div class="text-2xl font-bold text-green-600 mb-2">6 Numbers</div>
+                                    <div class="text-lg font-semibold text-green-800 mb-1">$60 total</div>
+                                    <div class="text-sm text-green-600 mb-2">6-Month Plan</div>
+                                    <div class="text-xs text-green-500">9,000 contacts/day safely</div>
+                                    <div class="text-xs text-green-500">$10/month cost</div>
+                                </div>
+                                <div class="text-center p-4 bg-purple-50 rounded-lg border">
+                                    <div class="text-2xl font-bold text-purple-600 mb-2">10 Numbers</div>
+                                    <div class="text-lg font-semibold text-purple-800 mb-1">$99 total</div>
+                                    <div class="text-sm text-purple-600 mb-2">Annual Plan</div>
+                                    <div class="text-xs text-purple-500">15,000 contacts/day safely</div>
+                                    <div class="text-xs text-purple-500">$8.25/month cost</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Safe Campaign Capacity Table -->
+                            <div class="mt-6">
+                                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                                    <h4 class="font-semibold text-yellow-800 mb-2">⚠️ Important: Safe Sending Limits</h4>
+                                    <p class="text-yellow-700 text-sm">Daily 1,500+ messages per number = High ban risk. Follow safe limits below for long-term account health.</p>
+                                </div>
+                                
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Plan</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Numbers</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Safe Strategy</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Monthly Reach</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Cost/Contact</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="px-4 py-3 text-sm font-medium text-gray-900">1 Month - $15</td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">3</td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">
+                                                    <div class="text-xs">
+                                                        <div>Weekly: 1,000×3×2 days = 6,000</div>
+                                                        <div class="text-green-600">Safe & sustainable</div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">
+                                                    <div class="font-medium">24,000-30,000</div>
+                                                    <div class="text-xs text-gray-500">4-5 weeks/month</div>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm font-medium text-blue-600">$0.0005-0.0006</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="px-4 py-3 text-sm font-medium text-gray-900">6 Months - $60</td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">6</td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">
+                                                    <div class="text-xs">
+                                                        <div>Weekly: 1,000×6×2 days = 12,000</div>
+                                                        <div class="text-green-600">Optimal balance</div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm text-gray-600">
+                                                    <div class="font-medium">48,000-60,000</div>
+                                                    <div class="text-xs text-gray-500">4-5 weeks/month</div>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm font-medium text-green-600">$0.0002-0.00025</td>
+                                            </tr>
+                                            <tr class="bg-purple-50">
+                                                <td class="px-4 py-3 text-sm font-medium text-purple-900">Annual - $99</td>
+                                                <td class="px-4 py-3 text-sm text-purple-700">10</td>
+                                                <td class="px-4 py-3 text-sm text-purple-700">
+                                                    <div class="text-xs">
+                                                        <div><strong>Conservative:</strong> 200×10×6 days = 12,000/week</div>
+                                                        <div><strong>Aggressive:</strong> 1,000×10×2 days = 20,000/week</div>
+                                                        <div class="text-purple-600">Best value</div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm text-purple-700">
+                                                    <div class="font-medium">48,000-100,000</div>
+                                                    <div class="text-xs text-purple-500">Conservative to aggressive</div>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm font-bold text-purple-600">$0.0001-0.0002</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="mt-4 grid md:grid-cols-2 gap-4">
+                                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                        <h5 class="font-medium text-green-800 mb-2">✅ Safe Approach</h5>
+                                        <ul class="text-sm text-green-700 space-y-1">
+                                            <li>• Weekly campaigns (not daily)</li>
+                                            <li>• 1,000 messages max per number per day</li>
+                                            <li>• 2 days per week maximum</li>
+                                            <li>• Rest periods between campaigns</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                        <h5 class="font-medium text-red-800 mb-2">Practices to Avoid</h5>
+                                        <ul class="text-sm text-red-700 space-y-1">
+                                            <li>• High-volume daily messaging</li>
+                                            <li>• Continuous messaging without breaks</li>
+                                            <li>• Repetitive message patterns</li>
+                                            <li>• Disregarding delivery rate metrics</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ROI Calculator -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Pricing & Cost Estimation</h3>
+                            
+                            <!-- Plan Comparison -->
+                            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                                <div class="text-center p-4 bg-blue-50 rounded-lg border">
+                                    <div class="text-lg font-bold text-blue-600 mb-1">1 Month Plan</div>
+                                    <div class="text-2xl font-bold text-blue-800 mb-1">$15</div>
+                                    <div class="text-sm text-blue-600">3 WhatsApp Numbers</div>
+                                    <div class="text-xs text-blue-500 mt-1">$5 per number/month</div>
+                                </div>
+                                <div class="text-center p-4 bg-green-50 rounded-lg border">
+                                    <div class="text-lg font-bold text-green-600 mb-1">6 Month Plan</div>
+                                    <div class="text-2xl font-bold text-green-800 mb-1">$60</div>
+                                    <div class="text-sm text-green-600">6 WhatsApp Numbers</div>
+                                    <div class="text-xs text-green-500 mt-1">$1.67 per number/month</div>
+                                </div>
+                                <div class="text-center p-4 bg-purple-50 rounded-lg border">
+                                    <div class="text-lg font-bold text-purple-600 mb-1">Annual Plan</div>
+                                    <div class="text-2xl font-bold text-purple-800 mb-1">$99</div>
+                                    <div class="text-sm text-purple-600">10 WhatsApp Numbers</div>
+                                    <div class="text-xs text-purple-500 mt-1">$0.83 per number/month</div>
+                                </div>
+                            </div>
+
+                            <!-- ROI Calculation Examples -->
+                            <div class="space-y-6">
+                                <!-- Conservative Safe Approach -->
+                                <div class="bg-green-50 rounded-lg p-6 border border-green-200">
+                                    <h4 class="font-semibold text-green-800 mb-4">🔒 Safe Approach: Annual Plan ($99)</h4>
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-3">Monthly Costs</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">WA Campaign Sender (Annual ÷ 12)</span>
+                                                    <span class="font-medium">$8.25</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Safe sending: 10 numbers × 200/day × 6 days/week</span>
+                                                    <span class="font-medium">12,000/week</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Monthly messages (4.5 weeks)</span>
+                                                    <span class="font-medium">54,000 msgs</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Cost per message</span>
+                                                    <span class="font-medium">$0.00015</span>
+                                                </div>
+                                                <div class="border-t pt-2 flex justify-between font-semibold">
+                                                    <span>Total Monthly Cost</span>
+                                                    <span class="text-blue-600">$8.25</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-3">Expected Returns</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Messages sent safely</span>
+                                                    <span class="font-medium">54,000</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Response rate (2%)</span>
+                                                    <span class="font-medium">1,080 responses</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Conversion rate (5%)</span>
+                                                    <span class="font-medium">54 sales</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Average order value</span>
+                                                    <span class="font-medium">$50</span>
+                                                </div>
+                                                <div class="border-t pt-2 flex justify-between font-semibold text-green-600">
+                                                    <span>Monthly Revenue</span>
+                                                    <span>$2,700</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 p-4 bg-green-100 rounded-lg text-center">
+                                        <div class="text-2xl font-bold text-green-600 mb-1">Estimated Return</div>
+                                        <div class="text-sm text-green-700">Results will vary based on your specific business and campaign quality</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Budget Plan Example -->
+                                <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
+                                    <h4 class="font-semibold text-blue-800 mb-4">💰 Budget Plan: 1 Month ($15)</h4>
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-3">Monthly Costs</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">WA Campaign Sender (1 Month)</span>
+                                                    <span class="font-medium">$15.00</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Safe: 3 numbers × 1,000 × 2 days/week</span>
+                                                    <span class="font-medium">6,000/week</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Monthly messages (4.5 weeks)</span>
+                                                    <span class="font-medium">27,000 msgs</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Cost per message</span>
+                                                    <span class="font-medium">$0.00056</span>
+                                                </div>
+                                                <div class="border-t pt-2 flex justify-between font-semibold">
+                                                    <span>Total Monthly Cost</span>
+                                                    <span class="text-blue-600">$15.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-3">Expected Returns</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Messages sent safely</span>
+                                                    <span class="font-medium">27,000</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Response rate (2%)</span>
+                                                    <span class="font-medium">540 responses</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Conversion rate (5%)</span>
+                                                    <span class="font-medium">27 sales</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Average order value</span>
+                                                    <span class="font-medium">$50</span>
+                                                </div>
+                                                <div class="border-t pt-2 flex justify-between font-semibold text-green-600">
+                                                    <span>Monthly Revenue</span>
+                                                    <span>$1,350</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 p-4 bg-blue-100 rounded-lg text-center">
+                                        <div class="text-2xl font-bold text-blue-600 mb-1">Estimated Return</div>
+                                        <div class="text-sm text-blue-700">Results depend on your business model and campaign effectiveness</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 6 Month Plan Example -->
+                                <div class="bg-green-50 rounded-lg p-6 border border-green-200">
+                                    <h4 class="font-semibold text-green-800 mb-4">🎯 Balanced Plan: 6 Months ($60 total)</h4>
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-3">Monthly Costs</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">WA Campaign Sender ($60 ÷ 6 months)</span>
+                                                    <span class="font-medium">$10.00</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Safe: 6 numbers × 1,000 × 2 days/week</span>
+                                                    <span class="font-medium">12,000/week</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Monthly messages (4.5 weeks)</span>
+                                                    <span class="font-medium">54,000 msgs</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Cost per message</span>
+                                                    <span class="font-medium">$0.00019</span>
+                                                </div>
+                                                <div class="border-t pt-2 flex justify-between font-semibold">
+                                                    <span>Total Monthly Cost</span>
+                                                    <span class="text-blue-600">$10.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-3">Expected Returns</h5>
+                                            <div class="space-y-2">
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Messages sent safely</span>
+                                                    <span class="font-medium">54,000</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Response rate (2%)</span>
+                                                    <span class="font-medium">1,080 responses</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Conversion rate (5%)</span>
+                                                    <span class="font-medium">54 sales</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-gray-600">Average order value</span>
+                                                    <span class="font-medium">$50</span>
+                                                </div>
+                                                <div class="border-t pt-2 flex justify-between font-semibold text-green-600">
+                                                    <span>Monthly Revenue</span>
+                                                    <span>$2,700</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-6 p-4 bg-green-100 rounded-lg text-center">
+                                        <div class="text-2xl font-bold text-green-600 mb-1">Estimated Return</div>
+                                        <div class="text-sm text-green-700">Actual results will vary based on your specific use case</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Smart Scaling Strategies -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-4">Smart Scaling Strategies</h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">🔄 Number Rotation Strategy</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-blue-500"></i>
+                                            Use different numbers weekly
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-blue-500"></i>
+                                            Let numbers rest between campaigns
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-blue-500"></i>
+                                            Monitor each number's health
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-blue-500"></i>
+                                            Keep backup numbers ready
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 mb-3">📊 Campaign Optimization</h4>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Personalize with contact names
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Use Google Contacts sync
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Split large lists into segments
+                                        </li>
+                                        <li class="flex items-start">
+                                            <i class="ri-arrow-right-line mr-2 mt-1 text-green-500"></i>
+                                            Track delivery rates manually
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+
+                            
+                            <!-- License Usage Strategy -->
+                            <div class="mt-6 bg-blue-50 rounded-lg p-4">
+                                <h4 class="font-medium text-blue-800 mb-3">🎯 License Usage Strategy</h4>
+                                <div class="grid md:grid-cols-3 gap-4 text-sm">
+                                    <div class="bg-white rounded border p-3">
+                                        <h5 class="font-medium text-blue-800 mb-2">1 Month Plan (3 licenses)</h5>
+                                        <p class="text-blue-700 mb-2">Use all 3 numbers monthly</p>
+                                        <ul class="text-blue-600 space-y-1">
+                                            <li>• Primary business number</li>
+                                            <li>• 2 secondary campaign numbers</li>
+                                            <li>• Split campaigns across all 3</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white rounded border p-3">
+                                        <h5 class="font-medium text-green-800 mb-2">6 Month Plan (6 licenses)</h5>
+                                        <p class="text-green-700 mb-2">Flexible usage options</p>
+                                        <ul class="text-green-600 space-y-1">
+                                            <li>• Use 3 numbers per month, OR</li>
+                                            <li>• Use all 6 numbers monthly</li>
+                                            <li>• Rotate numbers for safety</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white rounded border p-3">
+                                        <h5 class="font-medium text-purple-800 mb-2">Annual Plan (10 licenses)</h5>
+                                        <p class="text-purple-700 mb-2">Maximum flexibility</p>
+                                        <ul class="text-purple-600 space-y-1">
+                                            <li>• Use all 10 numbers monthly</li>
+                                            <li>• <$1 per number cost</li>
+                                            <li>• Best value for scaling</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- WhatsApp Marketing Statistics -->
+                            <div class="mt-6 bg-green-50 border border-green-200 rounded-lg p-6">
+                                <h4 class="font-medium text-gray-800 mb-4">📊 WhatsApp Marketing Statistics</h4>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h5 class="font-medium text-gray-800 mb-3">Engagement Metrics</h5>
+                                        <ul class="space-y-2 text-gray-700">
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                98% open rate for WhatsApp messages vs 20% for email
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                Average response time under 90 seconds
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                40-60% click-through rates on promotional messages
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                5-8x higher engagement than traditional marketing channels
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-gray-800 mb-3">Business Impact</h5>
+                                        <ul class="space-y-2 text-gray-700">
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                Recover up to 30% of abandoned shopping carts
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                Reduce return-to-origin (RTO) rates by up to 40%
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                Increase customer retention by 25-35%
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-500 mr-2 mt-1"></i>
+                                                Reduce product return rates by managing customer expectations
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dual Browser Setup -->
+                            <div class="mt-6 bg-yellow-50 rounded-lg p-4">
+                                <h4 class="font-medium text-yellow-800 mb-3">💻 Dual Browser Campaign Setup</h4>
+                                <div class="bg-white rounded border p-4">
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-2">Setup Process:</h5>
+                                            <ol class="text-gray-600 space-y-1 text-sm">
+                                                <li>1. Open Chrome → Login WhatsApp Account 1</li>
+                                                <li>2. Open Microsoft Edge → Login WhatsApp Account 2</li>
+                                                <li>3. Use Windows Split Screen (Win + ← / →)</li>
+                                                <li>4. Run campaigns simultaneously</li>
+                                            </ol>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-medium text-gray-800 mb-2">⚠️ Important Rules:</h5>
+                                            <ul class="text-gray-600 space-y-1 text-sm">
+                                                <li>• Only use warmed accounts (3+ months)</li>
+                                                <li>• Don't use external apps during campaigns</li>
+                                                <li>• Stop other activities for few hours</li>
+                                                <li>• Resume normal use after campaign ends</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-8 text-center text-white">
+            <h2 class="text-3xl font-bold mb-4">Ready to Start Your Compliant WhatsApp Campaigns?</h2>
+            <p class="text-xl mb-6 opacity-90">Join thousands of businesses using WA Campaign Sender safely and effectively</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="{% url 'sitevisitor:signup' %}" class="bg-white text-green-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                    Start Free Trial
+                </a>
+                <a href="{% url 'sitevisitor:how_to_use' %}" class="border border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-green-600 transition-colors">
+                    View Tutorial
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Enhanced tab functionality for mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            tabButtons.forEach(btn => {
+                btn.classList.remove('active', 'border-green-500', 'text-green-600');
+                btn.classList.add('border-transparent', 'text-gray-500');
+            });
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Add active class to clicked button and corresponding content
+            button.classList.add('active', 'border-green-500', 'text-green-600');
+            button.classList.remove('border-transparent', 'text-gray-500');
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Scroll the button into view on mobile (centered)
+            if (window.innerWidth < 768) {
+                button.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+            
+            // Scroll to top of content area on mobile
+            if (window.innerWidth < 768) {
+                const tabContent = document.getElementById(tabId);
+                tabContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+    
+    // Set initial active tab
+    const initialActiveTab = document.querySelector('.tab-button.active');
+    if (initialActiveTab) {
+        initialActiveTab.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+    }
+});
+</script>
+{% endblock %}

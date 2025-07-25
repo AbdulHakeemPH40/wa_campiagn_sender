@@ -1,0 +1,54 @@
+{% extends "admin_panel/base.html" %}
+{% block title %}Payments | WA Broadcast Sender{% endblock %}
+{% block admin_content %}
+<div class="bg-white rounded-lg shadow p-6">
+    <h1 class="text-2xl font-bold mb-4 text-primary">Payments</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Date</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Transaction ID</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for payment in payments %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">{{ payment.user }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ payment.amount }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ payment.status }}</td>
+                <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">{{ payment.payment_date|date:"Y-m-d H:i" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">{{ payment.transaction_id }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" class="text-center py-4">No payments found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        </div>
+<div class="mt-4">
+    <nav class="inline-flex items-center">
+        {% if payments.has_previous %}
+            <a href="?page={{ payments.previous_page_number }}" class="px-3 py-1 border rounded-l hover:bg-gray-200">&laquo;</a>
+        {% else %}
+            <span class="px-3 py-1 border rounded-l text-gray-400">&laquo;</span>
+        {% endif %}
+        {% for num in payments.paginator.page_range %}
+            {% if num == payments.number %}
+                <span class="px-3 py-1 border-t border-b bg-gray-200">{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}" class="px-3 py-1 border-t border-b hover:bg-gray-100">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if payments.has_next %}
+            <a href="?page={{ payments.next_page_number }}" class="px-3 py-1 border rounded-r hover:bg-gray-200">&raquo;</a>
+        {% else %}
+            <span class="px-3 py-1 border rounded-r text-gray-400">&raquo;</span>
+        {% endif %}
+    </nav>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}Download WA Campaign Sender Extension{% endblock %}
+{% block description %}Download WA Campaign Sender extension officially from Chrome Web Store or Microsoft Edge Add-ons. Now available for all major browsers.{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-12">
+    <div class="max-w-4xl mx-auto px-6">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender" class="h-16 mx-auto mb-6">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Download WA Campaign Sender</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Get our official WhatsApp marketing extension from Chrome Web Store and Microsoft Edge Add-ons.</p>
+        </div>
+
+        <!-- Official Store Downloads -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <!-- Chrome Web Store -->
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-xl p-6 border border-blue-200">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="ri-chrome-fill text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Chrome Web Store</h3>
+                    <p class="text-gray-600 mb-6">Official extension for Google Chrome</p>
+                    <a href="https://chromewebstore.google.com/detail/fajjbmbikblnjclnjgemebpgmmhhhdpb" 
+                       target="_blank"
+                       class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <i class="ri-chrome-fill text-xl mr-2"></i>
+                        Install from Chrome Store
+                    </a>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <div class="flex items-center justify-center space-x-4">
+                            <span class="flex items-center">
+                                <i class="ri-shield-check-line mr-1 text-green-600"></i>
+                                Official
+                            </span>
+                            <span class="flex items-center">
+                                <i class="ri-download-line mr-1"></i>
+                                One-click install
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Microsoft Edge Add-ons -->
+            <div class="bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-xl p-6 border border-green-200">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="ri-edge-new-fill text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Microsoft Edge Add-ons</h3>
+                    <p class="text-gray-600 mb-6">Official extension for Microsoft Edge</p>
+                    <a href="https://microsoftedge.microsoft.com/addons/detail/wa-campaign-sender/ibhnekgaefegdophimejbgdbmceofdff" 
+                       target="_blank"
+                       class="inline-flex items-center px-6 py-3 bg-green-600 text-white font-bold rounded-lg hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <i class="ri-edge-new-fill text-xl mr-2"></i>
+                        Install from Edge Store
+                    </a>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <div class="flex items-center justify-center space-x-4">
+                            <span class="flex items-center">
+                                <i class="ri-shield-check-line mr-1 text-green-600"></i>
+                                Official
+                            </span>
+                            <span class="flex items-center">
+                                <i class="ri-download-line mr-1"></i>
+                                One-click install
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Requirements -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6 flex items-center">
+                <i class="ri-settings-3-line text-2xl text-gray-600 mr-3"></i>
+                System Requirements - IMPORTANT
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Supported Browsers</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center">
+                            <i class="ri-chrome-fill text-blue-600 mr-2"></i>
+                            <span>Google Chrome 88+</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-edge-new-fill text-blue-500 mr-2"></i>
+                            <span>Microsoft Edge 88+</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">System Requirements</h3>
+                    <ul class="space-y-2 text-gray-700">
+                        <li class="flex items-center">
+                            <i class="ri-computer-line text-gray-600 mr-2"></i>
+                            <span>Windows 10/11</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-ram-line text-gray-600 mr-2"></i>
+                            <span>Minimum 4GB RAM</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-hard-drive-line text-gray-600 mr-2"></i>
+                            <span>SSD storage required</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-wifi-line text-gray-600 mr-2"></i>
+                            <span>Stable internet connection</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="ri-smartphone-line text-gray-600 mr-2"></i>
+                            <span>WhatsApp Web access</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex items-start">
+                    <i class="ri-error-warning-line text-red-600 text-xl mr-3 mt-0.5"></i>
+                    <div>
+                        <h4 class="text-sm font-semibold text-red-800 mb-2">Important Notice</h4>
+                        <p class="text-sm text-red-700 mb-2">This extension requires WhatsApp Web to be open in your browser. Make sure you have a stable internet connection and your phone is connected to WhatsApp.</p>
+                        <p class="text-sm text-red-700"><strong>SSD Recommended:</strong> Using HDD storage will cause poor performance and heavy campaign failure chances.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "errors/base.html" %}
+{% load static %}
+
+{% block title %}Email Service Error | WA Campaign Sender{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col items-center justify-center px-4 py-16">
+  <div class="w-full max-w-4xl flex flex-col items-center">
+
+    <!-- Logo -->
+    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender" class="h-16 mb-8">
+
+    <!-- Error headline -->
+    <h1 class="text-9xl font-bold text-primary mb-6">📧</h1>
+
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ error_title }}</h2>
+      <p class="text-xl text-gray-600 mb-2">{{ error_message }}</p>
+      <p class="text-gray-500">{{ error_description }}</p>
+    </div>
+
+    <!-- Illustration -->
+    <div class="mb-12 float-animation relative w-64 h-64">
+      <div class="absolute inset-0 bg-primary/10 rounded-full"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-40 h-40 bg-primary/20 rounded-full flex items-center justify-center">
+          <div class="w-28 h-28 bg-primary rounded-full flex items-center justify-center">
+            <i class="ri-mail-send-line text-white ri-3x"></i>
+          </div>
+        </div>
+      </div>
+      <div class="absolute -top-4 -right-4 w-12 h-12 bg-primary/30 rounded-full"></div>
+      <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-primary/20 rounded-full"></div>
+    </div>
+
+    <!-- Action buttons based on error type -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+      {% if error_type == 'quota_exceeded' %}
+        <a href="/contact/" 
+           class="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-button shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+          <i class="ri-customer-service-2-line"></i> Contact Support
+        </a>
+        <a href="/" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-8 py-3 rounded-button transition-all">
+          Go to Homepage
+        </a>
+      {% elif error_type == 'rate_limit' %}
+        <button id="retryLater" 
+                class="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-button shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+          <i class="ri-time-line"></i> Try Again Later
+        </button>
+        <a href="/" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-8 py-3 rounded-button transition-all">
+          Go to Homepage
+        </a>
+      {% else %}
+        <button id="retryNow" 
+                class="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-button shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+          <i class="ri-refresh-line"></i> Try Again
+        </button>
+        <a href="/contact/" 
+           class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-8 py-3 rounded-button transition-all flex items-center gap-2">
+          <i class="ri-customer-service-2-line"></i> Contact Support
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Additional info for quota exceeded -->
+    {% if error_type == 'quota_exceeded' %}
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8 max-w-md">
+      <div class="flex items-center gap-2 mb-2">
+        <i class="ri-information-line text-yellow-600"></i>
+        <span class="font-medium text-yellow-800">Daily Limit Reached</span>
+      </div>
+      <p class="text-yellow-700 text-sm">
+        Our email service has reached its daily sending limit. This resets at midnight UTC.
+      </p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Contact support now redirects to actual contact page
+
+  // Retry functionality
+  document.getElementById('retryNow')?.addEventListener('click', () => {
+    window.history.back();
+  });
+
+  document.getElementById('retryLater')?.addEventListener('click', () => {
+    alert('Please wait 5-10 minutes before trying again to avoid rate limiting.');
+  });
+</script>
+{% endblock %}

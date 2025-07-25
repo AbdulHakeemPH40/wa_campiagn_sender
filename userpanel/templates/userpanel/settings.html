@@ -1,0 +1,297 @@
+{% extends 'userpanel/base.html' %}
+
+{% block title %}Settings - WA Campaign Sender{% endblock %}
+
+{% block page_title %}Account Settings{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Profile Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 col-span-3">
+        <h3 class="text-xl font-semibold mb-4">Profile Settings</h3>
+
+        <form method="post" action="{% url 'userpanel:settings' %}" class="space-y-6" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if profile_form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                {{ profile_form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="flex items-center mb-6">
+                <div class="mr-4">
+                    {% if user_profile_picture_url %}
+                    <img src="{{ user_profile_picture_url }}" alt="Profile Picture"
+                        class="h-20 w-20 rounded-full object-cover">
+                    {% else %}
+                    <div
+                        class="h-20 w-20 rounded-full bg-primary text-white flex items-center justify-center text-3xl font-semibold">
+                        {{ request.user.full_name|slice:":1"|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="flex-grow">
+                    <label for="{{ profile_form.profile_picture.id_for_label }}"
+                        class="block text-sm font-medium text-gray-700 mb-1">Change Profile Picture</label>
+                    {{ profile_form.profile_picture }}
+                    {% if profile_form.profile_picture.help_text %}
+                    <p class="text-xs text-gray-500 mt-1">{{ profile_form.profile_picture.help_text }}</p>
+                    {% endif %}
+                    {% if profile_form.profile_picture.errors %}
+                    <p class="text-xs text-red-600 mt-1">{{ profile_form.profile_picture.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div>
+                <label for="{{ profile_form.full_name.id_for_label }}"
+                    class="block text-sm font-medium text-gray-700">Full Name</label>
+                {{ profile_form.full_name }}
+                {% if profile_form.full_name.help_text %}
+                <p class="text-xs text-gray-500 mt-1">{{ profile_form.full_name.help_text }}</p>
+                {% endif %}
+                {% if profile_form.full_name.errors %}
+                <p class="text-xs text-red-600 mt-1">{{ profile_form.full_name.errors|join:", " }}</p>
+                {% endif %}
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" name="email" value="{{ request.user.email }}" readonly
+                    class="mt-1 w-full pl-3 pr-3 py-2 border border-gray-200 bg-gray-50 rounded-button text-gray-500 focus:outline-none focus:ring-0 focus:border-gray-200">
+                <p class="text-xs text-gray-500 mt-1">Email cannot be changed.</p>
+            </div>
+
+
+
+            <!-- Password Security Section -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="flex items-center justify-center h-10 w-10 rounded-full bg-primary bg-opacity-10 mr-3">
+                            <i class="ri-lock-password-line text-primary text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-medium text-gray-900">Password Security</h4>
+                            <p class="text-sm text-gray-600">Keep your account secure</p>
+                        </div>
+                    </div>
+                    <a href="{% url 'userpanel:change_password' %}" 
+                       class="inline-flex items-center bg-primary hover:bg-secondary text-white px-4 py-2 
+                              rounded-lg font-medium text-sm transition-all duration-200 
+                              focus:ring-2 focus:ring-primary focus:ring-offset-2 transform hover:scale-[1.02] 
+                              active:scale-[0.98] shadow-sm hover:shadow-md">
+                        <i class="ri-key-line mr-2"></i>
+                        Change Password
+                    </a>
+                </div>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p class="text-xs text-blue-800 flex items-center">
+                        <i class="ri-shield-check-line mr-2 text-blue-600"></i>
+                        Your password is encrypted and stored securely
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-6">
+                <button type="submit" name="update_profile"
+                    class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-button">
+                    Save Profile Changes
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- Subscription Details Section -->
+    <div class="bg-white rounded-lg shadow-sm p-6 col-span-3">
+        <h3 class="text-xl font-semibold mb-4">Subscription</h3>
+
+        {% if subscription %}
+        <p class="mb-2"><span class="font-medium">Plan:</span> {{ subscription.plan.name|default:"Pro Plan" }}</p>
+        <p class="mb-2"><span class="font-medium">Start Date:</span> {{ subscription.created_at|date:"Y-m-d H:i" }}</p>
+        <p class="mb-2"><span class="font-medium">End Date:</span> {{ subscription.end_date|date:"Y-m-d H:i" }}</p>
+
+        {% if subscription.status == 'active' %}
+        <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded mb-4">
+            <div class="flex items-center">
+                <i class="ri-check-circle-line text-green-600 mr-2"></i>
+                <span class="font-medium">Active Subscription</span>
+            </div>
+            <p class="mt-2">Your subscription is active and will expire on {{ subscription.end_date|date:"Y-m-d" }}.</p>
+        </div>
+        {% elif subscription.status == 'cancelled' %}
+        <div class="bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded mb-4">
+            <div class="flex items-center">
+                <i class="ri-close-circle-line text-red-600 mr-2"></i>
+                <span class="font-medium">Subscription Cancelled</span>
+            </div>
+            <p class="mt-2">Your subscription has been cancelled by an administrator.</p>
+            <p class="mt-1">Reason: {{ subscription.cancel_reason|default:"No reason provided" }}</p>
+            <p class="mt-1">Cancelled on: {{ subscription.cancelled_at|date:"Y-m-d" }}</p>
+        </div>
+        <a href="{% url 'userpanel:pricing' %}"
+            class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-button">Purchase New Plan</a>
+        {% elif subscription.end_date < now %} <div
+            class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded mb-4">
+            <div class="flex items-center">
+                <i class="ri-time-line text-yellow-600 mr-2"></i>
+                <span class="font-medium">Subscription Expired</span>
+            </div>
+            <p class="mt-2">Your subscription expired on {{ subscription.end_date|date:"Y-m-d" }}.</p>
+    </div>
+    <a href="{% url 'userpanel:pricing' %}"
+        class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-button">Renew Plan</a>
+    {% endif %}
+    {% else %}
+    <div class="bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded mb-4">
+        <div class="flex items-center">
+            <i class="ri-information-line text-blue-600 mr-2"></i>
+            <span class="font-medium">No Subscription</span>
+        </div>
+        <p class="mt-2">You don't have any subscription history.</p>
+    </div>
+    <a href="{% url 'userpanel:pricing' %}"
+        class="bg-primary hover:bg-secondary text-white px-6 py-2 rounded-button">Choose a Plan</a>
+    {% endif %}
+</div>
+
+<!-- WhatsApp Account Management Section -->
+<div class="bg-white rounded-lg shadow-sm p-6 col-span-3 mt-6">
+    <h3 class="text-xl font-semibold mb-4">WhatsApp Account Management</h3>
+    <p class="mb-2"><span class="font-medium">WhatsApp Accounts Allowed (Total):</span> {{ max_whatsapp_numbers }}</p>
+    <p class="mb-2"><span class="font-medium">WhatsApp Accounts In Use:</span> {{ current_whatsapp_numbers_count }}</p>
+    <p class="mb-4"><span class="font-medium">Remaining You Can Add:</span> {{ remaining_whatsapp_numbers }}</p>
+
+    <div class="mt-4">
+        <h4 class="text-lg font-semibold mb-2">Primary WhatsApp Number:</h4>
+        {% if primary_whatsapp_number %}
+        <form method="post" action="{% url 'userpanel:settings' %}" class="space-y-4 mb-6">
+            {% csrf_token %}
+            <div>
+                <label for="primary_whatsapp_number_input" class="block text-sm font-medium text-gray-700">Default
+                    Number</label>
+                <div class="flex items-center">
+                    <input type="text" id="primary_whatsapp_number_input" name="primary_whatsapp_number"
+                        value="{{ primary_whatsapp_number.number }}"
+                        class="mt-1 w-full pl-3 pr-3 py-2 border border-gray-200 rounded-button text-gray-900
+                                        {% if not can_edit_primary_whatsapp %} bg-gray-100 cursor-not-allowed {% endif %}" {% if not can_edit_primary_whatsapp %}
+                        readonly {% endif %}>
+                    {% if can_edit_primary_whatsapp %}
+                    <i class="ri-pencil-line text-green-500 ml-2 cursor-pointer" title="Edit Primary Number"></i>
+                    {% endif %}
+                </div>
+                {% if not can_edit_primary_whatsapp %}
+                <p class="text-xs text-gray-500 mt-1">Your primary WhatsApp number cannot be edited because your free
+                    trial has started or you do not have an active subscription.</p>
+                {% else %}
+                <button type="submit" name="update_primary_whatsapp"
+                    class="px-4 py-2 mt-2 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">Update
+                    Primary Number</button>
+                {% endif %}
+            </div>
+        </form>
+        {% else %}
+        <p class="mb-4 text-gray-600">No primary WhatsApp number set. Please add one below.</p>
+        {% endif %}
+
+        <h4 class="text-lg font-semibold mb-2">Additional WhatsApp Numbers:</h4>
+        <ul class="list-disc list-inside mb-4">
+            {% for whatsapp_number_obj in user_whatsapp_numbers %}
+            <li>{{ whatsapp_number_obj.number }} <a
+                    href="{% url 'userpanel:remove_whatsapp_number' whatsapp_number_obj.id %}"
+                    class="text-red-500 hover:text-red-700 text-sm ml-2">Remove</a></li>
+            {% empty %}
+            <li>No additional WhatsApp numbers added yet.</li>
+            {% endfor %}
+        </ul>
+
+        <h4 class="text-lg font-semibold mb-2">Add New WhatsApp Number:</h4>
+        <form method="post" action="{% url 'userpanel:add_whatsapp_number' %}" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="id_whatsapp_number" class="block text-sm font-medium text-gray-700">WhatsApp Number</label>
+                {{ whatsapp_number_form.whatsapp_number }}
+                {% if whatsapp_number_form.whatsapp_number.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ whatsapp_number_form.whatsapp_number.errors.as_text }}</p>
+                {% endif %}
+            </div>
+            <button type="submit"
+                class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">Add
+                Number</button>
+        </form>
+    </div>
+</div>
+
+<!-- Free Trial Details Section -->
+<div class="bg-white rounded-lg shadow-sm p-6 col-span-3 mt-6">
+    <h3 class="text-xl font-semibold mb-4">Free Trial Status</h3>
+
+    {% if user.profile.on_free_trial and user.profile.days_until_trial_end > 0 %}
+    <div class="bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded mb-4">
+        <div class="flex items-center">
+            <i class="ri-check-circle-line text-green-600 mr-2"></i>
+            <span class="font-medium">Free Trial Activated</span>
+        </div>
+        <p class="mt-2">Your free trial is currently active and will expire on:</p>
+        <p class="font-semibold text-lg">{{ user.profile.free_trial_end|date:"F d, Y" }}</p>
+        <p class="text-sm mt-1">Days remaining: {{ user.profile.days_until_trial_end }} days</p>
+    </div>
+    {% else %}
+    {% if user.profile.free_trial_used or user.profile.on_free_trial and user.profile.days_until_trial_end == 0 %}
+    <div class="bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded mb-4">
+        <div class="flex items-center">
+            <i class="ri-close-circle-line text-red-600 mr-2"></i>
+            <span class="font-medium">
+                {% if user.profile.on_free_trial and user.profile.days_until_trial_end == 0 %}
+                Free Trial Cancelled by Admin
+                {% elif user.profile.free_trial_end and user.profile.free_trial_end < now.date %} Free Trial Expired {%
+                    else %} Free Trial Ended {% endif %} </span>
+        </div>
+        <p class="mt-2">
+            {% if user.profile.on_free_trial and user.profile.days_until_trial_end == 0 %}
+            Your free trial was <span class="text-red-600 font-medium">cancelled by an administrator</span>.
+            {% elif user.profile.free_trial_end and user.profile.free_trial_end < now.date %} Your free trial expired on
+                <span class="text-red-600 font-medium">{{ user.profile.free_trial_end|date:"F d, Y" }}</span> ({{
+                user_timezone }}).
+                {% else %}
+                Your free trial has ended.
+                {% endif %}
+        </p>
+        <p class="mt-2">Please purchase a subscription to continue using premium features.</p>
+        <a href="{% url 'userpanel:pricing' %}"
+            class="mt-2 inline-block bg-primary hover:bg-secondary text-white px-4 py-2 rounded-button">View Plans</a>
+    </div>
+    {% else %}
+    <div class="bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded mb-4">
+        <div class="flex items-center">
+            <i class="ri-gift-line text-blue-600 mr-2"></i>
+            <span class="font-medium">Free Trial Available</span>
+        </div>
+        <p class="mt-2">You haven't started your free trial yet. Activate it to enjoy premium features!</p>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+            const input = this.parentElement.querySelector('input');
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.innerHTML = '<i class="ri-eye-off-line text-gray-400"></i>';
+            } else {
+                input.type = 'password';
+                this.innerHTML = '<i class="ri-eye-line text-gray-400"></i>';
+            }
+        });
+    });
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "admin_panel/base.html" %}
+{% block title %}Users | WA Broadcast Sender{% endblock %}
+{% block admin_content %}
+<div class="bg-white rounded-lg shadow p-6">
+    <h1 class="text-2xl font-bold mb-4 text-primary">Users</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Full Name</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Date Joined</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Verified</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subscription</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for user in users %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <a href="{% url 'admin_panel:user_detail' pk=user.id %}" class="text-blue-600 hover:text-blue-900">
+                        {{ user.email }}
+                    </a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">{{ user.full_name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap hidden md:table-cell">{{ user.date_joined|date:"Y-m-d" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{% if user.is_active %}<span class="text-green-600 font-semibold">Yes</span>{% else %}<span class="text-red-600 font-semibold">No</span>{% endif %}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{% if user.is_email_verified %}<span class="text-green-600 font-semibold">Yes</span>{% else %}<span class="text-red-600 font-semibold">No</span>{% endif %}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if user.subscription_info %}
+                        {{ user.subscription_info }}
+                    {% else %}
+                        None
+                    {% endif %}
+                    <a href="{% url 'admin_panel:user_detail' pk=user.id %}" class="ml-2 text-blue-600 hover:text-blue-900 text-xs">
+                        (Details)
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center py-4">No users found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div class="mt-4">
+        <nav class="inline-flex items-center">
+            {% if users.has_previous %}
+                <a href="?page={{ users.previous_page_number }}" class="px-3 py-1 border rounded-l hover:bg-gray-200">&laquo;</a>
+            {% else %}
+                <span class="px-3 py-1 border rounded-l text-gray-400">&laquo;</span>
+            {% endif %}
+            {% for num in users.paginator.page_range %}
+                {% if num == users.number %}
+                    <span class="px-3 py-1 border-t border-b bg-gray-200">{{ num }}</span>
+                {% else %}
+                    <a href="?page={{ num }}" class="px-3 py-1 border-t border-b hover:bg-gray-100">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if users.has_next %}
+                <a href="?page={{ users.next_page_number }}" class="px-3 py-1 border rounded-r hover:bg-gray-200">&raquo;</a>
+            {% else %}
+                <span class="px-3 py-1 border rounded-r text-gray-400">&raquo;</span>
+            {% endif %}
+        </nav>
+    </div>
+</div>
+{% endblock %}

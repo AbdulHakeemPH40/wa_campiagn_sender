@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Subscription is Now Active!</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#25D366;color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">Subscription Activated!</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px;text-align:left;line-height:1.6;">
+                            <p style="margin:0 0 15px;">Dear {{ user.full_name|default:user.email }},</p>
+                            <p style="margin:0 0 15px;">Great news! Your <strong>{{ plan.name }}</strong> subscription has been activated and is now ready to use.</p>
+                            <p style="margin:0 0 15px;"><strong>Subscription Details:</strong></p>
+                            <ul style="margin:0 0 25px;padding-left:20px;">
+                                <li>Plan: {{ plan.name }}</li>
+                                <li>Valid Until: {{ end_date|date:"F j, Y" }}</li>
+                                <li>Status: Active</li>
+                            </ul>
+                            <p style="margin:0 0 25px;">You now have access to all premium features including:</p>
+                            <ul style="margin:0 0 25px;padding-left:20px;">
+                                <li>Browser Extension</li>
+                                <li>Bulk WhatsApp Messaging</li>
+                                <li>Contact Management</li>
+                                <li>Campaign Analytics</li>
+                                <li>Multiple WhatsApp Numbers</li>
+                            </ul>
+                            <p style="margin:0 0 25px; text-align:center;">
+                                <a href="https://{{ domain }}/userpanel/" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;margin-right:10px;">Access Dashboard</a>
+                                <a href="mailto:hi@wacampaignsender.com?subject=Extension Installation Guide" style="display:inline-block;padding:12px 25px;background-color:#007bff;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Get Extension</a>
+                            </p>
+                            <p style="margin:0 0 15px;">If you have any questions, feel free to contact our support team.</p>
+                            <p style="margin:0;">Best regards,<br>The WA Campaign Sender Team</p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {% now "Y" %} WA Campaign Sender. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

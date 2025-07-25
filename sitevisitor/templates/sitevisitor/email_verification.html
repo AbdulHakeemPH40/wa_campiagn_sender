@@ -1,0 +1,71 @@
+{% extends 'sitevisitor/base.html' %}
+
+{% block title %}Email Verification - WA Broadcast Sender{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="flex justify-center">
+            <div class="w-20 h-20 rounded-full bg-primary bg-opacity-10 flex items-center justify-center">
+                <div class="w-10 h-10 flex items-center justify-center text-primary">
+                    <i class="ri-mail-check-line ri-2x"></i>
+                </div>
+            </div>
+        </div>
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Check Your Email
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            We've sent a verification link to your email address. Please check your inbox and click the link to verify your account.
+        </p>
+    </div>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-5 h-5 flex items-center justify-center text-blue-500">
+                            <i class="ri-information-line"></i>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            If you don't see the email in your inbox, please check your spam folder.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <p class="text-gray-600 mb-4">Didn't receive the email?</p>
+                <form method="post" action="{% url 'sitevisitor:resend_verification' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        Resend Verification Email
+                    </button>
+                </form>
+            </div>
+            
+            <div class="mt-6">
+                <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">
+                            Or
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <a href="{% url 'sitevisitor:login' %}" class="font-medium text-primary hover:text-opacity-80">
+                        Return to login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
