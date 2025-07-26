@@ -261,6 +261,7 @@ def process_subscription_after_payment(user, order):
     """Process subscription creation after webhook confirmation"""
     try:
         from adminpanel.models import Subscription, SubscriptionPlan, Payment
+        from django.utils import timezone
 
         # Determine plan based on order
         duration_days = 30
@@ -307,6 +308,18 @@ def process_subscription_after_payment(user, order):
                 transaction_id=order.paypal_txn_id,
                 payment_method='PayPal'
             )
+
+        # IMPORTANT: Deactivate free trial when PRO subscription is activated
+        # This allows users to upgrade from trial to PRO immediately
+        try:
+            profile = user.profile
+            if profile.on_free_trial:
+                # Set trial end date to today to deactivate it
+                profile.free_trial_end = timezone.now().date()
+                profile.save()
+                logger.info(f"Free trial deactivated for user {user.email} due to PRO subscription activation")
+        except Exception as e:
+            logger.error(f"Error deactivating free trial for user {user.email}: {e}")
 
         logger.info(f"Subscription processed for user {user.email}")
 
@@ -397,18 +410,19 @@ def direct_paypal_redirect(request):
             messages.error(request, "No plan selected.")
             return redirect('userpanel:pricing')
 
-        # Prevent purchase during active free trial, but allow if trial was cancelled
+        # Get or create user profile
         profile, _ = Profile.objects.get_or_create(user=request.user)
         
-        # Check if free trial is active but NOT cancelled by admin
-        if profile.on_free_trial and not profile.free_trial_cancelled:
-            # Block purchase - trial is still active and not cancelled
-            messages.error(request, "You cannot purchase a paid plan while your free trial is active.")
-            return redirect('userpanel:cart')
+        # Note: We now ALLOW PRO purchase during free trial
+        # The trial will be deactivated when PRO subscription is activated
 
-        # Check for existing active subscription
+        # Check for existing active subscription (must be active status AND not expired)
         from adminpanel.models import Subscription
-        if Subscription.objects.filter(user=request.user, status='active', end_date__gt=timezone.now()).exists():
+        if Subscription.objects.filter(
+            user=request.user, 
+            status='active', 
+            end_date__gt=timezone.now()
+        ).exists():
             messages.info(request, "You already have an active PRO subscription.")
             return redirect('userpanel:dashboard')
 
@@ -1157,19 +1171,29 @@ def settings_view(request):
             else:
                 messages.error(request, 'No primary WhatsApp number found to update.')
 
-    # Subscription details - check both active status and processing orders
+    # Subscription details - ALWAYS show the latest subscription if it exists
     from django.utils import timezone
     from .timezone_utils import convert_to_user_timezone
     now = timezone.now()
+    
+    # First, try to get the most recent active subscription (including future end dates)
     subscription = Subscription.objects.filter(
         user=request.user,
-        status='active',
-        end_date__gt=now
-    ).first()
-
-    # If no active subscription, check for any subscription (including admin granted)
+        status='active'
+    ).order_by('-created_at').first()
+    
+    # If no active subscription, get the most recent subscription regardless of status
     if not subscription:
         subscription = Subscription.objects.filter(user=request.user).order_by('-created_at').first()
+    
+    # Check if subscription is actually active (not expired)
+    subscription_is_active = False
+    if subscription:
+        if subscription.status == 'active' and subscription.end_date and subscription.end_date > now:
+            subscription_is_active = True
+        elif subscription.status == 'active' and not subscription.end_date:
+            # Admin granted subscription without end date
+            subscription_is_active = True
         
     # Also check for processing orders (PayPal payment received but held)
     has_processing_order = Order.objects.filter(
@@ -1180,7 +1204,7 @@ def settings_view(request):
 
     # WhatsApp Number Management - Default to 1 for free users, more for PRO
     max_whatsapp_numbers = 1  # Default for free users
-    if subscription:
+    if subscription and subscription_is_active:
         if subscription.plan:
             plan_name = subscription.plan.name.lower()
             if '1 month' in plan_name:
@@ -1223,7 +1247,7 @@ def settings_view(request):
 
     # Determine if the primary WhatsApp number can be edited
     can_edit_primary_whatsapp = False
-    if subscription: # Pro users can always edit
+    if subscription and subscription_is_active: # Pro users with active subscription can always edit
         can_edit_primary_whatsapp = True
     elif not user_profile.free_trial_start: # Free trial users can edit if trial hasn't started
         can_edit_primary_whatsapp = True
@@ -1245,6 +1269,7 @@ def settings_view(request):
         'profile_form': profile_form,
         'whatsapp_number_form': whatsapp_number_form,
         'subscription': subscription,
+        'subscription_is_active': subscription_is_active,  # Add flag to indicate if subscription is truly active
         'has_processing_order': has_processing_order,
         'max_whatsapp_numbers': max_whatsapp_numbers,
         'current_whatsapp_numbers_count': current_whatsapp_numbers_count,
@@ -1444,7 +1469,12 @@ def pricing_view(request):
     Redirect PRO users away to dashboard.
     """
     from adminpanel.models import Subscription
-    if Subscription.objects.filter(user=request.user, status='active').exists():
+    # Check if user has an ACTIVE subscription that is NOT expired
+    if Subscription.objects.filter(
+        user=request.user, 
+        status='active', 
+        end_date__gt=timezone.now()
+    ).exists():
         messages.info(request, "You already have an active PRO subscription. No need to purchase again.")
         return redirect('userpanel:dashboard')
     return render(request, 'userpanel/pricing.html')
@@ -1468,15 +1498,17 @@ def add_to_cart_view(request):
         profile, _ = Profile.objects.get_or_create(user=request.user)
 
         from adminpanel.models import Subscription
-        if Subscription.objects.filter(user=request.user, status='active').exists():
-            messages.warning(request, "You already have an active PRO subscription; free trial is not available.")
-            return redirect('userpanel:pricing')
+        # Check if user has an ACTIVE subscription that is NOT expired
+        if Subscription.objects.filter(
+            user=request.user, 
+            status='active', 
+            end_date__gt=timezone.now()
+        ).exists():
+            messages.warning(request, "You already have an active PRO subscription. You cannot purchase another one.")
+            return redirect('userpanel:dashboard')
 
-        # Check if free trial is active but NOT cancelled by admin
-        if profile.on_free_trial and not profile.free_trial_cancelled:
-            # Block purchase - trial is still active and not cancelled
-            messages.warning(request, "You are currently on your free trial and cannot purchase a paid plan until it ends.")
-            return redirect('userpanel:pricing')
+        # Note: We now ALLOW PRO purchase during free trial
+        # The trial will be deactivated when PRO subscription is activated
 
         # Clear any previous items and add the selected plan
         cart = {product_id: 1}
@@ -1538,10 +1570,12 @@ def cart_view(request):
         pass # Profile will be created if needed later
 
     from adminpanel.models import Subscription
+    # Check if user has an ACTIVE subscription that is NOT expired
+    # This ensures cancelled subscriptions don't block repurchase
     is_pro_user = Subscription.objects.filter(
         user=request.user,
         status='active',
-        end_date__gt=timezone.now() # Ensure subscription is active and not expired
+        end_date__gt=timezone.now()  # Must be active AND not expired
     ).exists()
 
     # Redirect PRO users away from cart if they attempt duplicate purchase
@@ -1667,6 +1701,7 @@ def cart_view(request):
     saved_payment_methods = []
 
     # Flag indicating whether the user is currently on an active free trial (not cancelled)
+    # NOTE: This is for informational purposes only - users CAN purchase PRO during free trial
     on_free_trial = False
     if user_profile:
         # Check if free trial is active but NOT cancelled by admin
@@ -1699,14 +1734,77 @@ def logout_view(request):
 
 
 @login_required
+def free_trial_confirmation(request):
+    """Show confirmation dialog before free trial activation"""
+    if not request.user.is_authenticated:
+        messages.error(request, "Please log in to activate free trial.")
+        return redirect('sitevisitor:login')
+    
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    
+    from adminpanel.models import Subscription
+    # Check if user has active subscription
+    if Subscription.objects.filter(user=request.user, status='active').exists():
+        messages.error(request, "You already have an active PRO subscription; free trial is not available.")
+        return redirect('userpanel:settings')
+    
+    # Check if user has previously purchased PRO
+    if Subscription.objects.filter(user=request.user).exists():
+        messages.error(request, "Free trial is not available for users who have previously purchased PRO subscriptions.")
+        return redirect('userpanel:pricing')
+    
+    # Check if free trial already used
+    if profile.free_trial_used:
+        messages.error(request, "You have already used your free trial.")
+        return redirect('userpanel:pricing')
+    
+    # Get user's primary WhatsApp number
+    primary_whatsapp_number = WhatsAppNumber.objects.filter(profile=profile, is_primary=True).first()
+    phone_number = primary_whatsapp_number.number if primary_whatsapp_number else request.user.phone_number
+    
+    if not phone_number:
+        messages.error(request, "A WhatsApp number is required to activate the free trial. Please add one in your profile settings.")
+        return redirect('userpanel:settings')
+    
+    # Check if phone number already used for free trial
+    from sitevisitor.models import FreeTrialPhone
+    if FreeTrialPhone.objects.filter(phone=phone_number).exists():
+        messages.error(request, "This WhatsApp number has already been used for a free trial.")
+        return redirect('userpanel:pricing')
+    
+    # Format phone number with country code for display
+    formatted_number = phone_number
+    if not phone_number.startswith('+'):
+        # Add + if not present
+        formatted_number = f"+{phone_number}"
+    
+    context = {
+        'whatsapp_number': formatted_number,
+        'user': request.user,
+    }
+    
+    return render(request, 'userpanel/free_trial_confirmation.html', context)
+
 def start_free_trial(request):
     if request.method == 'POST':
+        # Check if confirmation was provided
+        if not request.POST.get('confirmed'):
+            # Redirect to confirmation page if not confirmed
+            return redirect('userpanel:free_trial_confirmation')
+        
         profile, _ = Profile.objects.get_or_create(user=request.user)
 
         from adminpanel.models import Subscription
+        # Check if user has active subscription
         if Subscription.objects.filter(user=request.user, status='active').exists():
             messages.error(request, "You already have an active PRO subscription; free trial is not available.")
             return redirect('userpanel:settings')
+        
+        # IMPORTANT: Prevent users who have EVER purchased PRO from activating free trial
+        # This prevents abuse where users buy PRO, then try to get free trial later
+        if Subscription.objects.filter(user=request.user).exists():
+            messages.error(request, "Free trial is not available for users who have previously purchased PRO subscriptions.")
+            return redirect('userpanel:pricing')
 
         # Prevent misuse by checking phone number history
         from sitevisitor.models import FreeTrialPhone

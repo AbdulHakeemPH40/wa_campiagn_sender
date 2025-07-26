@@ -92,10 +92,11 @@
                     </div>
 
                     {% if on_free_trial %}
-                    <div class="p-4 border rounded-lg bg-yellow-50">
-                        <p class="text-center text-yellow-800 font-medium">You are currently on your free trial. You can enjoy all PRO features until {{ user_profile.free_trial_end }}. You will be able to purchase a paid plan once your trial ends.</p>
+                    <div class="p-4 border rounded-lg bg-blue-50 mb-4">
+                        <p class="text-center text-blue-800 font-medium">You are currently on your free trial until {{ user_profile.free_trial_end }}. Purchasing PRO will immediately upgrade your account and deactivate the trial.</p>
                     </div>
-                    {% elif not is_pro_user %}
+                    {% endif %}
+                    {% if not is_pro_user %}
                     <div class="p-4 border rounded-lg bg-gray-50">
                         <p class="text-center text-gray-700 mb-4">Complete your purchase securely with PayPal.</p>
                         {% for item in cart_items %}

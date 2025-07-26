@@ -427,16 +427,13 @@
                         Free Trial Used
                     </button>
                     {% else %}
-                    <form action="{% url 'userpanel:start_free_trial' %}" method="post" class="w-full">
-                        {% csrf_token %}
-                        <button type="submit"
-                            class="w-full bg-green-500 text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-green-600 transition-colors mt-auto">
-                            Start Free Trial
-                        </button>
-                    </form>
+                    <a href="{% url 'userpanel:free_trial_confirmation' %}"
+                        class="w-full bg-green-500 text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-green-600 transition-colors mt-auto">
+                        Start Free Trial
+                    </a>
                     {% endif %}
                     {% else %}
-                    <a href="{% url 'userpanel:start_free_trial' %}"
+                    <a href="{% url 'userpanel:free_trial_confirmation' %}"
                         class="w-full bg-green-500 text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-green-600 transition-colors mt-auto">
                         14-Day Free Trial
                     </a>

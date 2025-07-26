@@ -11,6 +11,8 @@
     <meta name="googlebot" content="noindex, nofollow">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <!-- Loading Animations CSS -->
+    <link rel="stylesheet" href="{% static 'css/loading-animations.css' %}">
     <script>
         tailwind.config = {
             theme: {
@@ -191,6 +193,10 @@
         });
     </script>
     <script src="{% static 'js/timezone_detector.js' %}"></script>
+    
+    <!-- Loading Manager JavaScript -->
+    <script src="{% static 'js/loading-manager.js' %}"></script>
+    
     {% block scripts %}{% endblock %}
 </body>
 </html>

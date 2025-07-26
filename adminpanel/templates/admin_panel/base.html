@@ -24,6 +24,9 @@
     </script>
     <!-- Remixicon -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Loading Animations CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/loading-animations.css' %}">
     <!-- Prevent search engine indexing -->
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex, nofollow">
@@ -448,7 +451,11 @@
             });
         }
     </script>
-
+    
+    <!-- Loading Manager JavaScript -->
+    <script src="{% static 'js/loading-manager.js' %}"></script>
+    
     {% block extra_js_after_content %}{% endblock %}
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

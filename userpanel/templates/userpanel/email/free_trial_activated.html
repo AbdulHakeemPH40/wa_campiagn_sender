@@ -76,8 +76,9 @@
         <div class="content">
             <p>Hi {{ user.full_name|default:user.email }},</p>
             
-            <p>Great news! Your <span class="highlight">{{ trial_days }}-day free trial</span> has been activated by our admin team. Your trial begins today, {{ start_date|date:"F d, Y" }}, and will expire on {{ end_date|date:"F d, Y" }}.</p>
-            
+            <p>
+                Great news! Your <span class="highlight">{{ trial_days }}-day free trial</span> is now live. It starts today ({{ start_date|date:"F d, Y" }}) and ends on {{ end_date|date:"F d, Y" }}, so you have full access to all premium features until then!
+              </p>
             <div class="trial-info">
                 <h3 style="margin-top: 0; color: #25D366;">🎉 Trial Details</h3>
                 <p><strong>Start Date:</strong> {{ start_date|date:"F d, Y" }}</p>
@@ -100,12 +101,15 @@
                 <a href="https://{{ domain }}/login/?next=/userpanel/" class="button">Access Your Dashboard</a>
             </p>
             
-            <p><strong>Need the browser extension?</strong><br>
-            Download and install our Chrome extension from your dashboard to start sending campaigns.</p>
+            <div style="background-color: #E3F2FD; border-left: 4px solid #2196F3; padding: 15px; margin: 20px 0; border-radius: 0 5px 5px 0;">
+                <p style="margin: 0;"><strong>🔧 Next Step:</strong> Download our Chrome extension from your dashboard to start sending WhatsApp campaigns immediately!</p>
+            </div>
             
-            <p>If you have any questions or need assistance, simply reply to this email and our support team will help you get started.</p>
+            <p>If you have any questions or need assistance, simply reply to this email at <strong>hi@wacampaignsender.com</strong> and our support team will help you get started.</p>
             
-            <p>Make the most of your trial period! Remember, you have only {{ days_remaining }} days to explore all our premium features before your trial expires on {{ end_date|date:"F d, Y" }}.</p>
+            <div style="background-color: #FFF3CD; border: 1px solid #FFEAA7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+                <p style="margin: 0; color: #856404;"><strong>⏰ Important:</strong> Make the most of your trial period! You have {{ days_remaining }} days to explore all premium features before your trial expires on {{ end_date|date:"F d, Y" }}.</p>
+            </div>
             
             <p>Best regards,<br>
             <strong>WA Campaign Sender Team</strong></p>

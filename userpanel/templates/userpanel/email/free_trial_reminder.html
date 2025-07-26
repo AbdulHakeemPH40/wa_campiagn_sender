@@ -19,13 +19,34 @@
                     <tr>
                         <td style="padding:40px;text-align:left;line-height:1.6;">
                             <p style="margin:0 0 15px;">Dear {{ user.full_name }},</p>
-                            <p style="margin:0 0 15px;">This is a friendly reminder that your 14-day free trial for WA Campaign Sender will expire tomorrow, on <strong>{{ free_trial_end|date:"F j, Y" }}</strong>.</p>
-                            <p style="margin:0 0 25px;">Don't let your access to premium features run out! Upgrade to a paid plan today to continue enjoying uninterrupted service and all our powerful tools.</p>
+                            
+                            <div style="background-color:#FFF3CD;border:1px solid #FFEAA7;padding:15px;border-radius:5px;margin:20px 0;">
+                                <p style="margin:0;color:#856404;text-align:center;"><strong>⏰ Your free trial expires tomorrow!</strong></p>
+                            </div>
+                            
+                            <p style="margin:0 0 15px;">Your 14-day free trial for WA Campaign Sender will expire on <strong>{{ free_trial_end|date:"F j, Y" }}</strong> - that's tomorrow!</p>
+                            
+                            <p style="margin:0 0 15px;">We hope you've enjoyed exploring our premium features during your trial. Don't lose access to:</p>
+                            <ul style="margin:0 0 20px;padding-left:20px;">
+                                <li>✅ Unlimited WhatsApp campaigns</li>
+                                <li>✅ Contact management and CSV imports</li>
+                                <li>✅ Message personalization</li>
+                                <li>✅ File attachments and media sending</li>
+                                <li>✅ Advanced analytics and reporting</li>
+                            </ul>
+                            
+                            <p style="margin:0 0 25px;">Upgrade to a paid plan today to continue enjoying uninterrupted service and keep growing your business with WhatsApp marketing!</p>
                             <p style="margin:0 0 25px; text-align:center;">
                                 <a href="https://www.wacampaignsender.com/login/?next=/userpanel/pricing/" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Upgrade Your Plan Now</a>
                             </p>
-                            <p style="margin:0 0 15px;">If you have any questions or need assistance, please contact our support team.</p>
-                            <p style="margin:0;">Best regards,<br>The WA Campaign Sender Team</p>
+                            <div style="background-color:#E3F2FD;border-left:4px solid #2196F3;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;"><strong>💡 Need help choosing a plan?</strong> Our support team is here to help you select the perfect plan for your business needs.</p>
+                            </div>
+                            
+                            <p style="margin:0 0 15px;">If you have any questions or need assistance, please contact our support team at <strong>hi@wacampaignsender.com</strong>.</p>
+                            
+                            <p style="margin:0;">Best regards,<br>
+                            <strong>WA Campaign Sender Team</strong></p>
                         </td>
                     </tr>
                     <!-- Footer -->

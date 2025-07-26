@@ -60,6 +60,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="{% static 'css/home.css' %}" as="style">
+    <link rel="preload" href="{% static 'css/loading-animations.css' %}" as="style">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" as="style">
 
     <!-- Mobile -->
@@ -96,6 +97,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <!-- Loading Animations CSS -->
+    <link rel="stylesheet" href="{% static 'css/loading-animations.css' %}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'image/favicon.ico' %}">
@@ -492,6 +495,10 @@
     });
     </script>
     {% endblock page_scripts %}
+    
+    <!-- Loading Manager JavaScript -->
+    <script src="{% static 'js/loading-manager.js' %}"></script>
+    
     {% block extra_scripts %}{% endblock %}
 </body>
 

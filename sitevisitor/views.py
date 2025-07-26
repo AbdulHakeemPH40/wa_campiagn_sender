@@ -536,25 +536,25 @@ def custom_password_reset_complete_view(request):
 
 
 def buy_view(request):
-    """Handle adding a PRO plan to cart while preventing duplicate purchases and free-trial misuse."""
+    """Handle adding a PRO plan to cart while preventing duplicate purchases."""
     product_id = request.GET.get('add-to-cart')
     from adminpanel.models import Subscription
 
-    # Block duplicate purchases or purchases during free-trial
+    # Block duplicate purchases only
     if request.user.is_authenticated:
         profile, _ = Profile.objects.get_or_create(user=request.user)
-        if Subscription.objects.filter(user=request.user, status='active').exists():
+        # Check if user has an ACTIVE subscription that is NOT expired
+        if Subscription.objects.filter(
+            user=request.user, 
+            status='active', 
+            end_date__gt=timezone.now()
+        ).exists():
             messages.warning(request, "You already have an active PRO subscription. You can renew once it expires.")
             if 'cart' in request.session:
                 del request.session['cart']
                 request.session.modified = True
             return redirect('userpanel:dashboard')
-        if profile.on_free_trial:
-            messages.warning(request, "You are currently on your free trial and cannot purchase a paid plan until it ends.")
-            if 'cart' in request.session:
-                del request.session['cart']
-                request.session.modified = True
-            return redirect('userpanel:dashboard')
+        # Removed free trial blocking logic - users can now purchase PRO during free trial
 
     # Store the selected plan in the session cart
     if product_id:

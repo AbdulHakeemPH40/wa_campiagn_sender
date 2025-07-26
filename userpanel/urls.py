@@ -33,6 +33,7 @@ urlpatterns = [
     path('addresses/set-default/<int:address_id>/<str:address_type>/', views.set_default_address, name='set_default_address'),
     path('addresses/edit/<int:address_id>/', views.edit_address, name='edit_address'),
     path('addresses/get-data/<int:address_id>/', views.get_address_data, name='get_address_data'),
+    path('free-trial-confirmation/', views.free_trial_confirmation, name='free_trial_confirmation'),
     path('start-free-trial/', views.start_free_trial, name='start_free_trial'),
     # PayPal Webhook
     path('paypal-webhook/', paypal_webhook_handler, name='paypal_webhook'),

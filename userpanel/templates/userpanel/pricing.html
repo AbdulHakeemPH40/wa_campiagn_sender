@@ -7,110 +7,52 @@
 {% block content %}
 <div class="p-6 md:p-10">
     <!-- Pricing Section -->
-    <section id="pricing" class="py-10">
+    <section id="pricing" class="py-6">
         <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Choose the plan that fits your business needs</p>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Choose Your Plan</h2>
+                <p class="text-lg text-gray-600">Start with free trial or upgrade to PRO for advanced features</p>
             </div>
 
-            <!-- Pricing Plans -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-                <!-- Free Plan -->
-                <div class="bg-white p-8 rounded-lg shadow-lg border border-gray-200 flex flex-col
+            <!-- Compact Pricing Plans -->
+            <div class="flex flex-col lg:flex-row gap-4 max-w-7xl mx-auto justify-center items-stretch">
+                <!-- Free Trial Plan -->
+                <div class="flex-1 max-w-sm bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl shadow-lg border-2 border-blue-200 flex flex-col
     {% if request.user.is_authenticated and request.user.profile.has_active_subscription %}
         opacity-50 cursor-not-allowed
     {% elif request.user.is_authenticated and request.user.profile.free_trial_used %}
         opacity-50 cursor-not-allowed
     {% endif %}">
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Free Plan</h3>
-                    <p class="text-gray-500 mb-6">Get started with essential features.</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">$0</span>
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">Free Trial</h3>
+                        <p class="text-gray-600 mb-4">14 days full access</p>
+                        <div class="mb-0">
+                            <span class="text-4xl font-bold text-blue-600">$0</span>
+                            <span class="text-gray-500">/14 days</span>
+                        </div>
                     </div>
-                    <h4 class="text-sm font-semibold text-gray-700 mb-3">What's Included:</h4>
-                    <ul class="space-y-2 text-gray-600 mb-8 flex-grow">
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>1 WhatsApp Accounts</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Unlimited Messages Per Day</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Random Send Interval</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Real-Time Sending Progress</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Upload Excel</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Send Attachments (Image, PDF, Video)</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Send Personalized Messages</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Export Group Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Export Chat Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Export Contact Card</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Export Send Results After Campaign</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Access to All Future Updates</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-red-500 mr-2"><i
-                                    class="ri-close-line"></i></div>
-                            <span>WhatsApp Support 12/7</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Export / Send To Label Members</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Auto Skip Invalid Numbers</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i
-                                    class="ri-check-line"></i></div>
-                            <span>Auto Remove Invalid Chat / Duplicates</span>
-                        </li>
-                    </ul>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 flex-grow">
+                        <h4 class="font-semibold text-gray-800 mb-2">Key Features:</h4>
+                        <ul class="space-y-1 text-sm text-gray-600">
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>1 WhatsApp Account</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>Unlimited Messages</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>All Core Features</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>Contact Export</span>
+                            </li>
+                        </ul>
+                    </div>
                     {% if request.user.is_authenticated %}
                         {% if request.user.profile.has_active_subscription %}
                             <button class="w-full bg-gray-300 text-gray-600 text-center px-6 py-3 !rounded-button font-medium cursor-not-allowed" disabled>
@@ -121,96 +63,58 @@
                                 Free Trial Used
                             </button>
                         {% else %}
-                            <form action="{% url 'userpanel:start_free_trial' %}" method="post" class="w-full">
-                                {% csrf_token %}
-                                <button type="submit" class="w-full bg-green-500 text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-green-600 transition-colors mt-auto">
-                                    Start Free Trial
-                                </button>
-                            </form>
+                            <a href="{% url 'userpanel:free_trial_confirmation' %}" class="w-full bg-green-500 text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-green-600 transition-colors mt-auto">
+                                Start Free Trial
+                            </a>
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'userpanel:start_free_trial' %}" class="w-full bg-green-500 text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-green-600 transition-colors mt-auto">
+                        <a href="{% url 'userpanel:free_trial_confirmation' %}" class="w-full bg-green-500 text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-green-600 transition-colors mt-auto">
                             14-Day Free Trial
                         </a>
                     {% endif %}
                 </div>
-                <!-- 1 Month Plan -->
-                <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-primary flex flex-col relative">
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">1 Month Plan</h3>
-                    <p class="text-gray-500 mb-6">Full features, billed monthly.</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">$5.99</span>
-                        <span class="text-gray-500">/month</span>
-                        <div class="text-sm text-red-500 line-through">$15</div>
-                        <div class="text-xs font-medium text-orange-600">Limited Period Offer</div>
+                <!-- 1 Month PRO Plan -->
+                <div class="flex-1 max-w-sm bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-xl shadow-lg border-2 border-green-200 flex flex-col relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">POPULAR</span>
                     </div>
-                    <h4 class="text-sm font-semibold text-gray-700 mb-3">What's Included:</h4>
-                    <ul class="space-y-2 text-gray-600 mb-8 flex-grow">
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>3 WhatsApp Accounts</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Unlimited Messages Per Day</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Random Send Interval</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Real-Time Sending Progress</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Upload Excel</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Send Attachments (Image, PDF, Video)</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Send Personalized Messages</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Group Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Chat Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Contact Card</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Send Results After Campaign</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Access to All Future Updates</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>WhatsApp Support 12/7</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export / Send To Label Members</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Auto Skip Invalid Numbers</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Auto Remove Invalid Chat / Duplicates</span>
-                        </li>
-                    </ul>
+                    
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">1 Month PRO</h3>
+                        <p class="text-gray-600 mb-4">Full features, monthly billing</p>
+                        <div class="mb-0">
+                            <span class="text-4xl font-bold text-green-600">$5.99</span>
+                            <span class="text-gray-500">/month</span>
+                            <div class="text-sm text-red-500 line-through">$15</div>
+                            <div class="text-xs font-medium text-orange-600">Limited Time Offer</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 flex-grow">
+                        <h4 class="font-semibold text-gray-800 mb-2">PRO Features:</h4>
+                        <ul class="space-y-1 text-sm text-gray-600">
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>3 WhatsApp Accounts</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>Unlimited Messages</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>All Premium Features</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>12/7 WhatsApp Support</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-green-500 mr-2"></i>
+                                <span>Advanced Export Tools</span>
+                            </li>
+                        </ul>
+                    </div>
                     {% if not request.user.is_authenticated or not request.user.profile.has_active_subscription %}
 <a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_1_MONTH"
                         class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors mt-auto">Add to Cart</a>
@@ -219,86 +123,48 @@
 {% endif %}
                 </div>
 
-                <!-- 6 Month Plan -->
-                <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-primary flex flex-col relative">
-                    <div
-                        class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white px-3 py-1 text-sm font-semibold rounded-full">
-                        Best Value</div>
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">6 Month Plan</h3>
-                    <p class="text-gray-500 mb-6">Unlock all features for half a year.</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">$29.95</span>
-                        <span class="text-gray-500">/6 months</span>
-                        <div class="text-sm text-red-500 line-through">$59</div>
-                        <div class="text-xs font-medium text-orange-600">Limited Period Offer</div>
+                <!-- 6 Month PRO Plan -->
+                <div class="flex-1 max-w-sm bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-xl shadow-lg border-2 border-purple-200 flex flex-col relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-xs font-semibold">BEST VALUE</span>
                     </div>
-                    <h4 class="text-sm font-semibold text-gray-700 mb-3">What's Included:</h4>
-                    <ul class="space-y-2 text-gray-600 mb-8 flex-grow">
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>6 WhatsApp Accounts</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Unlimited Messages Per Day</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Random Send Interval</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Real-Time Sending Progress</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Upload Excel</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Send Attachments (Image, PDF, Video)</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Send Personalized Messages</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Group Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Chat Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Contact Card</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Send Results After Campaign</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Access to All Future Updates</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>WhatsApp Support 12/7</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export / Send To Label Members</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Auto Skip Invalid Numbers</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Auto Remove Invalid Chat / Duplicates</span>
-                        </li>
-                    </ul>
+                    
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">6 Month PRO</h3>
+                        <p class="text-gray-600 mb-4">Best value for growing businesses</p>
+                        <div class="mb-0">
+                            <span class="text-4xl font-bold text-purple-600">$29.95</span>
+                            <span class="text-gray-500">/6 months</span>
+                            <div class="text-sm text-red-500 line-through">$59</div>
+                            <div class="text-xs font-medium text-orange-600">Limited Time Offer</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 flex-grow">
+                        <h4 class="font-semibold text-gray-800 mb-2">Enhanced Features:</h4>
+                        <ul class="space-y-1 text-sm text-gray-600">
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-purple-500 mr-2"></i>
+                                <span>6 WhatsApp Accounts</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-purple-500 mr-2"></i>
+                                <span>Unlimited Messages</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-purple-500 mr-2"></i>
+                                <span>All Premium Features</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-purple-500 mr-2"></i>
+                                <span>Priority Support</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-purple-500 mr-2"></i>
+                                <span>Advanced Analytics</span>
+                            </li>
+                        </ul>
+                    </div>
                     {% if not request.user.is_authenticated or not request.user.profile.has_active_subscription %}
 <a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_6_MONTHS"
                         class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors mt-auto">Add to Cart</a>
@@ -307,86 +173,48 @@
 {% endif %}
                 </div>
 
-                <!-- 1 Year Plan -->
-                <div class="bg-white p-8 rounded-lg shadow-xl border-2 border-primary flex flex-col relative">
-                    <div
-                        class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white px-3 py-1 text-sm font-semibold rounded-full">
-                        Best Value</div>
-                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">1 Year Plan</h3>
-                    <p class="text-gray-500 mb-6">Unlock all features for a full year.</p>
-                    <div class="mb-6">
-                        <span class="text-4xl font-bold text-gray-900">$59</span>
-                        <span class="text-gray-500">/year</span>
-                        <div class="text-sm text-red-500 line-through">$99</div>
-                        <div class="text-xs font-medium text-orange-600">Limited Period Offer</div>
+                <!-- 1 Year PRO Plan -->
+                <div class="flex-1 max-w-sm bg-gradient-to-br from-amber-50 to-yellow-100 p-6 rounded-xl shadow-lg border-2 border-amber-200 flex flex-col relative">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                        <span class="bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-semibold">MAXIMUM SAVINGS</span>
                     </div>
-                    <h4 class="text-sm font-semibold text-gray-700 mb-3">What's Included:</h4>
-                    <ul class="space-y-2 text-gray-600 mb-8 flex-grow">
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>10 WhatsApp Accounts</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Unlimited Messages Per Day</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Random Send Interval</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Real-Time Sending Progress</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Upload Excel</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Send Attachments (Image, PDF, Video)</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Send Personalized Messages</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Group Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Chat Members Contact</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Contact Card</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export Send Results After Campaign</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Access to All Future Updates</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>WhatsApp Support 12/7</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Export / Send To Label Members</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Auto Skip Invalid Numbers</span>
-                        </li>
-                        <li class="flex items-center">
-                            <div class="w-5 h-5 flex items-center justify-center text-green-500 mr-2"><i class="ri-check-line"></i></div>
-                            <span>Auto Remove Invalid Chat / Duplicates</span>
-                        </li>
-                    </ul>
+                    
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">1 Year PRO</h3>
+                        <p class="text-gray-600 mb-4">Maximum savings for serious users</p>
+                        <div class="mb-0">
+                            <span class="text-4xl font-bold text-amber-600">$59</span>
+                            <span class="text-gray-500">/year</span>
+                            <div class="text-sm text-red-500 line-through">$99</div>
+                            <div class="text-xs font-medium text-orange-600">Limited Time Offer</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg p-4 mb-4 flex-grow">
+                        <h4 class="font-semibold text-gray-800 mb-2">Ultimate Features:</h4>
+                        <ul class="space-y-1 text-sm text-gray-600">
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-amber-500 mr-2"></i>
+                                <span>10 WhatsApp Accounts</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-amber-500 mr-2"></i>
+                                <span>Unlimited Messages</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-amber-500 mr-2"></i>
+                                <span>All Premium Features</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-amber-500 mr-2"></i>
+                                <span>VIP Support</span>
+                            </li>
+                            <li class="flex items-center">
+                                <i class="ri-check-line text-amber-500 mr-2"></i>
+                                <span>Advanced Analytics & Reports</span>
+                            </li>
+                        </ul>
+                    </div>
                     {% if not request.user.is_authenticated or not request.user.profile.has_active_subscription %}
 <a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_1_YEAR"
                         class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors mt-auto">Add to Cart</a>

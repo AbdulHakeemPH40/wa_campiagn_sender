@@ -1,0 +1,175 @@
+{% extends 'userpanel/base.html' %}
+{% load static %}
+
+{% block title %}Confirm Free Trial - WA Campaign Sender{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+        <!-- Heading -->
+        <div class="text-center mb-8">
+            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto">
+                <i class="ri-whatsapp-line text-2xl text-white"></i>
+            </div>
+            <h1 class="text-2xl font-bold mt-3">Activate Your Free Trial</h1>
+            <p class="text-gray-600 text-sm">Unlock 14 days of premium features</p>
+        </div>
+
+        <!-- Two-column layout -->
+        <div class="grid lg:grid-cols-2 gap-8 items-start">
+            <!-- Left Column: Number & Trial Info -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <!-- WhatsApp Number -->
+                <h2 class="text-lg font-semibold mb-3">Your WhatsApp Number</h2>
+                <div class="flex items-center bg-green-50 border border-green-200 rounded p-3 mb-3">
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white mr-3">
+                        <i class="ri-whatsapp-line text-sm"></i>
+                    </div>
+                    <div>
+                        <div class="text-base font-bold">{{ whatsapp_number }}</div>
+                        <div class="text-xs text-green-600">Verified and Ready</div>
+                    </div>
+                </div>
+
+                <!-- Country Code Example -->
+                {# ... existing code above ... #}
+
+                <!-- Country Code Examples -->
+                <h3 class="text-base font-medium mb-1">Enter Your Number with Country Code</h3>
+                <p class="text-xs text-gray-700 mb-1">
+                    Please include your country code when entering your WhatsApp number for verification.
+                </p>
+                <div class="bg-blue-50 border border-blue-200 p-3 rounded mb-3">
+                    <p class="text-xs text-blue-800 mb-2">
+                        <strong>Examples:</strong> Enter your number with the correct country code:
+                    </p>
+                    <div class="grid sm:grid-cols-2 gap-2">
+                        <!-- UAE Example -->
+                        <div class="bg-white p-2 rounded border text-sm">
+                            <span class="font-mono text-blue-600 font-semibold">+971501234567</span>
+                            <p class="text-xxs text-gray-600">UAE (50 123 4567)</p>
+                        </div>
+                        <!-- India Example -->
+                        <div class="bg-white p-2 rounded border text-sm">
+                            <span class="font-mono text-blue-600 font-semibold">+919876543210</span>
+                            <p class="text-xxs text-gray-600">India (98765&nbsp;43210)</p>
+                        </div>
+                        <!-- USA Example -->
+                        <div class="bg-white p-2 rounded border text-sm">
+                            <span class="font-mono text-blue-600 font-semibold">+14155551234</span>
+                            <p class="text-xxs text-gray-600">USA (415&nbsp;555&nbsp;1234)</p>
+                        </div>
+                        <!-- France Example -->
+                        <div class="bg-white p-2 rounded border text-sm">
+                            <span class="font-mono text-blue-600 font-semibold">+33612345678</span>
+                            <p class="text-xxs text-gray-600">France (06&nbsp;12&nbsp;34&nbsp;56&nbsp;78)</p>
+                        </div>
+                    </div>
+                </div>
+
+                {# ... existing code below ... #}
+
+                <!-- Trial Terms -->
+                <h3 class="text-base font-semibold mb-1">Free Trial Terms</h3>
+                <ul class="list-disc list-inside text-xs text-gray-700 space-y-1 mb-3">
+                    <li>Number locked for 14 days to ensure campaign consistency.</li>
+                    <li>Free trial available once per account.</li>
+                    <li>Upgrade anytime to edit number and access advanced features.</li>
+                </ul>
+
+                <!-- Next Steps -->
+                <h3 class="text-base font-semibold mb-1">What Happens Next?</h3>
+                <ol class="list-decimal list-inside text-xs text-gray-700 space-y-1 mb-5">
+                    <li>Instant access to all premium features.</li>
+                    <li>Receive email confirmation.</li>
+                    <li>Start your first campaign.</li>
+                    <li>Reminder one day before trial ends.</li>
+                </ol>
+
+                <!-- Action Buttons -->
+                <form method="post" action="{% url 'userpanel:start_free_trial' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="confirmed" value="true">
+                    <button type="submit"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md text-sm transition duration-200">
+                        Start My 14‑Day Free Trial
+                    </button>
+                    <p class="text-xxs text-center text-gray-500 mt-2">No credit card required</p>
+                </form>
+
+                <a href="{% url 'userpanel:settings' %}"
+                    class="w-full inline-block bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md text-center mt-3 text-sm transition duration-200">
+                    ← Change my WhatsApp Number
+                </a>
+            </div>
+
+            <!-- Right Column: Benefits -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-bold mb-3">What You Get</h3>
+                <p class="text-gray-600 text-sm mb-3">
+                    Enjoy 14 days of premium features to supercharge your campaigns.
+                </p>
+                <div class="space-y-3 mb-5">
+                    <div class="flex items-center p-3 bg-green-50 rounded-lg border border-green-200">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="ri-send-plane-line text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-base">Unlimited Campaigns</h4>
+                            <p class="text-xs text-gray-600">Send as many WhatsApp messages as you need.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="ri-calendar-schedule-line text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-base">Advanced Scheduling</h4>
+                            <p class="text-xs text-gray-600">Plan and automate your campaigns.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center p-3 bg-purple-50 rounded-lg border border-purple-200">
+                        <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="ri-contacts-line text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-base">Contact Management</h4>
+                            <p class="text-xs text-gray-600">Organize and segment your audience.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center p-3 bg-orange-50 rounded-lg border border-orange-200">
+                        <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                            <i class="ri-bar-chart-line text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-base">Analytics & Reports</h4>
+                            <p class="text-xs text-gray-600">Track performance and insights.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-green-100 border border-green-300 rounded-lg p-4 text-center">
+                    <div class="flex items-center justify-center mb-2">
+                        <i class="ri-time-line text-green-600 mr-2 text-lg"></i>
+                        <span class="font-bold text-green-800 text-base">14 Days Free Access</span>
+                    </div>
+                    <p class="text-green-700 text-xs">
+                        Start today and experience the full power of WA Campaign Sender!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-8">
+            <p class="text-xs text-gray-500">
+                Questions? <a href="{% url 'userpanel:settings' %}" class="text-green-600 hover:underline">Visit
+                    Settings</a> or contact support.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
