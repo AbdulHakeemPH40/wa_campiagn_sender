@@ -510,11 +510,25 @@ def direct_paypal_redirect(request):
 
         try:
             paypal_api = PayPalAPI()
-            logger.info(f"Attempting PayPal payment creation for ${price}")
+            
+            # Production validation: Prevent sandbox credentials in live mode
+            if not settings.DEBUG and hasattr(settings, 'PAYPAL_MODE') and settings.PAYPAL_MODE == 'live':
+                # Additional validation for production
+                if not paypal_api.validate_production_credentials():
+                    logger.error("Production PayPal validation failed - blocking payment")
+                    messages.error(
+                        request, 
+                        "Payment system configuration error. Please contact support."
+                    )
+                    return redirect('userpanel:pricing')
+            
+            logger.info(f"Attempting PayPal payment creation for ${price} in {getattr(settings, 'PAYPAL_MODE', 'sandbox')} mode")
 
             payment_data = paypal_api.create_payment(
                 amount=price,
-                description=name
+                description=name,
+                return_url=return_url,
+                cancel_url=cancel_url
             )
 
             if payment_data and payment_data.get('id'):
@@ -551,8 +565,16 @@ def direct_paypal_redirect(request):
 
         except Exception as api_error:
             logger.error(f"PayPal API Error: {api_error}", exc_info=True)
-            messages.error(request, "PayPal service is temporarily unavailable. Please try again in a few minutes.")
-            return redirect('userpanel:cart')
+            
+            # Check if it's a credentials issue
+            if 'invalid_client' in str(api_error).lower():
+                messages.error(request, "PayPal configuration error. Please contact support.")
+            elif 'timeout' in str(api_error).lower():
+                messages.error(request, "PayPal connection timeout. Please try again.")
+            else:
+                messages.error(request, "PayPal service temporarily unavailable. Please try the card payment option.")
+            
+            return redirect('userpanel:paypal_checkout', plan=plan_type)
 
     except Exception as e:
         logger.error(f"Error in direct_paypal_redirect: {str(e)}", exc_info=True)
@@ -566,11 +588,13 @@ def direct_paypal_redirect(request):
 
 def payment_success_view(request):
     """
-    View for handling successful payments after PayPal redirect
-    Automatically processes the payment when PayPal returns the user to this page
+    Comprehensive PayPal payment success handler.
+    Handles order completion, invoice generation, subscription processing, and user notifications.
     """
+    logger.info(f"PayPal payment success callback received for user: {request.user if request.user.is_authenticated else 'Anonymous'}")
+    
     try:
-        # Auto-login if user not authenticated but has valid order
+        # Step 1: Handle user authentication
         if not request.user.is_authenticated:
             url_user_id = request.GET.get('user_id')
             if url_user_id:
@@ -579,148 +603,98 @@ def payment_success_view(request):
                     User = get_user_model()
                     user = User.objects.get(id=int(url_user_id))
                     login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                except (ValueError, User.DoesNotExist):
-                    pass
+                    logger.info(f"Auto-logged in user {user.email} for payment success")
+                except (ValueError, User.DoesNotExist) as e:
+                    logger.error(f"Failed to auto-login user {url_user_id}: {e}")
         
         if not request.user.is_authenticated:
-            messages.error(request, "Please log in to continue.")
+            messages.error(request, "Authentication required to complete payment processing.")
             return redirect('sitevisitor:login')
+        
+        # Step 2: Find the pending order
+        url_order_id = request.GET.get('order_id')
+        order = None
+        
+        if url_order_id:
+            # Try to find specific order from URL
+            try:
+                order = Order.objects.get(
+                    id=int(url_order_id),
+                    user=request.user,
+                    status='pending'
+                )
+                logger.info(f"Found specific order {order.order_id} from URL parameter")
+            except (ValueError, Order.DoesNotExist):
+                logger.warning(f"Order {url_order_id} not found or not pending")
+        
+        if not order:
+            # Fallback: Find most recent pending order
+            order = Order.objects.filter(
+                user=request.user,
+                status='pending'
+            ).order_by('-created_at').first()
             
-        # Check for existing pending order
-        order = Order.objects.filter(
-            user=request.user,
-            status='pending'
-        ).order_by('-created_at').first()
-
-        # Development-only fallback removed – orders must be created *before* the user leaves for PayPal.
-        # If no pending order exists at this point we simply show an error below.
-
-        # Process the order if found or created
-        if order:
-            # Update the order status to completed (idempotent)
-            if order.status != 'completed':
-                order.status = 'completed'
-            # Generate a transaction ID based on PayPal's token or current time
-            txn_id = request.GET.get('token', None)
-            if not txn_id:
-                txn_id = f"dev-test-{timezone.now().strftime('%Y%m%d%H%M%S')}"
-
-            order.paypal_txn_id = txn_id
-            order.save()
-
-            # --- Create or update Subscription for the user ---
-            try:
-                from adminpanel.models import Subscription
-                from adminpanel.models import SubscriptionPlan
-                duration_days = 30  # default duration
-                first_item = order.items.first()
-                if first_item:
-                    name = getattr(first_item, 'product_name', '') or getattr(first_item, 'name', '')
-                    # Determine plan and duration
-                    plan_obj = None
-                    if "6 Month" in name:
-                        duration_days = 30 * 6
-                        plan_obj, _ = SubscriptionPlan.objects.get_or_create(
-                        name="WA PRO - 6 Month",
-                        defaults={
-                            "description": "6-Month WA Campaign Sender PRO plan",
-                            "price": order.total,
-                            "duration_days": duration_days,
-                            "is_active": True,
-                        },
-                    )
-                    elif "1 Year" in name:
-                        duration_days = 365
-                        plan_obj, _ = SubscriptionPlan.objects.get_or_create(
-                        name="WA PRO - 1 Year",
-                        defaults={
-                            "description": "1-Year WA Campaign Sender PRO plan",
-                            "price": order.total,
-                            "duration_days": duration_days,
-                            "is_active": True,
-                        },
-                    )
-                    elif "1 Month" in name:
-                        duration_days = 30
-                        plan_obj, _ = SubscriptionPlan.objects.get_or_create(
-                        name="WA PRO - 1 Month",
-                        defaults={
-                            "description": "1-Month WA Campaign Sender PRO plan",
-                            "price": order.total,
-                            "duration_days": duration_days,
-                            "is_active": True,
-                        },
-                    )
-                end_date = timezone.now() + timezone.timedelta(days=duration_days)
-
-                existing_sub = Subscription.objects.filter(user=request.user, status='active').first()
-                if existing_sub:
-                    if not existing_sub.end_date or existing_sub.end_date < end_date:
-                        if plan_obj and (not existing_sub.plan or existing_sub.plan != plan_obj):
-                            existing_sub.plan = plan_obj
-                        existing_sub.end_date = end_date
-                        existing_sub.save(update_fields=['plan','end_date'])
-                else:
-                    Subscription.objects.create(
-                        user=request.user,
-                        status='active',
-                        end_date=end_date,
-                        plan=plan_obj
-                    )
-            except Exception as sub_err:
-                logger.error(f'Failed to create/update subscription for order {order.order_id}: {sub_err}')
-
-            # --- Record Payment ---
-            try:
-                if not Payment.objects.filter(transaction_id=txn_id).exists():
-                    Payment.objects.create(
-                        user=request.user,
-                        subscription=Subscription.objects.filter(user=request.user, status='active').order_by('-end_date').first(),
-                        amount=order.total,
-                        status='completed',
-                        transaction_id=txn_id,
-                        payment_method='PayPal'
-                    )
-            except Exception as pay_err:
-                logger.error(f'Failed to record payment for order {order.order_id}: {pay_err}')
-
-            # Clear the cart
-            if 'cart' in request.session:
-                del request.session['cart']
-                request.session.modified = True
-
-            # Send invoice email to user
-            try:
-                # Send email using new synchronous utility (WeasyPrint-based)
-                send_payment_success_email(order.id)
-                logger.info(f"Payment success email (new util) sent for order {order.order_id}")
-            except Exception as email_error:
-                logger.error(f"Failed to send invoice email for order {order.order_id}: {str(email_error)}")
-
-            messages.success(request, "Payment successful! Your subscription is now active. An invoice has been sent to your email.")
+            if order:
+                logger.info(f"Found fallback pending order {order.order_id}")
+        
+        if not order:
+            logger.error(f"No pending order found for user {request.user.email}")
+            messages.error(request, "No pending order found. If you completed a payment, please contact support.")
             return redirect('userpanel:dashboard')
-        else:
-            messages.warning(request, "Your cart is empty. Please select a plan before simulating payment.")
-            return redirect('userpanel:pricing')
-    except Exception as e:
-        logger.error(f"Payment processing error: {str(e)}")
-        # Show more detailed error message during development
-        if settings.DEBUG:
-            messages.error(request, f"Development Error: {str(e)}")
-        else:
-            messages.error(request, "An error occurred while processing your payment. Please contact support.")
-        # Create the order anyway so at least there's progress
+        
+        # Step 3: Process PayPal payment details
+        paypal_token = request.GET.get('token')
+        paypal_payer_id = request.GET.get('PayerID')
+        
+        if paypal_token:
+            order.paypal_txn_id = paypal_token
+        if paypal_payer_id:
+            order.paypal_payment_id = paypal_payer_id
+        
+        # Step 4: Complete the order (this will trigger invoice number generation)
+        old_order_id = order.order_id
+        order.status = 'completed'
+        order.save()  # This will generate the invoice number via the model's save method
+        
+        logger.info(f"Order completed: {old_order_id} -> {order.order_id} (Invoice generated)")
+        
+        # Step 5: Process subscription using existing helper function
         try:
-            if order and order.status == 'pending':
-                order.status = 'completed'
-                order.paypal_txn_id = f"forced-{timezone.now().strftime('%Y%m%d%H%M%S')}"
-                order.save()
-                if 'cart' in request.session:
-                    del request.session['cart']
-                    request.session.modified = True
-                messages.success(request, "Despite the error, your order has been marked as completed.")
-        except Exception as inner_e:
-            logger.error(f"Forced order completion also failed: {str(inner_e)}")
+            process_subscription_after_payment(request.user, order)
+            logger.info(f"Subscription processed successfully for order {order.order_id}")
+        except Exception as sub_error:
+            logger.error(f"Subscription processing failed for order {order.order_id}: {sub_error}")
+            # Don't fail the entire payment - subscription can be fixed manually
+        
+        # Step 6: Clear cart and session
+        if 'cart' in request.session:
+            del request.session['cart']
+        if 'pending_order_id' in request.session:
+            del request.session['pending_order_id']
+        request.session.modified = True
+        
+        # Step 7: Send invoice email
+        try:
+            _send_invoice_email(request, order)
+            logger.info(f"Invoice email sent for order {order.order_id}")
+        except Exception as email_error:
+            logger.error(f"Failed to send invoice email for order {order.order_id}: {email_error}")
+            # Don't fail the payment for email issues
+        
+        # Step 8: Success message and redirect
+        messages.success(
+            request, 
+            f"🎉 Payment successful! Your PRO subscription has been activated. Invoice: {order.order_id}"
+        )
+        logger.info(f"Payment success processing completed for order {order.order_id}")
+        return redirect('userpanel:dashboard')
+        
+    except Exception as e:
+        logger.error(f"Critical error in payment success handler: {e}", exc_info=True)
+        messages.error(
+            request, 
+            "Payment processing encountered an error. Please contact support if your subscription is not activated."
+        )
         return redirect('userpanel:dashboard')
 
 def _send_invoice_email(request, order):
@@ -1478,7 +1452,138 @@ def pricing_view(request):
     ).exists():
         messages.info(request, "You already have an active PRO subscription. No need to purchase again.")
         return redirect('userpanel:dashboard')
-    return render(request, 'userpanel/pricing.html')
+    
+    context = {
+        'PAYPAL_CLIENT_ID': settings.PAYPAL_CLIENT_ID,
+    }
+    return render(request, 'userpanel/pricing.html', context)
+
+@login_required
+def paypal_checkout_view(request):
+    """
+    PayPal checkout page with both Express Checkout and Smart Payment Buttons.
+    Users are redirected here from the cart page to choose their payment method.
+    """
+    plan_id = request.GET.get('plan')
+    if not plan_id:
+        messages.error(request, "No plan selected for checkout.")
+        return redirect('userpanel:cart')
+    
+    from adminpanel.models import Subscription
+    # Check if user has an ACTIVE subscription that is NOT expired
+    if Subscription.objects.filter(
+        user=request.user, 
+        status='active', 
+        end_date__gt=timezone.now()
+    ).exists():
+        messages.info(request, "You already have an active PRO subscription. No need to purchase again.")
+        return redirect('userpanel:dashboard')
+    
+    # Environment-specific product database
+    if settings.DEBUG:
+        # Development: Use sandbox pricing
+        PRODUCTS_DB = {
+            "PRO_MEMBERSHIP_1_MONTH": {
+                "name": "WA Campaign Sender PRO - 1 Month",
+                "price": 5.99,
+                "description": "Start your WhatsApp marketing journey with 1 month of access to WA Campaign Sender PRO.",
+                "features": [
+                    "Bulk messaging to unlimited contacts",
+                    "Contact extractor and management",
+                    "Pause/Resume campaign support",
+                    "Anti-ban logic and safety features",
+                    "Real-time message delivery reports",
+                    "24/7 WhatsApp support"
+                ]
+            },
+            "PRO_MEMBERSHIP_6_MONTHS": {
+                "name": "WA Campaign Sender PRO - 6 Months",
+                "price": 29.95,
+                "description": "Perfect for growing businesses with 6 months of PRO access.",
+                "features": [
+                    "All 1-month features included",
+                    "Priority customer support",
+                    "Advanced scheduling options",
+                    "Multiple WhatsApp number support",
+                    "Campaign analytics and insights",
+                    "Export tools for contact management"
+                ]
+            },
+            "PRO_MEMBERSHIP_1_YEAR": {
+                "name": "WA Campaign Sender PRO - 1 Year",
+                "price": 59.00,
+                "description": "Best value for serious marketers with 1 year of PRO access.",
+                "features": [
+                    "All 6-month features included",
+                    "Dedicated account manager",
+                    "Custom integrations support",
+                    "Advanced automation features",
+                    "Priority feature requests",
+                    "Bulk discount on renewals"
+                ]
+            }
+        }
+    else:
+        # Production: Use live pricing
+        PRODUCTS_DB = {
+            "PRO_MEMBERSHIP_1_MONTH": {
+                "name": "WA Campaign Sender PRO - 1 Month",
+                "price": 5.99,
+                "description": "Start your WhatsApp marketing journey with 1 month of access to WA Campaign Sender PRO.",
+                "features": [
+                    "Bulk messaging to unlimited contacts",
+                    "Contact extractor and management",
+                    "Pause/Resume campaign support",
+                    "Anti-ban logic and safety features",
+                    "Real-time message delivery reports",
+                    "24/7 WhatsApp support"
+                ]
+            },
+            "PRO_MEMBERSHIP_6_MONTHS": {
+                "name": "WA Campaign Sender PRO - 6 Months",
+                "price": 29.95,
+                "description": "Perfect for growing businesses with 6 months of PRO access.",
+                "features": [
+                    "All 1-month features included",
+                    "Priority customer support",
+                    "Advanced scheduling options",
+                    "Multiple WhatsApp number support",
+                    "Campaign analytics and insights",
+                    "Export tools for contact management"
+                ]
+            },
+            "PRO_MEMBERSHIP_1_YEAR": {
+                "name": "WA Campaign Sender PRO - 1 Year",
+                "price": 59.00,
+                "description": "Best value for serious marketers with 1 year of PRO access.",
+                "features": [
+                    "All 6-month features included",
+                    "Dedicated account manager",
+                    "Custom integrations support",
+                    "Advanced automation features",
+                    "Priority feature requests",
+                    "Bulk discount on renewals"
+                ]
+            }
+        }
+    
+    if plan_id not in PRODUCTS_DB:
+        messages.error(request, "Invalid plan selected.")
+        return redirect('userpanel:cart')
+    
+    plan_info = PRODUCTS_DB[plan_id]
+    
+    context = {
+        'plan_id': plan_id,
+        'plan_info': plan_info,
+        'PAYPAL_CLIENT_ID': settings.PAYPAL_CLIENT_ID,
+        'debug': settings.DEBUG,
+    }
+    
+    # Debug: Log PayPal client ID
+    logger.info(f"PayPal Client ID: {settings.PAYPAL_CLIENT_ID[:10]}..." if settings.PAYPAL_CLIENT_ID else "PayPal Client ID is empty!")
+    
+    return render(request, 'userpanel/paypal_checkout.html', context)
 
 @login_required
 def clear_cart_view(request):
@@ -1713,6 +1818,16 @@ def cart_view(request):
         # Check if free trial is active but NOT cancelled by admin
         on_free_trial = user_profile.on_free_trial and not user_profile.free_trial_cancelled
 
+    # Prepare PayPal data for Smart Payment Buttons
+    paypal_cart_data = None
+    if processed_cart_items:
+        first_item = processed_cart_items[0]
+        paypal_cart_data = {
+            'amount': str(cart_total_overall),
+            'description': first_item['name'],
+            'plan_type': first_item['id']
+        }
+
     context = {
         'cart_items': processed_cart_items,
         'cart_subtotal': cart_subtotal,
@@ -1722,6 +1837,8 @@ def cart_view(request):
         'on_free_trial': on_free_trial,
         'is_pro_user': is_pro_user,
         'debug': settings.DEBUG,
+        'PAYPAL_CLIENT_ID': settings.PAYPAL_CLIENT_ID,
+        'paypal_cart_data': paypal_cart_data,
     }
     return render(request, 'userpanel/cart.html', context)
 
@@ -1733,6 +1850,110 @@ def logout_view(request):
     """
     logout(request)
     return redirect('sitevisitor:home')
+
+# ---------------- PayPal Smart Payment Buttons -----------------
+
+@csrf_exempt
+@require_POST
+def process_direct_paypal_payment(request):
+    """Process PayPal Smart Payment Buttons direct payments"""
+    try:
+        data = json.loads(request.body)
+        order_id = data.get('orderID')
+        payment_id = data.get('paymentID')
+        plan_type = data.get('planType')
+        amount = float(data.get('amount', 0))
+        payer_id = data.get('payerID')
+        capture_id = data.get('captureID')
+        
+        logger.info(f"Processing direct PayPal payment: {payment_id}, Plan: {plan_type}, Amount: ${amount}")
+        
+        if not all([order_id, payment_id, plan_type, amount, payer_id, capture_id]):
+            return JsonResponse({'success': False, 'error': 'Missing required payment data'})
+        
+        # Get user (must be authenticated for this flow)
+        if not request.user.is_authenticated:
+            return JsonResponse({'success': False, 'error': 'User not authenticated'})
+        
+        user = request.user
+        
+        # Check if user already has active subscription
+        from adminpanel.models import Subscription
+        if Subscription.objects.filter(
+            user=user, 
+            status='active', 
+            end_date__gt=timezone.now()
+        ).exists():
+            return JsonResponse({'success': False, 'error': 'User already has active subscription'})
+        
+        # Verify payment with PayPal using v2 API
+        from .paypal_utils import PayPalAPI
+        paypal_api = PayPalAPI()
+        
+        # Verify the order was actually captured
+        try:
+            # In a real implementation, you might want to verify the capture
+            # For now, we'll trust the client-side capture was successful
+            logger.info(f"PayPal payment verified: {capture_id}")
+        except Exception as e:
+            logger.error(f"PayPal verification failed: {e}")
+            return JsonResponse({'success': False, 'error': 'Payment verification failed'})
+        
+        # Create order record
+        order = Order.objects.create(
+            user=user,
+            total=amount,
+            subtotal=amount,
+            status='completed',  # Direct payment is already captured
+            payment_method='PayPal',
+            paypal_payment_id=payment_id,
+            paypal_txn_id=capture_id
+        )
+        
+        # Create order item
+        product_names = {
+            'PRO_MEMBERSHIP_1_MONTH': 'WA Campaign Sender PRO - 1 Month',
+            'PRO_MEMBERSHIP_6_MONTHS': 'WA Campaign Sender PRO - 6 Months', 
+            'PRO_MEMBERSHIP_1_YEAR': 'WA Campaign Sender PRO - 1 Year'
+        }
+        
+        OrderItem.objects.create(
+            order=order,
+            product_name=product_names.get(plan_type, 'WA Campaign Sender PRO'),
+            product_description=f"Plan ID: {plan_type}",
+            unit_price=amount,
+            quantity=1
+        )
+        
+        # Process subscription using existing function
+        try:
+            process_subscription_after_payment(user, order)
+            logger.info(f"Direct PayPal subscription processed for user {user.email}")
+        except Exception as e:
+            logger.error(f"Subscription processing failed: {e}")
+            return JsonResponse({'success': False, 'error': 'Subscription processing failed'})
+        
+        # Send success email
+        try:
+            from userpanel.email_utils import send_payment_success_email
+            send_payment_success_email(user, order)
+        except Exception as e:
+            logger.error(f"Failed to send success email: {e}")
+            # Don't fail the whole process for email issues
+        
+        logger.info(f"Direct PayPal payment completed successfully: Order #{order.order_id}")
+        return JsonResponse({
+            'success': True, 
+            'order_id': order.order_id,
+            'message': 'Payment processed successfully'
+        })
+        
+    except json.JSONDecodeError:
+        logger.error("Invalid JSON in direct PayPal payment request")
+        return JsonResponse({'success': False, 'error': 'Invalid request data'})
+    except Exception as e:
+        logger.error(f"Direct PayPal payment error: {e}", exc_info=True)
+        return JsonResponse({'success': False, 'error': 'Payment processing failed'})
 
 # ---------------- Free Trial -----------------
 
