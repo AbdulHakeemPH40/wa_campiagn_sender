@@ -37,5 +37,9 @@ urlpatterns = [
     path('start-free-trial/', views.start_free_trial, name='start_free_trial'),
     # PayPal Webhook
     path('paypal-webhook/', paypal_webhook_handler, name='paypal_webhook'),
+    # PayPal Smart Payment Buttons
+    path('paypal/process-direct-payment/', views.process_direct_paypal_payment, name='process_direct_payment'),
+    # PayPal Checkout Page
+    path('paypal/checkout/', views.paypal_checkout_view, name='paypal_checkout'),
 
 ]

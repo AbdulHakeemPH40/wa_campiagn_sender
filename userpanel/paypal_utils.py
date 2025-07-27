@@ -17,8 +17,31 @@ class PayPalAPI:
         else:
             self.base_url = 'https://api.paypal.com'
     
+    def validate_production_credentials(self):
+        """Validate that production mode doesn't use sandbox credentials"""
+        if self.mode == 'live':
+            # Check if using sandbox client ID (sandbox IDs typically contain 'sandbox' or start with 'sb-')
+            if ('sandbox' in self.client_id.lower() or 
+                self.client_id.startswith('sb-') or 
+                'test' in self.client_id.lower()):
+                logger.error("SECURITY ERROR: Sandbox credentials detected in production mode!")
+                return False
+                
+            # Check if using sandbox secret
+            if ('sandbox' in self.client_secret.lower() or 
+                'test' in self.client_secret.lower()):
+                logger.error("SECURITY ERROR: Sandbox secret detected in production mode!")
+                return False
+                
+        return True
+    
     def get_access_token(self):
-        """Get PayPal access token"""
+        """Get PayPal access token with production validation"""
+        # Validate credentials for production
+        if not self.validate_production_credentials():
+            logger.error("PayPal credential validation failed - blocking request")
+            return None
+            
         url = f"{self.base_url}/v1/oauth2/token"
         
         headers = {
@@ -39,18 +62,21 @@ class PayPalAPI:
             logger.info(f"PayPal token request status: {response.status_code}")
             response.raise_for_status()
             token_data = response.json()
-            logger.info(f"PayPal token obtained successfully")
+            logger.info(f"PayPal token obtained successfully in {self.mode} mode")
             return token_data['access_token']
         except requests.exceptions.RequestException as e:
             logger.error(f"PayPal access token request error: {e}")
             if hasattr(e, 'response') and e.response:
                 logger.error(f"PayPal response: {e.response.text}")
+                # Check if error is due to sandbox credentials in production
+                if self.mode == 'live' and 'invalid_client' in str(e.response.text).lower():
+                    logger.error("POSSIBLE CAUSE: Sandbox credentials used in production mode")
             return None
         except Exception as e:
             logger.error(f"PayPal access token error: {e}")
             return None
     
-    def create_payment(self, amount, currency='USD', description='WA Campaign Sender Subscription'):
+    def create_payment(self, amount, description, currency='USD', return_url=None, cancel_url=None):
         """Create PayPal payment"""
         access_token = self.get_access_token()
         if not access_token:
@@ -70,8 +96,13 @@ class PayPalAPI:
                 "payment_method": "paypal"
             },
             "redirect_urls": {
-                "return_url": settings.PAYPAL_RETURN_URL,
-                "cancel_url": settings.PAYPAL_CANCEL_URL
+                "return_url": return_url or settings.PAYPAL_RETURN_URL,
+                "cancel_url": cancel_url or settings.PAYPAL_CANCEL_URL
+            },
+            "application_context": {
+                "brand_name": "WA Campaign Sender",
+                "landing_page": "Billing",  # Show credit card form first
+                "user_action": "commit"      # Show "Pay Now" instead of "Continue"
             },
             "transactions": [{
                 "item_list": {
@@ -107,12 +138,118 @@ class PayPalAPI:
         except requests.exceptions.RequestException as e:
             logger.error(f"PayPal create payment request error: {e}")
             if hasattr(e, 'response') and e.response:
-                logger.error(f"PayPal response: {e.response.text}")
+                logger.error(f"PayPal response status: {e.response.status_code}")
+                logger.error(f"PayPal response text: {e.response.text}")
+                try:
+                    error_json = e.response.json()
+                    logger.error(f"PayPal error details: {error_json}")
+                except:
+                    pass
             return None
         except Exception as e:
             logger.error(f"PayPal create payment error: {e}")
             return None
     
+    def create_order_v2(self, amount, currency='USD', description='WA Campaign Sender Subscription'):
+        """Create PayPal order using v2 API for better guest checkout support"""
+        access_token = self.get_access_token()
+        if not access_token:
+            logger.error("Failed to get PayPal access token")
+            return None
+        
+        url = f"{self.base_url}/v2/checkout/orders"
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {access_token}',
+        }
+        
+        order_data = {
+            "intent": "CAPTURE",
+            "purchase_units": [{
+                "amount": {
+                    "currency_code": currency,
+                    "value": str(amount)
+                },
+                "description": description
+            }],
+            "application_context": {
+                "brand_name": "WA Campaign Sender",
+                "landing_page": "BILLING",  # Show credit card form first
+                "user_action": "PAY_NOW",    # Show "Pay Now" instead of "Continue"
+                "payment_method": {
+                    "payee_preferred": "UNRESTRICTED"  # Allow guest checkout
+                },
+                "return_url": settings.PAYPAL_RETURN_URL,
+                "cancel_url": settings.PAYPAL_CANCEL_URL
+            }
+        }
+        
+        try:
+            logger.info(f"Creating PayPal v2 order for ${amount}")
+            response = requests.post(
+                url, 
+                headers=headers, 
+                data=json.dumps(order_data),
+                timeout=30
+            )
+            logger.info(f"PayPal v2 order creation status: {response.status_code}")
+            response.raise_for_status()
+            order_response = response.json()
+            logger.info(f"PayPal v2 order created: {order_response.get('id')}")
+            return order_response
+        except requests.exceptions.RequestException as e:
+            logger.error(f"PayPal v2 create order request error: {e}")
+            if hasattr(e, 'response') and e.response:
+                logger.error(f"PayPal response status: {e.response.status_code}")
+                logger.error(f"PayPal response text: {e.response.text}")
+                try:
+                    error_json = e.response.json()
+                    logger.error(f"PayPal error details: {error_json}")
+                except:
+                    pass
+            return None
+        except Exception as e:
+            logger.error(f"PayPal v2 create order error: {e}")
+            return None
+    
+    def capture_order_v2(self, order_id):
+        """Capture PayPal order using v2 API"""
+        access_token = self.get_access_token()
+        if not access_token:
+            logger.error("Failed to get PayPal access token")
+            return None
+        
+        url = f"{self.base_url}/v2/checkout/orders/{order_id}/capture"
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {access_token}',
+        }
+        
+        try:
+            logger.info(f"Capturing PayPal v2 order: {order_id}")
+            response = requests.post(url, headers=headers, timeout=30)
+            logger.info(f"PayPal v2 capture status: {response.status_code}")
+            response.raise_for_status()
+            capture_response = response.json()
+            logger.info(f"PayPal v2 order captured: {capture_response.get('status')}")
+            return capture_response
+        except requests.exceptions.RequestException as e:
+            logger.error(f"PayPal v2 capture order request error: {e}")
+            if hasattr(e, 'response') and e.response:
+                logger.error(f"PayPal response status: {e.response.status_code}")
+                logger.error(f"PayPal response text: {e.response.text}")
+                try:
+                    error_json = e.response.json()
+                    logger.error(f"PayPal error details: {error_json}")
+                except:
+                    pass
+            return None
+        except Exception as e:
+            logger.error(f"PayPal v2 capture order error: {e}")
+            return None
+
     def execute_payment(self, payment_id, payer_id):
         """Execute PayPal payment"""
         access_token = self.get_access_token()

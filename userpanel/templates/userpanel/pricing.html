@@ -116,11 +116,12 @@
                         </ul>
                     </div>
                     {% if not request.user.is_authenticated or not request.user.profile.has_active_subscription %}
-<a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_1_MONTH"
-                        class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors mt-auto">Add to Cart</a>
-{% else %}
-<button class="w-full bg-gray-400 text-white text-center px-6 py-3 rounded-button font-medium cursor-not-allowed mt-auto" disabled>You already have PRO</button>
-{% endif %}
+                        <!-- Add to Cart Button -->
+                        <a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_1_MONTH"
+                            class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors">Add to Cart</a>
+                    {% else %}
+                        <button class="w-full bg-gray-400 text-white text-center px-6 py-3 rounded-button font-medium cursor-not-allowed mt-auto" disabled>You already have PRO</button>
+                    {% endif %}
                 </div>
 
                 <!-- 6 Month PRO Plan -->
@@ -166,11 +167,12 @@
                         </ul>
                     </div>
                     {% if not request.user.is_authenticated or not request.user.profile.has_active_subscription %}
-<a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_6_MONTHS"
-                        class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors mt-auto">Add to Cart</a>
-{% else %}
-<button class="w-full bg-gray-400 text-white text-center px-6 py-3 rounded-button font-medium cursor-not-allowed mt-auto" disabled>You already have PRO</button>
-{% endif %}
+                        <!-- Add to Cart Button -->
+                        <a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_6_MONTHS"
+                            class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors">Add to Cart</a>
+                    {% else %}
+                        <button class="w-full bg-gray-400 text-white text-center px-6 py-3 rounded-button font-medium cursor-not-allowed mt-auto" disabled>You already have PRO</button>
+                    {% endif %}
                 </div>
 
                 <!-- 1 Year PRO Plan -->
@@ -216,14 +218,19 @@
                         </ul>
                     </div>
                     {% if not request.user.is_authenticated or not request.user.profile.has_active_subscription %}
-<a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_1_YEAR"
-                        class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors mt-auto">Add to Cart</a>
-{% else %}
-<button class="w-full bg-gray-400 text-white text-center px-6 py-3 rounded-button font-medium cursor-not-allowed mt-auto" disabled>You already have PRO</button>
-{% endif %}
+                        <!-- Add to Cart Button -->
+                        <a href="{% url 'sitevisitor:buy' %}?add-to-cart=PRO_MEMBERSHIP_1_YEAR"
+                            class="w-full bg-primary text-white text-center px-6 py-3 !rounded-button font-medium hover:bg-opacity-90 transition-colors">Add to Cart</a>
+                    {% else %}
+                        <button class="w-full bg-gray-400 text-white text-center px-6 py-3 rounded-button font-medium cursor-not-allowed mt-auto" disabled>You already have PRO</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </section>
 </div>
+
+<!-- Add CSRF token for AJAX requests -->
+{% csrf_token %}
+
 {% endblock %}
