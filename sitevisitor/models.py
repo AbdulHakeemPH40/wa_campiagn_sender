@@ -120,14 +120,19 @@ class Profile(models.Model):
         from adminpanel.models import Subscription
         from userpanel.models import Order
 
-        # Check for active subscription
-        if Subscription.objects.filter(user=self.user, status='active').exists():
+        # Check for active subscription that is NOT expired
+        if Subscription.objects.filter(
+            user=self.user, 
+            status='active', 
+            end_date__gt=timezone.now()
+        ).exists():
             return True
             
         # Also check for processing orders (PayPal payment received but held)
+        # Note: Only processing orders, not completed ones (completed should have created subscriptions)
         return Order.objects.filter(
             user=self.user, 
-            status__in=['processing', 'completed'],
+            status='processing',
             paypal_txn_id__isnull=False
         ).exists()
 
