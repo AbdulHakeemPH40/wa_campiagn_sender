@@ -190,7 +190,7 @@ class WhatsAppNumberForm(forms.Form):
         widget=forms.TextInput(attrs={
             'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm',
             'placeholder': '+1234567890',
-            'pattern': '[\+0-9]+',
+            'pattern': r'[\+0-9]+',
             'title': 'Please enter only numbers and the + sign'
         })
     )

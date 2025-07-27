@@ -565,8 +565,16 @@ def direct_paypal_redirect(request):
 
         except Exception as api_error:
             logger.error(f"PayPal API Error: {api_error}", exc_info=True)
-            messages.error(request, "PayPal service is temporarily unavailable. Please try again in a few minutes.")
-            return redirect('userpanel:cart')
+            
+            # Check if it's a credentials issue
+            if 'invalid_client' in str(api_error).lower():
+                messages.error(request, "PayPal configuration error. Please contact support.")
+            elif 'timeout' in str(api_error).lower():
+                messages.error(request, "PayPal connection timeout. Please try again.")
+            else:
+                messages.error(request, "PayPal service temporarily unavailable. Please try the card payment option.")
+            
+            return redirect('userpanel:paypal_checkout', plan=plan_type)
 
     except Exception as e:
         logger.error(f"Error in direct_paypal_redirect: {str(e)}", exc_info=True)
@@ -1520,7 +1528,7 @@ def paypal_checkout_view(request):
         PRODUCTS_DB = {
             "PRO_MEMBERSHIP_1_MONTH": {
                 "name": "WA Campaign Sender PRO - 1 Month",
-                "price": 9.99,
+                "price": 5.99,
                 "description": "Start your WhatsApp marketing journey with 1 month of access to WA Campaign Sender PRO.",
                 "features": [
                     "Bulk messaging to unlimited contacts",
@@ -1533,7 +1541,7 @@ def paypal_checkout_view(request):
             },
             "PRO_MEMBERSHIP_6_MONTHS": {
                 "name": "WA Campaign Sender PRO - 6 Months",
-                "price": 49.99,
+                "price": 29.95,
                 "description": "Perfect for growing businesses with 6 months of PRO access.",
                 "features": [
                     "All 1-month features included",
@@ -1546,7 +1554,7 @@ def paypal_checkout_view(request):
             },
             "PRO_MEMBERSHIP_1_YEAR": {
                 "name": "WA Campaign Sender PRO - 1 Year",
-                "price": 99.99,
+                "price": 59.00,
                 "description": "Best value for serious marketers with 1 year of PRO access.",
                 "features": [
                     "All 6-month features included",
@@ -1571,6 +1579,9 @@ def paypal_checkout_view(request):
         'PAYPAL_CLIENT_ID': settings.PAYPAL_CLIENT_ID,
         'debug': settings.DEBUG,
     }
+    
+    # Debug: Log PayPal client ID
+    logger.info(f"PayPal Client ID: {settings.PAYPAL_CLIENT_ID[:10]}..." if settings.PAYPAL_CLIENT_ID else "PayPal Client ID is empty!")
     
     return render(request, 'userpanel/paypal_checkout.html', context)
 

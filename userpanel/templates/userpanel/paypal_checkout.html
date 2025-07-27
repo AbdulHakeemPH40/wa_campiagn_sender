@@ -2,40 +2,21 @@
 {% load humanize %}
 {% load static %}
 
-{% block title %}PayPal Checkout - {{ block.super }}{% endblock %}
+{% block title %}Secure Checkout - {{ block.super }}{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-    <div class="container mx-auto px-4 max-w-6xl">
-        <!-- Header with Country Selector -->
-        <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-8 space-y-4 lg:space-y-0">
-            <div class="text-center lg:text-left flex-1">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Complete Your Purchase</h1>
-                <p class="text-gray-600 text-sm md:text-base">Choose your preferred payment method below</p>
-            </div>
-            
-            <!-- Country Selector - Responsive -->
-            <div class="flex items-center justify-center lg:justify-end">
-                <div class="flex items-center space-x-2 bg-white rounded-lg px-3 py-2 shadow-sm border">
-                    <i class="ri-global-line text-gray-500"></i>
-                    <select class="bg-transparent border-none outline-none text-sm font-medium text-gray-700 cursor-pointer min-w-[120px]">
-                        <option value="US">🇺🇸 United States</option>
-                        <option value="AE">🇦🇪 UAE</option>
-                        <option value="IN" selected>🇮🇳 India</option>
-                        <option value="GB">🇬🇧 United Kingdom</option>
-                        <option value="CA">🇨🇦 Canada</option>
-                        <option value="AU">🇦🇺 Australia</option>
-                        <option value="SG">🇸🇬 Singapore</option>
-                        <option value="MY">🇲🇾 Malaysia</option>
-                    </select>
-                </div>
-            </div>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
+    <div class="container mx-auto px-4 max-w-5xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Secure Checkout</h1>
+            <p class="text-gray-600">Complete your purchase safely and securely</p>
         </div>
 
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                <!-- Left Column: Order Summary -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 order-2 lg:order-1">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Order Summary (Left/Top) -->
+            <div class="lg:col-span-1 order-2 lg:order-1">
+                <div class="bg-white rounded-xl shadow-lg p-6 sticky top-8">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Order Summary</h2>
                     
                     {% if plan_info %}
@@ -51,12 +32,12 @@
                         </div>
                         
                         <!-- Features -->
-                        <div class="bg-gray-50 rounded-lg p-4">
-                            <h4 class="font-medium text-gray-700 mb-2">What's Included:</h4>
-                            <ul class="text-sm text-gray-600 space-y-1">
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <h4 class="font-medium text-gray-700 mb-2 text-sm">What's Included:</h4>
+                            <ul class="text-xs text-gray-600 space-y-1">
                                 {% for feature in plan_info.features %}
                                 <li class="flex items-center">
-                                    <i class="ri-check-line text-green-500 mr-2"></i>
+                                    <i class="ri-check-line text-green-500 mr-2 text-sm"></i>
                                     {{ feature }}
                                 </li>
                                 {% endfor %}
@@ -73,134 +54,115 @@
                     </div>
                     {% endif %}
                     
-                    <!-- Navigation Options -->
-                    <div class="mt-6 pt-4 border-t space-y-3">
-                        <!-- Continue to Dashboard Button -->
-                        <a href="{% url 'userpanel:dashboard' %}" 
-                           class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center border border-gray-300">
-                            <i class="ri-dashboard-line mr-2"></i>
-                            Continue to Dashboard
-                        </a>
-                        
-                        <!-- Back to Cart -->
-                        <a href="{% url 'userpanel:cart' %}" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center justify-center">
-                            <i class="ri-arrow-left-line mr-1"></i>
-                            Back to Cart
-                        </a>
+                    <!-- Security Info -->
+                    <div class="mt-6 pt-4 border-t">
+                        <div class="flex items-center text-sm text-green-600 mb-2">
+                            <i class="ri-shield-check-line mr-2"></i>
+                            <span class="font-medium">Secure Payment</span>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>• 256-bit SSL encryption</li>
+                            <li>• PCI DSS compliant</li>
+                            <li>• No card details stored</li>
+                        </ul>
                     </div>
                 </div>
+            </div>
 
-                <!-- Right Column: Payment Options -->
-                <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 order-1 lg:order-2">
-                    <div class="flex items-center justify-between mb-6 border-b pb-3">
-                        <h2 class="text-xl font-semibold text-gray-800">Payment Options</h2>
-                        <div class="flex items-center text-sm text-gray-500">
-                            <i class="ri-shield-check-line text-green-500 mr-1"></i>
-                            <span>Secure Payment</span>
-                        </div>
-                    </div>
+            <!-- Payment Methods (Right/Bottom) -->
+            <div class="lg:col-span-2 order-1 lg:order-2">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Choose Payment Method</h2>
                     
-                    <!-- Recommended Payment Method -->
-                    <div class="mb-6 p-3 md:p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <div class="flex flex-col sm:flex-row sm:items-center mb-3 space-y-1 sm:space-y-0">
-                            <i class="ri-star-fill text-yellow-500 mr-2"></i>
-                            <h3 class="font-medium text-blue-800 text-sm md:text-base">Recommended for Indian Users</h3>
-                        </div>
-                        
-                        <!-- India-specific Notice -->
-                        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <!-- Payment Method Tabs -->
+                    <div class="flex border-b mb-6">
+                        <button id="card-tab" class="payment-tab active px-4 py-2 font-medium text-sm border-b-2 border-blue-600 text-blue-600">
+                            <i class="ri-bank-card-line mr-2"></i>Credit/Debit Card
+                        </button>
+                        <button id="paypal-tab" class="payment-tab px-4 py-2 font-medium text-sm text-gray-600 hover:text-gray-800">
+                            <i class="ri-paypal-fill mr-2"></i>PayPal Account
+                        </button>
+                    </div>
+
+                    <!-- Card Payment Section (Default Active) -->
+                    <div id="card-section" class="payment-section">
+                        <!-- Guest Checkout Notice -->
+                        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                             <div class="flex items-start">
-                                <i class="ri-check-line text-green-600 text-lg mr-2 mt-0.5 flex-shrink-0"></i>
+                                <i class="ri-user-line text-green-600 text-lg mr-3 mt-0.5"></i>
                                 <div>
-                                    <p class="text-sm text-green-800 font-medium">✅ Works with Indian Cards</p>
-                                    <p class="text-xs md:text-sm text-green-700 mt-1">Indian users can purchase using Indian cards. PayPal Express works better than Smart Buttons for Indian locations.</p>
+                                    <h3 class="font-medium text-green-800 mb-1">No Account Required</h3>
+                                    <p class="text-sm text-green-700">Pay securely with your credit or debit card without creating a PayPal account.</p>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="mb-4">
-                            <h4 class="font-medium text-gray-700 mb-2 flex items-center text-sm md:text-base">
-                                <i class="ri-paypal-fill text-blue-600 text-xl mr-2 flex-shrink-0"></i>
-                                PayPal Express Checkout
-                            </h4>
-                            <p class="text-xs md:text-sm text-gray-600 mb-3">Best option for Indian users - bypasses geographic restrictions</p>
-                        </div>
-                        
-                        <a href="{% url 'userpanel:direct_paypal_redirect' %}?plan={{ plan_id }}" 
-                           class="w-full bg-blue-600 text-white font-medium py-2.5 md:py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:shadow-outline flex items-center justify-center transition-colors duration-200 text-sm md:text-base">
-                            <i class="ri-paypal-fill mr-2 text-lg md:text-xl flex-shrink-0"></i>
-                            <span>{% if debug %}PayPal Express (Sandbox){% else %}PayPal Express Checkout{% endif %}</span>
-                        </a>
-                    </div>
-                    
-                    <!-- Production/Sandbox Mode Notice -->
-                    {% if debug %}
-                    <div class="mb-6 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                        <div class="flex items-start">
-                            <i class="ri-information-line text-yellow-600 text-lg mr-2 mt-0.5 flex-shrink-0"></i>
-                            <div>
-                                <p class="text-sm text-yellow-800 font-medium">🧪 Development Mode (Sandbox)</p>
-                                <p class="text-xs md:text-sm text-yellow-700 mt-1">You're in test mode. No real money will be charged. Use PayPal sandbox test accounts or the provided test card numbers.</p>
-                            </div>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg">
-                        <div class="flex items-start">
-                            <i class="ri-alert-line text-red-600 text-lg mr-2 mt-0.5 flex-shrink-0"></i>
-                            <div>
-                                <p class="text-sm text-red-800 font-medium">🔴 Production Mode (Live Payments)</p>
-                                <p class="text-xs md:text-sm text-red-700 mt-1">Real money will be charged. Do NOT use sandbox/test PayPal accounts. Use your real PayPal account or credit card.</p>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    <!-- Alternative Payment Method -->
-                    <div class="mb-6">
-                        <div class="flex items-center mb-3">
-                            <span class="text-sm text-gray-500 font-medium">Alternative Payment Method</span>
-                        </div>
-                    
 
-                    
-                        <div class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                            <h4 class="font-medium text-gray-700 mb-2 flex items-center">
-                                <i class="ri-bank-card-line text-gray-600 text-xl mr-2"></i>
-                                PayPal Smart Payment Buttons
-                            </h4>
-                            <p class="text-sm text-gray-600 mb-3">Pay with credit/debit card or PayPal account</p>
+                        <!-- PayPal Smart Payment Buttons (Card-First) -->
+                        <div class="space-y-4">
+                            <div class="text-center">
+                                <p class="text-sm text-gray-600 mb-4">Pay with your card through PayPal's secure checkout</p>
+                            </div>
                             
-                            <!-- Geographic Notice -->
-                            <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                                <div class="flex items-start">
-                                    <i class="ri-information-line text-amber-600 text-lg mr-2 mt-0.5"></i>
-                                    <div>
-                                        <p class="text-sm text-amber-800 font-medium">⚠️ Geographic Restriction Notice</p>
-                                        <p class="text-sm text-amber-700 mt-1">May not work from India/Asia locations. Use <strong>PayPal Express</strong> above if you encounter issues.</p>
-                                    </div>
+                            <!-- PayPal Buttons Container -->
+                            <div id="paypal-card-container" class="min-h-[60px] bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                                <div class="text-center text-gray-500">
+                                    <i class="ri-loader-4-line animate-spin text-xl mb-2"></i>
+                                    <p class="text-sm">Loading secure payment...</p>
                                 </div>
                             </div>
                             
-                            <div id="paypal-button-container" class="min-h-[50px] bg-white rounded border p-2"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Security Info -->
-                    <div class="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                        <div class="flex items-start">
-                            <i class="ri-shield-check-line text-green-600 text-lg mr-2 mt-0.5"></i>
-                            <div>
-                                <p class="text-sm text-green-800 font-medium">Secure Payment Guarantee</p>
-                                <ul class="text-sm text-green-700 mt-1 space-y-1">
-                                    <li>• 256-bit SSL encryption</li>
-                                    <li>• PCI DSS compliant</li>
-                                    <li>• No card details stored</li>
-                                    <li>• PayPal buyer protection</li>
-                                </ul>
+                            <!-- Accepted Cards -->
+                            <div class="flex items-center justify-center space-x-4 mt-4">
+                                <span class="text-xs text-gray-500">Accepted cards:</span>
+                                <div class="flex space-x-2">
+                                    <i class="ri-visa-line text-2xl text-blue-600"></i>
+                                    <i class="ri-mastercard-line text-2xl text-red-500"></i>
+                                    <i class="ri-bank-card-line text-2xl text-gray-600"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- PayPal Account Section -->
+                    <div id="paypal-section" class="payment-section hidden">
+                        <!-- PayPal Account Notice -->
+                        <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="ri-paypal-fill text-blue-600 text-lg mr-3 mt-0.5"></i>
+                                <div>
+                                    <h3 class="font-medium text-blue-800 mb-1">Pay with PayPal Account</h3>
+                                    <p class="text-sm text-blue-700">Use your existing PayPal account balance or linked payment methods.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Express Checkout Button -->
+                        <div class="space-y-4">
+                            <a href="{% url 'userpanel:direct_paypal_redirect' %}?plan={{ plan_id }}" 
+                               class="w-full bg-blue-600 text-white font-medium py-4 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center transition-all duration-200 text-base">
+                                <i class="ri-paypal-fill mr-3 text-xl"></i>
+                                <span>Continue with PayPal</span>
+                            </a>
+                            
+                            <p class="text-xs text-gray-500 text-center">You'll be redirected to PayPal to complete your payment</p>
+                        </div>
+                    </div>
+
+
+                </div>
+                
+                <!-- Navigation -->
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                    <a href="{% url 'userpanel:cart' %}" 
+                       class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center border border-gray-300">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Cart
+                    </a>
+                    <a href="{% url 'userpanel:dashboard' %}" 
+                       class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center border border-blue-300">
+                        <i class="ri-dashboard-line mr-2"></i>
+                        Dashboard
+                    </a>
                 </div>
             </div>
         </div>
@@ -209,162 +171,159 @@
 {% endblock %}
 
 {% block scripts %}
-{% if plan_info and PAYPAL_CLIENT_ID %}
-<!-- PayPal JavaScript SDK with Global Support -->
-<script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&enable-funding=card&currency=USD&locale=en_US&components=buttons&disable-funding=credit&buyer-country=US&merchant-id={{ PAYPAL_CLIENT_ID }}"></script>
+{% if PAYPAL_CLIENT_ID %}
+<script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&enable-funding=card&currency=USD&components=buttons"></script>
 
 <script>
-// PayPal Smart Payment Buttons Configuration
-const paypalCheckoutData = {
-    amount: '{{ plan_info.price }}',
-    description: '{{ plan_info.name|escapejs }}',
-    planType: '{{ plan_id }}'
-};
-
-// Initialize PayPal Smart Payment Buttons
-if (document.getElementById('paypal-button-container')) {
-    paypal.Buttons({
-        style: {
-            layout: 'vertical',
-            color: 'blue',
-            shape: 'rect',
-            label: 'paypal',
-            height: 45,
-            tagline: false
-        },
-        
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                intent: 'CAPTURE',
-                purchase_units: [{
-                    amount: {
-                        currency_code: 'USD',
-                        value: paypalCheckoutData.amount
-                    },
-                    description: paypalCheckoutData.description,
-                    shipping: {
-                        type: 'SHIPPING',
-                        address: {
-                            address_line_1: '123 Main St',
-                            admin_area_2: 'New York',
-                            admin_area_1: 'NY',
-                            postal_code: '10001',
-                            country_code: 'US'
-                        }
-                    }
-                }],
-                application_context: {
-                    brand_name: 'WA Campaign Sender',
-                    landing_page: 'BILLING',
-                    user_action: 'PAY_NOW',
-                    shipping_preference: 'SET_PROVIDED_ADDRESS',
-                    payment_method: {
-                        payee_preferred: 'UNRESTRICTED'
-                    }
-                }
-            }).catch(function(err) {
-                console.error('PayPal createOrder error:', err);
-                alert('Payment initialization failed. Please try again or contact support.');
-                return Promise.reject(err);
-            });
-        },
-        
-        onApprove: function(data, actions) {
-            // Show loading animation
-            if (typeof loadingManager !== 'undefined') {
-                loadingManager.showPaymentLoading();
-            }
-            
-            return actions.order.capture().then(function(details) {
-                console.log('PayPal payment completed:', details);
-                
-                // Send payment details to Django backend for processing
-                return fetch('/userpanel/paypal/process-direct-payment/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-                    },
-                    body: JSON.stringify({
-                        orderID: data.orderID,
-                        paymentID: details.id,
-                        planType: paypalCheckoutData.planType,
-                        amount: paypalCheckoutData.amount,
-                        payerID: details.payer.payer_id,
-                        captureID: details.purchase_units[0].payments.captures[0].id,
-                        paymentSource: 'smart_buttons'
-                    })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        // Show success message and redirect
-                        alert('🎉 Payment successful! Your PRO subscription has been activated.');
-                        window.location.href = '/userpanel/?payment=success';
-                    } else {
-                        alert('❌ Payment processing failed: ' + (result.error || 'Unknown error'));
-                        if (typeof loadingManager !== 'undefined') {
-                            loadingManager.hideLoading();
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Payment processing error:', error);
-                    alert('❌ Payment processing failed. Please contact support.');
-                    if (typeof loadingManager !== 'undefined') {
-                        loadingManager.hideLoading();
-                    }
-                });
-            });
-        },
-        
-        onError: function(err) {
-            console.error('PayPal SDK error:', err);
-            
-            // Handle specific geolocation errors
-            if (err && err.message && err.message.includes('India')) {
-                alert('🌍 Geographic restriction detected. Please use PayPal Express Checkout instead, or try using a VPN set to US/UAE location.');
-            } else {
-                alert('⚠️ An error occurred during checkout. Please try PayPal Express Checkout or contact support.');
-            }
-            
-            if (typeof loadingManager !== 'undefined') {
-                loadingManager.hideLoading();
-            }
-            
-            // Redirect to PayPal Express as fallback
-            setTimeout(function() {
-                if (confirm('Would you like to try PayPal Express Checkout instead?')) {
-                    window.location.href = '/userpanel/paypal/direct-redirect/?plan=' + paypalCheckoutData.planType;
-                }
-            }, 2000);
-        },
-        
-        onCancel: function(data) {
-            console.log('PayPal payment cancelled:', data);
-            if (typeof loadingManager !== 'undefined') {
-                loadingManager.hideLoading();
-            }
-        }
-    }).render('#paypal-button-container');
-}
-
-// Add loading animation to PayPal Express button
+// Tab switching
 document.addEventListener('DOMContentLoaded', function() {
+    const cardTab = document.getElementById('card-tab');
+    const paypalTab = document.getElementById('paypal-tab');
+    const cardSection = document.getElementById('card-section');
+    const paypalSection = document.getElementById('paypal-section');
+    
+    cardTab.addEventListener('click', function() {
+        cardTab.classList.add('active', 'border-blue-600', 'text-blue-600');
+        cardTab.classList.remove('text-gray-600');
+        paypalTab.classList.remove('active', 'border-blue-600', 'text-blue-600');
+        paypalTab.classList.add('text-gray-600');
+        cardSection.classList.remove('hidden');
+        paypalSection.classList.add('hidden');
+    });
+    
+    paypalTab.addEventListener('click', function() {
+        paypalTab.classList.add('active', 'border-blue-600', 'text-blue-600');
+        paypalTab.classList.remove('text-gray-600');
+        cardTab.classList.remove('active', 'border-blue-600', 'text-blue-600');
+        cardTab.classList.add('text-gray-600');
+        paypalSection.classList.remove('hidden');
+        cardSection.classList.add('hidden');
+    });
+    
+    // Add smooth loading to PayPal Express button
     const expressButton = document.querySelector('a[href*="direct_paypal_redirect"]');
     if (expressButton) {
-        expressButton.addEventListener('click', function() {
-            if (typeof loadingManager !== 'undefined') {
-                loadingManager.showPaymentLoading();
-            }
+        expressButton.addEventListener('click', function(e) {
+            this.innerHTML = '<i class="ri-loader-4-line animate-spin mr-3 text-xl"></i><span>Redirecting to PayPal...</span>';
+            this.classList.add('opacity-75', 'cursor-not-allowed');
         });
     }
+    
+    // Initialize PayPal buttons with industry standards
+    setTimeout(function() {
+        const container = document.getElementById('paypal-card-container');
+        if (typeof paypal !== 'undefined') {
+            // Clear loading content first
+            container.innerHTML = '';
+            
+            paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    color: 'blue',
+                    shape: 'rect',
+                    height: 50,
+                    tagline: false
+                },
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        intent: 'CAPTURE',
+                        purchase_units: [{
+                            amount: {
+                                currency_code: 'USD',
+                                value: '{{ plan_info.price }}'
+                            },
+                            description: '{{ plan_info.name|escapejs }}'
+                        }],
+                        application_context: {
+                            brand_name: 'WA Campaign Sender',
+                            landing_page: 'BILLING',
+                            user_action: 'PAY_NOW',
+                            shipping_preference: 'NO_SHIPPING'
+                        }
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        console.log('Payment captured:', details);
+                        
+                        // Send to Django backend for processing
+                        return fetch('/userpanel/paypal/process-direct-payment/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                            },
+                            body: JSON.stringify({
+                                orderID: data.orderID,
+                                paymentID: details.id,
+                                planType: '{{ plan_id }}',
+                                amount: '{{ plan_info.price }}',
+                                payerID: details.payer.payer_id,
+                                captureID: details.purchase_units[0].payments.captures[0].id,
+                                paymentSource: 'smart_buttons_guest'
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                document.getElementById('paypal-card-container').innerHTML = 
+                                    '<div class="text-center p-4 bg-green-50 rounded-lg"><i class="ri-check-line text-green-600 text-xl mb-2"></i><p class="text-sm text-green-700">Payment successful! Redirecting...</p></div>';
+                                
+                                setTimeout(function() {
+                                    window.location.href = '/userpanel/dashboard/?payment=success';
+                                }, 1500);
+                            } else {
+                                throw new Error(result.error || 'Payment processing failed');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Payment processing error:', error);
+                            document.getElementById('paypal-card-container').innerHTML = 
+                                '<div class="text-center p-4 bg-red-50 rounded-lg"><i class="ri-error-warning-line text-red-600 text-xl mb-2"></i><p class="text-sm text-red-700">Payment processing failed. Contact support.</p></div>';
+                        });
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal error:', err);
+                    document.getElementById('paypal-card-container').innerHTML = 
+                        '<div class="text-center p-4 bg-red-50 rounded-lg"><i class="ri-error-warning-line text-red-600 text-xl mb-2"></i><p class="text-sm text-red-700">Payment failed. Try PayPal Account option above.</p></div>';
+                },
+                onCancel: function(data) {
+                    document.getElementById('paypal-card-container').innerHTML = 
+                        '<div class="text-center p-4 bg-yellow-50 rounded-lg"><i class="ri-information-line text-yellow-600 text-xl mb-2"></i><p class="text-sm text-yellow-700">Payment cancelled. You can try again.</p></div>';
+                }
+            }).render('#paypal-card-container');
+        } else {
+            document.getElementById('paypal-card-container').innerHTML = 
+                '<div class="text-center p-4 bg-red-50 rounded-lg"><p class="text-red-600 text-sm">PayPal unavailable. Use PayPal Account option above.</p></div>';
+        }
+    }, 1000);
 });
-
-
+</script>
+{% else %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('paypal-card-container').innerHTML = 
+        '<div class="text-center p-4 bg-red-50 rounded-lg"><p class="text-red-600 text-sm">PayPal configuration error. Contact support.</p></div>';
+});
 </script>
 {% endif %}
 
-<!-- Add CSRF token for AJAX requests -->
 {% csrf_token %}
+
+<style>
+.payment-tab.active {
+    border-bottom: 2px solid #2563eb;
+    color: #2563eb;
+}
+
+.payment-section {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
 {% endblock %}

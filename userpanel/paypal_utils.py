@@ -37,6 +37,11 @@ class PayPalAPI:
     
     def get_access_token(self):
         """Get PayPal access token with production validation"""
+        # Debug log credentials (first 10 chars only)
+        logger.info(f"PayPal mode: {self.mode}")
+        logger.info(f"PayPal client ID: {self.client_id[:10]}...")
+        logger.info(f"PayPal base URL: {self.base_url}")
+        
         # Validate credentials for production
         if not self.validate_production_credentials():
             logger.error("PayPal credential validation failed - blocking request")
@@ -57,7 +62,7 @@ class PayPalAPI:
                 headers=headers,
                 data=data,
                 auth=(self.client_id, self.client_secret),
-                timeout=30
+                timeout=10  # Reduced timeout
             )
             logger.info(f"PayPal token request status: {response.status_code}")
             response.raise_for_status()
@@ -101,8 +106,8 @@ class PayPalAPI:
             },
             "application_context": {
                 "brand_name": "WA Campaign Sender",
-                "landing_page": "Billing",  # Show credit card form first
-                "user_action": "commit"      # Show "Pay Now" instead of "Continue"
+                "landing_page": "Billing",
+                "user_action": "commit"
             },
             "transactions": [{
                 "item_list": {
@@ -143,6 +148,10 @@ class PayPalAPI:
                 try:
                     error_json = e.response.json()
                     logger.error(f"PayPal error details: {error_json}")
+                    # Log specific error for debugging
+                    if 'details' in error_json:
+                        for detail in error_json['details']:
+                            logger.error(f"PayPal validation error: {detail}")
                 except:
                     pass
             return None
@@ -177,8 +186,10 @@ class PayPalAPI:
                 "brand_name": "WA Campaign Sender",
                 "landing_page": "BILLING",  # Show credit card form first
                 "user_action": "PAY_NOW",    # Show "Pay Now" instead of "Continue"
+                "shipping_preference": "NO_SHIPPING",  # Digital product
                 "payment_method": {
-                    "payee_preferred": "UNRESTRICTED"  # Allow guest checkout
+                    "payee_preferred": "UNRESTRICTED",  # Allow guest checkout
+                    "payer_selected": "PAYPAL"  # Default but allow cards
                 },
                 "return_url": settings.PAYPAL_RETURN_URL,
                 "cancel_url": settings.PAYPAL_CANCEL_URL
