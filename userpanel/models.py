@@ -34,16 +34,35 @@ class Order(models.Model):
     card_expiry = models.CharField(max_length=7, blank=True, null=True)
     
     def save(self, *args, **kwargs):
-        # Generate order_id for pending orders using UUID to avoid duplicates
+        # Check if status is changing to completed and we need to generate invoice number
+        status_changed_to_completed = False
+        if self.pk:  # Existing order
+            try:
+                old_order = Order.objects.get(pk=self.pk)
+                if old_order.status != 'completed' and self.status == 'completed':
+                    status_changed_to_completed = True
+            except Order.DoesNotExist:
+                pass
+        
+        # Generate order_id for new orders or when status changes to completed
         if not self.order_id:
-            if self.status == 'completed':
-                year = datetime.now().strftime('%Y')
-                count = Order.objects.filter(order_id__startswith='#{}'.format(year), status='completed').count() + 1
-                self.order_id = '#{}{:06d}'.format(year, count)
-            else:
-                # Use short UUID for pending orders
-                import uuid
-                self.order_id = 'P{}'.format(str(uuid.uuid4())[:8].upper())
+            # Use short UUID for pending orders
+            import uuid
+            self.order_id = 'P{}'.format(str(uuid.uuid4())[:8].upper())
+        
+        # Generate invoice number when order is completed
+        if (self.status == 'completed' and 
+            (not self.pk or status_changed_to_completed) and 
+            not self.order_id.startswith('#')):
+            from datetime import datetime
+            year = datetime.now().strftime('%Y')
+            # Get count of completed orders with invoice numbers this year
+            count = Order.objects.filter(
+                order_id__startswith='#{}'.format(year), 
+                status='completed'
+            ).count() + 1
+            self.order_id = '#{}{:06d}'.format(year, count)
+        
         super().save(*args, **kwargs)
     
     def __str__(self):
