@@ -1179,7 +1179,8 @@ def settings_view(request):
     # First, try to get the most recent active subscription (including future end dates)
     subscription = Subscription.objects.filter(
         user=request.user,
-        status='active'
+        status='active',
+        end_date__gt=timezone.now()
     ).order_by('-created_at').first()
     
     # If no active subscription, get the most recent subscription regardless of status
@@ -1551,7 +1552,12 @@ def cart_view(request):
     cart_data = request.session.get('cart', {})
 
     from adminpanel.models import Subscription
-    if Subscription.objects.filter(user=request.user, status='active').exists():
+    # Check if user has an ACTIVE subscription that is NOT expired
+    if Subscription.objects.filter(
+        user=request.user, 
+        status='active', 
+        end_date__gt=timezone.now()
+    ).exists():
         messages.info(request, "You already have an active PRO subscription. No need to purchase again.")
         if 'cart' in request.session:
             del request.session['cart']
@@ -1743,8 +1749,12 @@ def free_trial_confirmation(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
     
     from adminpanel.models import Subscription
-    # Check if user has active subscription
-    if Subscription.objects.filter(user=request.user, status='active').exists():
+    # Check if user has active subscription that is NOT expired
+    if Subscription.objects.filter(
+        user=request.user, 
+        status='active', 
+        end_date__gt=timezone.now()
+    ).exists():
         messages.error(request, "You already have an active PRO subscription; free trial is not available.")
         return redirect('userpanel:settings')
     
@@ -1795,8 +1805,12 @@ def start_free_trial(request):
         profile, _ = Profile.objects.get_or_create(user=request.user)
 
         from adminpanel.models import Subscription
-        # Check if user has active subscription
-        if Subscription.objects.filter(user=request.user, status='active').exists():
+        # Check if user has active subscription that is NOT expired
+        if Subscription.objects.filter(
+            user=request.user, 
+            status='active', 
+            end_date__gt=timezone.now()
+        ).exists():
             messages.error(request, "You already have an active PRO subscription; free trial is not available.")
             return redirect('userpanel:settings')
         

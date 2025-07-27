@@ -28,11 +28,11 @@ def admin_dashboard_view(request):
     new_users_this_month = CustomUser.objects.filter(date_joined__gte=first_day_of_month).count()
     subscription_rate = round((active_subscriptions / total_users) * 100) if total_users > 0 else 0
     current_month_payments = Payment.objects.filter(status='completed', payment_date__gte=first_day_of_month)
-    monthly_revenue = current_month_payments.aggregate(Sum('amount'))['amount__sum'] or 0
+    monthly_revenue = round(current_month_payments.aggregate(Sum('amount'))['amount__sum'] or 0, 2)
     previous_month = first_day_of_month - timedelta(days=1)
     previous_month_start = previous_month.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     previous_month_payments = Payment.objects.filter(status='completed', payment_date__gte=previous_month_start, payment_date__lt=first_day_of_month)
-    previous_monthly_revenue = previous_month_payments.aggregate(Sum('amount'))['amount__sum'] or 0
+    previous_monthly_revenue = round(previous_month_payments.aggregate(Sum('amount'))['amount__sum'] or 0, 2)
     revenue_change = round(((monthly_revenue - previous_monthly_revenue) / previous_monthly_revenue) * 100) if previous_monthly_revenue > 0 else (100 if monthly_revenue > 0 else 0)
     
     recent_activities = []
@@ -48,7 +48,7 @@ def admin_dashboard_view(request):
     for payment in recent_payments:
         recent_activities.append({
             'user': payment.user,
-            'action': f"Payment of ₹{payment.amount}",
+            'action': f"Payment of ${payment.amount}",
             'action_type': 'payment',
             'timestamp': payment.payment_date
         })
@@ -283,6 +283,12 @@ def admin_user_detail_view(request, pk):
 
 @user_passes_test(is_admin_user)
 def admin_subscriptions_view(request):
+    from .models import Subscription, SubscriptionPlan, Payment
+    from django.core.paginator import Paginator
+    from django.db.models import Q, Sum
+    from django.utils import timezone
+    import json
+    
     # Helper function for chart data
     def get_subscription_chart_data():
         end_date = timezone.now()
@@ -340,7 +346,7 @@ def admin_subscriptions_view(request):
             subscriptions.update(status='inactive')
             messages.success(request, f'{len(subscriptions)} subscriptions deactivated')
         elif action == 'cancel':
-            subscriptions.update(status='cancelled')
+            subscriptions.update(status='cancelled', end_date=timezone.now())
             messages.success(request, f'{len(subscriptions)} subscriptions cancelled')
         
         return redirect('admin_panel:subscriptions')
