@@ -7,9 +7,8 @@ pip install "weasyprint<66"
 pip install requests
 
 pip install pytz
-pip install  mysqlclient
-pip install python-dotenv
 pip install social-auth-app-django
 
 pip install dj-database-url
-
+pip install  mysqlclient
+pip install python-dotenv

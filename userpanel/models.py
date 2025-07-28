@@ -14,12 +14,12 @@ STATUS_CHOICES = (
 
 class Order(models.Model):
     order_id = models.CharField(max_length=20, unique=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders', db_index=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
-    paypal_txn_id = models.CharField(max_length=100, blank=True, null=True)
-    paypal_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    paypal_txn_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    paypal_payment_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     total = models.DecimalField(max_digits=10, decimal_places=2)
@@ -65,6 +65,20 @@ class Order(models.Model):
         
         super().save(*args, **kwargs)
     
+    class Meta:
+        # Composite indexes for optimal PayPal payment processing queries
+        indexes = [
+            models.Index(fields=['user', 'status']),              # User order status queries
+            models.Index(fields=['status', 'created_at']),        # Recent orders by status
+            models.Index(fields=['user', 'status', 'created_at']), # User recent orders
+            models.Index(fields=['paypal_payment_id', 'status']),  # PayPal payment tracking
+            models.Index(fields=['paypal_txn_id', 'status']),      # PayPal transaction tracking
+        ]
+        # Database table optimization
+        ordering = ['-created_at']
+        verbose_name = 'Order'
+        verbose_name_plural = 'Orders'
+
     def __str__(self):
         return '{} - {}'.format(self.order_id, self.user.email)
 

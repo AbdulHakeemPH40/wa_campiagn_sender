@@ -81,6 +81,66 @@ class PayPalAPI:
             logger.error(f"PayPal access token error: {e}")
             return None
     
+    def get_order_details(self, order_id):
+        """Get PayPal order details for verification"""
+        access_token = self.get_access_token()
+        if not access_token:
+            logger.error("Failed to get PayPal access token for order verification")
+            return None
+        
+        url = f"{self.base_url}/v2/checkout/orders/{order_id}"
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {access_token}',
+        }
+        
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            logger.info(f"PayPal order details request status: {response.status_code}")
+            response.raise_for_status()
+            order_data = response.json()
+            logger.info(f"PayPal order details retrieved successfully for order: {order_id}")
+            return order_data
+        except requests.exceptions.RequestException as e:
+            logger.error(f"PayPal order details request error: {e}")
+            if hasattr(e, 'response') and e.response:
+                logger.error(f"PayPal response: {e.response.text}")
+            return None
+        except Exception as e:
+            logger.error(f"PayPal order details error: {e}")
+            return None
+    
+    def verify_payment_capture(self, capture_id):
+        """Verify PayPal payment capture for security"""
+        access_token = self.get_access_token()
+        if not access_token:
+            logger.error("Failed to get PayPal access token for capture verification")
+            return None
+        
+        url = f"{self.base_url}/v2/payments/captures/{capture_id}"
+        
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {access_token}',
+        }
+        
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            logger.info(f"PayPal capture verification request status: {response.status_code}")
+            response.raise_for_status()
+            capture_data = response.json()
+            logger.info(f"PayPal capture verified successfully: {capture_id}")
+            return capture_data
+        except requests.exceptions.RequestException as e:
+            logger.error(f"PayPal capture verification request error: {e}")
+            if hasattr(e, 'response') and e.response:
+                logger.error(f"PayPal response: {e.response.text}")
+            return None
+        except Exception as e:
+            logger.error(f"PayPal capture verification error: {e}")
+            return None
+    
     def create_payment(self, amount, description, currency='USD', return_url=None, cancel_url=None):
         """Create PayPal payment"""
         access_token = self.get_access_token()

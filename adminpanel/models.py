@@ -3,11 +3,11 @@ from django.conf import settings
 from django.utils import timezone
 
 class Subscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_index=True)
     plan = models.ForeignKey('SubscriptionPlan', on_delete=models.SET_NULL, null=True, blank=True, related_name='subscriptions')
-    status = models.CharField(max_length=20, default='active') # Consider adding choices for clarity: ('active', 'Active'), ('cancelled', 'Cancelled'), ('expired', 'Expired')
-    created_at = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=20, default='active', db_index=True) # Consider adding choices for clarity: ('active', 'Active'), ('cancelled', 'Cancelled'), ('expired', 'Expired')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    end_date = models.DateTimeField(null=True, blank=True, db_index=True)
     cancelled_at = models.DateTimeField(null=True, blank=True) # New field: Timestamp when the subscription was cancelled
     cancel_reason = models.TextField(blank=True, null=True) # New field: Reason for cancellation
     subscription_number = models.CharField(max_length=100, blank=True, null=True)
@@ -20,6 +20,19 @@ class Subscription(models.Model):
         self.cancelled_at = timezone.now()
         self.cancel_reason = reason
         self.save()  # Number of seats/licenses granted
+
+    class Meta:
+        # Composite indexes for optimal PayPal payment processing queries
+        indexes = [
+            models.Index(fields=['user', 'status', 'end_date']),  # Primary PayPal subscription check
+            models.Index(fields=['status', 'end_date']),          # Active subscription queries
+            models.Index(fields=['user', 'status']),              # User subscription status
+            models.Index(fields=['created_at', 'status']),        # Recent subscriptions
+        ]
+        # Database table optimization
+        db_table = 'adminpanel_subscription'
+        verbose_name = 'Subscription'
+        verbose_name_plural = 'Subscriptions'
 
     def __str__(self):
         plan_name = self.plan.name if self.plan else 'No Plan'
