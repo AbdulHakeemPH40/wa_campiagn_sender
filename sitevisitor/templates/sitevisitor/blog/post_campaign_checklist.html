@@ -1,0 +1,141 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}The Ultimate Checklist for a Successful WhatsApp Bulk Campaign - Blog{% endblock %}
+
+{% block content %}
+<section class="py-12 md:py-20 bg-gray-50">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
+
+      <!-- Sidebar -->
+      <aside class="lg:col-span-4 xl:col-span-3">
+        {% include 'sitevisitor/blog/blog_sidebar.html' %}
+      </aside>
+
+      <!-- Main Content -->
+      <main class="lg:col-span-8 xl:col-span-9">
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md border border-gray-200">
+          <article class="prose lg:prose-lg max-w-none leading-relaxed text-gray-800">
+
+            <img src="{% static 'image/blog_campaign_checklist.png' %}"
+                 alt="Campaign Checklist"
+                 class="w-full rounded-lg mb-8 shadow-lg">
+
+            <h1 class="text-3xl font-bold mb-2">The Ultimate Checklist for a Successful WhatsApp Bulk Campaign with WA Campaign Sender</h1>
+            <p class="text-gray-500 text-sm mb-6">Published on: <span class="publishDate"></span></p>
+
+            <p>
+              Launching a WhatsApp bulk campaign can be incredibly effective when executed properly.
+              <br><br>
+              Use this comprehensive checklist to ensure your outreach using <strong>WA Campaign Sender</strong> is successful, compliant, and impactful.
+            </p>
+
+            {% comment %} Sections will follow with improved spacing, typography, and clarity {% endcomment %}
+
+            <h2 class="mt-10">1. Define Your Objective & Audience</h2>
+            <p>
+              Start with clarity: Why are you sending this campaign? What’s your end goal?
+              <br><br>
+              Align that with your target audience to craft messages that resonate.
+            </p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Goal:</strong> Be precise (e.g., "Increase sales of Product A by 10% this quarter").</li>
+              <li><strong>Audience:</strong> Segment by location, behavior, purchase history, etc.</li>
+              <li><strong>Action:</strong> Always end with a clear CTA — what should the user do?</li>
+            </ul>
+
+            <h2 class="mt-10">2. Craft a Compelling Message</h2>
+            <p>
+              Make it short, relevant, and personalized. The first few lines should grab attention.
+            </p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Use placeholders like <code>{{Name}}</code> to personalize.</li>
+              <li>Highlight value — why should they care?</li>
+              <li>Keep it human — write like you're speaking to a friend.</li>
+              <li>Include a powerful, direct CTA.</li>
+              <li>Proofread — errors lower credibility.</li>
+              <li>Add media only if it enhances the message (images, PDF, video).</li>
+            </ul>
+
+            <h2 class="mt-10">3. Prepare Your Contact List</h2>
+            <p>
+              Quality contacts = quality results. Make sure your list is:
+            </p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Opt-in only:</strong> Respect privacy and avoid getting flagged.</li>
+              <li><strong>Clean:</strong> Remove duplicates, fix formatting, verify details.</li>
+              <li><strong>CSV Ready:</strong> Format properly for smooth upload.</li>
+              <li><strong>Segmented:</strong> Separate files for targeted outreach.</li>
+            </ul>
+
+            <h2 class="mt-10">4. Configure WA Campaign Sender</h2>
+            <p>
+              Ensure everything is set up correctly before launch.
+            </p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Import CSV file.</li>
+              <li>Map personalization fields accurately.</li>
+              <li>Paste message, confirm placeholders.</li>
+              <li>Set smart delays — avoid rapid bursts.</li>
+              <li>Double-check campaign settings before launch.</li>
+            </ul>
+
+            <h2 class="mt-10">5. Test Thoroughly</h2>
+            <p>
+              Never skip testing. It prevents costly mistakes.
+            </p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Send test to yourself + team.</li>
+              <li>Verify links, images, CTA visibility.</li>
+              <li>Check placeholder rendering.</li>
+              <li>Check formatting on various devices.</li>
+            </ul>
+
+            <h2 class="mt-10">6. Launch & Monitor</h2>
+            <p>
+              It's time to go live — but keep a close eye.
+            </p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Send at the right time (audience-aware).</li>
+              <li>Monitor delivery and engagement.</li>
+              <li>Watch for errors or slowdowns in WhatsApp Web.</li>
+            </ul>
+
+            <h2 class="mt-10">7. Handle Replies & Opt-Outs Gracefully</h2>
+            <p>
+              Post-launch, your job isn’t over. Engagement and feedback handling matter.
+            </p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Reply quickly and helpfully.</li>
+              <li>Remove users who opt out (e.g., reply STOP).</li>
+              <li>Track feedback and adapt future campaigns.</li>
+            </ul>
+
+            <p class="mt-8">
+              Following this checklist not only boosts your campaign results, but also protects your brand, your number, and the overall user experience.
+              <br><br>
+              Use WA Campaign Sender the smart way — responsibly, effectively, and with long-term growth in mind.
+            </p>
+
+            <div class="mt-12 text-center">
+              <a href="{% url 'sitevisitor:home' %}"
+                 class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">
+                Get Started with WA Campaign Sender
+              </a>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.publishDate').forEach(el =>
+    el.textContent = new Date().toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    })
+  );
+</script>
+{% endblock %}

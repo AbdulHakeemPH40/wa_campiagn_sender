@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Subscription is Now Active!</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#25D366;color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">Subscription Activated!</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px;text-align:left;line-height:1.6;">
+                            <p style="margin:0 0 15px;">Dear {{ user.full_name|default:user.email }},</p>
+                            
+                            <div style="background-color:#DCF8C6;border-left:4px solid #25D366;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;text-align:center;"><strong>🎉 Congratulations! Your subscription is now active!</strong></p>
+                            </div>
+                            
+                            <p style="margin:0 0 15px;">Great news! Your <strong>{{ plan.name }}</strong> subscription has been successfully activated and is ready to use.</p>
+                            
+                            <div style="background-color:#F8F9FA;border:1px solid #DEE2E6;padding:15px;border-radius:5px;margin:20px 0;">
+                                <p style="margin:0 0 10px;"><strong>📅 Subscription Details:</strong></p>
+                                <p style="margin:0 0 5px;"><strong>Plan:</strong> {{ plan.name }}</p>
+                                <p style="margin:0 0 5px;"><strong>Valid Until:</strong> {{ end_date|date:"F j, Y" }}</p>
+                                <p style="margin:0;"><strong>Status:</strong> <span style="color:#25D366;font-weight:bold;">Active</span></p>
+                            </div>
+                            <p style="margin:0 0 15px;"><strong>🚀 You now have access to all premium features:</strong></p>
+                            <ul style="margin:0 0 25px;padding-left:20px;">
+                                <li>✅ Browser Extension for Chrome</li>
+                                <li>✅ Unlimited WhatsApp campaigns</li>
+                                <li>✅ Advanced contact management & CSV imports</li>
+                                <li>✅ Campaign analytics and reporting</li>
+                                <li>✅ Multiple WhatsApp numbers support</li>
+                                <li>✅ Message personalization & templates</li>
+                                <li>✅ File attachments (images, videos, PDFs)</li>
+                                <li>✅ Priority customer support</li>
+                            </ul>
+                            <div style="background-color:#E3F2FD;border-left:4px solid #2196F3;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;"><strong>🔧 Next Steps:</strong> Download our Chrome extension from your dashboard and start sending WhatsApp campaigns immediately!</p>
+                            </div>
+                            
+                            <p style="margin:0 0 25px; text-align:center;">
+                                <a href="https://{{ domain }}/userpanel/" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;margin-right:10px;">Access Dashboard</a>
+                                <a href="mailto:hi@wacampaignsender.com?subject=Extension Installation Guide" style="display:inline-block;padding:12px 25px;background-color:#007bff;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Get Extension Guide</a>
+                            </p>
+                            
+                            <p style="margin:0 0 15px;">Thank you for choosing WA Campaign Sender! If you have any questions or need assistance getting started, our support team is here to help at <strong>hi@wacampaignsender.com</strong>.</p>
+                            
+                            <p style="margin:0;">Best regards,<br>
+                            <strong>WA Campaign Sender Team</strong></p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {% now "Y" %} WA Campaign Sender. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

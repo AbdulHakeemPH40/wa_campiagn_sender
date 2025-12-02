@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Subscription is Active</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%);color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">🎉 Subscription Activated!</h1>
+                            <p style="margin:5px 0 0;font-size:16px;opacity:0.9;">Welcome to WA Campaign Sender PRO</p>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px;text-align:left;line-height:1.6;">
+                            <p style="margin:0 0 15px;">Hi {{ user.full_name|default:user.email }},</p>
+                            
+                            <div style="background-color:#DCF8C6;border-left:4px solid #25D366;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;text-align:center;"><strong>✅ Great news! Your {{ plan.name }} subscription is now active!</strong></p>
+                            </div>
+                            
+                            <div style="background:linear-gradient(135deg, #E8F5E8 0%, #DCF8C6 100%);border:1px solid #25D366;padding:20px;border-radius:5px;margin:20px 0;">
+                                <h3 style="margin:0 0 15px;color:#128C7E;">📅 Subscription Details</h3>
+                                <table style="width:100%;border-collapse:collapse;">
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);font-weight:600;color:#128C7E;width:40%;">Plan:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);color:#333;font-weight:bold;">{{ plan.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);font-weight:600;color:#128C7E;">Valid Until:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);color:#333;font-weight:bold;">{{ end_date|date:"F d, Y" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;font-weight:600;color:#128C7E;">Status:</td>
+                                        <td style="padding:8px 0;color:#25D366;font-weight:bold;font-size:16px;">✅ Active</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <p style="margin:0 0 15px;"><strong>🚀 You now have unlimited access to:</strong></p>
+                            <ul style="margin:0 0 25px;padding-left:20px;">
+                                <li>✅ Unlimited WhatsApp campaigns</li>
+                                <li>✅ Browser extension for Chrome</li>
+                                <li>✅ Advanced contact management & CSV imports</li>
+                                <li>✅ Multiple WhatsApp numbers support</li>
+                                <li>✅ Message personalization & templates</li>
+                                <li>✅ File attachments (images, videos, PDFs)</li>
+                                <li>✅ Campaign analytics and reporting</li>
+                                <li>✅ Priority customer support</li>
+                            </ul>
+                            
+                            <div style="background-color:#E3F2FD;border-left:4px solid #2196F3;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;"><strong>🔧 Ready to start?</strong> Log in to your dashboard and download our Chrome extension to begin sending WhatsApp campaigns immediately!</p>
+                            </div>
+                            
+                            <p style="margin:0 0 25px;text-align:center;">
+                                <a href="https://{{ domain }}/login/?next=/userpanel/" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;margin-right:10px;">Access Dashboard</a>
+                                <a href="mailto:hi@wacampaignsender.com?subject=Extension Installation Guide" style="display:inline-block;padding:12px 25px;background-color:#007bff;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Get Extension Guide</a>
+                            </p>
+                            
+                            <p style="margin:0 0 15px;">If you have any questions or need assistance getting started, simply reply to this email and our support team will get back to you promptly.</p>
+                            
+                            <div style="background-color:#FFF3CD;border:1px solid #FFEAA7;padding:15px;border-radius:5px;margin:20px 0;">
+                                <p style="margin:0;color:#856404;text-align:center;"><strong>📞 Need Help?</strong> Our support team is available at <strong>hi@wacampaignsender.com</strong></p>
+                            </div>
+                            
+                            <p style="margin:0;">Thank you for choosing WA Campaign Sender!<br><br>
+                            Best regards,<br>
+                            <strong>WA Campaign Sender Team</strong></p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {% now "Y" %} WA Campaign Sender. All rights reserved.<br>
+                            P13 France Cluster, International City, Dubai | Support: hi@wacampaignsender.com</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

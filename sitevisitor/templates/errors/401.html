@@ -1,0 +1,80 @@
+{% extends "errors/base.html" %}
+{% load static %}
+
+{% block title %}401 – Unauthorized Access | WA Campaign Sender{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col items-center justify-center px-4 py-16">
+  <div class="w-full max-w-4xl flex flex-col items-center">
+
+    <!-- Brand Logo -->
+    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender" class="h-16 mb-8">
+
+    <!-- Code & Headline -->
+    <h1 class="text-9xl font-bold text-primary mb-6">401</h1>
+
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Session Expired</h2>
+      <p class="text-xl text-gray-600 mb-2">
+        Your session has expired or you need to upgrade your account.
+      </p>
+      <p class="text-gray-500">
+        Please log in again or upgrade to access this feature.
+      </p>
+    </div>
+
+    <!-- Illustration -->
+    <div class="mb-12 float-animation relative w-64 h-64">
+      <div class="absolute inset-0 bg-primary/10 rounded-full"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-40 h-40 bg-primary/20 rounded-full flex items-center justify-center">
+          <div class="w-28 h-28 bg-primary rounded-full flex items-center justify-center">
+            <i class="ri-lock-2-line text-white ri-3x"></i>
+          </div>
+        </div>
+      </div>
+      <div class="absolute -top-4 -right-4 w-12 h-12 bg-primary/30 rounded-full"></div>
+      <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-primary/20 rounded-full"></div>
+    </div>
+
+    <!-- Calls-to-Action -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+      <a href="/login/"
+         class="cta-btn bg-primary hover:bg-primary/90">
+        <i class="ri-login-circle-line"></i> Log&nbsp;in
+      </a>
+
+      <a href="{% url 'sitevisitor:home' %}#pricing"
+         class="cta-btn bg-secondary hover:bg-secondary/90">
+        <i class="ri-vip-crown-line"></i> Upgrade&nbsp;Plan
+      </a>
+    </div>
+
+    <a href="/" class="text-gray-600 hover:text-primary flex items-center gap-2 transition-colors">
+      <i class="ri-home-line"></i> Return&nbsp;to&nbsp;Homepage
+    </a>
+  </div>
+</div>
+
+<!-- Regular CSS instead of Tailwind @apply -->
+<style>
+  .cta-btn {
+    color: white;
+    font-weight: 500;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  .cta-btn:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+</style>
+{% endblock %}
+
+

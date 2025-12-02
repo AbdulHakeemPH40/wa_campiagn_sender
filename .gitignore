@@ -1,0 +1,84 @@
+# Django Settings with API Keys
+wa_campiagn_sender/settings.py
+wa_campiagn_sender/pythonanywhere_settings.py
+
+# Django Migrations (keep only __init__.py)
+*/migrations/*.py
+!*/migrations/__init__.py
+.env
+.env.local
+.env.*.local
+
+# Database
+db.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Static and media files
+staticfiles/
+/static/
+/media/
+
+# Log files
+logs/
+*.log
+
+# Cache
+.cache/
+.pytest_cache/
+.coverage
+
+# Redis
+dump.rdb
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+
+# Node modules (if using any frontend build tools)
+node_modules/
+npm-debug.log
+
+# Uploads
+uploads/
+temp/

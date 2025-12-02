@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your WA Campaign Sender Invoice</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%);color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">📧 Invoice - WA Campaign Sender</h1>
+                            <p style="margin:5px 0 0;font-size:16px;opacity:0.9;">Thank you for your purchase!</p>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px;text-align:left;line-height:1.6;">
+                            <p style="margin:0 0 15px;">Dear {{ user.full_name }},</p>
+                            
+                            <div style="background-color:#DCF8C6;border-left:4px solid #25D366;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;"><strong>✅ Payment Successful!</strong> Your subscription purchase has been processed successfully.</p>
+                            </div>
+                            
+                            <div style="background-color:#F8F9FA;border:1px solid #DEE2E6;padding:20px;border-radius:5px;margin:20px 0;">
+                                <h3 style="margin:0 0 15px;color:#25D366;">📄 Invoice Details</h3>
+                                <table style="width:100%;border-collapse:collapse;">
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600;color:#555;width:40%;">Invoice Number:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid #eee;color:#333;">#{{ order.order_id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600;color:#555;">Date:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid #eee;color:#333;">{{ order.created_at|date:"F d, Y" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid #eee;font-weight:600;color:#555;">Total Amount:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid #eee;color:#25D366;font-weight:bold;font-size:18px;">${{ order.total|floatformat:2 }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;font-weight:600;color:#555;">Payment Method:</td>
+                                        <td style="padding:8px 0;color:#333;">PayPal</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div style="background:linear-gradient(135deg, #E8F5E8 0%, #DCF8C6 100%);border:1px solid #25D366;padding:20px;border-radius:5px;margin:20px 0;">
+                                <h3 style="margin:0 0 15px;color:#128C7E;">🚀 Subscription Details</h3>
+                                <table style="width:100%;border-collapse:collapse;">
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);font-weight:600;color:#128C7E;width:40%;">Plan:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);color:#333;font-weight:bold;">WA Campaign Sender PRO</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);font-weight:600;color:#128C7E;">Duration:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);color:#333;">{{ subscription_period }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);font-weight:600;color:#128C7E;">Start Date:</td>
+                                        <td style="padding:8px 0;border-bottom:1px solid rgba(37,211,102,0.2);color:#333;">{{ start_date|date:"F d, Y" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:8px 0;font-weight:600;color:#128C7E;">Expiry Date:</td>
+                                        <td style="padding:8px 0;color:#333;font-weight:bold;">{{ expiry_date|date:"F d, Y" }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div style="background-color:#E3F2FD;border-left:4px solid #2196F3;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;"><strong>📄 Invoice:</strong> You can view and download your invoice anytime from your dashboard.</p>
+                            </div>
+                            
+                            <p style="margin:0 0 25px;text-align:center;">
+                                <a href="{{ invoice_url }}" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;margin-right:10px;">View Invoice</a>
+                                <a href="https://www.wacampaignsender.com/login/?next=/userpanel/" style="display:inline-block;padding:12px 25px;background-color:#007bff;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;margin-right:10px;">Access Dashboard</a>
+                                <a href="mailto:{{ support_email|default:'hi@wacampaignsender.com' }}?subject=Invoice Support" style="display:inline-block;padding:12px 25px;background-color:#6c757d;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Contact Support</a>
+                            </p>
+                            
+                            <p style="margin:0 0 15px;">If you have any questions about your subscription, billing, or need technical assistance, our support team is here to help.</p>
+                            
+                            <div style="background-color:#F8F9FA;padding:15px;border-radius:5px;margin:20px 0;text-align:center;">
+                                <p style="margin:0;color:#666;"><strong>WA Campaign Sender</strong><br>
+                                P13 France Cluster, International City, Dubai<br>
+                                Support: <a href="mailto:{{ support_email|default:'hi@wacampaignsender.com' }}" style="color:#25D366;text-decoration:none;">{{ support_email|default:'hi@wacampaignsender.com' }}</a></p>
+                            </div>
+                            
+                            <p style="margin:0;">Best regards,<br>
+                            <strong>WA Campaign Sender Team</strong></p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {% now "Y" %} WA Campaign Sender. All rights reserved.<br>
+                            This is an automated invoice email. Please keep this for your records.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

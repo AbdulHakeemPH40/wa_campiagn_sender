@@ -1,0 +1,161 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}Maximize Your Reach: Best Times & Frequencies for WhatsApp Campaigns - Blog{% endblock %}
+
+{% block content %}
+<section class="py-12 md:py-20 bg-gray-50 leading-relaxed">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="grid lg:grid-cols-12 gap-8 lg:gap-12">
+      <!-- Sidebar -->
+      <div class="lg:col-span-4 xl:col-span-3">
+        {% include 'sitevisitor/blog/blog_sidebar.html' %}
+      </div>
+
+      <!-- Main Content -->
+      <div class="lg:col-span-8 xl:col-span-9">
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-md border border-gray-200">
+          <article class="prose lg:prose-xl max-w-none space-y-6 prose-p:mb-4 prose-li:mb-2">
+            <!-- Hero Image -->
+            <img src="{% static 'image/blog_timing_frequency.png' %}" alt="Optimal WhatsApp Campaign Timing" class="w-full rounded-lg mb-8 shadow-lg">
+
+            <!-- Title & Meta -->
+            <h1 class="font-bold">Maximize Your Reach: Best Times &amp; Frequencies for Sending WhatsApp Campaigns</h1>
+            <p class="text-gray-500 text-sm">Published on: <span class="publishDate"></span></p>
+
+            <!-- Intro -->
+            <p>
+              You’ve crafted the perfect WhatsApp message and your contact list is prepped. But <em>when</em> should you press send—and <em>how often</em>? WA Campaign Sender handles the delivery mechanics; <strong>timing &amp; cadence</strong> are the strategic levers that separate average campaigns from high‑performing ones. This guide dives deeper—covering lifecycle timing, cultural nuances, and advanced segmentation—so your messages land at the <em>right moment</em> and with the <em>right frequency</em>.
+            </p>
+
+            <!-- Best Time -->
+            <h2>Finding the Best Time to Send</h2>
+            <p>WhatsApp’s near‑instant read receipts are a blessing—unless you interrupt dinner. Use these principles as a starting point:</p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Know Your Audience:</strong><br> B2B prospects—business hours (09:30–11:30 AM or 2:00–4:30 PM). B2C—early evening (6–8 PM) and weekend mid‑mornings.</li>
+              <li><strong>Respect Time Zones:</strong><br> Segment global lists so no one receives a 3 AM ping.</li>
+              <li><strong>Leverage Micro‑Moments:</strong><br> Flash‑sale? Push just before lunch or after work when wallets are open.</li>
+              <li><strong>Test Fast, Iterate Faster:</strong><br> A/B two send windows, double‑down on the winner, and keep iterating monthly.</li>
+              <li><strong>Avoid “Noise Hours”:</strong><br> Commutes, late nights, and holidays (unless context‑relevant) lower engagement.</li>
+            </ul>
+
+            <!-- NEW: Lifecycle Timing -->
+            <h2>Lifecycle‑Based Timing Framework</h2>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Onboarding (Day 0–7):</strong> Welcome + how‑to guides within 5 minutes of signup, follow‑up tips 3 days later.</li>
+              <li><strong>Engagement (Week 2–4):</strong> Educational content every 7–10 days keeps the brand top‑of‑mind.</li>
+              <li><strong>Revenue Push (Month 1+):</strong> Targeted offers aligned with payday cycles or seasonal peaks.</li>
+              <li><strong>Re‑Engagement (Dormant ≥60 days):</strong> One “we miss you” ping; if ignored, pause 30 days before retrying.</li>
+            </ul>
+
+            <!-- Frequency -->
+            <h2>Dialing In Message Frequency</h2>
+            <p>Too many pings risk blocks; too few and you disappear:</p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Value Over Volume:</strong><br> Every outreach must answer “What’s in it for me?” for the recipient.</li>
+              <li><strong>Set Expectations Upfront:</strong><br> “You’ll get 2 tips/week”—then honor it.</li>
+              <li><strong>Behavioral Triggers:</strong><br> Transactional alerts (e.g., appointment reminder) feel helpful, even if frequency spikes briefly.</li>
+              <li><strong>Engagement‑Tier Segments:</strong><br> VIP customers can handle 4 touches/month; cold leads maybe 1.</li>
+              <li><strong>Quarterly List Hygiene:</strong><br> Remove or re‑warm inactives to keep deliverability high.</li>
+            </ul>
+
+            <!-- NEW: Frequency Matrix Table (rendered as HTML) -->
+            <div class="overflow-x-auto">
+              <table class="table-auto text-sm border rounded-lg w-full whitespace-nowrap">
+                <thead>
+                  <tr class="bg-gray-100">
+                    <th class="px-4 py-2 text-left">Audience Tier</th>
+                    <th class="px-4 py-2 text-left">Recommended Cadence</th>
+                    <th class="px-4 py-2 text-left">Typical Content</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-t">
+                    <td class="px-4 py-2 font-semibold">VIP / High‑Spend</td>
+                    <td class="px-4 py-2">1–2× per week</td>
+                    <td class="px-4 py-2">Exclusive deals, early access</td>
+                  </tr>
+                  <tr class="border-t">
+                    <td class="px-4 py-2 font-semibold">Engaged Regulars</td>
+                    <td class="px-4 py-2">2× per month</td>
+                    <td class="px-4 py-2">Education, promotions</td>
+                  </tr>
+                  <tr class="border-t">
+                    <td class="px-4 py-2 font-semibold">Dormant</td>
+                    <td class="px-4 py-2">≤1× per month</td>
+                    <td class="px-4 py-2">Win‑back offers</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Data-Driven Insights -->
+            <h2>Let Data Guide You</h2>
+            <p>Monitor these KPIs to refine timing:</p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Delivery Rate</strong> – list quality &amp; formatting issues.</li>
+              <li><strong>Read Rate</strong> – WhatsApp’s double‑blue‑tick percentage.</li>
+              <li><strong>Click‑Through Rate</strong> – link taps ÷ messages delivered.</li>
+              <li><strong>Response Latency</strong> – avg. minutes until first reply.</li>
+            </ul>
+
+            <!-- Cultural & Seasonal -->
+            <h2>Cultural &amp; Seasonal Considerations</h2>
+            <p>Campaign resonance shifts with local customs:</p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Religious Holidays:</strong> Ramadan, Diwali, Christmas affect daily routines—adjust send windows.</li>
+              <li><strong>School Calendars:</strong> Parents’ availability changes during exams or breaks.</li>
+              <li><strong>Weather Events:</strong> Storms/heatwaves spike real‑time attention—use empathy.</li>
+            </ul>
+
+            <!-- NEW: Case Study -->
+            <h2>Case Study: Fashion E‑Com Flash Sale</h2>
+            <p><em>Goal:</em> Clear spring inventory. <em>Audience:</em> 15 k segmented by purchase recency.</p>
+            <ul class="list-disc pl-5 space-y-2">
+              <li>Sent VIP early‑access code Friday 10 AM.</li>
+              <li>General list blast Saturday 10 AM.</li>
+              <li>Last‑chance reminder Sunday 4 PM to non‑buyers.</li>
+              <li><strong>Result:</strong> 38% click‑through, 6× daily sales lift, <span class="text-green-600 font-semibold">0% spam reports</span>.</li>
+            </ul>
+
+            <!-- WA Campaign Sender tips -->
+            <h2>Working Smarter with WA Campaign Sender</h2>
+            <ul class="list-disc pl-5 space-y-2">
+              <li><strong>Manual Scheduling, Strategic Pacing:</strong> Launch sends during optimal windows; built‑in randomized delays mimic human rhythm.</li>
+              <li><strong>Batching Large Lists:</strong> Split large lists into mini‑waves, monitor health, adjust cadence on the fly.</li>
+              <li><strong>Template Variants:</strong> Rotate slight wording changes to reduce spam fingerprints.</li>
+              <li><strong>CSV Time‑Zone Columns:</strong> Add a <code>timezone</code> column; filter &amp; send to each zone at local prime time.</li>
+            </ul>
+
+            <!-- Quick Cheat Sheet -->
+            <h2 class="text-primary">Timing &amp; Frequency Cheat Sheet</h2>
+            <ul class="list-disc pl-5 space-y-2 bg-blue-50 p-4 rounded-md border border-blue-200">
+              <li>✅ Weekdays 10 AM–11 AM: Top B2B engagement.</li>
+              <li>✅ Sat 10 AM–12 PM: High B2C engagement.</li>
+              <li>⚠️ 7 AM &amp; 11 PM sends: Often intrusive.</li>
+              <li>⚠️ &gt;3 promos/week without clear opt‑in: Unsub spikes.</li>
+            </ul>
+
+            <!-- Conclusion -->
+            <p>
+              Timing &amp; frequency form the backbone of respectful, high‑impact WhatsApp marketing. Combine these insights with WA Campaign Sender’s delivery engine, and you’ll consistently hit the sweet spot: <strong>maximum reach, minimal fatigue.</strong>
+            </p>
+
+            <!-- CTA -->
+            <div class="mt-12 text-center">
+              <a href="{% url 'sitevisitor:home' %}#pricing" class="bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors">Learn More About WA Campaign Sender</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.querySelectorAll('.publishDate').forEach(el => {
+    el.textContent = new Date().toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+  });
+</script>
+{% endblock %}

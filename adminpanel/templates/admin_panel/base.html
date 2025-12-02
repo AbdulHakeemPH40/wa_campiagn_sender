@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WA Campaign Sender - Admin Panel{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0078d4',
+                        secondary: '#106ebe',
+                        accent: '#005a9e',
+                        neutral: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '2px',
+                        DEFAULT: '4px',
+                        'md': '6px',
+                        'lg': '8px',
+                        'xl': '12px',
+                        '2xl': '16px',
+                        'full': '9999px'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Remixicon -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Loading Animations CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/loading-animations.css' %}">
+    <!-- Admin Panel Professional Styles -->
+    <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+    <!-- Prevent search engine indexing -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    {% block extra_css %}{% endblock %}
+    {% block extra_js %}{% endblock %}
+    
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .admin-sidebar-link {
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            margin: 2px 0;
+        }
+        .admin-sidebar-link:hover {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        .admin-sidebar-link.active {
+            background-color: #0078d4;
+            color: white;
+            font-weight: 500;
+        }
+        .admin-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Auto-hide message notifications after 5 seconds
+        const messageContainer = document.getElementById('messages-container');
+        if (messageContainer) {
+            const messages = messageContainer.querySelectorAll('.relative.flex.items-start');
+            messages.forEach(function(message) {
+                setTimeout(function() {
+                    message.style.transition = 'opacity 0.3s ease-out';
+                    message.style.opacity = '0';
+                    setTimeout(function() {
+                        message.remove();
+                    }, 300);
+                }, 5000);
+            });
+        }
+    });
+    </script>
+</head>
+<body id="bodyTag" class="bg-neutral-50 min-h-screen flex flex-col overflow-x-hidden has-sidebar-expanded font-sans">
+    {% block messages_container %}
+    <div id="messages-container" class="fixed top-20 right-4 z-[100] w-auto max-w-xs sm:max-w-sm space-y-3">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="relative flex items-start p-4 rounded-lg shadow-xl 
+                {% if message.tags == 'debug' %} bg-gray-100 border border-gray-400 text-gray-800 {% endif %}
+                {% if message.tags == 'info' %} bg-blue-100 border border-blue-400 text-blue-800 {% endif %}
+                {% if message.tags == 'success' %} bg-green-100 border border-green-400 text-green-800 {% endif %}
+                {% if message.tags == 'warning' %} bg-yellow-100 border border-yellow-400 text-yellow-800 {% endif %}
+                {% if message.tags == 'error' %} bg-red-100 border border-red-400 text-red-800 {% endif %}"
+                role="alert">
+                <div class="flex-shrink-0 pt-0.5">
+                    {% if message.tags == 'success' %}<i class="ri-checkbox-circle-fill text-green-500 text-xl"></i>{% endif %}
+                    {% if message.tags == 'info' %}<i class="ri-information-fill text-blue-500 text-xl"></i>{% endif %}
+                    {% if message.tags == 'warning' %}<i class="ri-error-warning-fill text-yellow-500 text-xl"></i>{% endif %}
+                    {% if message.tags == 'error' %}<i class="ri-close-circle-fill text-red-500 text-xl"></i>{% endif %}
+                    {% if message.tags == 'debug' %}<i class="ri-bug-fill text-gray-500 text-xl"></i>{% endif %}
+                </div>
+                <div class="ml-3 flex-grow">
+                    <p class="text-sm font-medium">{{ message }}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <div class="-mx-1.5 -my-1.5">
+                        <button type="button" 
+                                class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                                {% if message.tags == 'debug' %} text-gray-500 hover:bg-gray-200 focus:ring-offset-gray-100 focus:ring-gray-600 {% endif %}
+                                {% if message.tags == 'info' %} text-blue-500 hover:bg-blue-200 focus:ring-offset-blue-100 focus:ring-blue-600 {% endif %}
+                                {% if message.tags == 'success' %} text-green-500 hover:bg-green-200 focus:ring-offset-green-100 focus:ring-green-600 {% endif %}
+                                {% if message.tags == 'warning' %} text-yellow-500 hover:bg-yellow-200 focus:ring-offset-yellow-100 focus:ring-yellow-600 {% endif %}
+                                {% if message.tags == 'error' %} text-red-500 hover:bg-red-200 focus:ring-offset-red-100 focus:ring-red-600 {% endif %}"
+                                onclick="this.closest('.relative.flex.items-start').remove();">
+                            <span class="sr-only">Dismiss</span>
+                            <i class="ri-close-line text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% endblock messages_container %}
+    <!-- Mobile navigation toggle button -->
+    <button id="mobileMenuToggle" class="md:hidden absolute top-4 right-4 text-gray-700 focus:outline-none z-50">
+        <i class="ri-menu-line text-2xl"></i>
+    </button>
+
+    <!-- Mobile navigation menu -->
+    <div id="mobileNav" class="fixed inset-0 bg-white z-40 transform -translate-y-full transition-transform duration-300 md:hidden">
+        <div class="p-6">
+            <!-- Mobile menu content here -->
+        </div>
+    </div>
+    <!-- Header for Admin Panel -->
+    <header class="bg-white border-b border-neutral-200">
+        <div class="px-6 py-4 flex items-center justify-between">
+            <!-- Mobile sidebar toggle -->
+            <button id="sidebarToggle" class="md:hidden mr-4 text-neutral-600 focus:outline-none">
+                <i class="ri-menu-line text-xl"></i>
+            </button>
+            <button id="desktopSidebarToggle" class="hidden md:block mr-4 text-neutral-600 focus:outline-none">
+                <i class="ri-menu-line text-xl"></i>
+            </button>
+            <a href="{% url 'admin_panel:dashboard' %}" class="flex items-center">
+                <div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-semibold text-sm">
+                    W
+                </div>
+                <span class="ml-3 text-lg font-semibold text-neutral-900">Admin Panel</span>
+            </a>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <button id="userMenuButton" class="flex items-center space-x-2 text-neutral-700 hover:text-primary transition-colors">
+                        <div class="w-8 h-8 rounded-full bg-neutral-200 flex items-center justify-center text-neutral-700 text-sm font-medium">
+                            {{ request.user.first_name|default:request.user.email|first|upper }}
+                        </div>
+                        <span class="hidden md:inline text-sm font-medium">{{ request.user.full_name|default:request.user.get_full_name|default:request.user.username }}</span>
+                        <i class="ri-arrow-down-s-line text-sm"></i>
+                    </button>
+                    <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg py-1 z-10 hidden border border-neutral-200">
+                        <a href="{% url 'admin_panel:settings' %}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Profile</a>
+                        <a href="{% url 'admin_panel:settings' %}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Settings</a>
+                        <div class="border-t border-neutral-100 my-1"></div>
+                        <a href="{% url 'admin_panel:logout' %}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Sign out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden"></div>
+    <!-- Main Content with Sidebar -->
+    <main class="flex-grow flex">
+        <!-- Sidebar -->
+        <div id="sidebar" class="transform transition-transform duration-200 ease-in-out fixed md:relative inset-y-0 left-0 w-64 bg-white border-r border-neutral-200 -translate-x-full md:translate-x-0 z-50 md:z-auto flex-shrink-0">
+            <div class="px-6 py-8">
+                <div class="flex items-center mb-8">
+                    <div class="w-10 h-10 rounded bg-primary text-white flex items-center justify-center text-sm font-semibold">
+                        {{ request.user.first_name|default:request.user.email|first|upper }}
+                    </div>
+                    <div class="ml-3">
+                        <h2 class="text-sm font-semibold text-neutral-900">{{ request.user.full_name|default:request.user.get_full_name|default:request.user.username }}</h2>
+                        <p class="text-xs text-neutral-600">Administrator</p>
+                    </div>
+                </div>
+            </div>
+            <nav class="px-4">
+                <div class="space-y-1">
+                    <a href="{% url 'admin_panel:dashboard' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{% url 'admin_panel:contact_messages' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'contact_messages' %}active{% endif %}">
+                        <i class="ri-message-3-line mr-3 text-lg"></i>
+                        <span>Messages</span>
+                    </a>
+                    <a href="{% url 'admin_panel:newsletter_subscribers' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'newsletter_subscribers' %}active{% endif %}">
+                        <i class="ri-mail-line mr-3 text-lg"></i>
+                        <span>Newsletter</span>
+                    </a>
+                    <a href="{% url 'admin_panel:users' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'users' %}active{% endif %}">
+                        <i class="ri-user-line mr-3 text-lg"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="{% url 'admin_panel:subscriptions' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'subscriptions' %}active{% endif %}">
+                        <i class="ri-vip-crown-line mr-3 text-lg"></i>
+                        <span>Subscriptions</span>
+                    </a>
+                    <a href="{% url 'admin_panel:payments' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'payments' %}active{% endif %}">
+                        <i class="ri-bank-card-line mr-3 text-lg"></i>
+                        <span>Payments</span>
+                    </a>
+                    <a href="{% url 'admin_panel:invoices' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'invoices' %}active{% endif %}">
+                        <i class="ri-file-list-3-line mr-3 text-lg"></i>
+                        <span>Invoices</span>
+                    </a>
+                    <a href="{% url 'admin_panel:grant_subscription' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'grant_subscription' %}active{% endif %}">
+                        <i class="ri-gift-line mr-3 text-lg"></i>
+                        <span>Grant Subscription</span>
+                    </a>
+                    <a href="{% url 'admin_panel:plans' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'plans' %}active{% endif %}">
+                        <i class="ri-price-tag-3-line mr-3 text-lg"></i>
+                        <span>Plans</span>
+                    </a>
+                    <a href="{% url 'admin_panel:whatsapp_sessions' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'whatsapp_sessions' %}active{% endif %}">
+                        <i class="ri-whatsapp-line mr-3 text-lg"></i>
+                        <span>WhatsApp Sessions</span>
+                    </a>
+                    <a href="{% url 'admin_panel:settings' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium {% if request.resolver_match.url_name == 'settings' %}active{% endif %}">
+                        <i class="ri-settings-3-line mr-3 text-lg"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                <div class="border-t border-neutral-200 my-6 mx-4"></div>
+                <div class="px-2">
+                    <a href="{% url 'admin_panel:logout' %}" class="admin-sidebar-link flex items-center px-4 py-3 text-neutral-600 text-sm font-medium hover:bg-red-50 hover:text-red-700">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Sign out</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+                
+        <!-- Main Content Area -->
+        <div id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-neutral-50 p-6">
+            <div class="max-w-7xl mx-auto">
+                {% block admin_content %}{% endblock %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-neutral-200 py-4">
+        <div class="px-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div class="text-center md:text-left mb-2 md:mb-0">
+                    <p class="text-xs text-neutral-600">&copy; 2025 WA Campaign Sender. All rights reserved.</p>
+                </div>
+                <div class="flex justify-center md:justify-end space-x-4">
+                    <a href="{% url 'admin_panel:settings' %}" class="text-xs text-neutral-600 hover:text-primary transition-colors">Settings</a>
+                    <a href="#" class="text-xs text-neutral-600 hover:text-primary transition-colors">Help</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variable declarations
+        const bodyTag = document.getElementById('bodyTag');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const desktopSidebarToggle = document.getElementById('desktopSidebarToggle');
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
+
+        // Smart notification system
+        document.addEventListener('DOMContentLoaded', () => {
+            const messagesContainer = document.getElementById('messages-container');
+
+            const createNotification = (message) => {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'relative flex items-start p-4 rounded-lg shadow-xl bg-green-100 border border-green-400 text-green-800';
+                messageElement.setAttribute('role', 'alert');
+                messageElement.dataset.messageId = message.id;
+
+                const iconContainer = document.createElement('div');
+                iconContainer.className = 'flex-shrink-0 pt-0.5';
+                iconContainer.innerHTML = `<i class="ri-mail-check-fill text-green-500 text-xl"></i>`;
+
+                const textContainer = document.createElement('div');
+                textContainer.className = 'ml-3 flex-grow';
+                textContainer.innerHTML = `<p class="text-sm font-medium">New message from ${message.name}: ${message.subject}</p>`;
+
+                const closeContainer = document.createElement('div');
+                closeContainer.className = 'ml-auto pl-3';
+                closeContainer.innerHTML = `
+                    <div class="-mx-1.5 -my-1.5">
+                        <button type="button" class="inline-flex rounded-md p-1.5 text-green-500 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-100 focus:ring-green-600">
+                            <span class="sr-only">Dismiss</span>
+                            <i class="ri-close-line text-lg"></i>
+                        </button>
+                    </div>`;
+                
+                messageElement.appendChild(iconContainer);
+                messageElement.appendChild(textContainer);
+                messageElement.appendChild(closeContainer);
+                return messageElement;
+            };
+
+            fetch("{% url 'admin_panel:unread_messages_api' %}")
+                .then(response => response.json())
+                .then(data => {
+                    const dismissedMessages = JSON.parse(localStorage.getItem('dismissedMessages')) || [];
+                    data.messages.forEach(message => {
+                        if (!dismissedMessages.includes(message.id)) {
+                            const notification = createNotification(message);
+                            messagesContainer.appendChild(notification);
+                        }
+                    });
+                });
+
+            messagesContainer.addEventListener('click', (event) => {
+                const button = event.target.closest('button');
+                if (button) {
+                    const messageElement = event.target.closest('[role="alert"]');
+                    if (messageElement) {
+                        const messageId = parseInt(messageElement.dataset.messageId, 10);
+                        const dismissed = JSON.parse(localStorage.getItem('dismissedMessages')) || [];
+                        if (!dismissed.includes(messageId)) {
+                            dismissed.push(messageId);
+                            localStorage.setItem('dismissedMessages', JSON.stringify(dismissed));
+                        }
+                        
+                        messageElement.style.transition = 'opacity 0.5s';
+                        messageElement.style.opacity = '0';
+                        setTimeout(() => messageElement.remove(), 500);
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // Sidebar toggle functionality for mobile
+        
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebarOverlay.classList.remove('hidden');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            sidebarOverlay.classList.add('hidden');
+        }
+
+        if (sidebar && sidebarToggle && sidebarOverlay) {
+            sidebarToggle.addEventListener('click', () => {
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    openSidebar();
+                } else {
+                    closeSidebar();
+                }
+            });
+
+            // Close when clicking on overlay
+            sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // Keep sidebar state in sync on window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 768) { // Tailwind md breakpoint
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebarOverlay.classList.add('hidden');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
+        }
+
+        // Desktop sidebar toggle
+
+        if (desktopSidebarToggle && bodyTag && sidebar) {
+            desktopSidebarToggle.addEventListener('click', () => {
+                bodyTag.classList.toggle('has-sidebar-expanded');
+                bodyTag.classList.toggle('has-sidebar-collapsed');
+
+                // Toggle sidebar width and content visibility
+                    // Toggle sidebar width and content visibility
+                if (bodyTag.classList.contains('has-sidebar-collapsed')) {
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-20'); // Collapsed width
+                    // Hide text in sidebar nav items
+                    sidebar.querySelectorAll('nav span').forEach(span => span.classList.add('hidden'));
+                    sidebar.querySelectorAll('nav .w-5').forEach(div => div.classList.remove('mr-3')); // Remove margin from icons
+                    desktopSidebarToggle.querySelector('i').classList.remove('ri-menu-line');
+                    desktopSidebarToggle.querySelector('i').classList.add('ri-close-line'); // Change icon
+                } else {
+                    sidebar.classList.remove('w-20');
+                    sidebar.classList.add('w-64'); // Expanded width
+                    // Show text in sidebar nav items
+                    sidebar.querySelectorAll('nav span').forEach(span => span.classList.remove('hidden'));
+                    sidebar.querySelectorAll('nav .w-5').forEach(div => div.classList.add('mr-3')); // Add margin back
+                    desktopSidebarToggle.querySelector('i').classList.remove('ri-close-line');
+                    desktopSidebarToggle.querySelector('i').classList.add('ri-menu-line'); // Change icon back
+                }
+            });
+        }
+    </script>
+
+    <script>
+        // Mobile navigation toggle
+        
+        
+        if (mobileMenuToggle && mobileNav) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileNav.classList.toggle('-translate-y-full');
+            });
+        }
+    </script>
+
+    <script>
+        // User menu toggle
+        
+        
+        if (userMenuButton && userMenu) {
+            userMenuButton.addEventListener('click', function() {
+                userMenu.classList.toggle('hidden');
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+    
+    <!-- Loading Manager JavaScript -->
+    <script src="{% static 'js/loading-manager.js' %}"></script>
+    
+    {% block extra_js_after_content %}{% endblock %}
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

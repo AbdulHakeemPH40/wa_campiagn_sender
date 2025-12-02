@@ -1,0 +1,73 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}Contact WA Campaign Sender - Get WhatsApp Marketing Help{% endblock %}
+{% block description %}Contact our WhatsApp marketing experts for support. Available 12/7 via WhatsApp +971553884741 or email. Get help with campaigns and technical issues.{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Get in Touch</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">We're here to help! Whether you have a question about our
+                features, pricing, or anything else, our team is ready to answer all your questions.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            <!-- Contact Information Section -->
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Contact Information</h2>
+                <div class="space-y-6">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center">
+                            <i class="ri-whatsapp-line text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">WhatsApp</h3>
+                            <p class="text-gray-600">+971553884741</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center">
+                            <i class="ri-mail-line text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">Email</h3>
+                            <p class="text-gray-600">hi@wacampaignsender.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center">
+                            <i class="ri-map-pin-line text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium text-gray-900">Address</h3>
+                            <p class="text-gray-600">Dubai, United Arab Emirates</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form Section -->
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-6">Send us a Message</h2>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <form action="{% url 'sitevisitor:contact' %}" method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit"
+                            class="w-full bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-colors">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

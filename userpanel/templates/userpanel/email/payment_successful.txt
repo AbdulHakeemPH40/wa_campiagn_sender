@@ -1,0 +1,10 @@
+Dear {{ user.full_name|default:'Customer' }},
+
+Thank you for your payment! Your order #{{ order.order_id }} has been processed successfully.
+
+Your invoice is attached as a PDF. You can also view and download your invoice from your account dashboard:
+{{ site_url }}{% url 'userpanel:dashboard' %}
+
+If you have any questions, please contact our support team.
+
+– WA Campaign Sender

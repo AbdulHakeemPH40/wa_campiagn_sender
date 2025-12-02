@@ -1,0 +1,3332 @@
+{% extends 'whatsappapi/base.html' %}
+{% load static %}
+
+{% block title %}Send Campaign{% endblock %}
+
+{% block content %}
+<!-- Messages Banner -->
+ 
+
+{% if session_has_active_campaign %}
+<!-- Active Campaign Warning Modal -->
+<div id="activeCampaignModal" class="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+  <div class="bg-white w-full max-w-lg rounded-xl shadow-xl border border-neutral-200">
+    <div class="p-5 border-b border-neutral-200 flex items-start justify-between">
+      <div class="flex items-start gap-3">
+        <div class="h-10 w-10 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+          <i class="ri-error-warning-line text-orange-600 text-xl"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-neutral-900">Campaign Already Running</h3>
+          <p class="text-sm text-neutral-600 mt-1">This WhatsApp session already has an active campaign.</p>
+        </div>
+      </div>
+      <button type="button" class="text-neutral-500 hover:text-neutral-800" onclick="document.getElementById('activeCampaignModal').remove()">
+        <i class="ri-close-line text-xl"></i>
+      </button>
+    </div>
+    <div class="p-5">
+      <!-- Session Info -->
+      <div class="mb-4 p-3 bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="ri-smartphone-line text-orange-600"></i>
+          <p class="text-sm font-bold text-orange-900">Session:</p>
+          <p class="text-sm font-semibold text-orange-800">{{ session.connected_phone_number|default:session.phone_number }}</p>
+        </div>
+        <p class="text-xs text-orange-700">Only one campaign can run per WhatsApp number at a time.</p>
+      </div>
+      
+      <!-- Active Campaigns List -->
+      {% if active_campaigns %}
+      <div class="mb-3">
+        <p class="text-xs font-bold text-neutral-700 mb-2 flex items-center">
+          <i class="ri-timer-line mr-1"></i>
+          Currently Running:
+        </p>
+        <div class="space-y-2">
+          {% for c in active_campaigns %}
+          <div class="flex items-center justify-between p-3 bg-neutral-50 rounded-lg border border-neutral-200">
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-semibold text-neutral-900 truncate">{{ c.name }}</p>
+              <p class="text-xs text-neutral-600">Started: {{ c.started_at|date:"M d, Y H:i"|default:"Pending" }}</p>
+              <p class="text-xs text-neutral-500 mt-1">Progress: {{ c.messages_sent|default:0 }}/{{ c.total_recipients|default:0 }} sent</p>
+            </div>
+            <span class="px-3 py-1 rounded-lg text-xs font-bold ml-3 {% if c.status == 'running' %}bg-blue-100 text-blue-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">{{ c.status|title }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      
+      <!-- Help Text -->
+      <div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded text-xs text-blue-800">
+        <p class="font-semibold mb-1">💡 What you can do:</p>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Wait for the current campaign to complete</li>
+          <li>Switch to a <strong>different WhatsApp session</strong> to send in parallel</li>
+          <li>View campaign progress in the <a href="{% url 'whatsappapi:campaigns' %}" class="underline font-semibold">Campaigns page</a></li>
+        </ul>
+      </div>
+    </div>pro
+    <div class="p-5 border-t border-neutral-200 flex items-center justify-end gap-2">
+      <a href="{% url 'whatsappapi:campaigns' %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">View Campaigns</a>
+      <a href="{% url 'whatsappapi:dashboard' %}" class="px-4 py-2 bg-purple-100 text-purple-700 border border-purple-200 rounded-lg text-sm font-semibold hover:bg-purple-200">Switch Session</a>
+      <button type="button" class="px-4 py-2 bg-neutral-100 text-neutral-800 rounded-lg text-sm font-semibold hover:bg-neutral-200" onclick="document.getElementById('activeCampaignModal').remove()">Close</button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if queue_success_modal %}
+<!-- Queue Success Modal -->
+<div id="queueSuccessModal" class="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+  <div class="bg-white w-full max-w-lg rounded-xl shadow-xl border border-neutral-200">
+    <div class="p-5 border-b border-neutral-200 flex items-start justify-between">
+      <div class="flex items-center gap-2">
+        <span class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center"><i class="ri-check-line text-green-600"></i></span>
+        <h3 class="text-lg font-semibold text-neutral-900">Campaign Queued</h3>
+      </div>
+      <button type="button" class="text-neutral-500 hover:text-neutral-800" onclick="document.getElementById('queueSuccessModal').remove()">
+        <i class="ri-close-line text-xl"></i>
+      </button>
+    </div>
+    <div class="p-5">
+      <p class="text-sm text-neutral-700">{{ queue_success_message }}</p>
+      {% if queued_campaign %}
+      <div class="mt-3 p-3 bg-neutral-50 rounded border border-neutral-200">
+        <p class="text-sm font-semibold text-neutral-900">{{ queued_campaign.name }}</p>
+        <p class="text-xs text-neutral-600">Task queued at {{ queued_campaign.created_at|date:"M d, Y H:i" }}</p>
+      </div>
+      {% endif %}
+    </div>
+    <div class="p-5 border-t border-neutral-200 flex items-center justify-end gap-2">
+      <a href="{% url 'whatsappapi:campaigns' %}" class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700">View Campaigns</a>
+      <button type="button" class="px-3 py-2 bg-neutral-100 text-neutral-800 rounded-lg text-sm font-semibold hover:bg-neutral-200" onclick="document.getElementById('queueSuccessModal').remove()">Close</button>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+<div class="max-w-7xl mx-auto">
+    
+    <!-- Sending From Session Banner -->
+    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-2 border-green-200 p-4 sm:p-5 mb-6">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <div class="h-12 w-12 bg-green-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="ri-whatsapp-line text-white text-2xl"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs sm:text-sm font-medium text-neutral-600 mb-1">Sending From:</p>
+                    <p class="text-base sm:text-lg font-bold text-green-700 truncate">{{ session.connected_phone_number|default:session.phone_number }}</p>
+                    <p class="text-xs text-neutral-500 truncate">{{ session.session_name }}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="px-3 py-1.5 bg-green-100 text-green-700 border border-green-200 rounded-lg text-xs font-semibold inline-flex items-center">
+                    <i class="ri-checkbox-circle-fill mr-1"></i>
+                    Connected
+                </span>
+                <a href="{% url 'whatsappapi:dashboard' %}" 
+                   class="px-3 py-1.5 bg-blue-100 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-200 text-xs font-semibold inline-flex items-center">
+                    <i class="ri-refresh-line mr-1"></i>
+                    Switch Account
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <!-- Main Form Section (2 columns) -->
+        <div class="lg:col-span-2 space-y-6">
+            <form method="post" action="{% url 'whatsappapi:send_campaign' %}" enctype="multipart/form-data" id="campaignForm" class="space-y-6"
+                  {% if selected_draft %}data-draft-name="{{ selected_draft.name|escapejs }}"
+                  data-draft-message="{{ selected_draft.message|escapejs }}"
+                  {% if selected_draft.contact_list %}data-draft-contact-list="{{ selected_draft.contact_list.id }}"{% endif %}
+                  data-draft-id="{{ selected_draft.id }}"{% endif %}
+                  {% if selected_contact_list_id %}data-selected-list="{{ selected_contact_list_id }}"{% endif %}>
+                {% csrf_token %}
+                <!-- CRITICAL: Preserve selected session across form submission -->
+                <input type="hidden" id="sessionId" name="session_id" value="{{ session.id }}">
+                <input type="hidden" id="draftId" name="draft_id" value="">
+                <input type="hidden" id="actionType" name="action" value="send">
+                <input type="hidden" id="complianceConfirmed" name="compliance_confirmed" value="false">
+
+                <!-- Campaign Name Card -->
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-md border border-green-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-green-200">
+                        <h2 class="text-base sm:text-lg font-bold text-neutral-800 flex items-center">
+                            <i class="ri-bookmark-line mr-2 text-green-600"></i>
+                            Campaign Details
+                        </h2>
+                    </div>
+                    <div class="p-4 sm:p-6">
+                        <label for="campaignName" class="block text-sm font-bold text-neutral-800 mb-3">
+                            Campaign Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="campaignName" name="campaign_name" required
+                            class="w-full px-4 sm:px-5 py-3 border-2 border-neutral-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all text-sm sm:text-base"
+                            placeholder="e.g., new_year_offer_2025"
+                            pattern="[a-z0-9_]+"
+                            title="Only lowercase letters, numbers, and underscores allowed">
+                        <div class="mt-2 flex items-start space-x-2">
+                            <div id="nameValidIcon" class="hidden">
+                                <i class="ri-error-warning-fill text-red-500 text-lg"></i>
+                            </div>
+                            <p id="nameHelp" class="text-xs text-neutral-500">
+                                Format: <code class="bg-neutral-100 px-2 py-1 rounded">lowercase_with_underscores</code>
+                                <span class="text-neutral-400">• No spaces • No uppercase • No special characters</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact List Selection Card -->
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-md border border-blue-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-50 to-sky-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-blue-200">
+                        <h2 class="text-base sm:text-lg font-bold text-neutral-800 flex items-center">
+                            <i class="ri-contacts-line mr-2 text-blue-600"></i>
+                            Select Contact List
+                        </h2>
+                    </div>
+                    <div class="p-4 sm:p-6">
+                        <label for="contactList" class="block text-sm font-bold text-neutral-800 mb-3">
+                            Choose Contact List <span class="text-red-500">*</span>
+                        </label>
+                        <select id="contactList" name="contact_list_id" required
+                            class="w-full px-4 sm:px-5 py-3 border-2 border-neutral-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm sm:text-base">
+                            <option value="">-- Select Contact List --</option>
+                            {% for list in contact_lists %}
+                            <option value="{{ list.id }}" data-contacts="{{ list.total_contacts }}" {% if selected_contact_list_id == list.id %}selected{% endif %}>
+                                {{ list.name }} ({{ list.total_contacts }} contacts)
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
+                            <a href="{% url 'whatsappapi:contacts' %}" class="text-xs text-blue-600 hover:underline flex items-center">
+                                <i class="ri-add-line mr-1"></i>Import New Contact List
+                            </a>
+                            <div id="selectedContacts" class="px-3 py-1.5 bg-blue-100 rounded-lg">
+                                <span class="text-xs font-bold text-blue-700">0 contacts selected</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <!-- Message Composer Card -->
+                <div class="bg-white rounded-2xl shadow-md border border-green-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-4 border-b border-green-200">
+                        <h2 class="text-lg font-bold text-neutral-800 flex items-center mb-3">
+                            <i class="ri-message-3-fill mr-2 text-green-600"></i>
+                            Message Content
+                        </h2>
+                        <!-- Variable Buttons Section -->
+                        <div class="bg-white rounded-xl p-4 border border-green-100">
+                            <div class="flex items-center mb-2">
+                                <i class="ri-code-line text-green-600 mr-2"></i>
+                                <span class="text-xs font-bold text-neutral-700">Insert Variable:</span>
+                            </div>
+                            <div id="variableButtonsContainer" class="flex flex-wrap gap-2">
+                                {% if available_fields %}
+                                    <!-- Dynamic variables based on uploaded CSV headers -->
+                                    {% for field in available_fields %}
+                                        <button type="button" data-variable="{{ field }}" onclick="insertVariable('{' + this.dataset.variable + '}')" class="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors">
+                                            <i class="ri-bookmark-line mr-1"></i>{<span>{{ field }}</span>}
+                                        </button>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- Default message when no contact list selected -->
+                                    <span class="text-xs text-neutral-500 italic">Select a contact list above to see available variables</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <!-- Text Formatting Toolbar -->
+                        <div class="bg-neutral-50 rounded-xl p-3 mb-3 border border-neutral-200">
+                            <div class="flex items-center justify-between flex-wrap gap-3">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-xs font-bold text-neutral-600 mr-2">Format Text:</span>
+                                    <button type="button" onclick="showFormattingHelp()" title="Text Formatting Guide"
+                                        class="px-3 py-1.5 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors">
+                                        <i class="ri-question-line text-neutral-700"></i>
+                                    </button>
+                                    <button type="button" onclick="formatText('bold')" title="Bold (Ctrl+B)"
+                                        class="px-3 py-1.5 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors">
+                                        <i class="ri-bold text-neutral-700"></i>
+                                    </button>
+                                    <button type="button" onclick="formatText('italic')" title="Italic (Ctrl+I)"
+                                        class="px-3 py-1.5 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors">
+                                        <i class="ri-italic text-neutral-700"></i>
+                                    </button>
+                                    <button type="button" onclick="formatText('strikethrough')" title="Strikethrough"
+                                        class="px-3 py-1.5 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors">
+                                        <i class="ri-strikethrough text-neutral-700"></i>
+                                    </button>
+                                    <div class="h-6 w-px bg-neutral-300 mx-1"></div>
+                                    <button type="button" onclick="toggleEmojiPicker()" title="Add Emoji"
+                                        class="px-3 py-1.5 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-100 transition-colors">
+                                        <i class="ri-emotion-line text-neutral-700"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Emoji Picker -->
+                            <div id="emojiPicker" class="hidden mt-3 bg-white rounded-lg border border-neutral-300 p-1 shadow-lg"></div>
+                        </div>
+                        
+                        <textarea id="message" name="message" rows="10" required
+                            class="w-full px-5 py-4 border-2 border-neutral-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none transition-all text-neutral-800 font-medium bg-neutral-50 hover:bg-white"
+                            placeholder="Hello {first_name},&#10;&#10;We have exciting news for you!&#10;&#10;Visit our store for amazing offers."></textarea>
+                        
+                        <div class="flex items-center justify-between mt-2">
+                            <span id="charCount" class="text-xs font-medium text-gray-600">0 characters</span>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <div id="aiAssistantCard" class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden">
+                                <!-- Minimal animated gradient background (hidden by default) -->
+                                <div id="aiGradientBg" class="hidden absolute inset-0 bg-gradient-to-r from-gray-100 via-blue-50 via-purple-50 to-gray-100 animate-ai-gradient opacity-90"></div>
+                                
+                                <!-- Content wrapper -->
+                                <div class="relative z-10">
+                                    <div class="flex flex-col gap-3">
+                                        <!-- Header -->
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <div class="h-9 w-9 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                                    <i class="ri-sparkling-line text-white text-lg"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-semibold text-gray-800">AI Assistant</p>
+                                                    <p class="text-xs text-gray-500">Powered by OpenAI</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Loading State (hidden by default) -->
+                                        <div id="aiLoadingState" class="hidden">
+                                            <div class="flex flex-col items-center justify-center gap-3 py-10">
+                                                <!-- Simple pulsing icon -->
+                                                <div class="relative">
+                                                    <i class="ri-sparkling-fill text-gray-400 text-4xl animate-pulse"></i>
+                                                </div>
+                                                
+                                                <!-- Loading text -->
+                                                <div class="text-center">
+                                                    <p class="text-gray-600 font-medium text-sm">Generating content...</p>
+                                                </div>
+                                                
+                                                <!-- Simple loading bar -->
+                                                <div class="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
+                                                    <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-loading-bar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Controls (shown when not loading) -->
+                                        <div id="aiControls">
+                                            <!-- Options -->
+                                            <div class="grid grid-cols-2 gap-3">
+                                                <div>
+                                                    <label for="aiTone" class="text-xs font-medium text-gray-700 mb-1.5 block">Tone</label>
+                                                    <select id="aiTone" class="w-full text-sm px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                        <option value="friendly" selected>😊 Friendly</option>
+                                                        <option value="professional">💼 Professional</option>
+                                                        <option value="casual">👋 Casual</option>
+                                                        <option value="persuasive">🎯 Persuasive</option>
+                                                        <option value="informative">📚 Informative</option>
+                                                        <option value="urgent">⚡ Urgent</option>
+                                                        <option value="formal">🎩 Formal</option>
+                                                        <option value="playful">🎨 Playful</option>
+                                                        <option value="empathetic">❤️ Empathetic</option>
+                                                        <option value="authoritative">👑 Authoritative</option>
+                                                        <option value="humorous">😄 Humorous</option>
+                                                        <option value="storytelling">📖 Storytelling</option>
+                                                        <option value="promotional">🎁 Promotional</option>
+                                                        <option value="neutral">⚪ Neutral</option>
+                                                        <option value="creative">✨ Creative</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label for="aiLength" class="text-xs font-medium text-gray-700 mb-1.5 block">Length</label>
+                                                    <select id="aiLength" class="w-full text-sm px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                                        <option value="short">📝 Short</option>
+                                                        <option value="medium" selected>📄 Medium</option>
+                                                        <option value="long">📜 Long</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Generate & Demo Buttons -->
+                                            <div class="space-y-2">
+                                                <button type="button" id="aiDraftBtn" onclick="generateAiDraft()" 
+                                                        class="w-full mt-3 px-4 py-2.5 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white rounded-lg hover:from-purple-700 hover:via-blue-700 hover:to-cyan-700 font-medium text-sm inline-flex items-center justify-center gap-2 transition-all transform hover:scale-105 active:scale-95">
+                                                    <i class="ri-sparkling-line"></i>
+                                                    <span>Generate AI Draft</span>
+                                                </button>
+                                                <button type="button" onclick="showAiDraftDemo()" 
+                                                        class="w-full px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg hover:from-indigo-600 hover:to-purple-600 font-medium text-sm inline-flex items-center justify-center gap-2 transition-all">
+                                                    <i class="ri-book-open-line"></i>
+                                                    <span>View Demo Examples</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Draft Result Container -->
+                        <div id="aiDraftContainer" class="hidden mt-3 bg-indigo-50 border border-indigo-200 rounded-xl p-4">
+                            <div class="flex flex-col gap-3">
+                                <!-- Header -->
+                                <div class="flex items-center gap-2">
+                                    <i class="ri-sparkling-2-line text-indigo-600 text-lg"></i>
+                                    <span class="text-sm font-bold text-indigo-800">AI Generated Draft</span>
+                                </div>
+                                
+                                <!-- Draft Text -->
+                                <p id="aiDraftText" class="text-sm text-neutral-800 whitespace-pre-wrap bg-white rounded-lg p-3 border border-indigo-200"></p>
+                                
+                                <!-- Action Buttons -->
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                    <button type="button" onclick="insertAiDraft('append')" class="px-4 py-2.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors inline-flex items-center justify-center gap-1 border border-blue-200">
+                                        <i class="ri-add-line"></i>
+                                        <span>Append</span>
+                                    </button>
+                                    <button type="button" onclick="insertAiDraft('replace')" class="px-4 py-2.5 bg-green-100 text-green-700 rounded-lg text-xs font-semibold hover:bg-green-200 transition-colors inline-flex items-center justify-center gap-1 border border-green-200">
+                                        <i class="ri-repeat-line"></i>
+                                        <span>Replace</span>
+                                    </button>
+                                    <button type="button" onclick="regenerateAiDraft()" aria-label="Regenerate" class="px-4 py-2.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-semibold hover:bg-purple-200 transition-colors inline-flex items-center justify-center gap-1 border border-purple-200">
+                                        <i class="ri-refresh-line"></i>
+                                        <span>Retry</span>
+                                    </button>
+                                    <button type="button" onclick="clearAiDraft()" class="px-4 py-2.5 bg-red-100 text-red-700 rounded-lg text-xs font-semibold hover:bg-red-200 transition-colors inline-flex items-center justify-center gap-1 border border-red-200">
+                                        <i class="ri-delete-bin-line"></i>
+                                        <span>Clear</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attachment Upload Card -->
+                <div class="bg-white rounded-2xl shadow-md border border-purple-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-4 border-b border-purple-200">
+                        <h2 class="text-lg font-bold text-neutral-800 flex items-center">
+                            <i class="ri-attachment-line mr-2 text-purple-600"></i>
+                            Attachment (Optional)
+                        </h2>
+                    </div>
+                    <div class="p-6">
+                        <div class="border-2 border-dashed border-neutral-300 rounded-xl p-6 text-center hover:border-purple-400 transition-colors">
+                            <input type="file" id="attachment" name="attachment" accept="image/*,video/*,.pdf" class="hidden" onchange="handleFileSelect(this)">
+                            <label for="attachment" class="cursor-pointer">
+                                <div class="h-16 w-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <i class="ri-upload-cloud-line text-3xl text-purple-600"></i>
+                                </div>
+                                <p class="text-sm font-semibold text-neutral-800 mb-1">Click to upload file</p>
+                                <p class="text-xs text-neutral-500">Images, Videos, or PDF (Max 10MB)</p>
+                            </label>
+                        </div>
+                        <div id="filePreview" class="hidden mt-4 p-4 bg-purple-50 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="ri-file-line text-2xl text-purple-600"></i>
+                                <div>
+                                    <p id="fileName" class="text-sm font-semibold text-neutral-800"></p>
+                                    <p id="fileSize" class="text-xs text-neutral-500"></p>
+                                </div>
+                            </div>
+                            <button type="button" onclick="removeFile()" class="text-red-600 hover:text-red-800">
+                                <i class="ri-delete-bin-line text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Sending Controls Card -->
+                <div class="bg-white rounded-2xl shadow-md border border-orange-200 overflow-hidden">
+                    <div class="bg-gradient-to-r from-orange-50 to-amber-50 px-6 py-4 border-b border-orange-200">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-bold text-neutral-800 flex items-center">
+                                <i class="ri-settings-3-line mr-2 text-orange-600"></i>
+                                Advanced Sending Controls
+                            </h2>
+                            <span class="text-xs font-semibold px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Optional</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-sm text-neutral-600 mb-4">
+                            Configure random delays, batch splitting, and cooldown intervals to minimize account ban risks.
+                        </p>
+                        <button type="button" onclick="showAdvancedControlsModal()" 
+                                class="w-full px-5 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl hover:from-orange-600 hover:to-amber-700 font-semibold transition-all inline-flex items-center justify-center shadow-md hover:shadow-lg">
+                            <i class="ri-equalizer-line mr-2 text-lg"></i>
+                            <span>Configure Sending Controls</span>
+                        </button>
+                        <div id="advancedControlsStatus" class="hidden mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                            <p class="text-xs font-semibold text-green-700 mb-1">✓ Advanced Controls Enabled</p>
+                            <p class="text-xs text-green-600" id="advancedControlsSummary"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 mt-6 sm:mt-8 pt-6 border-t-2 border-neutral-100">
+                    <!-- Cancel Button -->
+                    <a href="{% url 'whatsappapi:dashboard' %}" 
+                       class="w-full sm:w-auto px-5 py-3.5 bg-red-100 text-red-700 border-2 border-red-200 rounded-2xl hover:bg-red-200 font-semibold transition-all inline-flex items-center justify-center">
+                        <i class="ri-close-line mr-2 text-lg"></i>
+                        <span>Cancel</span>
+                    </a>
+                    
+                    <!-- Action Buttons Group -->
+                    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        <!-- Save Draft Button - Purple -->
+                        <button type="button" onclick="saveDraft()" 
+                                class="w-full sm:w-auto px-5 py-3.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:to-purple-700 font-semibold transition-all inline-flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="ri-save-line mr-2 text-lg"></i>
+                            <span>Save Draft</span>
+                        </button>
+                        
+                        <!-- Test Campaign Button - Blue -->
+                        <button type="button" onclick="showTestCampaignModal()" 
+                                class="w-full sm:w-auto px-5 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 font-semibold transition-all inline-flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="ri-test-tube-line mr-2 text-lg"></i>
+                            <span>Test Campaign</span>
+                        </button>
+                        
+                        <!-- Send Campaign Button - Green (Primary) -->
+                        <button type="button" onclick="showSendConfirmation()" 
+                                class="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl hover:from-green-600 hover:to-emerald-700 font-bold shadow-xl hover:shadow-2xl transition-all inline-flex items-center justify-center transform hover:scale-105">
+                            <i class="ri-send-plane-fill mr-2 text-lg"></i>
+                            <span>Send Campaign</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Sidebar - Preview (1 column) -->
+        <div class="lg:col-span-1 space-y-5">
+            <!-- Campaign Stats - MOVED TO TOP -->
+            <div class="bg-white rounded-2xl shadow-lg border border-blue-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-50 to-sky-50 px-5 py-4 border-b border-blue-200">
+                    <h3 class="font-bold text-neutral-800 flex items-center text-base">
+                        <i class="ri-bar-chart-line mr-2 text-blue-600 text-xl"></i>
+                        Campaign Stats
+                    </h3>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-neutral-600">Recipients:</span>
+                        <span id="statsRecipients" class="text-base font-bold text-neutral-900">0</span>
+                    </div>
+                    <div class="h-px bg-neutral-200"></div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-neutral-600">Characters:</span>
+                        <span id="statsChars" class="text-base font-bold text-neutral-900">0</span>
+                    </div>
+                    <div class="h-px bg-neutral-200"></div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-neutral-600">Variables:</span>
+                        <span id="statsVars" class="text-base font-bold text-neutral-900">0</span>
+                    </div>
+                    <div class="h-px bg-neutral-200"></div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-neutral-600">Attachment:</span>
+                        <span id="statsAttachment" class="text-base font-bold text-neutral-900">None</span>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br><br><br><br>
+            <!-- Live Preview - MOVED TO BOTTOM -->
+            <div class="bg-white rounded-2xl shadow-md border border-green-200 overflow-hidden sticky" style="top: 250px;">
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-5 py-4 border-b border-green-200">
+                    <h3 class="font-bold text-neutral-800 flex items-center text-base">
+                        <i class="ri-smartphone-line mr-2 text-green-600 text-xl"></i>
+                        Live Preview
+                    </h3>
+                </div>
+                <div class="p-5">
+                    <div class="bg-neutral-100 rounded-xl p-4">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="h-10 w-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="ri-whatsapp-line text-white text-xl"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-bold text-neutral-800">WhatsApp Business</p>
+                                <p class="text-xs text-neutral-500">WhatsApp</p>
+                            </div>
+                        </div>
+                        <!-- WhatsApp-style preview: attachment first, then message -->
+                        <div id="previewAttachment" class="hidden mb-3">
+                            <img id="previewImage" class="rounded-lg max-w-full h-auto" src="" alt="Attachment preview">
+                        </div>
+                        <div id="previewMessageContainer" class="bg-white rounded-xl p-4 shadow-sm">
+                            <p id="previewMessage" class="text-sm text-neutral-800 whitespace-pre-wrap" style="line-height: 1.6;">Your message will appear here...</p>
+                        </div>
+                        <p class="text-xs text-neutral-400 mt-3">12:30 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Draft Modal -->
+<div id="viewDraftModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-5 border-b border-green-200 sticky top-0">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-neutral-800">View Draft</h2>
+                <button onclick="closeViewModal()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="mb-4">
+                <label class="text-sm font-bold text-neutral-700">Campaign Name</label>
+                <p id="viewName" class="text-neutral-800 mt-1"></p>
+            </div>
+            <div class="mb-4">
+                <label class="text-sm font-bold text-neutral-700">Message</label>
+                <div class="bg-neutral-50 rounded-xl p-4 mt-1">
+                    <p id="viewMessage" class="text-neutral-800 whitespace-pre-wrap"></p>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="text-sm font-bold text-neutral-700">Contact List</label>
+                <p id="viewContacts" class="text-neutral-800 mt-1"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Draft Modal -->
+<div id="deleteDraftModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-red-50 to-rose-50 px-6 py-5 border-b border-red-200 rounded-t-2xl">
+            <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                <i class="ri-delete-bin-line text-red-600 mr-2"></i>
+                Delete Draft
+            </h2>
+        </div>
+        <div class="p-6">
+            <p class="text-neutral-700 mb-6">Are you sure you want to delete this draft? This action cannot be undone.</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeDeleteModal()" class="px-6 py-3 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 font-semibold">
+                    Cancel
+                </button>
+                <button onclick="confirmDeleteDraft()" class="px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 font-semibold">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Send Campaign Confirmation Modal -->
+<div id="sendConfirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full">
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-5 border-b border-green-200 rounded-t-2xl">
+            <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                <i class="ri-send-plane-fill text-green-600 mr-2"></i>
+                Confirm Send Campaign
+            </h2>
+        </div>
+        <div class="p-6">
+            <div class="bg-blue-50 rounded-xl p-4 mb-4">
+                <div class="flex items-start space-x-3">
+                    <i class="ri-information-line text-blue-600 text-xl mt-0.5"></i>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-blue-900 mb-2">Campaign Summary</h3>
+                        <div class="space-y-1 text-sm text-blue-800">
+                            <p><strong>Campaign Name:</strong> <span id="confirmCampaignName"></span></p>
+                            <p><strong>Recipients:</strong> <span id="confirmRecipients"></span> contacts</p>
+                            <p><strong>Message Length:</strong> <span id="confirmMessageLength"></span> characters</p>
+                            <p><strong>Attachment:</strong> <span id="confirmAttachment">None</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+                <div class="flex items-start space-x-3">
+                    <i class="ri-shield-check-line text-emerald-600 text-xl mt-0.5"></i>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-emerald-900 mb-2">Compliance Confirmation</h3>
+                        <p class="text-sm text-emerald-800 mb-3">By sending, you attest that this campaign complies with WhatsApp policies and our sending rules.</p>
+                        <label class="flex items-start space-x-2">
+                            <input type="checkbox" id="complianceConfirmCheckbox" class="h-4 w-4 rounded border-emerald-300 text-emerald-600 focus:ring-emerald-500">
+                            <span class="text-sm text-neutral-800">
+                                I confirm: recipients opted-in; content is non-spam and compliant; sending respects default rate limits and warm-up; and I accept enforcement actions for abuse.
+                            </span>
+                        </label>
+                        <p id="complianceError" class="hidden mt-2 text-xs text-red-600">Please check the box to confirm compliance before sending.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-neutral-700 mb-4"><strong>Are you ready to send this campaign?</strong></p>
+            <p class="text-sm text-neutral-600 mb-6">This will send WhatsApp messages to all contacts in the selected list. Make sure your message content and variables are correct.</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeSendConfirmModal()" class="px-6 py-3 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 font-semibold">
+                    <i class="ri-close-line mr-1"></i>Cancel
+                </button>
+                <button onclick="confirmSendCampaign()" class="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 font-bold">
+                    <i class="ri-send-plane-fill mr-2"></i>Yes, Send Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Sending Controls Modal -->
+<div id="advancedControlsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="bg-gradient-to-r from-orange-50 to-amber-50 px-6 py-5 border-b border-orange-200 sticky top-0 rounded-t-2xl">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                    <i class="ri-settings-3-fill text-orange-600 mr-2"></i>
+                    Advanced Sending Controls
+                </h2>
+                <button onclick="closeAdvancedControlsModal()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6 space-y-6">
+            <!-- Enable/Disable Toggle -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <label class="flex items-center justify-between cursor-pointer">
+                    <div class="flex items-center space-x-3">
+                        <i class="ri-flashlight-line text-blue-600 text-2xl"></i>
+                        <div>
+                            <p class="font-semibold text-neutral-800">Enable Advanced Controls</p>
+                            <p class="text-xs text-neutral-600">Activate batch processing and random delays</p>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="useAdvancedControls" class="h-6 w-6 rounded border-blue-300 text-blue-600 focus:ring-blue-500">
+                </label>
+            </div>
+
+            <div id="advancedControlsFields" class="space-y-6">
+                <!-- Random Delay Section -->
+                <div>
+                    <h3 class="font-bold text-neutral-800 mb-3 flex items-center">
+                        <i class="ri-time-line text-green-600 mr-2"></i>
+                        Random Delay Between Messages
+                    </h3>
+                    <p class="text-sm text-neutral-600 mb-4">Set randomized delays between each message to reduce detection risks</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Minimum Delay (seconds)</label>
+                            <input type="number" id="randomDelayMin" min="1" max="120" value="5" 
+                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="text-xs text-neutral-500 mt-1">Recommended: 5 seconds</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Maximum Delay (seconds)</label>
+                            <input type="number" id="randomDelayMax" min="1" max="120" value="10" 
+                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="text-xs text-neutral-500 mt-1">Recommended: 10 seconds</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Batch Size Section -->
+                <div>
+                    <h3 class="font-bold text-neutral-800 mb-3 flex items-center">
+                        <i class="ri-stack-line text-purple-600 mr-2"></i>
+                        Batch Splitting
+                    </h3>
+                    <p class="text-sm text-neutral-600 mb-4">Split large contact lists into smaller batches for controlled distribution</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Minimum Batch Size</label>
+                            <input type="number" id="batchSizeMin" min="10" max="500" value="50" 
+                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="text-xs text-neutral-500 mt-1">Recommended: 50 contacts</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Maximum Batch Size</label>
+                            <input type="number" id="batchSizeMax" min="10" max="500" value="70" 
+                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="text-xs text-neutral-500 mt-1">Recommended: 70 contacts</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Batch Cooldown Section -->
+                <div>
+                    <h3 class="font-bold text-neutral-800 mb-3 flex items-center">
+                        <i class="ri-timer-line text-blue-600 mr-2"></i>
+                        Batch Cooldown Time
+                    </h3>
+                    <p class="text-sm text-neutral-600 mb-4">Rest period between batches to maintain account health and prevent detection</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Minimum Cooldown (minutes)</label>
+                            <input type="number" id="batchCooldownMin" min="0.5" max="180" step="0.5" value="5" 
+                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="text-xs text-neutral-500 mt-1">Recommended: 5 minutes</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Maximum Cooldown (minutes)</label>
+                            <input type="number" id="batchCooldownMax" min="0.5" max="180" step="0.5" value="10" 
+                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="text-xs text-neutral-500 mt-1">Recommended: 10 minutes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warning Notice -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                    <div class="flex items-start space-x-3">
+                        <i class="ri-alert-line text-yellow-600 text-xl mt-0.5"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-yellow-900 mb-1">Important Guidelines:</p>
+                            <ul class="text-xs text-yellow-800 space-y-1 list-disc list-inside">
+                                <li>Higher delays and longer cooldowns reduce ban risk significantly</li>
+                                <li>Smaller batches with extended cooldown periods are recommended for new accounts</li>
+                                <li>These settings override standard account protection delays</li>
+                                <li>Monitor account health regularly when using bulk sending features</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="sticky bottom-0 bg-neutral-50 px-6 py-4 border-t border-neutral-200 rounded-b-2xl flex justify-end space-x-3">
+            <button onclick="closeAdvancedControlsModal()" class="px-6 py-3 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 font-semibold">
+                <i class="ri-close-line mr-1"></i>Cancel
+            </button>
+            <button onclick="saveAdvancedControls()" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl hover:from-orange-600 hover:to-amber-700 font-bold">
+                <i class="ri-save-line mr-2"></i>Save Settings
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Test Campaign Modal -->
+<div id="testCampaignModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-blue-50 to-sky-50 px-6 py-5 border-b border-blue-200 rounded-t-2xl">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                    <i class="ri-test-tube-fill text-blue-600 mr-2"></i>
+                    Send Test Message
+                </h2>
+                <button onclick="closeTestCampaignModal()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6">
+            <p class="text-sm text-neutral-600 mb-6">Send a test message to your phone number to preview how it will look on WhatsApp.</p>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-bold text-neutral-700 mb-2">Test Phone Number</label>
+                
+                <div class="flex space-x-2">
+                    <!-- Country Selector -->
+                    <div class="relative" style="width: 180px;">
+                        <button type="button" id="testCountryBtn" class="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg hover:bg-neutral-50 flex items-center justify-between text-left">
+                            <span id="testSelectedCountry" class="flex items-center text-neutral-500">
+                                <i class="ri-global-line text-xl mr-2"></i>
+                                <span class="text-sm font-medium">Select Country</span>
+                            </span>
+                            <i class="ri-arrow-down-s-line text-lg"></i>
+                        </button>
+                        
+                        <!-- Dropdown -->
+                        <div id="testCountryDropdown" class="hidden absolute top-full left-0 mt-1 bg-white border border-neutral-300 rounded-lg shadow-lg max-h-80 overflow-hidden z-10" style="width: 320px;">
+                            <!-- Search -->
+                            <div class="p-3 border-b bg-neutral-50">
+                                <input type="text" id="testCountrySearch" placeholder="Search country..." class="w-full px-3 py-2 border border-neutral-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            
+                            <!-- Country List -->
+                            <div class="overflow-y-auto" style="max-height: 280px;" id="testCountryList">
+                                <!-- Countries will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Phone Number Input -->
+                    <input type="tel" id="testPhoneInput" 
+                           placeholder="Enter phone number" 
+                           class="flex-1 px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                           required>
+                </div>
+                <p class="text-xs text-neutral-500 mt-2">Country code will be added automatically</p>
+            </div>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-6">
+                <div class="flex items-start space-x-2">
+                    <i class="ri-information-line text-yellow-600 text-lg mt-0.5"></i>
+                    <p class="text-xs text-yellow-800">This will send a test message using your current message content and attachment (if any). The campaign will NOT be saved.</p>
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeTestCampaignModal()" class="px-6 py-3 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 font-semibold transition-all">
+                    <i class="ri-close-line mr-1"></i>Cancel
+                </button>
+                <button onclick="sendTestMessage()" id="sendTestBtn" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 font-bold transition-all transform hover:scale-105 active:scale-95">
+                    <i class="ri-send-plane-fill mr-2"></i>Send Test
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading/Moderation Check Modal -->
+<div id="moderationCheckLoadingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="p-8 text-center">
+            <div class="mb-6">
+                <div class="inline-block">
+                    <div class="h-16 w-16 rounded-full border-4 border-blue-200 border-t-blue-600 animate-spin"></div>
+                </div>
+            </div>
+            <h2 class="text-xl font-bold text-neutral-800 mb-2">Checking Content Safety</h2>
+            <p class="text-sm text-neutral-600">Please wait while we verify your message content for compliance...</p>
+            <div class="mt-6 flex items-center justify-center gap-1">
+                <div class="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0s;"></div>
+                <div class="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+                <div class="h-2 w-2 bg-blue-500 rounded-full animate-bounce" style="animation-delay: 0.4s;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Moderation Check Modal -->
+<div id="moderationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto">
+        <!-- Header -->
+        <div class="sticky top-0 bg-gradient-to-r from-red-500 to-rose-500 px-6 py-4 rounded-t-2xl flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i class="ri-alert-line text-white text-2xl"></i>
+                <div>
+                    <h2 class="text-lg font-bold text-white">Content Blocked</h2>
+                    <p class="text-sm text-red-100">Prohibited content detected</p>
+                </div>
+            </div>
+            <button onclick="closeModerationModal()" class="text-white hover:bg-red-600 p-2 rounded-lg">
+                <i class="ri-close-line text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 space-y-5">
+            <!-- Risk Score -->
+            <div class="bg-gradient-to-r from-red-50 to-rose-50 p-4 rounded-lg border border-red-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-semibold text-neutral-700">Risk Score</span>
+                    <span id="riskScoreValue" class="text-2xl font-bold text-red-600">0</span>
+                </div>
+                <div class="w-full bg-red-200 rounded-full h-2">
+                    <div id="riskScoreBar" class="bg-gradient-to-r from-red-500 to-orange-500 h-2 rounded-full transition-all" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- Detected Words -->
+            <div>
+                <h3 class="font-semibold text-neutral-900 mb-3 flex items-center text-sm">
+                    <i class="ri-error-warning-fill text-red-500 mr-2"></i>
+                    Prohibited Words
+                </h3>
+                <div id="illegalWordsList" class="space-y-2"></div>
+            </div>
+
+            <!-- Message Preview -->
+            <div>
+                <h3 class="font-semibold text-neutral-900 mb-2 text-sm">Your Message</h3>
+                <div id="messageHighlightPreview" class="bg-neutral-50 rounded-lg p-4 border border-neutral-200 max-h-32 overflow-y-auto text-sm text-neutral-700 whitespace-pre-wrap break-words leading-relaxed"></div>
+            </div>
+
+            <!-- Violation Details -->
+            <div class="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                <h3 class="font-semibold text-yellow-900 mb-2 text-sm flex items-center">
+                    <i class="ri-information-line text-yellow-600 mr-2"></i>
+                    Violation Details
+                </h3>
+                <ul id="reasonsList" class="space-y-1 text-xs text-yellow-800 list-disc list-inside"></ul>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="sticky bottom-0 bg-neutral-50 px-6 py-4 border-t border-neutral-200 rounded-b-2xl flex justify-end space-x-3">
+            <button onclick="closeModerationModal()" class="px-4 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-100 font-medium text-sm flex items-center">
+                <i class="ri-arrow-left-line mr-2"></i>
+                Edit Message
+            </button>
+            <button class="px-4 py-2 bg-red-100 text-red-700 rounded-lg cursor-not-allowed font-medium text-sm flex items-center" disabled>
+                <i class="ri-lock-line mr-2"></i>
+                Blocked
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notifications -->
+<div id="successToast" class="hidden fixed top-5 right-5 z-40 max-w-sm">
+    <div class="bg-white rounded-xl shadow-2xl border-l-4 border-green-500 p-4 flex items-start space-x-3 animate-slide-in">
+        <div class="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <i class="ri-check-line text-2xl text-green-600"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="font-semibold text-neutral-800" id="toastTitle">Success!</h3>
+            <p class="text-sm text-neutral-600" id="toastMessage">Action completed successfully</p>
+        </div>
+        <button onclick="closeToast()" class="text-neutral-400 hover:text-neutral-600">
+            <i class="ri-close-line text-xl"></i>
+        </button>
+    </div>
+</div>
+
+<style>
+/* Spinner animation for loading modal */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Bounce animation */
+@keyframes bounce-custom {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(-8px); opacity: 0.7; }
+}
+.animate-bounce {
+    animation: bounce-custom 1.4s infinite;
+}
+
+/* Moderation modal highlight styles */
+
+
+/* Smooth scrolling for preview */
+#previewMessageContainer {
+    scroll-behavior: smooth;
+}
+
+/* Preview message proper spacing for line breaks */
+#previewMessage {
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* CRITICAL: Proper spacing for paragraph breaks in WhatsApp preview */
+#previewMessage br {
+    display: block;
+    content: "";
+    margin: 0.5em 0;  /* Increased from 0.25em for visible paragraph spacing */
+}
+
+/* Extra spacing for double line breaks (paragraph breaks) */
+#previewMessage br + br {
+    margin-top: 0.75em;  /* Additional spacing for paragraph breaks */
+}
+
+/* Make strong tags (bold) display as block to force new line */
+#previewMessage strong {
+    display: inline;
+}
+
+/* Only break URLs if they overflow */
+#previewMessage a {
+    word-break: break-all;
+}
+
+/* Custom scrollbar for preview */
+#previewMessageContainer::-webkit-scrollbar {
+    width: 6px;
+}
+#previewMessageContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+#previewMessageContainer::-webkit-scrollbar-thumb {
+    background: #22c55e;
+    border-radius: 10px;
+}
+#previewMessageContainer::-webkit-scrollbar-thumb:hover {
+    background: #16a34a;
+}
+
+</style>
+
+<!-- File Size Warning Modal -->
+<div id="fileSizeWarningModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-red-50 to-rose-50 px-6 py-5 border-b border-red-200 rounded-t-2xl">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                    <i class="ri-error-warning-line text-red-600 mr-2"></i>
+                    File Too Large
+                </h2>
+                <button onclick="closeFileSizeWarning()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="bg-red-50 rounded-xl p-4 mb-4">
+                <div class="flex items-start space-x-3">
+                    <i class="ri-information-line text-red-600 text-xl mt-0.5"></i>
+                    <div class="flex-1">
+                        <p class="text-red-800">The selected file exceeds the maximum allowed size of <strong>10MB</strong>.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-neutral-700 mb-2"><strong>File Size:</strong> <span id="fileSizeValue"></span> MB</p>
+            <p class="text-sm text-neutral-600 mb-6">Please choose a smaller file or compress your file before uploading.</p>
+            <div class="flex justify-end">
+                <button onclick="closeFileSizeWarning()" class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 font-bold">
+                    <i class="ri-close-line mr-2"></i>OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Text Formatting Help Modal -->
+<div id="formattingHelpModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto">
+        <div class="bg-gradient-to-r from-blue-50 to-sky-50 px-6 py-5 border-b border-blue-200 sticky top-0 rounded-t-2xl">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                    <i class="ri-code-line text-blue-600 mr-2"></i>
+                    Text Formatting Guide
+                </h2>
+                <button onclick="closeFormattingHelp()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <div class="bg-blue-50 rounded-xl p-4">
+                    <h3 class="font-bold text-blue-900 mb-2 flex items-center">
+                        <i class="ri-bold text-blue-600 mr-2"></i>
+                        Bold Text
+                    </h3>
+                    <p class="text-sm text-blue-800 mb-2">Use asterisks (*) around text to make it bold:</p>
+                    <div class="bg-white rounded-lg p-3 border border-blue-200">
+                        <code class="text-sm">*This text will be bold*</code>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 rounded-xl p-4">
+                    <h3 class="font-bold text-green-900 mb-2 flex items-center">
+                        <i class="ri-italic text-green-600 mr-2"></i>
+                        Italic Text
+                    </h3>
+                    <p class="text-sm text-green-800 mb-2">Use underscores (_) around text to make it italic:</p>
+                    <div class="bg-white rounded-lg p-3 border border-green-200">
+                        <code class="text-sm">_This text will be italic_</code>
+                    </div>
+                </div>
+                
+                <div class="bg-purple-50 rounded-xl p-4">
+                    <h3 class="font-bold text-purple-900 mb-2 flex items-center">
+                        <i class="ri-strikethrough text-purple-600 mr-2"></i>
+                        Strikethrough Text
+                    </h3>
+                    <p class="text-sm text-purple-800 mb-2">Use tildes (~) around text to strikethrough:</p>
+                    <div class="bg-white rounded-lg p-3 border border-purple-200">
+                        <code class="text-sm">~This text will be strikethrough~</code>
+                    </div>
+                </div>
+                
+                <div class="bg-neutral-50 rounded-xl p-4">
+                    <h3 class="font-bold text-neutral-900 mb-2 flex items-center">
+                        <i class="ri-lightbulb-line text-neutral-600 mr-2"></i>
+                        Tips
+                    </h3>
+                    <ul class="text-sm text-neutral-700 space-y-1">
+                        <li>• Use keyboard shortcuts: <kbd class="bg-white px-2 py-1 rounded border">Ctrl+B</kbd> for bold, <kbd class="bg-white px-2 py-1 rounded border">Ctrl+I</kbd> for italic</li>
+                        <li>• You can combine formatting: <code class="bg-white px-2 py-1 rounded border">*_bold and italic_*</code></li>
+                        <li>• Add emojis with the emoji picker button</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Formatting Warning Modal -->
+<div id="formattingWarningModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-yellow-50 to-amber-50 px-6 py-5 border-b border-yellow-200 rounded-t-2xl">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                    <i class="ri-error-warning-line text-yellow-600 mr-2"></i>
+                    Text Selection Required
+                </h2>
+                <button onclick="closeFormattingWarning()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="bg-yellow-50 rounded-xl p-4 mb-4">
+                <div class="flex items-start space-x-3">
+                    <i class="ri-information-line text-yellow-600 text-xl mt-0.5"></i>
+                    <div class="flex-1">
+                        <p class="text-yellow-800">Please select the text you want to format before clicking a formatting button.</p>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-neutral-600 mb-6">Highlight the text in your message, then click the formatting button (Bold, Italic, etc.) to apply the formatting.</p>
+            <div class="flex justify-end">
+                <button onclick="closeFormattingWarning()" class="px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-xl hover:from-yellow-600 hover:to-yellow-700 font-bold">
+                    <i class="ri-close-line mr-2"></i>OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Complete list of all 195 countries with flags and phone codes
+
+
+let deleteDraftId = null;
+
+// Auto-load draft if selected (using data attributes)
+window.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('campaignForm');
+    
+    // Check if draft data exists in form attributes
+    if (form.dataset.draftName) {
+        document.getElementById('campaignName').value = form.dataset.draftName;
+        document.getElementById('message').value = form.dataset.draftMessage || '';
+        
+        if (form.dataset.draftContactList) {
+            document.getElementById('contactList').value = form.dataset.draftContactList;
+            document.getElementById('contactList').dispatchEvent(new Event('change'));
+        }
+        
+        if (form.dataset.draftId) {
+            document.getElementById('draftId').value = form.dataset.draftId;
+        }
+        
+        document.getElementById('message').dispatchEvent(new Event('input'));
+    }
+
+    // If a preselected contact list is provided (e.g., after import), override selection
+    if (form.dataset.selectedList) {
+        const selectEl = document.getElementById('contactList');
+        selectEl.value = form.dataset.selectedList;
+        selectEl.dispatchEvent(new Event('change'));
+    }
+});
+
+// Campaign Name Validation - Real-time
+const campaignNameInput = document.getElementById('campaignName');
+const nameValidIcon = document.getElementById('nameValidIcon');
+const nameHelp = document.getElementById('nameHelp');
+
+campaignNameInput.addEventListener('input', function() {
+    // Always convert to lowercase
+    this.value = this.value.toLowerCase();
+    
+    const value = this.value;
+    const validPattern = /^[a-z0-9_]*$/;
+    
+    if (value && !validPattern.test(value)) {
+        // Only show error for truly invalid characters (not common typing)
+        this.classList.remove('border-neutral-200', 'focus:border-green-500');
+        this.classList.add('border-red-500', 'focus:border-red-500', 'bg-red-50');
+        nameValidIcon.classList.remove('hidden');
+        nameHelp.classList.remove('text-neutral-500');
+        nameHelp.classList.add('text-red-600', 'font-semibold');
+        nameHelp.innerHTML = '<i class="ri-error-warning-line mr-1"></i>Invalid character detected';
+    } else {
+        // Valid input - clean appearance
+        this.classList.remove('border-red-500', 'focus:border-red-500', 'bg-red-50');
+        this.classList.add('border-neutral-200', 'focus:border-green-500');
+        nameValidIcon.classList.add('hidden');
+        nameHelp.classList.remove('text-red-600', 'font-semibold');
+        nameHelp.classList.add('text-neutral-500');
+        nameHelp.innerHTML = 'Format: <code class="bg-neutral-100 px-2 py-1 rounded">lowercase_with_underscores</code>';
+    }
+});
+
+// Also handle paste events
+campaignNameInput.addEventListener('paste', function(e) {
+    e.preventDefault();
+    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+    const lowercaseText = pastedText.toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const start = this.selectionStart;
+    const end = this.selectionEnd;
+    const text = this.value;
+    this.value = text.substring(0, start) + lowercaseText + text.substring(end);
+    this.selectionStart = this.selectionEnd = start + lowercaseText.length;
+});
+
+// Character count
+document.getElementById('message').addEventListener('input', function() {
+    const text = this.value;
+    const charCount = text.length;
+    document.getElementById('charCount').textContent = charCount + ' characters';
+    document.getElementById('statsChars').textContent = charCount;
+    
+    // Count variables
+    const varCount = (text.match(/{[^}]+}/g) || []).length;
+    document.getElementById('statsVars').textContent = varCount;
+    
+    // Update preview
+    updatePreview();
+    
+    // Auto-scroll preview to bottom
+    const previewContainer = document.getElementById('previewMessageContainer');
+    if (previewContainer) {
+        previewContainer.scrollTop = previewContainer.scrollHeight;
+    }
+});
+
+// Contact list selection
+document.getElementById('contactList').addEventListener('change', function() {
+    const option = this.options[this.selectedIndex];
+    const contacts = option.dataset.contacts || 0;
+    document.getElementById('selectedContacts').innerHTML = 
+        `<span class="text-xs font-bold text-blue-700">${contacts} contacts selected</span>`;
+    document.getElementById('statsRecipients').textContent = contacts;
+});
+
+// File upload handling
+function handleFileSelect(input) {
+    const file = input.files[0];
+    if (file) {
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+            showFileSizeWarning(file.size);
+            input.value = '';
+            return;
+        }
+        
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+        document.getElementById('filePreview').classList.remove('hidden');
+        document.getElementById('statsAttachment').textContent = file.name;
+        
+        // Handle different file types for preview
+        const previewAttachment = document.getElementById('previewAttachment');
+        
+        // Clear previous content
+        previewAttachment.innerHTML = '';
+        
+        if (file.type.startsWith('image/')) {
+            // Image preview
+            const img = document.createElement('img');
+            img.className = 'rounded-lg max-w-full h-auto';
+            img.alt = 'Image preview';
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                previewAttachment.appendChild(img);
+                previewAttachment.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else if (file.type.startsWith('video/')) {
+            // Video preview (thumbnail-like representation)
+            const videoIcon = document.createElement('div');
+            videoIcon.className = 'bg-blue-100 rounded-lg p-4 text-center';
+            videoIcon.innerHTML = `
+                <i class="ri-file-video-line text-4xl text-blue-600 mb-2"></i>
+                <p class="text-sm font-semibold text-blue-800">${file.name}</p>
+                <p class="text-xs text-blue-600 mt-1">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+            `;
+            previewAttachment.appendChild(videoIcon);
+            previewAttachment.classList.remove('hidden');
+        } else {
+            // Document preview (PDF, DOC, etc.)
+            const fileExt = file.name.toLowerCase().split('.').pop();
+            let iconClass = 'ri-file-line text-gray-600';
+            let colorClass = 'bg-gray-100 text-gray-800';
+            
+            if (fileExt === 'pdf') {
+                iconClass = 'ri-file-pdf-line text-red-600';
+                colorClass = 'bg-red-100 text-red-800';
+            } else if (['doc', 'docx'].includes(fileExt)) {
+                iconClass = 'ri-file-word-line text-blue-600';
+                colorClass = 'bg-blue-100 text-blue-800';
+            }
+            
+            const docIcon = document.createElement('div');
+            docIcon.className = `${colorClass} rounded-lg p-4 text-center`;
+            docIcon.innerHTML = `
+                <i class="${iconClass} text-4xl mb-2"></i>
+                <p class="text-sm font-semibold">${file.name}</p>
+                <p class="text-xs mt-1">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+            `;
+            previewAttachment.appendChild(docIcon);
+            previewAttachment.classList.remove('hidden');
+        }
+    }
+}
+
+function removeFile() {
+    document.getElementById('attachment').value = '';
+    document.getElementById('filePreview').classList.add('hidden');
+    document.getElementById('previewAttachment').classList.add('hidden');
+    document.getElementById('statsAttachment').textContent = 'None';
+}
+
+// Insert variable at cursor
+function insertVariable(variable) {
+    const textarea = document.getElementById('message');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+    textarea.value = text.substring(0, start) + variable + text.substring(end);
+    textarea.focus();
+    textarea.setSelectionRange(start + variable.length, start + variable.length);
+    textarea.dispatchEvent(new Event('input'));
+}
+
+// Update preview
+function updatePreview() {
+    const message = document.getElementById('message').value;
+    let preview = message;
+    
+    // Get current available fields from the contact list
+    const contactListId = document.getElementById('contactList').value;
+    if (contactListId) {
+        // Replace variables dynamically (will be updated when we fetch real data)
+        // For now, use generic replacements
+        preview = preview.replace(/{(\w+)}/g, function(match, field) {
+            // Sample data for preview
+            const sampleData = {
+                'first_name': 'John',
+                'last_name': 'Doe',
+                'email': 'john@example.com',
+                'phone': '+1234567890',
+                'company': 'ABC Corp',
+                'city': 'New York'
+            };
+            return sampleData[field] || match;
+        });
+    }
+    
+    // Normalize then apply WhatsApp formatting in preview
+    preview = formatWhatsAppText(normalizeMessageText(preview));
+    
+    document.getElementById('previewMessage').innerHTML = preview || 'Your message will appear here...';
+}
+
+// Format WhatsApp text for preview (convert markdown to HTML)
+function formatWhatsAppText(text) {
+    if (!text) return text;
+    
+    // Debug: Log original text to see line breaks
+    console.log('📝 Original text:', text.substring(0, 200));
+    
+    // STEP 1: Convert markdown to WhatsApp format FIRST
+    // Convert **bold** (markdown) to *bold* (WhatsApp)
+    text = text.replace(/\*\*([^*]+)\*\*/g, '*$1*');
+    // Convert [text](url) markdown links to just URL
+    text = text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '$2');
+    
+    // STEP 1b: Fix emoji inside bold patterns
+    // Fix *emoji *text* → emoji *text*
+    text = text.replace(/\*([\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}]+)\s*\*([^*]+)\*/gu, '$1 *$2*');
+    // Fix *emoji text* → emoji *text*
+    text = text.replace(/\*([\u{1F300}-\u{1F9FF}\u{2600}-\u{27BF}])\s+([^*]+)\*/gu, '$1 *$2*');
+    
+    // STEP 1c: Fix ✅ bullet points on separate lines - join with text
+    text = text.replace(/✅\s*\n+([A-Za-z])/g, '✅ $1');
+    
+    // STEP 2: Fix spacing issues
+    // Fix "OFFon" -> "OFF on"
+    text = text.replace(/OFF([a-z])/g, 'OFF $1');
+    text = text.replace(/OFF([A-Z])/g, 'OFF $1');
+    // Fix "at" followed by capital without space
+    text = text.replace(/\bat([A-Z])/g, 'at $1');
+    
+    // STEP 3: Ensure emoji bullets are on separate lines
+    // Add newline before ✅ if not already preceded by newline
+    text = text.replace(/([^\n])✅/g, '$1\n✅');
+    // Add newline before common section emojis if not preceded by newline  
+    text = text.replace(/([^\n])(📅|📍|⏰|💰|👉|🎯)/g, '$1\n$2');
+    // Add newline after bullet point content if followed by text (not newline)
+    text = text.replace(/(✅[^\n]+)([A-Z])/g, '$1\n$2');
+    
+    // STEP 4: Process formatting BEFORE line break conversion
+    // Bold: *text* -> <strong>text</strong> (must happen before <br> conversion)
+    text = text.replace(/\*([^*\n]+)\*/g, '<strong>$1</strong>');
+    
+    // Italic: _text_ -> <em>text</em>
+    text = text.replace(/_([^_\n]+)_/g, '<em>$1</em>');
+    
+    // Strikethrough: ~text~ -> <del>text</del>
+    text = text.replace(/~([^~\n]+)~/g, '<del>$1</del>');
+    
+    // Monospace: ```text``` -> <code>text</code>
+    text = text.replace(/```([^`]+)```/g, '<code>$1</code>');
+    
+    // STEP 5: Convert line breaks to HTML
+    // Replace multiple consecutive newlines (2 or more) with paragraph breaks
+    text = text.replace(/\n{2,}/g, '<br><br>');
+    // Replace single newlines with single <br>
+    text = text.replace(/\n/g, '<br>');
+    
+    console.log('✅ Final formatted text:', text.substring(0, 200));
+    
+    return text;
+}
+
+// Normalize message text to WhatsApp-compatible formatting
+function normalizeMessageText(text) {
+    if (!text) return text;
+
+    // Helper to trim inner whitespace within delimiter pairs
+    const trimWithinDelimiters = (t, left, right) => {
+        const pattern = new RegExp(`\\${left}([^\\${left}\\${right}]+)\\${right}`, 'g');
+        return t.replace(pattern, (match, inner) => {
+            const trimmed = inner.replace(/^\s+|\s+$/g, '');
+            return trimmed.length ? `${left}${trimmed}${right}` : match;
+        });
+    };
+
+    // Fix spaced formatting markers: * Bold * -> *Bold*, _ HI _ -> _HI_, ~ Happy ~ -> ~Happy~
+    text = trimWithinDelimiters(text, '*', '*');
+    text = trimWithinDelimiters(text, '_', '_');
+    text = trimWithinDelimiters(text, '~', '~');
+
+    // Optional: normalize triple quotes to code block backticks if present
+    text = text.replace(/'''/g, '```');
+
+    return text;
+}
+
+// Emoji enrichment for AI-generated drafts
+function decorateDraftWithEmojis(draft, tone) {
+    if (!draft) return draft;
+
+    let enriched = draft;
+
+    // Helper: insert emoji after a matched segment, and if segment lies within *bold* move emoji outside closing * for reliability
+    const insertEmojiSafely = (text, startIdx, length, emoji) => {
+        if (startIdx < 0) return text;
+        const endIdx = startIdx + length;
+        const leftStar = text.lastIndexOf('*', startIdx);
+        const rightStar = text.indexOf('*', endIdx);
+        const insideBold = leftStar !== -1 && rightStar !== -1 && leftStar < startIdx && rightStar >= endIdx;
+        if (insideBold) {
+            // Place emoji just after the closing *
+            return text.slice(0, rightStar + 1) + ' ' + emoji + text.slice(rightStar + 1);
+        }
+        // Default: place emoji right after the matched segment
+        return text.slice(0, endIdx) + ' ' + emoji + text.slice(endIdx);
+    };
+
+    // Detect date mentions (month names or numeric formats)
+    const monthPattern = /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i;
+    const dayMonthPattern = /\b\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i;
+    const monthDayPattern = /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+\d{1,2}/i;
+    const isoDatePattern = /\b\d{4}-\d{2}-\d{2}\b/;
+    const slashDatePattern = /\b[\d/\-.]+\b/;
+
+    // Detect time mentions (HH:MM, 6pm, noon, midnight)
+    const hhmmPattern = /\b(?:[01]?\d|2[0-3]):[0-5]\d\b/;
+    const ampmPattern = /\b(?:[1-9]|1[0-2])\s?(?:am|pm)\b/i;
+    const specialTimePattern = /\b(noon|midnight)\b/i;
+
+    // Detect promotional language or explicit promotional tone
+    const promoPattern = /\b(offer|sale|discount|save|deal|special|promo|free|coupon|bogo|limited|price|shop\s+now|buy\s+now|order\s+now|book\s+now)\b/i;
+
+    // Detect time requests (asking to schedule or choose a time)
+    const requestTimePattern = /\b(what\s+time|confirm\s+time|preferred\s+time|choose\s+a\s+time|select\s+a\s+time|schedule|appointment|book\s+a\s+slot|reserve\s+a\s+time|time\s+slot)\b/i;
+
+    // Insert calendar emoji near first detected date
+    if (!enriched.includes("📅")) {
+        const match = enriched.match(dayMonthPattern) || enriched.match(monthDayPattern) || enriched.match(isoDatePattern) || enriched.match(slashDatePattern);
+        if (match && match[0]) {
+            const idx = enriched.indexOf(match[0]);
+            enriched = insertEmojiSafely(enriched, idx, match[0].length, "📅");
+        }
+    }
+
+    // Insert time emoji near first detected time
+    if (!enriched.includes("⏰")) {
+        const tmatch = enriched.match(hhmmPattern) || enriched.match(ampmPattern) || enriched.match(specialTimePattern);
+        if (tmatch && tmatch[0]) {
+            const idx = enriched.indexOf(tmatch[0]);
+            enriched = insertEmojiSafely(enriched, idx, tmatch[0].length, "⏰");
+        }
+    }
+
+    // Add promotional emoji if promotional tone or wording detected
+    const isPromotional = String(tone || '').toLowerCase() === 'promotional' || promoPattern.test(enriched);
+    if (isPromotional && !enriched.includes("📣")) {
+        enriched = enriched.trim() + " \uD83D\uDCE3"; // 📣 megaphone
+    }
+
+    // Add scheduling emoji when asking for a time
+    if (requestTimePattern.test(enriched) && !enriched.includes("🗓️")) {
+        enriched = enriched.replace(requestTimePattern, function(m){ return m + " 🗓️"; });
+    }
+
+    return enriched;
+}
+
+// === AI Drafting ===
+function getSelectedTextFromTextarea(el) {
+    try {
+        const start = el.selectionStart || 0;
+        const end = el.selectionEnd || 0;
+        return (el.value || '').substring(start, end).trim();
+    } catch (e) {
+        return '';
+    }
+}
+
+async function generateAiDraft() {
+    const textarea = document.getElementById('message');
+    const campaignNameEl = document.getElementById('campaignName');
+    const campaignName = (campaignNameEl?.value || '').trim();
+    const prompt = getSelectedTextFromTextarea(textarea) || (textarea.value || '').trim();
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+    // Collect available variable names from the buttons
+    const vars = Array.from(document.querySelectorAll('#variableButtonsContainer button'))
+        .map(b => b.dataset.variable)
+        .filter(Boolean);
+
+    const btn = document.getElementById('aiDraftBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-not-allowed');
+    }
+
+    const container = document.getElementById('aiDraftContainer');
+    const textNode = document.getElementById('aiDraftText');
+    container.classList.remove('hidden');
+    textNode.textContent = 'Generating draft...';
+
+    try {
+        const res = await fetch('{% url "whatsappapi:ai_draft" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                prompt,
+                variables: vars,
+                campaign_name: campaignName,
+                tone: (document.getElementById('aiTone')?.value || 'friendly'),
+                length: (document.getElementById('aiLength')?.value || 'medium')
+            })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.draft) {
+            throw new Error(data.error || 'Failed to generate AI draft');
+        }
+
+        // Enrich AI draft with emojis based on content and selected tone
+        const toneVal = (document.getElementById('aiTone')?.value || 'friendly');
+        const enrichedDraft = decorateDraftWithEmojis(data.draft || '', toneVal);
+        textNode.textContent = enrichedDraft;
+        container.classList.remove('hidden');
+
+        // Moderation hinting if present
+        const m = data.moderation || {};
+        if (m.requires_review) {
+            showToast('Moderation', 'Draft flagged for review. Risk ' + (m.risk_score || 0), 'warning');
+        }
+    } catch (err) {
+        textNode.textContent = 'Generation failed: ' + (err.message || 'Unexpected error');
+        
+        // Parse error message for moderation reasons
+        const errorMsg = err.message || 'Generation failed';
+        let reasons = [];
+        
+        if (errorMsg.includes('Reasons:')) {
+            const reasonsText = errorMsg.split('Reasons:')[1];
+            if (reasonsText) {
+                reasons = reasonsText.split(';').map(r => r.trim()).filter(r => r);
+            }
+        }
+        
+        // Show beautiful error modal instead of alert
+        if (errorMsg.includes('blocked by content moderation')) {
+            showErrorModal(
+                'Your content was blocked by our content moderation system. Please review and modify your prompt to comply with our content policy.',
+                reasons.length > 0 ? reasons : ['Content policy violation detected']
+            );
+        } else {
+            showErrorModal(errorMsg, []);
+        }
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+        }
+    }
+}
+
+function insertAiDraft(mode) {
+    const textarea = document.getElementById('message');
+    const container = document.getElementById('aiDraftContainer');
+    const textNode = document.getElementById('aiDraftText');
+    const draft = (textNode.textContent || '').trim();
+    if (!draft) {
+        showToast('Info', 'No draft to insert', 'info');
+        return;
+    }
+    const normalized = normalizeMessageText(draft);
+    if (mode === 'replace') {
+        textarea.value = normalized;
+    } else {
+        const sep = textarea.value.trim() ? '\n\n' : '';
+        textarea.value = textarea.value + sep + normalized;
+    }
+    textarea.dispatchEvent(new Event('input'));
+    container.classList.add('hidden');
+}
+
+function regenerateAiDraft() {
+    generateAiDraft();
+}
+
+function clearAiDraft() {
+    const container = document.getElementById('aiDraftContainer');
+    const textNode = document.getElementById('aiDraftText');
+    textNode.textContent = '';
+    container.classList.add('hidden');
+}
+
+// Error Modal Functions
+function showErrorModal(message, reasons = []) {
+    const modal = document.getElementById('errorModal');
+    const messageEl = document.getElementById('errorModalMessage');
+    const reasonsContainer = document.getElementById('errorModalReasons');
+    const reasonsList = document.getElementById('errorModalReasonsList');
+    
+    // Set message
+    messageEl.textContent = message;
+    
+    // Set reasons if provided
+    if (reasons && reasons.length > 0) {
+        reasonsList.innerHTML = '';
+        reasons.forEach(reason => {
+            const li = document.createElement('li');
+            li.innerHTML = `<i class="ri-close-circle-line mr-1"></i>${reason}`;
+            reasonsList.appendChild(li);
+        });
+        reasonsContainer.classList.remove('hidden');
+    } else {
+        reasonsContainer.classList.add('hidden');
+    }
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+function closeErrorModal() {
+    const modal = document.getElementById('errorModal');
+    modal.classList.add('hidden');
+    
+    // Restore body scroll
+    document.body.style.overflow = '';
+}
+
+// Close modal on background click
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('errorModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeErrorModal();
+            }
+        });
+    }
+    
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+            closeErrorModal();
+        }
+    });
+});
+
+// Text formatting functions
+function formatText(type) {
+    const textarea = document.getElementById('message');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = textarea.value.substring(start, end);
+
+    if (!selectedText) {
+        showFormattingWarning();
+        return;
+    }
+    
+    // Preserve outer spaces, format only the core selection
+    const leadingSpaces = (selectedText.match(/^\s*/) || [''])[0];
+    const trailingSpaces = (selectedText.match(/\s*$/) || [''])[0];
+    const core = selectedText.trim();
+
+    if (!core) {
+        showFormattingWarning();
+        return;
+    }
+
+    let formattedCore = '';
+
+    switch(type) {
+        case 'bold':
+            formattedCore = `*${core}*`;
+            break;
+        case 'italic':
+            formattedCore = `_${core}_`;
+            break;
+        case 'strikethrough':
+            formattedCore = `~${core}~`;
+            break;
+    }
+    
+    // Replace selected text with formatted version, keeping surrounding spaces outside the markers
+    textarea.value = textarea.value.substring(0, start) + leadingSpaces + formattedCore + trailingSpaces + textarea.value.substring(end);
+    
+    // Update cursor position
+    const newCursorPos = start + formattedText.length;
+    textarea.setSelectionRange(newCursorPos, newCursorPos);
+    textarea.focus();
+    
+    // Update preview
+    updatePreview();
+}
+
+// Keyboard shortcuts for formatting
+document.getElementById('message').addEventListener('keydown', function(e) {
+    if (e.ctrlKey || e.metaKey) {
+        if (e.key === 'b' || e.key === 'B') {
+            e.preventDefault();
+            formatText('bold');
+        } else if (e.key === 'i' || e.key === 'I') {
+            e.preventDefault();
+            formatText('italic');
+        }
+    }
+});
+
+// Toggle emoji picker
+let emojiPickerInstance = null;
+
+function toggleEmojiPicker() {
+    const pickerContainer = document.getElementById('emojiPicker');
+    
+    // Toggle visibility
+    pickerContainer.classList.toggle('hidden');
+    
+    // Create picker on first click
+    if (!emojiPickerInstance && !pickerContainer.classList.contains('hidden')) {
+        emojiPickerInstance = document.createElement('emoji-picker');
+        emojiPickerInstance.addEventListener('emoji-click', event => {
+            insertEmoji(event.detail.unicode);
+            // Close picker after selecting emoji for better UX
+            pickerContainer.classList.add('hidden');
+        });
+        pickerContainer.appendChild(emojiPickerInstance);
+    }
+}
+
+// Close emoji picker when clicking outside
+document.addEventListener('click', function(e) {
+    const pickerContainer = document.getElementById('emojiPicker');
+    const emojiButton = e.target.closest('[onclick="toggleEmojiPicker()"]');
+    
+    // If clicking outside the picker and not on the emoji button
+    if (pickerContainer && !pickerContainer.classList.contains('hidden') && 
+        !e.target.closest('#emojiPicker') && !emojiButton) {
+        pickerContainer.classList.add('hidden');
+    }
+});
+
+// Insert emoji at cursor position
+function insertEmoji(emoji) {
+    const textarea = document.getElementById('message');
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    
+    // Insert emoji at cursor position
+    textarea.value = textarea.value.substring(0, start) + emoji + textarea.value.substring(end);
+    
+    // Move cursor after emoji
+    const newPos = start + emoji.length;
+    textarea.setSelectionRange(newPos, newPos);
+    textarea.focus();
+    
+    // Update preview
+    updatePreview();
+    
+    // Keep picker open for multiple emoji insertions
+}
+
+// Contact list change handler - fetch available fields
+document.getElementById('contactList').addEventListener('change', function() {
+    const contactListId = this.value;
+    
+    if (!contactListId) {
+        // Clear variables
+        updateVariableButtons([]);
+        return;
+    }
+    
+    // Fetch available fields for this contact list
+    fetch(`/whatsappapi/api/contact-list-fields/${contactListId}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateVariableButtons(data.fields || []);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching fields:', error);
+        });
+});
+
+// Update variable buttons dynamically
+function updateVariableButtons(fields) {
+    const container = document.getElementById('variableButtonsContainer');
+    const colors = [
+        'bg-blue-100 text-blue-700 hover:bg-blue-200',
+        'bg-purple-100 text-purple-700 hover:bg-purple-200',
+        'bg-pink-100 text-pink-700 hover:bg-pink-200',
+        'bg-cyan-100 text-cyan-700 hover:bg-cyan-200',
+        'bg-amber-100 text-amber-700 hover:bg-amber-200',
+        'bg-rose-100 text-rose-700 hover:bg-rose-200',
+        'bg-indigo-100 text-indigo-700 hover:bg-indigo-200',
+        'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+    ];
+    
+    // Clear existing buttons
+    container.innerHTML = '<span class="text-xs font-semibold text-neutral-600 mr-2">Insert Variable:</span>';
+    
+    if (fields.length === 0) {
+        container.innerHTML += '<span class="text-xs text-neutral-500 italic">No variables available for this contact list</span>';
+        return;
+    }
+    
+    // Create button for each field
+    fields.forEach((field, index) => {
+        const colorClass = colors[index % colors.length];
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.onclick = () => insertVariable(`{${field}}`);
+        button.className = `px-3 py-1.5 ${colorClass} rounded-lg text-xs font-semibold transition-colors`;
+        button.innerHTML = `<i class="ri-bookmark-line mr-1"></i>{${field}}`;
+        container.appendChild(button);
+    });
+}
+
+// Save draft
+function saveDraft() {
+    const formData = new FormData(document.getElementById('campaignForm'));
+    formData.set('action', 'draft');
+    
+    fetch('{% url "whatsappapi:save_draft" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Saved!', 'Draft saved successfully');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            alert('Error: ' + (data.error || 'Failed to save draft'));
+        }
+    })
+    .catch(error => alert('Error: ' + error.message));
+}
+
+// Load draft
+function loadDraft(draftId) {
+    window.location.href = `/whatsappapi/send-campaign/?draft=${draftId}`;
+}
+
+// View draft
+function viewDraft(draftId) {
+    fetch(`/whatsappapi/drafts/${draftId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('viewName').textContent = data.name;
+            document.getElementById('viewMessage').textContent = data.message;
+            document.getElementById('viewContacts').textContent = data.contact_list_name || 'Not selected';
+            document.getElementById('viewDraftModal').classList.remove('hidden');
+        });
+}
+
+function closeViewModal() {
+    document.getElementById('viewDraftModal').classList.add('hidden');
+}
+
+// Delete draft
+function deleteDraft(draftId) {
+    deleteDraftId = draftId;
+    document.getElementById('deleteDraftModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteDraftModal').classList.add('hidden');
+    deleteDraftId = null;
+}
+
+function confirmDeleteDraft() {
+    fetch(`/whatsappapi/drafts/${deleteDraftId}/delete/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeDeleteModal();
+            showToast('Deleted!', 'Draft deleted successfully');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            alert('Error: ' + (data.error || 'Failed to delete draft'));
+        }
+    });
+}
+
+// ==================== Content Moderation Check ====================
+
+function closeModerationModal() {
+    document.getElementById('moderationModal').classList.add('hidden');
+}
+
+function showModerationModal(moderation) {
+    const riskScore = moderation.risk_score || 0;
+    const illegalWords = moderation.illegal_words || [];
+    const reasons = moderation.reasons || [];
+    const message = document.getElementById('message').value;
+    const wordPositions = moderation.word_positions || {};
+    
+    // Update risk score
+    document.getElementById('riskScoreValue').textContent = riskScore;
+    document.getElementById('riskScoreBar').style.width = Math.min(riskScore, 100) + '%';
+    
+    // Update illegal words list
+    const wordsList = document.getElementById('illegalWordsList');
+    wordsList.innerHTML = illegalWords.map(word => `
+        <div class="inline-flex items-center gap-2 bg-red-100 text-red-700 px-3 py-1.5 rounded-full text-sm font-semibold border border-red-300">
+            <i class="ri-alert-fill text-red-600 text-xs"></i>
+            ${word.toUpperCase()}
+        </div>
+    `).join('');
+    
+    // Highlight illegal words in message preview
+    let highlightedMessage = message;
+    Object.keys(wordPositions).forEach(word => {
+        const positions = wordPositions[word];
+        // Replace in reverse order to maintain positions
+        positions.reverse().forEach(pos => {
+            const start = pos.start;
+            const end = pos.end;
+            const before = highlightedMessage.substring(0, start);
+            const highlighted = '<span class="illegal-highlight">' + highlightedMessage.substring(start, end) + '</span>';
+            const after = highlightedMessage.substring(end);
+            highlightedMessage = before + highlighted + after;
+        });
+    });
+    document.getElementById('messageHighlightPreview').innerHTML = highlightedMessage.replace(/\n/g, '<br>');
+    
+    // Update reasons list
+    const reasonsList = document.getElementById('reasonsList');
+    reasonsList.innerHTML = reasons.map(reason => {
+        const reasonStr = String(reason).replace(/_/g, ' ').replace('ai:', '').replace('classifier:', '').trim();
+        return '<li>' + reasonStr.charAt(0).toUpperCase() + reasonStr.slice(1) + '</li>';
+    }).join('');
+    
+    // Show modal
+    document.getElementById('moderationModal').classList.remove('hidden');
+}
+
+async function checkModerationBeforeSend() {
+    const message = document.getElementById('message').value.trim();
+    
+    if (!message) {
+        return true; // Allow proceed if no message
+    }
+    
+    // Show loading modal
+    document.getElementById('moderationCheckLoadingModal').classList.remove('hidden');
+    
+    try {
+        const response = await fetch('{% url "whatsappapi:check_moderation" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                message: message
+            })
+        });
+        
+        // Hide loading modal
+        document.getElementById('moderationCheckLoadingModal').classList.add('hidden');
+        
+        if (!response.ok) {
+            console.error('Moderation check failed');
+            return true; // Allow proceed if check fails
+        }
+        
+        const data = await response.json();
+        
+        // If blocked, show modal and prevent sending
+        if (data.blocked) {
+            showModerationModal(data);
+            return false; // Prevent campaign send
+        }
+        
+        // If requires review but not blocked, allow user to proceed
+        return true;
+        
+    } catch (error) {
+        console.error('Error checking moderation:', error);
+        // Hide loading modal on error
+        document.getElementById('moderationCheckLoadingModal').classList.add('hidden');
+        return true; // Allow proceed if check errors
+    }
+}
+
+// Send Campaign Confirmation - with moderation check
+async function showSendConfirmation() {
+    const campaignName = document.getElementById('campaignName').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const contactListSelect = document.getElementById('contactList');
+    const contactList = contactListSelect.value;
+    const attachment = document.getElementById('attachment').files[0];
+    
+    // Validate required fields
+    if (!campaignName || !message || !contactList) {
+        alert('Please fill in all required fields: Campaign Name, Message, and Contact List');
+        return;
+    }
+    
+    // Validate campaign name format
+    const validPattern = /^[a-z0-9_]+$/;
+    if (!validPattern.test(campaignName)) {
+        alert('Campaign name must contain only lowercase letters, numbers, and underscores');
+        document.getElementById('campaignName').focus();
+        return;
+    }
+    
+    // Show loading modal before checking moderation
+    document.getElementById('moderationCheckLoadingModal').classList.remove('hidden');
+    
+    // Check moderation before proceeding to confirmation
+    const moderationPassed = await checkModerationBeforeSend();
+    if (!moderationPassed) {
+        // Moderation check failed - modal is shown by checkModerationBeforeSend()
+        return;
+    }
+    
+    // Hide loading modal if still visible
+    document.getElementById('moderationCheckLoadingModal').classList.add('hidden');
+    
+    // Populate modal with campaign info
+    document.getElementById('confirmCampaignName').textContent = campaignName;
+    document.getElementById('confirmRecipients').textContent = contactListSelect.options[contactListSelect.selectedIndex].dataset.contacts || '0';
+    document.getElementById('confirmMessageLength').textContent = message.length;
+    document.getElementById('confirmAttachment').textContent = attachment ? attachment.name : 'None';
+
+    // Reset compliance confirmation state
+    const checkbox = document.getElementById('complianceConfirmCheckbox');
+    const errorEl = document.getElementById('complianceError');
+    if (checkbox) checkbox.checked = false;
+    if (errorEl) errorEl.classList.add('hidden');
+    
+    // Show modal
+    document.getElementById('sendConfirmModal').classList.remove('hidden');
+}
+
+function closeSendConfirmModal() {
+    document.getElementById('sendConfirmModal').classList.add('hidden');
+}
+
+function confirmSendCampaign() {
+    // Require compliance confirmation
+    const checkbox = document.getElementById('complianceConfirmCheckbox');
+    const errorEl = document.getElementById('complianceError');
+    if (!checkbox || !checkbox.checked) {
+        if (errorEl) errorEl.classList.remove('hidden');
+        // Keep modal open
+        return;
+    }
+    // Set hidden field for server-side enforcement
+    const complianceHidden = document.getElementById('complianceConfirmed');
+    if (complianceHidden) complianceHidden.value = 'true';
+    // Close modal
+    closeSendConfirmModal();
+    
+    // Get the form
+    const form = document.getElementById('campaignForm');
+    const submitBtn = form.querySelector('button[onclick="showSendConfirmation()"]');
+    
+    // Normalize message content before submit (handle ''' -> ```)
+    const msgEl = document.getElementById('message');
+    msgEl.value = normalizeMessageText(msgEl.value.trim());
+    
+    // Add advanced controls hidden fields to form BEFORE submitting
+    // Remove any existing advanced controls fields first
+    const existingFields = form.querySelectorAll('[name^="random_delay_"], [name^="batch_"], [name="use_advanced_controls"]');
+    existingFields.forEach(field => field.remove());
+    
+    // Create hidden input fields for advanced controls
+    const advancedControlsInput = document.createElement('input');
+    advancedControlsInput.type = 'hidden';
+    advancedControlsInput.name = 'use_advanced_controls';
+    advancedControlsInput.value = advancedControlsConfig.enabled ? 'true' : 'false';
+    form.appendChild(advancedControlsInput);
+    
+    if (advancedControlsConfig.enabled) {
+        const delayMinInput = document.createElement('input');
+        delayMinInput.type = 'hidden';
+        delayMinInput.name = 'random_delay_min';
+        delayMinInput.value = advancedControlsConfig.randomDelayMin;
+        form.appendChild(delayMinInput);
+        
+        const delayMaxInput = document.createElement('input');
+        delayMaxInput.type = 'hidden';
+        delayMaxInput.name = 'random_delay_max';
+        delayMaxInput.value = advancedControlsConfig.randomDelayMax;
+        form.appendChild(delayMaxInput);
+        
+        const batchMinInput = document.createElement('input');
+        batchMinInput.type = 'hidden';
+        batchMinInput.name = 'batch_size_min';
+        batchMinInput.value = advancedControlsConfig.batchSizeMin;
+        form.appendChild(batchMinInput);
+        
+        const batchMaxInput = document.createElement('input');
+        batchMaxInput.type = 'hidden';
+        batchMaxInput.name = 'batch_size_max';
+        batchMaxInput.value = advancedControlsConfig.batchSizeMax;
+        form.appendChild(batchMaxInput);
+        
+        const cooldownMinInput = document.createElement('input');
+        cooldownMinInput.type = 'hidden';
+        cooldownMinInput.name = 'batch_cooldown_min';
+        cooldownMinInput.value = advancedControlsConfig.batchCooldownMin;
+        form.appendChild(cooldownMinInput);
+        
+        const cooldownMaxInput = document.createElement('input');
+        cooldownMaxInput.type = 'hidden';
+        cooldownMaxInput.name = 'batch_cooldown_max';
+        cooldownMaxInput.value = advancedControlsConfig.batchCooldownMax;
+        form.appendChild(cooldownMaxInput);
+        
+        // Log what's being sent
+        console.log('✅ Submitting with Advanced Controls:');
+        console.log(`   Delay: ${advancedControlsConfig.randomDelayMin}-${advancedControlsConfig.randomDelayMax}s`);
+        console.log(`   Batch: ${advancedControlsConfig.batchSizeMin}-${advancedControlsConfig.batchSizeMax}`);
+        console.log(`   Cooldown: ${advancedControlsConfig.batchCooldownMin}-${advancedControlsConfig.batchCooldownMax}min`);
+    } else {
+        console.log('ℹ️ Submitting with Standard Controls (Advanced disabled)');
+    }
+    
+    // Disable button and show loading
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="ri-loader-4-line mr-2 animate-spin"></i>Sending Campaign...';
+    
+    // Submit form
+    form.submit();
+}
+
+// ... existing code ...
+function showToast(title, message) {
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastMessage').textContent = message;
+    document.getElementById('successToast').classList.remove('hidden');
+    setTimeout(() => closeToast(), 3000);
+}
+
+function closeToast() {
+    document.getElementById('successToast').classList.add('hidden');
+}
+
+// Form submission - removed old confirm dialog
+document.getElementById('campaignForm').addEventListener('submit', function(e) {
+    // Form will be submitted via confirmSendCampaign() function
+    // No additional validation needed here
+});
+
+// Hide loading modal on page load (in case it's stuck from previous action)
+window.addEventListener('load', function() {
+    document.getElementById('moderationCheckLoadingModal').classList.add('hidden');
+});
+
+// ==================== Test Campaign Modal ====================
+// No default country selected initially - user must choose
+let testSelectedCountry = null;
+
+// Track selected index for keyboard navigation in test modal
+let testSelectedCountryIndex = -1;
+let testFilteredCountries = [];
+let testCountryListenersAttached = false;
+
+// Complete list of all 195 countries with flags and phone codes
+const countries = [
+    { name: 'Afghanistan', code: '+93', flag: '🇦🇫' },
+    { name: 'Albania', code: '+355', flag: '🇦🇱' },
+    { name: 'Algeria', code: '+213', flag: '🇩🇿' },
+    { name: 'Andorra', code: '+376', flag: '🇦🇩' },
+    { name: 'Angola', code: '+244', flag: '🇦🇴' },
+    { name: 'Antigua and Barbuda', code: '+1268', flag: '🇦🇬' },
+    { name: 'Argentina', code: '+54', flag: '🇦🇷' },
+    { name: 'Armenia', code: '+374', flag: '🇦🇲' },
+    { name: 'Australia', code: '+61', flag: '🇦🇺' },
+    { name: 'Austria', code: '+43', flag: '🇦🇹' },
+    { name: 'Azerbaijan', code: '+994', flag: '🇦🇿' },
+    { name: 'Bahamas', code: '+1242', flag: '🇧🇸' },
+    { name: 'Bahrain', code: '+973', flag: '🇧🇭' },
+    { name: 'Bangladesh', code: '+880', flag: '🇧🇩' },
+    { name: 'Barbados', code: '+1246', flag: '🇧🇧' },
+    { name: 'Belarus', code: '+375', flag: '🇧🇾' },
+    { name: 'Belgium', code: '+32', flag: '🇧🇪' },
+    { name: 'Belize', code: '+501', flag: '🇧🇿' },
+    { name: 'Benin', code: '+229', flag: '🇧🇯' },
+    { name: 'Bhutan', code: '+975', flag: '🇧🇹' },
+    { name: 'Bolivia', code: '+591', flag: '🇧🇴' },
+    { name: 'Bosnia and Herzegovina', code: '+387', flag: '🇧🇦' },
+    { name: 'Botswana', code: '+267', flag: '🇧🇼' },
+    { name: 'Brazil', code: '+55', flag: '🇧🇷' },
+    { name: 'Brunei', code: '+673', flag: '🇧🇳' },
+    { name: 'Bulgaria', code: '+359', flag: '🇧🇬' },
+    { name: 'Burkina Faso', code: '+226', flag: '🇧🇫' },
+    { name: 'Burundi', code: '+257', flag: '🇧🇮' },
+    { name: 'Cambodia', code: '+855', flag: '🇰🇭' },
+    { name: 'Cameroon', code: '+237', flag: '🇨🇲' },
+    { name: 'Canada', code: '+1', flag: '🇨🇦' },
+    { name: 'Cape Verde', code: '+238', flag: '🇨🇻' },
+    { name: 'Central African Republic', code: '+236', flag: '🇨🇫' },
+    { name: 'Chad', code: '+235', flag: '🇹🇩' },
+    { name: 'Chile', code: '+56', flag: '🇨🇱' },
+    { name: 'China', code: '+86', flag: '🇨🇳' },
+    { name: 'Colombia', code: '+57', flag: '🇨🇴' },
+    { name: 'Comoros', code: '+269', flag: '🇰🇲' },
+    { name: 'Congo', code: '+242', flag: '🇨🇬' },
+    { name: 'Costa Rica', code: '+506', flag: '🇨🇷' },
+    { name: 'Croatia', code: '+385', flag: '🇭🇷' },
+    { name: 'Cuba', code: '+53', flag: '🇨🇺' },
+    { name: 'Cyprus', code: '+357', flag: '🇨🇾' },
+    { name: 'Czech Republic', code: '+420', flag: '🇨🇿' },
+    { name: 'Denmark', code: '+45', flag: '🇩🇰' },
+    { name: 'Djibouti', code: '+253', flag: '🇩🇯' },
+    { name: 'Dominica', code: '+1767', flag: '🇩🇲' },
+    { name: 'Dominican Republic', code: '+1809', flag: '🇩🇴' },
+    { name: 'DR Congo', code: '+243', flag: '🇨🇩' },
+    { name: 'Ecuador', code: '+593', flag: '🇪🇨' },
+    { name: 'Egypt', code: '+20', flag: '🇪🇬' },
+    { name: 'El Salvador', code: '+503', flag: '🇸🇻' },
+    { name: 'Equatorial Guinea', code: '+240', flag: '🇬🇶' },
+    { name: 'Eritrea', code: '+291', flag: '🇪🇷' },
+    { name: 'Estonia', code: '+372', flag: '🇪🇪' },
+    { name: 'Eswatini', code: '+268', flag: '🇸🇿' },
+    { name: 'Ethiopia', code: '+251', flag: '🇪🇹' },
+    { name: 'Fiji', code: '+679', flag: '🇫🇯' },
+    { name: 'Finland', code: '+358', flag: '🇫🇮' },
+    { name: 'France', code: '+33', flag: '🇫🇷' },
+    { name: 'Gabon', code: '+241', flag: '🇬🇦' },
+    { name: 'Gambia', code: '+220', flag: '🇬🇲' },
+    { name: 'Georgia', code: '+995', flag: '🇬🇪' },
+    { name: 'Germany', code: '+49', flag: '🇩🇪' },
+    { name: 'Ghana', code: '+233', flag: '🇬🇭' },
+    { name: 'Greece', code: '+30', flag: '🇬🇷' },
+    { name: 'Grenada', code: '+1473', flag: '🇬🇩' },
+    { name: 'Guatemala', code: '+502', flag: '🇬🇹' },
+    { name: 'Guinea', code: '+224', flag: '🇬🇳' },
+    { name: 'Guinea-Bissau', code: '+245', flag: '🇬🇼' },
+    { name: 'Guyana', code: '+592', flag: '🇬🇾' },
+    { name: 'Haiti', code: '+509', flag: '🇭🇹' },
+    { name: 'Honduras', code: '+504', flag: '🇭🇳' },
+    { name: 'Hungary', code: '+36', flag: '🇭🇺' },
+    { name: 'Iceland', code: '+354', flag: '🇮🇸' },
+    { name: 'India', code: '+91', flag: '🇮🇳' },
+    { name: 'Indonesia', code: '+62', flag: '🇮🇩' },
+    { name: 'Iran', code: '+98', flag: '🇮🇷' },
+    { name: 'Iraq', code: '+964', flag: '🇮🇶' },
+    { name: 'Ireland', code: '+353', flag: '🇮🇪' },
+    { name: 'Israel', code: '+972', flag: '🇮🇱' },
+    { name: 'Italy', code: '+39', flag: '🇮🇹' },
+    { name: 'Ivory Coast', code: '+225', flag: '🇨🇮' },
+    { name: 'Jamaica', code: '+1876', flag: '🇯🇲' },
+    { name: 'Japan', code: '+81', flag: '🇯🇵' },
+    { name: 'Jordan', code: '+962', flag: '🇯🇴' },
+    { name: 'Kazakhstan', code: '+7', flag: '🇰🇿' },
+    { name: 'Kenya', code: '+254', flag: '🇰🇪' },
+    { name: 'Kiribati', code: '+686', flag: '🇰🇮' },
+    { name: 'Kosovo', code: '+383', flag: '🇽🇰' },
+    { name: 'Kuwait', code: '+965', flag: '🇰🇼' },
+    { name: 'Kyrgyzstan', code: '+996', flag: '🇰🇬' },
+    { name: 'Laos', code: '+856', flag: '🇱🇦' },
+    { name: 'Latvia', code: '+371', flag: '🇱🇻' },
+    { name: 'Lebanon', code: '+961', flag: '🇱🇧' },
+    { name: 'Lesotho', code: '+266', flag: '🇱🇸' },
+    { name: 'Liberia', code: '+231', flag: '🇱🇷' },
+    { name: 'Libya', code: '+218', flag: '🇱🇾' },
+    { name: 'Liechtenstein', code: '+423', flag: '🇱🇮' },
+    { name: 'Lithuania', code: '+370', flag: '🇱🇹' },
+    { name: 'Luxembourg', code: '+352', flag: '🇱🇺' },
+    { name: 'Madagascar', code: '+261', flag: '🇲🇬' },
+    { name: 'Malawi', code: '+265', flag: '🇲🇼' },
+    { name: 'Malaysia', code: '+60', flag: '🇲🇾' },
+    { name: 'Maldives', code: '+960', flag: '🇲🇻' },
+    { name: 'Mali', code: '+223', flag: '🇲🇱' },
+    { name: 'Malta', code: '+356', flag: '🇲🇹' },
+    { name: 'Marshall Islands', code: '+692', flag: '🇲🇭' },
+    { name: 'Mauritania', code: '+222', flag: '🇲🇷' },
+    { name: 'Mauritius', code: '+230', flag: '🇲🇺' },
+    { name: 'Mexico', code: '+52', flag: '🇲🇽' },
+    { name: 'Micronesia', code: '+691', flag: '🇫🇲' },
+    { name: 'Moldova', code: '+373', flag: '🇲🇩' },
+    { name: 'Monaco', code: '+377', flag: '🇲🇨' },
+    { name: 'Mongolia', code: '+976', flag: '🇲🇳' },
+    { name: 'Montenegro', code: '+382', flag: '🇲🇪' },
+    { name: 'Morocco', code: '+212', flag: '🇲🇦' },
+    { name: 'Mozambique', code: '+258', flag: '🇲🇿' },
+    { name: 'Myanmar', code: '+95', flag: '🇲🇲' },
+    { name: 'Namibia', code: '+264', flag: '🇳🇦' },
+    { name: 'Nauru', code: '+674', flag: '🇳🇷' },
+    { name: 'Nepal', code: '+977', flag: '🇳🇵' },
+    { name: 'Netherlands', code: '+31', flag: '🇳🇱' },
+    { name: 'New Zealand', code: '+64', flag: '🇳🇿' },
+    { name: 'Nicaragua', code: '+505', flag: '🇳🇮' },
+    { name: 'Niger', code: '+227', flag: '🇳🇪' },
+    { name: 'Nigeria', code: '+234', flag: '🇳🇬' },
+    { name: 'North Korea', code: '+850', flag: '🇰🇵' },
+    { name: 'North Macedonia', code: '+389', flag: '🇲🇰' },
+    { name: 'Norway', code: '+47', flag: '🇳🇴' },
+    { name: 'Oman', code: '+968', flag: '🇴🇲' },
+    { name: 'Pakistan', code: '+92', flag: '🇵🇰' },
+    { name: 'Palau', code: '+680', flag: '🇵🇼' },
+    { name: 'Palestine', code: '+970', flag: '🇵🇸' },
+    { name: 'Panama', code: '+507', flag: '🇵🇦' },
+    { name: 'Papua New Guinea', code: '+675', flag: '🇵🇬' },
+    { name: 'Paraguay', code: '+595', flag: '🇵🇾' },
+    { name: 'Peru', code: '+51', flag: '🇵🇪' },
+    { name: 'Philippines', code: '+63', flag: '🇵🇭' },
+    { name: 'Poland', code: '+48', flag: '🇵🇱' },
+    { name: 'Portugal', code: '+351', flag: '🇵🇹' },
+    { name: 'Qatar', code: '+974', flag: '🇶🇦' },
+    { name: 'Romania', code: '+40', flag: '🇷🇴' },
+    { name: 'Russia', code: '+7', flag: '🇷🇺' },
+    { name: 'Rwanda', code: '+250', flag: '🇷🇼' },
+    { name: 'Saint Kitts and Nevis', code: '+1869', flag: '🇰🇳' },
+    { name: 'Saint Lucia', code: '+1758', flag: '🇱🇨' },
+    { name: 'Saint Vincent', code: '+1784', flag: '🇻🇨' },
+    { name: 'Samoa', code: '+685', flag: '🇼🇸' },
+    { name: 'San Marino', code: '+378', flag: '🇸🇲' },
+    { name: 'Sao Tome and Principe', code: '+239', flag: '🇸🇹' },
+    { name: 'Saudi Arabia', code: '+966', flag: '🇸🇦' },
+    { name: 'Senegal', code: '+221', flag: '🇸🇳' },
+    { name: 'Serbia', code: '+381', flag: '🇷🇸' },
+    { name: 'Seychelles', code: '+248', flag: '🇸🇨' },
+    { name: 'Sierra Leone', code: '+232', flag: '🇸🇱' },
+    { name: 'Singapore', code: '+65', flag: '🇸🇬' },
+    { name: 'Slovakia', code: '+421', flag: '🇸🇰' },
+    { name: 'Slovenia', code: '+386', flag: '🇸🇮' },
+    { name: 'Solomon Islands', code: '+677', flag: '🇸🇧' },
+    { name: 'Somalia', code: '+252', flag: '🇸🇴' },
+    { name: 'South Africa', code: '+27', flag: '🇿🇦' },
+    { name: 'South Korea', code: '+82', flag: '🇰🇷' },
+    { name: 'South Sudan', code: '+211', flag: '🇸🇸' },
+    { name: 'Spain', code: '+34', flag: '🇪🇸' },
+    { name: 'Sri Lanka', code: '+94', flag: '🇱🇰' },
+    { name: 'Sudan', code: '+249', flag: '🇸🇩' },
+    { name: 'Suriname', code: '+597', flag: '🇸🇷' },
+    { name: 'Sweden', code: '+46', flag: '🇸🇪' },
+    { name: 'Switzerland', code: '+41', flag: '🇨🇭' },
+    { name: 'Syria', code: '+963', flag: '🇸🇾' },
+    { name: 'Taiwan', code: '+886', flag: '🇹🇼' },
+    { name: 'Tajikistan', code: '+992', flag: '🇹🇯' },
+    { name: 'Tanzania', code: '+255', flag: '🇹🇿' },
+    { name: 'Thailand', code: '+66', flag: '🇹🇭' },
+    { name: 'Timor-Leste', code: '+670', flag: '🇹🇱' },
+    { name: 'Togo', code: '+228', flag: '🇹🇬' },
+    { name: 'Tonga', code: '+676', flag: '🇹🇴' },
+    { name: 'Trinidad and Tobago', code: '+1868', flag: '🇹🇹' },
+    { name: 'Tunisia', code: '+216', flag: '🇹🇳' },
+    { name: 'Turkey', code: '+90', flag: '🇹🇷' },
+    { name: 'Turkmenistan', code: '+993', flag: '🇹🇲' },
+    { name: 'Tuvalu', code: '+688', flag: '🇹🇻' },
+    { name: 'Uganda', code: '+256', flag: '🇺🇬' },
+    { name: 'Ukraine', code: '+380', flag: '🇺🇦' },
+    { name: 'United Arab Emirates', code: '+971', flag: '🇦🇪' },
+    { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
+    { name: 'United States', code: '+1', flag: '🇺🇸' },
+    { name: 'Uruguay', code: '+598', flag: '🇺🇾' },
+    { name: 'Uzbekistan', code: '+998', flag: '🇺🇿' },
+    { name: 'Vanuatu', code: '+678', flag: '🇻🇺' },
+    { name: 'Vatican City', code: '+379', flag: '🇻🇦' },
+    { name: 'Venezuela', code: '+58', flag: '🇻🇪' },
+    { name: 'Vietnam', code: '+84', flag: '🇻🇳' },
+    { name: 'Yemen', code: '+967', flag: '🇾🇪' },
+    { name: 'Zambia', code: '+260', flag: '🇿🇲' },
+    { name: 'Zimbabwe', code: '+263', flag: '🇿🇼' },
+].sort((a, b) => a.name.localeCompare(b.name));
+
+function showTestCampaignModal() {
+    // Reset selection state
+    testSelectedCountryIndex = -1;
+    
+    // Initialize test country list
+    renderTestCountries();
+    document.getElementById('testCampaignModal').classList.remove('hidden');
+    
+    // Focus search field and attach keyboard listeners
+    const searchField = document.getElementById('testCountrySearch');
+    if (searchField) {
+        // Attach event listeners only once
+        if (!testCountryListenersAttached) {
+            searchField.addEventListener('keydown', handleTestCountryKeyboard);
+            testCountryListenersAttached = true;
+        }
+        
+        // Focus after small delay to ensure modal is visible
+        setTimeout(() => searchField.focus(), 100);
+    }
+}
+
+function closeTestCampaignModal() {
+    document.getElementById('testCampaignModal').classList.add('hidden');
+    document.getElementById('testPhoneInput').value = '';
+}
+
+// Render test country list with filtering
+function renderTestCountries(filter = '') {
+    const list = document.getElementById('testCountryList');
+    if (!list) return;
+    
+    // Get search value if filter not provided
+    if (!filter) {
+        const searchInput = document.getElementById('testCountrySearch');
+        filter = searchInput ? searchInput.value : '';
+    }
+    
+    // Filter countries
+    const query = filter.toLowerCase().trim();
+    testFilteredCountries = countries.filter(c => 
+        c.name.toLowerCase().includes(query) || 
+        c.code.replace('+', '').includes(query)
+    );
+    
+    // Reset selection when list changes
+    testSelectedCountryIndex = -1;
+    
+    // Render filtered list
+    list.innerHTML = testFilteredCountries.map((country, index) => `
+        <button type="button" 
+                class="test-country-item w-full px-4 py-2.5 hover:bg-neutral-50 flex items-center justify-between text-left border-b border-neutral-100 last:border-b-0"
+                data-index="${index}"
+                data-code="${country.code}" data-flag="${country.flag}" data-name="${country.name}">
+            <div class="flex items-center space-x-3 flex-1">
+                <span class="text-2xl">${country.flag}</span>
+                <span class="text-sm font-medium text-neutral-900">${country.name}</span>
+            </div>
+            <span class="text-sm font-semibold text-neutral-600 ml-2">${country.code}</span>
+        </button>
+    `).join('');
+    
+    // Add click handlers
+    list.querySelectorAll('button').forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+            selectTestCountry(this.dataset.code, this.dataset.flag, this.dataset.name);
+        });
+    });
+}
+
+// Highlight test country item at index
+function highlightTestCountryItem(index) {
+    const items = document.querySelectorAll('.test-country-item');
+    items.forEach((item, i) => {
+        if (i === index) {
+            item.classList.add('bg-blue-100');
+            item.classList.remove('bg-neutral-50');
+            // Scroll into view if needed
+            item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+            item.classList.remove('bg-blue-100');
+        }
+    });
+}
+
+// Keyboard navigation for test country search
+function handleTestCountryKeyboard(e) {
+    const list = document.getElementById('testCountryList');
+    if (!list || testFilteredCountries.length === 0) return;
+    
+    switch(e.key) {
+        case 'ArrowDown':
+            e.preventDefault();
+            testSelectedCountryIndex = Math.min(testSelectedCountryIndex + 1, testFilteredCountries.length - 1);
+            highlightTestCountryItem(testSelectedCountryIndex);
+            break;
+        
+        case 'ArrowUp':
+            e.preventDefault();
+            testSelectedCountryIndex = Math.max(testSelectedCountryIndex - 1, 0);
+            highlightTestCountryItem(testSelectedCountryIndex);
+            break;
+        
+        case 'Enter':
+            e.preventDefault();
+            if (testSelectedCountryIndex >= 0 && testSelectedCountryIndex < testFilteredCountries.length) {
+                const country = testFilteredCountries[testSelectedCountryIndex];
+                selectTestCountry(country.code, country.flag, country.name);
+            }
+            break;
+        
+        case 'Escape':
+            e.preventDefault();
+            closeTestCampaignModal();
+            break;
+    }
+}
+
+// Select test country
+function selectTestCountry(code, flag, name) {
+    testSelectedCountry = { name, code, flag };
+    const selectedEl = document.getElementById('testSelectedCountry');
+    selectedEl.innerHTML = `
+        <span class="text-xl mr-2">${flag}</span>
+        <span class="text-sm font-medium">${code}</span>
+    `;
+    // Remove the text-neutral-500 class and add text-neutral-800 for selected state
+    selectedEl.classList.remove('text-neutral-500');
+    selectedEl.classList.add('text-neutral-800');
+    
+    document.getElementById('testCountryDropdown').classList.add('hidden');
+    document.getElementById('testPhoneInput').focus();
+}
+
+// Toggle test country dropdown
+document.getElementById('testCountryBtn').addEventListener('click', function() {
+    const dropdown = document.getElementById('testCountryDropdown');
+    dropdown.classList.toggle('hidden');
+    if (!dropdown.classList.contains('hidden')) {
+        document.getElementById('testCountrySearch').focus();
+        renderTestCountries();
+    }
+});
+
+// Test country search
+document.getElementById('testCountrySearch').addEventListener('input', function(e) {
+    renderTestCountries(e.target.value);
+});
+
+// Phone input formatting
+document.getElementById('testPhoneInput').addEventListener('input', function(e) {
+    let value = e.target.value;
+    value = value.replace(/[^0-9]/g, '');
+    if (value.startsWith('0') && value.length > 1) {
+        value = value.substring(1);
+    }
+    e.target.value = value;
+});
+
+// Send test message with smooth animations
+function sendTestMessage() {
+    const phoneNumber = document.getElementById('testPhoneInput').value.trim();
+    const message = document.getElementById('message').value.trim();
+    const normalizedMessage = normalizeMessageText(message);
+    
+    // Validation: Check if country is selected
+    if (!testSelectedCountry) {
+        // Shake animation for country button
+        const countryBtn = document.getElementById('testCountryBtn');
+        countryBtn.classList.add('animate-shake');
+        setTimeout(() => countryBtn.classList.remove('animate-shake'), 500);
+        
+        alert('Please select a country code first');
+        countryBtn.focus();
+        return;
+    }
+    
+    // Validation: Check phone number
+    if (!phoneNumber) {
+        // Shake animation for phone input
+        const phoneInput = document.getElementById('testPhoneInput');
+        phoneInput.classList.add('animate-shake');
+        setTimeout(() => phoneInput.classList.remove('animate-shake'), 500);
+        
+        alert('Please enter a phone number');
+        phoneInput.focus();
+        return;
+    }
+    
+    // Validation: Check message
+    if (!message) {
+        alert('Please write a message first');
+        return;
+    }
+    
+    const fullNumber = testSelectedCountry.code + phoneNumber;
+    const attachment = document.getElementById('attachment').files[0];
+    
+    // Create FormData for AJAX
+    const formData = new FormData();
+    formData.append('test_phone', fullNumber);
+    formData.append('test_message', normalizedMessage);
+    if (attachment) {
+        formData.append('test_attachment', attachment);
+    }
+    
+    // Get button and show immediate loading state with animation
+    const sendBtn = document.getElementById('sendTestBtn');
+    const originalHTML = sendBtn.innerHTML;
+    
+    // Disable button and show loading state immediately
+    sendBtn.disabled = true;
+    sendBtn.classList.add('opacity-75', 'cursor-not-allowed');
+    sendBtn.innerHTML = '<i class="ri-loader-4-line mr-2 animate-spin"></i>Sending...';
+    
+    // Add pulse animation to button
+    sendBtn.classList.add('animate-pulse');
+    
+    // Send test message via AJAX
+    fetch('{% url "whatsappapi:send_test_message" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Success animation
+            sendBtn.classList.remove('animate-pulse');
+            sendBtn.classList.add('bg-green-600');
+            sendBtn.innerHTML = '<i class="ri-check-line mr-2"></i>Sent!';
+            
+            // Show toast and close modal with delay
+            showToast('Test Sent!', `Test message sent to ${fullNumber}`);
+            
+            setTimeout(() => {
+                closeTestCampaignModal();
+                // Reset button after modal closes
+                setTimeout(() => {
+                    sendBtn.disabled = false;
+                    sendBtn.classList.remove('opacity-75', 'cursor-not-allowed', 'bg-green-600');
+                    sendBtn.innerHTML = originalHTML;
+                }, 300);
+            }, 1000);
+        } else {
+            // Error state
+            sendBtn.classList.remove('animate-pulse');
+            sendBtn.classList.add('bg-red-600', 'animate-shake');
+            sendBtn.innerHTML = '<i class="ri-error-warning-line mr-2"></i>Failed';
+            
+            alert('Failed to send test: ' + (data.error || 'Unknown error'));
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                sendBtn.disabled = false;
+                sendBtn.classList.remove('opacity-75', 'cursor-not-allowed', 'bg-red-600', 'animate-shake');
+                sendBtn.innerHTML = originalHTML;
+            }, 2000);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        
+        // Error state with shake animation
+        sendBtn.classList.remove('animate-pulse');
+        sendBtn.classList.add('bg-red-600', 'animate-shake');
+        sendBtn.innerHTML = '<i class="ri-error-warning-line mr-2"></i>Error';
+        
+        alert('Failed to send test message. Please try again.');
+        
+        // Reset button after 2 seconds
+        setTimeout(() => {
+            sendBtn.disabled = false;
+            sendBtn.classList.remove('opacity-75', 'cursor-not-allowed', 'bg-red-600', 'animate-shake');
+            sendBtn.innerHTML = originalHTML;
+        }, 2000);
+    });
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#testCountryBtn') && !e.target.closest('#testCountryDropdown')) {
+        document.getElementById('testCountryDropdown').classList.add('hidden');
+    }
+});
+
+// Show file size warning modal
+function showFileSizeWarning(fileSize) {
+    const sizeInMB = (fileSize / 1024 / 1024).toFixed(2);
+    document.getElementById('fileSizeValue').textContent = sizeInMB;
+    document.getElementById('fileSizeWarningModal').classList.remove('hidden');
+}
+
+function closeFileSizeWarning() {
+    document.getElementById('fileSizeWarningModal').classList.add('hidden');
+}
+
+// Show formatting help modal
+function showFormattingHelp() {
+    document.getElementById('formattingHelpModal').classList.remove('hidden');
+}
+
+function closeFormattingHelp() {
+    document.getElementById('formattingHelpModal').classList.add('hidden');
+}
+
+// Show formatting warning modal
+function showFormattingWarning() {
+    document.getElementById('formattingWarningModal').classList.remove('hidden');
+}
+
+function closeFormattingWarning() {
+    document.getElementById('formattingWarningModal').classList.add('hidden');
+}
+
+// ==================== AI Draft Generation ====================
+function generateAiDraft() {
+    const messageField = document.getElementById('message');
+    const prompt = messageField.value.trim(); // Use existing message as prompt
+    const tone = document.getElementById('aiTone').value;
+    const length = document.getElementById('aiLength').value;
+    const gradientBg = document.getElementById('aiGradientBg');
+    const loadingState = document.getElementById('aiLoadingState');
+    const controls = document.getElementById('aiControls');
+    
+    // Show gradient background and loading state
+    gradientBg.classList.remove('hidden');
+    loadingState.classList.remove('hidden');
+    controls.classList.add('hidden');
+    
+    // Make API call to generate AI content
+    fetch('{% url "whatsappapi:ai_draft" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({
+            prompt: prompt || 'Write a WhatsApp campaign message',
+            tone: tone,
+            length: length
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Hide gradient and loading, show controls
+        gradientBg.classList.add('hidden');
+        loadingState.classList.add('hidden');
+        controls.classList.remove('hidden');
+        
+        if (data.success && data.draft) {
+            // Show the draft in the result container
+            document.getElementById('aiDraftText').textContent = data.draft;
+            document.getElementById('aiDraftContainer').classList.remove('hidden');
+            
+            // Show toast notification
+            showToast('AI Draft Generated!', 'Review and choose an action below');
+        } else {
+            // Parse error for moderation reasons
+            const errorMsg = data.error || data.message || 'Unknown error';
+            let reasons = [];
+            
+            if (data.reasons && Array.isArray(data.reasons)) {
+                reasons = data.reasons;
+            } else if (errorMsg.includes('Reasons:')) {
+                const reasonsText = errorMsg.split('Reasons:')[1];
+                if (reasonsText) {
+                    reasons = reasonsText.split(';').map(r => r.trim()).filter(r => r);
+                }
+            }
+            
+            // Show beautiful error modal
+            if (errorMsg.includes('blocked by content moderation')) {
+                showErrorModal(
+                    'Your content was blocked by our content moderation system. Please review and modify your prompt to comply with our content policy.',
+                    reasons.length > 0 ? reasons : ['Content policy violation detected']
+                );
+            } else {
+                showErrorModal('Failed to generate AI draft: ' + errorMsg, reasons);
+            }
+        }
+    })
+    .catch(error => {
+        console.error('AI draft error:', error);
+        
+        // Hide loading, show controls
+        loadingState.classList.add('hidden');
+        controls.classList.remove('hidden');
+        
+        // Show error modal instead of alert
+        showErrorModal(
+            'Failed to generate AI draft. Please check your internet connection and try again.',
+            ['Network error or server unavailable']
+        );
+    });
+}
+
+// Insert AI draft into message field
+function insertAiDraft(mode) {
+    const draftText = document.getElementById('aiDraftText').textContent;
+    const messageField = document.getElementById('message');
+    
+    if (mode === 'append') {
+        // Append to existing message
+        const currentText = messageField.value.trim();
+        messageField.value = currentText ? currentText + '\n\n' + draftText : draftText;
+    } else if (mode === 'replace') {
+        // Replace entire message
+        messageField.value = draftText;
+    }
+    
+    // Update character count if function exists
+    if (typeof updateCharCount === 'function') {
+        updateCharCount();
+    }
+    
+    // Clear the draft container
+    clearAiDraft();
+    
+    showToast('Draft Inserted!', 'The AI draft has been added to your message');
+}
+
+// Regenerate AI draft with same settings
+function regenerateAiDraft() {
+    generateAiDraft();
+}
+
+// Clear AI draft container
+function clearAiDraft() {
+    document.getElementById('aiDraftContainer').classList.add('hidden');
+    document.getElementById('aiDraftText').textContent = '';
+}
+
+// ==================== Advanced Sending Controls ====================
+// Store advanced controls state
+let advancedControlsConfig = {
+    enabled: false,
+    randomDelayMin: 5,
+    randomDelayMax: 10,
+    batchSizeMin: 50,
+    batchSizeMax: 70,
+    batchCooldownMin: 5.0,
+    batchCooldownMax: 10.0
+};
+
+// Show advanced controls modal
+function showAdvancedControlsModal() {
+    // Load current config into form
+    document.getElementById('useAdvancedControls').checked = advancedControlsConfig.enabled;
+    document.getElementById('randomDelayMin').value = advancedControlsConfig.randomDelayMin;
+    document.getElementById('randomDelayMax').value = advancedControlsConfig.randomDelayMax;
+    document.getElementById('batchSizeMin').value = advancedControlsConfig.batchSizeMin;
+    document.getElementById('batchSizeMax').value = advancedControlsConfig.batchSizeMax;
+    document.getElementById('batchCooldownMin').value = advancedControlsConfig.batchCooldownMin;
+    document.getElementById('batchCooldownMax').value = advancedControlsConfig.batchCooldownMax;
+    
+    // Toggle fields visibility based on checkbox
+    toggleAdvancedFields();
+    
+    document.getElementById('advancedControlsModal').classList.remove('hidden');
+}
+
+// Close advanced controls modal
+function closeAdvancedControlsModal() {
+    document.getElementById('advancedControlsModal').classList.add('hidden');
+}
+
+// Toggle advanced fields visibility
+function toggleAdvancedFields() {
+    const enabled = document.getElementById('useAdvancedControls').checked;
+    const fields = document.getElementById('advancedControlsFields');
+    
+    if (enabled) {
+        fields.style.opacity = '1';
+        fields.style.pointerEvents = 'auto';
+    } else {
+        fields.style.opacity = '0.5';
+        fields.style.pointerEvents = 'none';
+    }
+}
+
+// Add event listener to checkbox
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.getElementById('useAdvancedControls');
+    if (checkbox) {
+        checkbox.addEventListener('change', toggleAdvancedFields);
+    }
+});
+
+// Save advanced controls
+function saveAdvancedControls() {
+    const enabled = document.getElementById('useAdvancedControls').checked;
+    
+    if (enabled) {
+        // Validate inputs
+        const delayMin = parseInt(document.getElementById('randomDelayMin').value);
+        const delayMax = parseInt(document.getElementById('randomDelayMax').value);
+        const batchMin = parseInt(document.getElementById('batchSizeMin').value);
+        const batchMax = parseInt(document.getElementById('batchSizeMax').value);
+        const cooldownMin = parseFloat(document.getElementById('batchCooldownMin').value);
+        const cooldownMax = parseFloat(document.getElementById('batchCooldownMax').value);
+        
+        // Validation
+        if (delayMin > delayMax) {
+            alert('Minimum delay cannot be greater than maximum delay');
+            return;
+        }
+        if (batchMin > batchMax) {
+            alert('Minimum batch size cannot be greater than maximum batch size');
+            return;
+        }
+        if (cooldownMin > cooldownMax) {
+            alert('Minimum cooldown cannot be greater than maximum cooldown');
+            return;
+        }
+        
+        // Save configuration with ENABLED = TRUE
+        advancedControlsConfig = {
+            enabled: true,
+            randomDelayMin: delayMin,
+            randomDelayMax: delayMax,
+            batchSizeMin: batchMin,
+            batchSizeMax: batchMax,
+            batchCooldownMin: cooldownMin,
+            batchCooldownMax: cooldownMax
+        };
+        
+        // Update status display
+        const statusDiv = document.getElementById('advancedControlsStatus');
+        const summaryText = document.getElementById('advancedControlsSummary');
+        statusDiv.classList.remove('hidden');
+        summaryText.textContent = `Delays: ${delayMin}-${delayMax}s | Batches: ${batchMin}-${batchMax} | Cooldown: ${cooldownMin}-${cooldownMax}min`;
+        
+        console.log('✅ Advanced Controls SAVED:');
+        console.log(`   Enabled: true`);
+        console.log(`   Delay: ${delayMin}-${delayMax}s`);
+        console.log(`   Batch: ${batchMin}-${batchMax}`);
+        console.log(`   Cooldown: ${cooldownMin}-${cooldownMax}min`);
+        
+        showToast('Settings Saved!', 'Advanced sending controls have been configured');
+    } else {
+        // DISABLED - Reset config to indicate no custom values
+        advancedControlsConfig = {
+            enabled: false,
+            randomDelayMin: 5,
+            randomDelayMax: 10,
+            batchSizeMin: 50,
+            batchSizeMax: 70,
+            batchCooldownMin: 5.0,
+            batchCooldownMax: 10.0
+        };
+        document.getElementById('advancedControlsStatus').classList.add('hidden');
+        
+        console.log('ℹ️ Advanced Controls DISABLED - Will use default: 5-10s, 50-70, 5-10min');
+        
+        showToast('Controls Disabled', 'Using default sending mode (5-10s, 50-70, 5-10min)');
+    }
+    
+    closeAdvancedControlsModal();
+}
+
+// ==================== AI Draft Demo Modal ====================
+function showAiDraftDemo() {
+    document.getElementById('aiDraftDemoModal').classList.remove('hidden');
+}
+
+function closeAiDraftDemo() {
+    document.getElementById('aiDraftDemoModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.getElementById('aiDraftDemoModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeAiDraftDemo();
+    }
+});
+</script>
+
+<!-- AI Draft Demo Modal -->
+<div id="aiDraftDemoModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 px-6 py-5 border-b border-indigo-200 sticky top-0">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <i class="ri-lightbulb-flash-line text-3xl text-indigo-600"></i>
+                    <h2 class="text-2xl font-bold text-neutral-800">AI Content Examples</h2>
+                </div>
+                <button onclick="closeAiDraftDemo()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            <p class="text-sm text-neutral-600 mt-2">👇 Learn how to write effective WhatsApp messages with dates, times, URLs, prices & variables</p>
+        </div>
+        
+        <div class="p-6 space-y-6">
+            <!-- Example 1: Promotional with Price -->
+            <div class="border-l-4 border-green-500 bg-green-50 rounded-lg p-5">
+                <div class="flex items-start gap-3">
+                    <i class="ri-tag-discount-line text-2xl text-green-600 flex-shrink-0 mt-1"></i>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-neutral-900 mb-2">💳 Promotional Offer with Price</h3>
+                        <div class="bg-white rounded-lg p-3 mb-3 border border-green-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>Your Message:</strong></p>
+                            <p class="text-sm text-neutral-700">"Check our summer sale - 50% off on all items. Price from ₹500 to ₹2000. Use code SUMMER50"</p>
+                        </div>
+                        <div class="bg-indigo-50 rounded-lg p-3 border border-indigo-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>🤖 AI Generates (Persuasive tone):</strong></p>
+                            <p class="text-sm text-neutral-700 whitespace-pre-wrap">🎁 *Summer Sale Alert!* 🎁
+
+Dear {first_name},
+
+Save BIG this season! 💰
+*Get 50% OFF* on everything at {company_name}.
+
+Prices now: ₹500-₹2000 ✨
+
+*Exclusive Code:* SUMMER50
+Expires: 30th Dec, 2025 ⏰
+
+Shop now → www.example.com/summer 🛍️</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Example 2: Time-sensitive with Date & URL -->
+            <div class="border-l-4 border-orange-500 bg-orange-50 rounded-lg p-5">
+                <div class="flex items-start gap-3">
+                    <i class="ri-timer-flash-line text-2xl text-orange-600 flex-shrink-0 mt-1"></i>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-neutral-900 mb-2">⏰ Time-Sensitive with Schedule</h3>
+                        <div class="bg-white rounded-lg p-3 mb-3 border border-orange-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>Your Message:</strong></p>
+                            <p class="text-sm text-neutral-700">"Join webinar on Jan 15 at 3 PM. Register at www.webinar.com. Limited to 100 seats."</p>
+                        </div>
+                        <div class="bg-indigo-50 rounded-lg p-3 border border-indigo-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>🤖 AI Generates (Urgent tone):</strong></p>
+                            <p class="text-sm text-neutral-700 whitespace-pre-wrap">⚠️ *LIMITED SEATS AVAILABLE!* ⚠️
+
+Hi {first_name},
+
+🚀 Join our exclusive webinar TODAY!
+
+📅 *Date:* January 15, 2025
+⏰ *Time:* 3:00 PM (Your Timezone)
+
+Topic: Grow Your Business 3X Faster
+👥 Only 100 spots available!
+
+*Register Now:* www.webinar.com/live
+
+Don't miss out! 🔥</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Example 3: Welcome with Personalization & URL -->
+            <div class="border-l-4 border-blue-500 bg-blue-50 rounded-lg p-5">
+                <div class="flex items-start gap-3">
+                    <i class="ri-user-add-line text-2xl text-blue-600 flex-shrink-0 mt-1"></i>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-neutral-900 mb-2">👋 Welcome Message with Variables</h3>
+                        <div class="bg-white rounded-lg p-3 mb-3 border border-blue-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>Your Message:</strong></p>
+                            <p class="text-sm text-neutral-700">"Welcome {first_name}! Check out your personalized dashboard at app.example.com"</p>
+                        </div>
+                        <div class="bg-indigo-50 rounded-lg p-3 border border-indigo-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>🤖 AI Generates (Friendly tone):</strong></p>
+                            <p class="text-sm text-neutral-700 whitespace-pre-wrap">👋 Welcome {first_name}!
+
+We're excited to have you on board! 🎉
+
+Your personal dashboard is ready:
+→ app.example.com/dashboard
+
+Quick Start Guide:
+✓ Complete Your Profile
+✓ Browse {company_name} Features
+✓ Get Expert Tips & Support
+
+Need help? Reply HELP or visit our support page.
+
+Happy exploring! 💚</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Example 4: Multiple Details -->
+            <div class="border-l-4 border-purple-500 bg-purple-50 rounded-lg p-5">
+                <div class="flex items-start gap-3">
+                    <i class="ri-gift-line text-2xl text-purple-600 flex-shrink-0 mt-1"></i>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-neutral-900 mb-2">🎯 Complex Message (Price + Date + URL)</h3>
+                        <div class="bg-white rounded-lg p-3 mb-3 border border-purple-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>Your Message:</strong></p>
+                            <p class="text-sm text-neutral-700">"Book appointment on Jan 20, 2025 at our clinic. Consultation fee: ₹500. Limited to 10 slots. Register: clinic.book.com"</p>
+                        </div>
+                        <div class="bg-indigo-50 rounded-lg p-3 border border-indigo-200">
+                            <p class="text-sm font-mono text-neutral-700 mb-2"><strong>🤖 AI Generates (Professional tone):</strong></p>
+                            <p class="text-sm text-neutral-700 whitespace-pre-wrap">📋 *Professional Consultation*
+
+Dear {first_name},
+
+We're offering personalized consultations with expert specialists.
+
+📅 *Available Date:* January 20, 2025
+⏰ *Limited Slots:* 10 appointments only
+💰 *Consultation Fee:* ₹500 per session
+
+*About the Session:*
+✓ 30-minute one-on-one consultation
+✓ Personalized recommendations
+✓ Follow-up support included
+
+*Book Your Slot:* clinic.book.com/appointments
+
+For questions, contact us anytime.
+
+Best regards,
+{company_name} Team</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pro Tips -->
+            <div class="bg-gradient-to-r from-amber-50 to-yellow-50 rounded-xl p-5 border border-amber-200">
+                <h4 class="font-bold text-amber-900 mb-3 flex items-center gap-2">
+                    <i class="ri-lightbulb-line text-xl"></i>
+                    💡 Pro Tips for Writing Prompts
+                </h4>
+                <ul class="space-y-2 text-sm text-amber-900">
+                    <li>✅ <strong>Include specifics:</strong> Mention actual dates (Jan 20), times (3 PM), prices (₹500), URLs</li>
+                    <li>✅ <strong>Use variables:</strong> {first_name}, {company_name}, {product_name} for personalization</li>
+                    <li>✅ <strong>Set tone:</strong> Promotional, Urgent, Friendly, Professional, etc.</li>
+                    <li>✅ <strong>Be clear:</strong> What's the offer? What's the deadline? What's the action?</li>
+                    <li>❌ <strong>Avoid:</strong> Banned content (drugs, weapons, hate speech, gambling, fraud)</li>
+                    <li>❌ <strong>No excessive:</strong> Too many emojis, special chars, or ALL CAPS</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="bg-neutral-50 px-6 py-4 border-t border-neutral-200 flex justify-end gap-3">
+            <button onclick="closeAiDraftDemo()" class="px-5 py-2.5 bg-neutral-200 text-neutral-800 rounded-lg hover:bg-neutral-300 font-medium text-sm transition-colors">
+                Close
+            </button>
+            <button onclick="closeAiDraftDemo()" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 font-medium text-sm transition-all">
+                Got it! Let's Generate
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal for Content Moderation -->
+<div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full animate-scale-in">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-4 rounded-t-2xl">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <i class="ri-error-warning-line text-3xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold">Content Blocked</h3>
+                    <p class="text-sm text-red-100">AI Draft Generation Failed</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Body -->
+        <div class="p-6">
+            <div class="mb-4">
+                <p id="errorModalMessage" class="text-gray-700 text-base leading-relaxed"></p>
+            </div>
+            
+            <!-- Reasons List -->
+            <div id="errorModalReasons" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <p class="text-sm font-semibold text-red-900 mb-2">🚫 Detected Issues:</p>
+                <ul id="errorModalReasonsList" class="text-sm text-red-800 space-y-1"></ul>
+            </div>
+            
+            <!-- Help Text -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p class="text-sm text-blue-900">
+                    <strong>💡 Tip:</strong> Please review your content and ensure it complies with our content policy. 
+                    Avoid prohibited content like violence, hate speech, illegal activities, or adult content.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="bg-gray-50 px-6 py-4 rounded-b-2xl flex justify-end gap-3">
+            <button onclick="closeErrorModal()" class="px-6 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 font-medium text-sm transition-all transform hover:scale-105 active:scale-95 shadow-lg">
+                <i class="ri-close-line mr-1"></i>
+                Got it
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Add animation styles -->
+<style>
+@keyframes scale-in {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-scale-in {
+    animation: scale-in 0.3s ease-out;
+}
+
+#errorModal {
+    backdrop-filter: blur(4px);
+}
+</style>
+
+{% endblock %}

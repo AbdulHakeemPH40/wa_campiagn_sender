@@ -1,0 +1,87 @@
+import datetime
+from django.core.management.base import BaseCommand
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+
+from django.conf import settings
+
+# Disable completely when DEBUG is False
+if not getattr(settings, "DEBUG", False):
+    raise SystemExit("send_test_reminder_emails command is disabled in production settings (DEBUG=False).")
+
+
+class Command(BaseCommand):
+    """Send test free-trial and pro-subscription reminder e-mails to a target address.
+
+    Usage:
+        python manage.py send_test_reminder_emails --email you@example.com
+
+    If --email is omitted it defaults to the superuser's e-mail (first superuser found).
+    """
+
+    help = "Sends both reminder templates (free-trial & pro) to a given e-mail for testing."
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--email",
+            type=str,
+            help="Destination e-mail address. Defaults to the first superuser's email.",
+        )
+
+    def handle(self, *args, **options):
+        to_email = options.get("email")
+        if not to_email:
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            superuser = User.objects.filter(is_superuser=True).first()
+            if not superuser:
+                self.stderr.write(self.style.ERROR("No email specified and no superuser exists to derive an address."))
+                return
+            to_email = superuser.email
+            self.stdout.write(f"No --email given. Using superuser address {to_email}.")
+
+        today = datetime.date.today()
+        tomorrow = today + datetime.timedelta(days=1)
+
+        # 1) Free-trial reminder
+        trial_ctx = {
+            "user": {"full_name": "Test User"},
+            "free_trial_end": tomorrow,
+            "current_year": today.year,
+            "domain": "yourdomain.com",
+        }
+        self._send_mail(
+            subject="TEST – Free Trial Ends Tomorrow",
+            template="userpanel/email/free_trial_reminder.html",
+            ctx=trial_ctx,
+            to=[to_email],
+        )
+
+        # 2) Pro subscription reminder
+        pro_ctx = {
+            "user": {"full_name": "Test User"},
+            "subscription_end_date": tomorrow,
+            "current_year": today.year,
+            "domain": "yourdomain.com",
+        }
+        self._send_mail(
+            subject="TEST – Pro Subscription Ends Tomorrow",
+            template="userpanel/email/pro_version_reminder.html",
+            ctx=pro_ctx,
+            to=[to_email],
+        )
+
+        self.stdout.write(self.style.SUCCESS("✓ Test reminder e-mails queued for delivery via SendGrid."))
+
+    def _send_mail(self, subject: str, template: str, ctx: dict, to: list):
+        """Render HTML template and dispatch e-mail (also attaches plain-text placeholder)"""
+        html_content = render_to_string(template, ctx)
+        text_content = "This is an HTML e-mail. Please view it in an HTML-capable client."
+
+        msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, to)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+
+# python manage.py send_test_reminder_emails --email abdulhakeemph@gmail.com

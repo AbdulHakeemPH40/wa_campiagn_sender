@@ -1,0 +1,421 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'image/title.png' %}">
+    <title>{% block title %}WA Campaign Sender{% endblock %} - WA Campaign Sender</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Prefetch for faster navigation - all sidebar pages -->
+    <link rel="prefetch" href="{% url 'userpanel:dashboard' %}">
+    <link rel="prefetch" href="{% url 'whatsappapi:dashboard' %}">
+    <link rel="prefetch" href="{% url 'whatsappapi:send_campaign' %}">
+    <link rel="prefetch" href="{% url 'whatsappapi:campaigns' %}">
+    <link rel="prefetch" href="{% url 'whatsappapi:drafts' %}">
+    <link rel="prefetch" href="{% url 'whatsappapi:sessions' %}">
+    <link rel="prefetch" href="{% url 'whatsappapi:contacts' %}">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Emoji Picker CDN -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease;
+        }
+        .sidebar-link:hover {
+            background-color: #f0fdf4;
+            color: #16a34a;
+        }
+        .sidebar-link.active {
+            background-color: #dcfce7;
+            color: #16a34a;
+            font-weight: 500;
+        }
+        
+        /* Mobile sidebar overlay */
+        .sidebar-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-mobile {
+            transition: transform 0.3s ease;
+        }
+        
+        /* Shake animation for validation errors */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        /* AI Gradient Animation (Minimal subtle version) */
+        @keyframes ai-gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-ai-gradient {
+            background-size: 200% 200%;
+            animation: ai-gradient 4s ease infinite;
+        }
+        
+        /* Loading Bar Animation */
+        @keyframes loading-bar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .animate-loading-bar {
+            animation: loading-bar 1.5s ease-in-out infinite;
+        }
+    </style>
+    {% block extra_styles %}{% endblock %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-neutral-50">
+
+<div class="flex h-screen bg-neutral-50 overflow-hidden">
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+    
+    <!-- Left Sidebar -->
+    <aside id="sidebar" class="sidebar-mobile fixed lg:static lg:translate-x-0 -translate-x-full w-64 bg-white border-r border-neutral-200 flex-shrink-0 top-0 h-screen z-50">
+        <div class="flex flex-col h-full overflow-y-auto">
+            <!-- Logo -->
+            <div class="px-6 py-6 border-b border-neutral-100">
+                <div class="flex items-center space-x-3">
+                    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender Logo" class="h-8 w-8 object-contain">
+                    <span class="text-xl font-semibold text-neutral-800">WA Campaign Sender</span>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="flex-1 px-3 py-4 space-y-1">
+                {% block sidebar_links %}
+                <a href="{% url 'whatsappapi:dashboard' %}" 
+                   class="sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %} flex items-center space-x-3 px-4 py-2.5 rounded-lg text-neutral-700 text-sm">
+                    <i class="ri-dashboard-line text-lg"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{% url 'whatsappapi:send_campaign' %}" 
+                   class="sidebar-link {% if request.resolver_match.url_name == 'send_campaign' %}active{% endif %} flex items-center space-x-3 px-4 py-2.5 rounded-lg text-neutral-700 text-sm">
+                    <i class="ri-send-plane-line text-lg"></i>
+                    <span>Send Campaign</span>
+                </a>
+
+                <a href="{% url 'whatsappapi:campaigns' %}" 
+                   class="sidebar-link {% if request.resolver_match.url_name == 'campaigns' %}active{% endif %} flex items-center space-x-3 px-4 py-2.5 rounded-lg text-neutral-700 text-sm">
+                    <i class="ri-mail-line text-lg"></i>
+                    <span>Campaign List</span>
+                </a>
+
+                <a href="{% url 'whatsappapi:drafts' %}" 
+                   class="sidebar-link {% if request.resolver_match.url_name == 'drafts' %}active{% endif %} flex items-center space-x-3 px-4 py-2.5 rounded-lg text-neutral-700 text-sm">
+                    <i class="ri-draft-line text-lg"></i>
+                    <span>Saved Drafts</span>
+                </a>
+
+                <a href="{% url 'whatsappapi:sessions' %}" 
+                   class="sidebar-link {% if request.resolver_match.url_name == 'sessions' %}active{% endif %} flex items-center space-x-3 px-4 py-2.5 rounded-lg text-neutral-700 text-sm">
+                    <i class="ri-smartphone-line text-lg"></i>
+                    <span>Sessions</span>
+                </a>
+
+               
+<a href="{% url 'whatsappapi:contacts' %}?nocache=1"
+class="sidebar-link {% if request.resolver_match.url_name == 'contacts' %}active{% endif %} flex items-center space-x-3 px-4 py-2.5 rounded-lg text-neutral-700 text-sm">
+                    <i class="ri-contacts-line text-lg"></i>
+                    <span>Contacts</span>
+                </a>
+                {% endblock %}
+            </nav>
+
+            <!-- Bottom Links -->
+            <div class="px-3 py-4 mt-auto sticky bottom-0 border-t border-neutral-200 bg-neutral-50/80 backdrop-blur supports-[backdrop-filter]:bg-neutral-50/60 space-y-2">
+                <p class="px-2 text-xs font-semibold text-neutral-500 uppercase tracking-wide">Quick Actions</p>
+
+                <!-- Back to Main Panel: prominent neutral button -->
+                <a href="{% url 'userpanel:dashboard' %}"
+                   class="group block w-full flex items-center gap-3 px-4 py-3 rounded-lg text-neutral-800 text-sm bg-neutral-100 border border-neutral-200 hover:bg-neutral-200 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-300 shadow-sm transition"
+                   id="back-to-panel-link">
+                    <span class="h-6 w-6 rounded-md flex items-center justify-center bg-white/70 text-neutral-700">
+                        <i class="ri-arrow-left-line text-base" id="back-icon"></i>
+                    </span>
+                    <span class="font-medium">Back to Main Panel</span>
+                </a>
+
+                <!-- Logout: distinct, safe-danger button -->
+                <a href="{% url 'userpanel:logout' %}"
+                   class="group block w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-700 text-sm bg-red-50 border border-red-200 hover:bg-red-100 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-sm transition">
+                    <span class="h-6 w-6 rounded-md flex items-center justify-center bg-white/70 text-red-600">
+                        <i class="ri-logout-box-line text-base"></i>
+                    </span>
+                    <span class="font-medium">Logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-x-hidden overflow-y-auto">
+        <!-- Top Navbar -->
+        <header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-neutral-200">
+            <div class="flex items-center justify-between px-4 sm:px-6 py-3">
+                <!-- Hamburger Menu (Mobile) + Brand -->
+                <div class="flex items-center gap-3">
+                    <button type="button" id="mobile-menu-button" onclick="toggleSidebar()" class="lg:hidden inline-flex items-center justify-center p-2 rounded-lg text-neutral-600 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-300">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <div class="flex items-center gap-2 text-neutral-800">
+                        <i class="ri-whatsapp-line text-xl text-green-600"></i>
+                        <span class="text-sm sm:text-base font-semibold">WhatsApp API</span>
+                    </div>
+                </div>
+
+                <!-- Right: Profile and Logout -->
+                <div class="flex items-center gap-3">
+                    {% if user.is_authenticated %}
+                    <div class="relative">
+                        <button type="button" id="profile-menu-button"
+                                class="flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-lg bg-neutral-100 text-neutral-800 hover:bg-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-300">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-green-100 text-green-700">
+                                <i class="ri-user-3-line"></i>
+                            </span>
+                            <span class="hidden sm:inline text-sm font-medium truncate max-w-[8rem] md:max-w-[14rem]">
+                                {% with full=user.get_full_name %}
+                                    {% if full %}{{ full }}
+                                    {% elif user.email %}{{ user.email }}
+                                    {% else %}{{ user.username }}{% endif %}
+                                {% endwith %}
+                            </span>
+                            <i class="hidden sm:inline ri-arrow-down-s-line text-neutral-500"></i>
+                        </button>
+                        <!-- Dropdown -->
+                        <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 rounded-lg border border-neutral-200 bg-white shadow-lg z-40">
+                            <a href="{% url 'userpanel:dashboard' %}"
+                               class="flex items-center gap-2 px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50">
+                                <i class="ri-dashboard-line text-lg"></i>
+                                <span>My Panel</span>
+                            </a>
+                            <div class="border-t border-neutral-200"></div>
+                            <a href="{% url 'userpanel:logout' %}"
+                               class="flex items-center gap-2 px-3 py-2 text-sm text-red-700 hover:bg-red-50">
+                                <i class="ri-logout-box-line"></i>
+                                <span>Logout</span>
+                            </a>
+                        </div>
+                    </div>
+                    {% else %}
+                    <a href="{% url 'userpanel:dashboard' %}"
+                       class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-neutral-700 bg-neutral-100 border border-neutral-200 hover:bg-neutral-200 hover:text-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-300 transition">
+                        <i class="ri-login-box-line"></i>
+                        <span class="text-sm font-medium">Sign in</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        {% block content %}
+        {% endblock %}
+    </main>
+</div>
+
+<!-- Global Toast Container -->
+<div id="toast-root" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+<script>
+// Simple, beautiful toast component using Tailwind classes
+function showToast(titleOrType, messageOrText, type) {
+  // Support both signatures: showToast('Saved!', 'Draft saved') and showToast('success', 'Saved!')
+  let title = 'Notice';
+  let text = '';
+  let level = 'info';
+  if (type) {
+    title = String(titleOrType || '');
+    text = String(messageOrText || '');
+    level = String(type || 'info');
+  } else {
+    // titleOrType is actually the level when only two args are provided
+    level = String(titleOrType || 'info');
+    text = String(messageOrText || '');
+  }
+  const colors = {
+    success: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-800', icon: 'ri-check-line text-green-600' },
+    error:   { bg: 'bg-red-50',   border: 'border-red-200',   text: 'text-red-800',   icon: 'ri-error-warning-line text-red-600' },
+    warning: { bg: 'bg-yellow-50',border: 'border-yellow-200',text: 'text-yellow-800',icon: 'ri-alert-line text-yellow-600' },
+    info:    { bg: 'bg-neutral-50',border: 'border-neutral-200',text: 'text-neutral-800',icon: 'ri-information-line text-neutral-600' }
+  }[level] || { bg: 'bg-neutral-50', border: 'border-neutral-200', text: 'text-neutral-800', icon: 'ri-information-line text-neutral-600' };
+  const root = document.getElementById('toast-root');
+  const el = document.createElement('div');
+  el.className = `flex items-start gap-3 px-4 py-3 rounded-lg border shadow ${colors.bg} ${colors.border}`;
+  el.innerHTML = `
+    <span class="h-7 w-7 rounded-full flex items-center justify-center bg-white/60"><i class="${colors.icon}"></i></span>
+    <div class="min-w-0">
+      <p class="text-sm font-semibold ${colors.text}">${title || level.charAt(0).toUpperCase()+level.slice(1)}</p>
+      <p class="text-sm ${colors.text} truncate">${text}</p>
+    </div>
+    <button type="button" class="ml-auto text-neutral-500 hover:text-neutral-800" aria-label="Dismiss" onclick="this.parentElement.remove()">
+      <i class="ri-close-line"></i>
+    </button>
+  `;
+  root.appendChild(el);
+  // Auto dismiss after 4s
+  setTimeout(() => { el.remove(); }, 4000);
+}
+</script>
+
+<script>
+// Sidebar toggle for mobile
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  
+  if (sidebar.classList.contains('-translate-x-full')) {
+    sidebar.classList.remove('-translate-x-full');
+    sidebar.classList.add('translate-x-0');
+    overlay.classList.remove('hidden');
+  } else {
+    sidebar.classList.add('-translate-x-full');
+    sidebar.classList.remove('translate-x-0');
+    overlay.classList.add('hidden');
+  }
+}
+
+// Profile dropdown toggle and outside-click close
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('profile-menu-button');
+  const menu = document.getElementById('profile-dropdown');
+  if (!btn || !menu) return;
+  const toggle = () => menu.classList.toggle('hidden');
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggle();
+  });
+  document.addEventListener('click', (e) => {
+    if (!menu.classList.contains('hidden')) {
+      const within = btn.contains(e.target) || menu.contains(e.target);
+      if (!within) menu.classList.add('hidden');
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      menu.classList.add('hidden');
+      // Also close sidebar on mobile
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar && overlay && !sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.add('-translate-x-full');
+        sidebar.classList.remove('translate-x-0');
+        overlay.classList.add('hidden');
+      }
+    }
+  });
+  
+  // OPTIMIZATION: Add loading state for back to panel link
+  const backLink = document.getElementById('back-to-panel-link');
+  if (backLink) {
+    backLink.addEventListener('click', function(e) {
+      const icon = document.getElementById('back-icon');
+      if (icon) {
+        icon.classList.remove('ri-arrow-left-line');
+        icon.classList.add('ri-loader-4-line', 'animate-spin');
+      }
+      this.style.opacity = '0.7';
+      this.style.pointerEvents = 'none';
+    });
+  }
+  
+  // INSTANT NAVIGATION: Prefetch on hover, instant feedback on click
+  const navLinks = document.querySelectorAll('.sidebar-link, a[href^="/"]');
+  navLinks.forEach(link => {
+    // Prefetch on hover
+    link.addEventListener('mouseenter', function() {
+      const href = this.getAttribute('href');
+      if (href && href.startsWith('/') && !href.includes('logout')) {
+        const prefetchLink = document.createElement('link');
+        prefetchLink.rel = 'prefetch';
+        prefetchLink.href = href;
+        document.head.appendChild(prefetchLink);
+      }
+    });
+    
+    // Instant visual feedback on click
+    link.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href && href.startsWith('/') && !href.includes('logout')) {
+        // Immediate visual feedback
+        this.style.opacity = '0.6';
+        this.style.transform = 'scale(0.98)';
+        
+        // Show top loading bar
+        showTopLoadingBar();
+      }
+    });
+  });
+  
+  // Top loading bar for instant feedback
+  function showTopLoadingBar() {
+    let bar = document.getElementById('top-loading-bar');
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'top-loading-bar';
+      bar.style.cssText = 'position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#10b981,#3b82f6);width:0%;z-index:9999;transition:width 0.3s ease;';
+      document.body.appendChild(bar);
+    }
+    bar.style.width = '30%';
+    setTimeout(() => { bar.style.width = '60%'; }, 100);
+    setTimeout(() => { bar.style.width = '90%'; }, 300);
+  }
+  
+  // Hide loading bar on page load
+  window.addEventListener('load', function() {
+    const bar = document.getElementById('top-loading-bar');
+    if (bar) {
+      bar.style.width = '100%';
+      setTimeout(() => {
+        bar.style.opacity = '0';
+        setTimeout(() => bar.remove(), 300);
+      }, 200);
+    }
+  });
+});
+</script>
+
+{% if messages %}
+<!-- Django messages rendered as safe data nodes (avoids template tags inside JS) -->
+<div id="django-messages-data" class="hidden">
+  {% for message in messages %}
+    <div data-level="{{ message.tags|default:'info' }}" data-text="{{ message|escape }}"></div>
+  {% endfor %}
+  </div>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const root = document.getElementById('django-messages-data');
+    if (!root) return;
+    root.querySelectorAll('div[data-level][data-text]').forEach(el => {
+      const level = el.getAttribute('data-level') || 'info';
+      const text = el.getAttribute('data-text') || '';
+      showToast(level, text);
+    });
+    root.remove();
+  });
+  </script>
+{% endif %}
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>

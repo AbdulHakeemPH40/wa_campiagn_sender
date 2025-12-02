@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Issue - Action Required</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#DC3545;color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">⚠️ Payment Issue - Action Required</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px;text-align:left;line-height:1.6;">
+                            <p style="margin:0 0 15px;">Dear {{ user.full_name|default:'Valued Customer' }},</p>
+                            
+                            <p style="margin:0 0 15px;">We encountered an issue while processing the payment for your order <strong>#{{ order_invoice_id }}</strong>.</p>
+                            
+                            <div style="background-color:#FFF3CD;border:1px solid #FFEAA7;padding:15px;border-radius:5px;margin:20px 0;">
+                                <p style="margin:0;color:#856404;"><strong>Payment Status:</strong> {{ payment_status }}</p>
+                                {% if reason %}
+                                <p style="margin:5px 0 0;color:#856404;"><strong>Reason:</strong> {{ reason }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <p style="margin:0 0 15px;"><strong>What you can do:</strong></p>
+                            <ul style="margin:0 0 25px;padding-left:20px;">
+                                <li>Check your payment method details (card expiry, sufficient funds)</li>
+                                <li>Contact your bank or payment provider</li>
+                                <li>Try a different payment method</li>
+                                <li>Contact our support team for assistance</li>
+                            </ul>
+                            
+                            <p style="margin:0 0 25px;text-align:center;">
+                                <a href="https://www.wacampaignsender.com/login/?next=/userpanel/pricing/" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;margin-right:10px;">Try Payment Again</a>
+                                <a href="mailto:hi@wacampaignsender.com?subject=Payment Issue - Order {{ order_invoice_id }}" style="display:inline-block;padding:12px 25px;background-color:#007bff;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Contact Support</a>
+                            </p>
+                            
+                            <p style="margin:0 0 15px;">If you believe this is an error or need immediate assistance, please contact our support team at <strong>hi@wacampaignsender.com</strong> with your order number.</p>
+                            
+                            <p style="margin:0;">Best regards,<br>
+                            <strong>WA Campaign Sender Team</strong></p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {% now "Y" %} WA Campaign Sender. All rights reserved.<br>
+                            Support: hi@wacampaignsender.com | P13 France Cluster, International City, Dubai</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

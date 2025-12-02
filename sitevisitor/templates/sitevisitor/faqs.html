@@ -1,0 +1,122 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}FAQs - WA Campaign Sender WhatsApp Marketing Questions{% endblock %}
+{% block description %}Get answers to common questions about WA Campaign Sender. Learn about features, safety, pricing, and how to use our WhatsApp marketing extension effectively.{% endblock %}
+
+{% block content %}
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Have questions? We've got answers. If you can't find what you're looking for, feel free to contact us.</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto space-y-4">
+            <!-- FAQ Item 1 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>What is WA Campaign Sender?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>WA Campaign Sender is a browser extension for Chrome and Edge that enhances your WhatsApp Web experience. It allows you to send personalized bulk messages, manage contact lists, and track campaign progress directly within your browser, eliminating the need for complex APIs or external tools.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>How do I send a campaign?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>From the extension's main menu, click on "Message Sender." You can then choose your target audience (from saved lists, group members, or by uploading a CSV), compose your message with personalization variables, attach media if needed, and start the campaign. You can monitor the progress in real-time.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>What is the Contact Extractor?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>The Contact Extractor is a powerful feature that allows you to build contact lists directly from WhatsApp. You can extract phone numbers from groups you are a member of, from your existing chat list, or even from saved contact cards. This is a quick way to build targeted lists for your campaigns.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 4 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>Is using this extension safe for my WhatsApp account?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>We prioritize your account's safety. Our extension uses intelligent, randomized delays between messages to simulate human behavior and reduce the risk of being flagged by WhatsApp. However, we always recommend following best practices, such as sending messages only to users who expect to hear from you and avoiding spammy content.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 5 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>What are the limitations of the Free Plan?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>The Free Plan is a great way to get started. It allows you to connect one WhatsApp account and send unlimited messages. However, it does not include premium features like 12/7 WhatsApp support. For more advanced features and support, please consider upgrading to one of our paid plans.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 6 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>Can I use my personal WhatsApp number?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>Yes, you can use the extension with any personal or business WhatsApp account that is active on WhatsApp Web. There is no need for a separate business API account.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 7 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>How do I get help or provide feedback?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>In the footer of the extension popup, you will find links for "Help" and "Feedback." You can also visit our <a href="{% url 'sitevisitor:contact' %}" class="text-primary hover:underline">Contact Page</a> to send us a message directly. We appreciate your input!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% block page_scripts %}
+{{ block.super }}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const faqButtons = document.querySelectorAll('.max-w-4xl .bg-white button');
+
+        faqButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('i');
+
+                // Close other open FAQs
+                faqButtons.forEach(otherButton => {
+                    if (otherButton !== button) {
+                        otherButton.nextElementSibling.classList.add('hidden');
+                        otherButton.querySelector('i').classList.remove('rotate-180');
+                    }
+                });
+
+                answer.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+    });
+</script>
+{% endblock page_scripts %}

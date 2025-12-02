@@ -1,0 +1,210 @@
+{% extends 'userpanel/base.html' %}
+
+{% block title %}Settings - WA Campaign Sender{% endblock %}
+
+{% block page_title %}Account Settings{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Profile Section -->
+    <div class="card p-6">
+        <div class="border-b border-neutral-200 pb-4 mb-6">
+            <h3 class="text-lg font-semibold text-neutral-900">Profile Settings</h3>
+            <p class="text-sm text-neutral-600 mt-1">Manage your personal information and account preferences</p>
+        </div>
+
+        <form method="post" action="{% url 'userpanel:settings' %}" class="space-y-6" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% if profile_form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                {{ profile_form.non_field_errors }}
+            </div>
+            {% endif %}
+
+            <div class="flex items-start space-x-6 mb-6">
+                <div class="flex-shrink-0">
+                    {% if user_profile_picture_url %}
+                    <img src="{{ user_profile_picture_url }}" alt="Profile Picture"
+                        class="h-16 w-16 rounded-lg object-cover border border-neutral-200">
+                    {% else %}
+                    <div class="h-16 w-16 rounded-lg bg-primary text-white flex items-center justify-center text-xl font-semibold">
+                        {{ request.user.full_name|slice:":1"|upper }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="flex-1 min-w-0">
+                    <label for="{{ profile_form.profile_picture.id_for_label }}"
+                        class="block text-sm font-medium text-neutral-700 mb-2">Profile Picture</label>
+                    {{ profile_form.profile_picture }}
+                    {% if profile_form.profile_picture.help_text %}
+                    <p class="text-xs text-neutral-500 mt-1">{{ profile_form.profile_picture.help_text }}</p>
+                    {% endif %}
+                    {% if profile_form.profile_picture.errors %}
+                    <p class="text-xs text-red-600 mt-1">{{ profile_form.profile_picture.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ profile_form.full_name.id_for_label }}"
+                        class="block text-sm font-medium text-neutral-700 mb-2">Full Name</label>
+                    {{ profile_form.full_name }}
+                    {% if profile_form.full_name.help_text %}
+                    <p class="text-xs text-neutral-500 mt-1">{{ profile_form.full_name.help_text }}</p>
+                    {% endif %}
+                    {% if profile_form.full_name.errors %}
+                    <p class="text-xs text-red-600 mt-1">{{ profile_form.full_name.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">Email Address</label>
+                    <input type="email" name="email" value="{{ request.user.email }}" readonly
+                        class="w-full px-3 py-2 border border-neutral-200 bg-neutral-50 rounded text-neutral-500 text-sm focus:outline-none">
+                    <p class="text-xs text-neutral-500 mt-1">Email address cannot be modified</p>
+                </div>
+            </div>
+
+
+
+            <!-- Password Security Section -->
+            <div class="mt-8 pt-6 border-t border-neutral-200">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="h-10 w-10 bg-orange-50 rounded-lg flex items-center justify-center">
+                            <i class="ri-shield-keyhole-line text-orange-600 text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-neutral-900">Password & Security</h4>
+                            <p class="text-xs text-neutral-600">Manage your account security settings</p>
+                        </div>
+                    </div>
+                    <a href="{% url 'userpanel:change_password' %}" class="btn-primary text-sm">
+                        <i class="ri-key-line mr-2"></i>
+                        Change Password
+                    </a>
+                </div>
+                <div class="bg-blue-50 border border-blue-200 rounded p-3">
+                    <p class="text-xs text-blue-800 flex items-center">
+                        <i class="ri-shield-check-line mr-2 text-blue-600"></i>
+                        Your password is encrypted and stored securely using industry-standard protocols
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-6">
+                <button type="submit" name="update_profile" class="btn-primary">
+                    <i class="ri-save-line mr-2"></i>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+    <!-- Subscription Details Section -->
+    <div class="card p-6">
+        <div class="border-b border-neutral-200 pb-4 mb-6">
+            <h3 class="text-lg font-semibold text-neutral-900">Subscription Plan</h3>
+            <p class="text-sm text-neutral-600 mt-1">Manage your subscription and billing information</p>
+        </div>
+
+        {% if subscription %}
+        <div class="mb-4">
+            <p class="mb-2"><span class="font-medium">Plan:</span> {{ subscription.plan.name|default:"Pro Plan" }}</p>
+            <p class="mb-2"><span class="font-medium">Start Date:</span> {{ subscription.created_at|date:"F d, Y H:i" }}</p>
+            <p class="mb-2"><span class="font-medium">End Date:</span> {{ subscription.end_date|date:"F d, Y H:i" }}</p>
+        </div>
+
+        {% if subscription_is_active %}
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <div class="flex items-start space-x-3">
+                <div class="h-8 w-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="ri-check-line text-green-600 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-medium text-green-900 mb-1">Active Subscription</h4>
+                    <p class="text-sm text-green-700">Your WhatsApp API subscription is active until <strong>{{ subscription.end_date|date:"F d, Y" }}</strong></p>
+                    {% if subscription.plan %}
+                    <p class="text-xs text-green-600 mt-1">Current plan: {{ subscription.plan.name }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% elif subscription.status == 'cancelled' %}
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div class="flex items-start space-x-3">
+                <div class="h-8 w-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="ri-close-line text-red-600 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-medium text-red-900 mb-1">Subscription Cancelled</h4>
+                    <p class="text-sm text-red-700">Your subscription was cancelled by an administrator</p>
+                    <p class="text-xs text-red-600 mt-1">Reason: {{ subscription.cancel_reason|default:"No reason provided" }}</p>
+                    <p class="text-xs text-red-600">Cancelled: {{ subscription.cancelled_at|date:"F d, Y" }}</p>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'userpanel:pricing' %}" class="btn-primary">Purchase New Plan</a>
+        {% elif subscription.end_date and subscription.end_date < now %}
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <div class="flex items-start space-x-3">
+                <div class="h-8 w-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="ri-time-line text-yellow-600 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-medium text-yellow-900 mb-1">Subscription Expired</h4>
+                    <p class="text-sm text-yellow-700">Your subscription expired on <strong>{{ subscription.end_date|date:"F d, Y" }}</strong></p>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'userpanel:pricing' %}" class="btn-primary">Renew Subscription</a>
+        {% else %}
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div class="flex items-start space-x-3">
+                <div class="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="ri-information-line text-blue-600 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-medium text-blue-900 mb-1">Status Verification Required</h4>
+                    <p class="text-sm text-blue-700">Your subscription status needs verification. Contact support if this appears incorrect.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-6">
+            <div class="flex items-start space-x-3">
+                <div class="h-8 w-8 bg-neutral-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="ri-information-line text-neutral-600 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-medium text-neutral-900 mb-1">No Active Subscription</h4>
+                    <p class="text-sm text-neutral-600">You don't currently have an active subscription plan</p>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'userpanel:pricing' %}" class="btn-primary">Choose a Plan</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+            const input = this.parentElement.querySelector('input');
+            if (input.type === 'password') {
+                input.type = 'text';
+                this.innerHTML = '<i class="ri-eye-off-line text-gray-400"></i>';
+            } else {
+                input.type = 'password';
+                this.innerHTML = '<i class="ri-eye-line text-gray-400"></i>';
+            }
+        });
+    });
+
+
+</script>
+{% endblock %}

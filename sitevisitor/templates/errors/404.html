@@ -1,0 +1,72 @@
+{% extends "errors/base.html" %}
+{% load static %}
+
+{% block title %}404 – Page Not Found | WA Campaign Sender{% endblock %}
+{% block meta_description %}The page you're looking for doesn't exist. Explore our WhatsApp marketing tools, blog posts, and features.{% endblock %}
+{% block robots %}noindex, follow{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col items-center justify-center px-4 py-16">
+  <div class="w-full max-w-4xl flex flex-col items-center">
+
+    <!-- Logo -->
+    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender" class="h-16 mb-8">
+
+    <!-- Error headline -->
+    <h1 class="text-9xl font-bold text-primary mb-6">404</h1>
+
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Oops! Message Not Delivered</h2>
+      <p class="text-xl text-gray-600 mb-2">
+        The page you’re looking for seems to have disappeared.
+      </p>
+      <p class="text-gray-500">
+        You can head back to the homepage or try searching below.
+      </p>
+    </div>
+
+    <!-- Illustration -->
+    <div class="mb-12 float-animation relative w-64 h-64">
+      <div class="absolute inset-0 bg-primary/10 rounded-full"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-40 h-40 bg-primary/20 rounded-full flex items-center justify-center">
+          <div class="w-28 h-28 bg-primary rounded-full flex items-center justify-center">
+            <i class="ri-message-3-line text-white ri-3x"></i>
+          </div>
+        </div>
+      </div>
+      <div class="absolute -top-4 -right-4 w-12 h-12 bg-primary/30 rounded-full"></div>
+      <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-primary/20 rounded-full"></div>
+    </div>
+
+    <!-- Search bar -->
+    <div class="w-full max-w-md mb-8">
+      <div class="relative">
+        <input id="search404" type="text" placeholder="Search for something…"
+               class="w-full px-5 py-3 pr-12 bg-white border border-gray-200 rounded-button shadow-sm
+                      focus:outline-none focus:ring-2 focus:ring-primary/50">
+        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+          <i class="ri-search-line"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <a href="/" class="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-button
+                      shadow-md hover:shadow-lg transition-all">
+      Go to Homepage
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Redirect to blogs page for search
+  document.getElementById('search404').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      window.location.href = '/blogs/';
+    }
+  });
+</script>
+{% endblock %}

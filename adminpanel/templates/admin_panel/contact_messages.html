@@ -1,0 +1,184 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Contact Messages - Admin Panel{% endblock %}
+
+{% block messages_container %}
+<div id="messages-container" class="fixed top-20 right-4 z-[100] w-auto max-w-xs sm:max-w-sm space-y-3">
+    {% if messages %}
+        {% for message in messages %}
+        {% if message.tags %}
+        <div class="relative flex items-start p-4 rounded-lg shadow-xl 
+            {% if message.tags == 'debug' %} bg-gray-100 border border-gray-400 text-gray-800 {% endif %}
+            {% if message.tags == 'info' %} bg-blue-100 border border-blue-400 text-blue-800 {% endif %}
+            {% if message.tags == 'success' %} bg-green-100 border border-green-400 text-green-800 {% endif %}
+            {% if message.tags == 'warning' %} bg-yellow-100 border border-yellow-400 text-yellow-800 {% endif %}
+            {% if message.tags == 'error' %} bg-red-100 border border-red-400 text-red-800 {% endif %}"
+            role="alert">
+            <div class="flex-shrink-0 pt-0.5">
+                {% if message.tags == 'success' %}<i class="ri-checkbox-circle-fill text-green-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'info' %}<i class="ri-information-fill text-blue-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'warning' %}<i class="ri-error-warning-fill text-yellow-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'error' %}<i class="ri-close-circle-fill text-red-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'debug' %}<i class="ri-bug-fill text-gray-500 text-xl"></i>{% endif %}
+            </div>
+            <div class="ml-3 flex-grow">
+                <p class="text-sm font-medium">{{ message }}</p>
+            </div>
+            <div class="ml-auto pl-3">
+                <div class="-mx-1.5 -my-1.5">
+                    <button type="button" 
+                            class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                            {% if message.tags == 'debug' %} text-gray-500 hover:bg-gray-200 focus:ring-offset-gray-100 focus:ring-gray-600 {% endif %}
+                            {% if message.tags == 'info' %} text-blue-500 hover:bg-blue-200 focus:ring-offset-blue-100 focus:ring-blue-600 {% endif %}
+                            {% if message.tags == 'success' %} text-green-500 hover:bg-green-200 focus:ring-offset-green-100 focus:ring-green-600 {% endif %}
+                            {% if message.tags == 'warning' %} text-yellow-500 hover:bg-yellow-200 focus:ring-offset-yellow-100 focus:ring-yellow-600 {% endif %}
+                            {% if message.tags == 'error' %} text-red-500 hover:bg-red-200 focus:ring-offset-red-100 focus:ring-red-600 {% endif %}"
+                            onclick="this.closest('.relative.flex.items-start').remove();">
+                        <span class="sr-only">Dismiss</span>
+                        <i class="ri-close-line text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block admin_content %}
+<div class="container mx-auto px-4 sm:px-8">
+    <div class="py-8">
+        <div>
+            <h2 class="text-2xl font-semibold leading-tight">Contact Messages</h2>
+        </div>
+        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+            <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Sender
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Subject
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Date
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in messages %}
+                        <tr>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <div class="flex items-center">
+                                    <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                            {{ message.name }}
+                                        </p>
+                                        <p class="text-gray-600 whitespace-no-wrap">{{ message.email }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">{{ message.subject }}</p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    {{ message.timestamp|date:"d M, Y" }}
+                                </p>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                {% if message.is_read %}
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                        <span aria-hidden class="absolute inset-0 bg-green-200 opacity-50 rounded-full"></span>
+                                        <span class="relative">Read</span>
+                                    </span>
+                                {% else %}
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                        <span aria-hidden class="absolute inset-0 bg-red-200 opacity-50 rounded-full"></span>
+                                        <span class="relative">Unread</span>
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                                <a href="{% url 'admin_panel:contact_message_detail' pk=message.pk %}" class="text-indigo-600 hover:text-indigo-900">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="px-5 py-5 bg-white border-t flex items-center justify-between">
+                    <span class="text-xs xs:text-sm text-gray-900">
+                        Showing {{ messages.start_index }} to {{ messages.end_index }} of {{ messages.paginator.count }} entries
+                    </span>
+                    <nav aria-label="Page navigation">
+                        <ul class="inline-flex items-center -space-x-px">
+                            {% if messages.has_previous %}
+                                <li>
+                                    <a href="?page={{ messages.previous_page_number }}" class="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Previous</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <span class="py-2 px-3 ml-0 leading-tight text-gray-400 bg-white rounded-l-lg border border-gray-300 cursor-not-allowed">Previous</span>
+                                </li>
+                            {% endif %}
+                    
+                            {% if messages.number > 3 %}
+                                <li>
+                                    <a href="?page=1" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">1</a>
+                                </li>
+                                {% if messages.number > 4 %}
+                                    <li>
+                                        <span class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300">...</span>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                    
+                            {% for i in messages.paginator.page_range %}
+                                {% if i >= messages.number|add:'-2' and i <= messages.number|add:'2' %}
+                                    {% if i == messages.number %}
+                                        <li>
+                                            <a href="#" aria-current="page" class="z-10 py-2 px-3 leading-tight text-indigo-600 bg-indigo-50 border border-indigo-300 hover:bg-indigo-100 hover:text-indigo-700">{{ i }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a href="?page={{ i }}" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{ i }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                    
+                            {% if messages.number < messages.paginator.num_pages|add:'-2' %}
+                                {% if messages.number < messages.paginator.num_pages|add:'-3' %}
+                                    <li>
+                                        <span class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300">...</span>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="?page={{ messages.paginator.num_pages }}" class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{ messages.paginator.num_pages }}</a>
+                                </li>
+                            {% endif %}
+                    
+                            {% if messages.has_next %}
+                                <li>
+                                    <a href="?page={{ messages.next_page_number }}" class="py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Next</a>
+                                </li>
+                            {% else %}
+                                 <li>
+                                    <span class="py-2 px-3 leading-tight text-gray-400 bg-white rounded-r-lg border border-gray-300 cursor-not-allowed">Next</span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock admin_content %}

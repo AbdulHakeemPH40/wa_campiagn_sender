@@ -1,0 +1,89 @@
+# Allow major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yahoo! Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+# Allow social media preview bots
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Pinterestbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+# Allow trusted AI bots
+User-agent: OpenAI-SearchBot
+Allow: /
+
+User-agent: GrokAI
+Allow: /
+
+# Default for all other bots
+User-agent: *
+Allow: /
+Allow: /static/
+Allow: /media/
+
+# Block admin and user panels
+Disallow: /adminpanel/
+Disallow: /userpanel/
+Disallow: /admin/
+
+# Block authentication pages
+Disallow: /login/
+Disallow: /signup/
+Disallow: /logout/
+Disallow: /password-reset/
+Disallow: /verify-email/
+Disallow: /resend-verification/
+
+# Block API endpoints
+Disallow: /api/
+
+# Block error pages
+Disallow: /error/
+
+# Allow important pages
+Allow: /about/
+Allow: /contact/
+Allow: /privacy-policy/
+Allow: /terms-of-service/
+Allow: /refund/
+Allow: /faqs/
+Allow: /blogs/
+Allow: /blog/
+
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://wacampaignsender.com/sitemap.xml

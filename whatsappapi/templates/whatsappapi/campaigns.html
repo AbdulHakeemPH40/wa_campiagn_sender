@@ -1,0 +1,263 @@
+{% extends 'whatsappapi/base.html' %}
+{% load static %}
+
+{% block title %}Campaigns{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-8">
+    
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-neutral-800 mb-2">Campaign History</h1>
+        <p class="text-neutral-600">View all your sent WhatsApp campaigns and their performance</p>
+    </div>
+
+    <!-- Campaigns List -->
+    {% if campaigns %}
+        <div class="grid gap-3">
+            {% for campaign in campaigns %}
+            <div class="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden hover:shadow-sm transition-shadow" data-campaign-id="{{ campaign.id }}">
+                <div class="p-3">
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-base font-bold text-neutral-800 truncate mb-0.5">
+                                {{ campaign.name }}
+                            </h3>
+                            <p class="text-xs text-neutral-500 truncate">
+                                <i class="ri-calendar-line mr-1"></i>{{ campaign.created_at|date:"M d, Y - g:i A" }}
+                            </p>
+                        </div>
+                        <div class="flex items-center space-x-1 ml-2">
+                            {% if campaign.status == 'completed' %}
+                                <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs font-semibold inline-flex items-center">
+                                    <i class="ri-check-circle-fill mr-1 text-xs"></i>Finished
+                                </span>
+                            {% elif campaign.status == 'running' %}
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-semibold inline-flex items-center">
+                                    <i class="ri-loader-4-line mr-1 text-xs animate-spin"></i>Running
+                                </span>
+                            {% elif campaign.status == 'failed' %}
+                                <span class="px-2 py-0.5 bg-red-100 text-red-700 rounded text-xs font-semibold inline-flex items-center">
+                                    <i class="ri-error-warning-fill mr-1 text-xs"></i>Failed
+                                </span>
+                            {% elif campaign.status == 'paused' %}
+                                <span class="px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded text-xs font-semibold inline-flex items-center">
+                                    <i class="ri-pause-circle-fill mr-1 text-xs"></i>Paused
+                                </span>
+                            {% elif campaign.status == 'pending' %}
+                                <span class="px-2 py-0.5 bg-neutral-100 text-neutral-700 rounded text-xs font-semibold inline-flex items-center">
+                                    <i class="ri-time-line mr-1 text-xs"></i>Pending
+                                </span>
+                            {% else %}
+                                <span class="px-2 py-0.5 bg-neutral-100 text-neutral-700 rounded text-xs font-semibold">
+                                    {{ campaign.status|title }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Campaign Stats -->
+                    <div class="grid grid-cols-4 gap-1.5 mb-2">
+                        <div class="bg-blue-50 rounded p-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-blue-600 font-semibold mb-0.5">T</p>
+                                    <p class="text-sm font-bold text-blue-900">{{ campaign.total_recipients|default:0 }}</p>
+                                </div>
+                                <i class="ri-group-line text-base text-blue-400"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-green-50 rounded p-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-green-600 font-semibold mb-0.5">S</p>
+                                    <p class="text-sm font-bold text-green-900">{{ campaign.messages_sent|default:0 }}</p>
+                                </div>
+                                <i class="ri-check-line text-base text-green-400"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-50 rounded p-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-red-600 font-semibold mb-0.5">F</p>
+                                    <p class="text-sm font-bold text-red-900">{{ campaign.messages_failed|default:0 }}</p>
+                                </div>
+                                <i class="ri-close-line text-base text-red-400"></i>
+                            </div>
+                        </div>
+
+                        <div class="bg-purple-50 rounded p-2">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-purple-600 font-semibold mb-0.5">%</p>
+                                    <p class="text-sm font-bold text-purple-900">
+                                        {% if campaign.total_recipients and campaign.total_recipients > 0 %}
+                                            {% widthratio campaign.messages_sent|default:0 campaign.total_recipients 100 %}%
+                                        {% else %}
+                                            0%
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <i class="ri-percent-line text-base text-purple-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Message Preview -->
+                    <div class="bg-neutral-50 rounded p-2 mb-2">
+                        <p class="text-xs text-neutral-800 truncate">{{ campaign.message_template }}</p>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-between pt-2 border-t border-neutral-200">
+                        <div class="text-xs text-neutral-500 truncate">
+                            <i class="ri-user-line mr-0.5 text-xs"></i>{{ campaign.session.phone_number|default:"N/A" }}
+                        </div>
+                        <a href="{% url 'whatsappapi:campaign_detail' campaign.id %}" 
+                           class="px-2 py-1 bg-blue-600 text-white rounded text-xs font-semibold hover:bg-blue-700 transition-colors">
+                            Details
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if campaigns.has_other_pages %}
+        <div class="mt-6 flex items-center justify-between border-t border-neutral-200 pt-4">
+            <div class="text-xs text-neutral-600">
+                <span class="font-semibold">{{ campaigns.start_index }}</span>-<span class="font-semibold">{{ campaigns.end_index }}</span> of <span class="font-semibold">{{ campaigns.paginator.count }}</span>
+            </div>
+            
+            <div class="flex items-center space-x-1">
+                {% if campaigns.has_previous %}
+                    <a href="?page=1" class="px-2 py-1 rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors text-xs">
+                        <i class="ri-arrow-left-double-line"></i>
+                    </a>
+                    <a href="?page={{ campaigns.previous_page_number }}" class="px-2 py-1 rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors text-xs">
+                        <i class="ri-arrow-left-line"></i>
+                    </a>
+                {% endif %}
+                
+                <!-- Page numbers -->
+                {% for num in campaigns.paginator.page_range %}
+                    {% if campaigns.number == num %}
+                        <span class="px-2 py-1 rounded bg-blue-600 text-white font-semibold text-xs">{{ num }}</span>
+                    {% elif num > campaigns.number|add:'-3' and num < campaigns.number|add:'3' %}
+                        <a href="?page={{ num }}" class="px-2 py-1 rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors text-xs">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if campaigns.has_next %}
+                    <a href="?page={{ campaigns.next_page_number }}" class="px-2 py-1 rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors text-xs">
+                        <i class="ri-arrow-right-line"></i>
+                    </a>
+                    <a href="?page={{ campaigns.paginator.num_pages }}" class="px-2 py-1 rounded border border-neutral-300 text-neutral-700 hover:bg-neutral-50 transition-colors text-xs">
+                        <i class="ri-arrow-right-double-line"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-2xl shadow-md border border-neutral-200 p-12 text-center">
+            <div class="h-24 w-24 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="ri-mail-send-line text-5xl text-neutral-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-neutral-800 mb-3">No Campaigns Yet</h2>
+            <p class="text-neutral-600 mb-6 max-w-md mx-auto">
+                You haven't sent any campaigns yet. Create your first campaign to start sending WhatsApp messages to your contacts.
+            </p>
+            <a href="{% url 'whatsappapi:send_campaign' %}" 
+               class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                <i class="ri-send-plane-fill mr-2"></i>Send First Campaign
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+// Auto-refresh campaign stats every 4 seconds
+function updateCampaignStats() {
+    // Add timestamp to force fresh fetch (bypass cache)
+    const url = new URL(window.location.href);
+    url.searchParams.set('_t', Date.now());
+    
+    fetch(url.toString())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+    })
+    .then(html => {
+        // Parse the response HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Get all campaign cards from current and new pages
+        const currentCards = document.querySelectorAll('[data-campaign-id]');
+        let updatedCount = 0;
+        
+        // Update each campaign card with fresh data
+        currentCards.forEach(card => {
+            const campaignId = card.getAttribute('data-campaign-id');
+            const newCard = doc.querySelector(`[data-campaign-id="${campaignId}"]`);
+            
+            if (newCard) {
+                // Find and update only the stats section, not the whole card
+                const currentStats = card.querySelector('.grid.grid-cols-4');
+                const newStats = newCard.querySelector('.grid.grid-cols-4');
+                
+                if (currentStats && newStats) {
+                    const currentHtml = currentStats.innerHTML.trim();
+                    const newHtml = newStats.innerHTML.trim();
+                    
+                    if (currentHtml !== newHtml) {
+                        // Update just the stats div
+                        currentStats.innerHTML = newHtml;
+                        updatedCount++;
+                        console.log(`Updated campaign ${campaignId} stats`);
+                    }
+                }
+            }
+        });
+        
+        if (updatedCount === 0 && currentCards.length > 0) {
+            console.log(`Campaign stats checked (${currentCards.length} campaigns) - no changes`);
+        } else if (updatedCount > 0) {
+            console.log(`Updated ${updatedCount} campaign(s)`);
+        }
+    })
+    .catch(error => console.error('Error updating campaign stats:', error));
+}
+
+// Start auto-refresh when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Page loaded, starting auto-refresh...');
+        // Initial update
+        updateCampaignStats();
+        // Then refresh every 4 seconds
+        window.campaignRefreshInterval = setInterval(updateCampaignStats, 4000);
+    });
+} else {
+    // Page already loaded
+    console.log('Page already loaded, starting auto-refresh...');
+    updateCampaignStats();
+    window.campaignRefreshInterval = setInterval(updateCampaignStats, 4000);
+}
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+    if (window.campaignRefreshInterval) {
+        clearInterval(window.campaignRefreshInterval);
+    }
+});
+</script>
+{% endblock %}

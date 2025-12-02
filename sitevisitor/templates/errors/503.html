@@ -1,0 +1,64 @@
+{% extends "errors/base.html" %}
+{% load static %}
+
+{% block title %}503 – Service Unavailable | WA Campaign Sender{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col items-center justify-center px-4 py-16">
+  <div class="w-full max-w-4xl flex flex-col items-center">
+
+    <!-- Logo -->
+    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender" class="h-16 mb-8">
+    <!-- Error headline -->
+    <h1 class="text-9xl font-bold text-primary mb-6">503</h1>
+
+    <!-- Message -->
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Service Unavailable</h2>
+      <p class="text-xl text-gray-600 mb-2">
+        We're currently performing scheduled maintenance.
+      </p>
+      <p class="text-gray-500">
+        Expected completion:
+        <span class="font-medium">June&nbsp;28,&nbsp;2025&nbsp;at&nbsp;18:00&nbsp;UTC</span>
+      </p>
+      <p class="text-gray-500 mt-2">
+        Maintenance&nbsp;ID:&nbsp;
+        <span id="maintId" class="font-mono bg-gray-100 px-2 py-1 rounded"></span>
+      </p>
+    </div>
+
+    <!-- Illustration -->
+    <div class="mb-12 float-animation relative w-64 h-64">
+      <div class="absolute inset-0 bg-primary/10 rounded-full"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-40 h-40 bg-primary/20 rounded-full flex items-center justify-center">
+          <div class="w-28 h-28 bg-primary rounded-full flex items-center justify-center">
+            <i class="ri-error-warning-line text-white ri-3x"></i>
+          </div>
+        </div>
+      </div>
+      <div class="absolute -top-4 -right-4 w-12 h-12 bg-primary/30 rounded-full"></div>
+      <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-primary/20 rounded-full"></div>
+    </div>
+
+    <!-- Buttons -->
+    <a href="/contact/" class="mb-8 flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-medium
+                      px-8 py-3 rounded-button shadow-md hover:shadow-lg transition-all">
+      <i class="ri-customer-service-2-line"></i> Contact&nbsp;Support
+    </a>
+
+    <a href="/" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-8 py-3 rounded-button
+                   transition-all flex items-center gap-2">
+      <i class="ri-home-line"></i> Go&nbsp;to&nbsp;Homepage
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  /* Add simple maintenance ID for reference */
+  document.getElementById('maintId').textContent = 'MAINT-' + Date.now().toString(36);
+</script>
+{% endblock %}

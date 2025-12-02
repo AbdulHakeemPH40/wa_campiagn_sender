@@ -1,0 +1,279 @@
+{% extends 'whatsappapi/base.html' %}
+{% load static %}
+
+{% block title %}Sessions - WA Campaign Sender{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-neutral-50 via-blue-50 to-indigo-50 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-neutral-800">WhatsApp Sessions</h1>
+            <p class="text-sm sm:text-base text-neutral-600 mt-1">Manage all your WhatsApp API sessions</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="?refresh=1" 
+               class="px-4 py-2.5 bg-purple-100 text-purple-700 border border-purple-200 rounded-xl hover:bg-purple-200 font-semibold shadow-md inline-flex items-center">
+                <i class="ri-refresh-line mr-2 text-lg"></i>
+                Refresh Status
+            </a>
+            {% if total_count == 0 %}
+            <a href="{% url 'whatsappapi:dashboard' %}" 
+               class="px-5 py-3 bg-blue-100 text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-200 font-semibold shadow-md inline-flex items-center">
+                <i class="ri-add-line mr-2 text-lg"></i>
+                Create First Session
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <!-- Total Sessions -->
+        <div class="bg-white border-2 border-neutral-200 rounded-xl p-4 sm:p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs sm:text-sm font-medium text-neutral-600">Total Sessions</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-neutral-800 mt-1">{{ total_count }}</p>
+                </div>
+                <div class="h-12 w-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+                    <i class="ri-smartphone-line text-2xl text-neutral-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Sessions -->
+        <div class="bg-white border-2 border-green-200 rounded-xl p-4 sm:p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs sm:text-sm font-medium text-green-600">Active Sessions</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-green-700 mt-1">{{ active_count }}</p>
+                </div>
+                <div class="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="ri-checkbox-circle-line text-2xl text-green-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Sessions -->
+        <div class="bg-white border-2 border-yellow-200 rounded-xl p-4 sm:p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs sm:text-sm font-medium text-yellow-600">Pending</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-yellow-700 mt-1">{{ pending_count }}</p>
+                </div>
+                <div class="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                    <i class="ri-time-line text-2xl text-yellow-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inactive Sessions -->
+        <div class="bg-white border-2 border-red-200 rounded-xl p-4 sm:p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs sm:text-sm font-medium text-red-600">Inactive</p>
+                    <p class="text-2xl sm:text-3xl font-bold text-red-700 mt-1">{{ inactive_count }}</p>
+                </div>
+                <div class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
+                    <i class="ri-close-circle-line text-2xl text-red-600"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sessions List -->
+    {% if all_sessions %}
+    <div class="bg-white rounded-2xl shadow-lg border border-neutral-200 overflow-hidden">
+        <!-- Table Header -->
+        <div class="bg-gradient-to-r from-neutral-50 to-neutral-100 px-4 sm:px-6 py-4 border-b border-neutral-200">
+            <h2 class="text-base sm:text-lg font-semibold text-neutral-800">All Sessions</h2>
+        </div>
+
+        <!-- Desktop Table View -->
+        <div class="hidden lg:block overflow-x-auto">
+            <table class="min-w-full divide-y divide-neutral-200">
+                <thead class="bg-neutral-50">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">Session Name</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">Phone Number</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">Connected</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">Created</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-neutral-600 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-neutral-200">
+                    {% for session in all_sessions %}
+                    <tr class="hover:bg-neutral-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <i class="ri-smartphone-line text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-neutral-800">{{ session.session_name }}</p>
+                                    <p class="text-xs text-neutral-500">ID: {{ session.session_id }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-neutral-800">
+                                {{ session.connected_phone_number|default:session.phone_number|default:"—" }}
+                            </p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if session.status == 'connected' %}
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-200">
+                                <i class="ri-checkbox-circle-fill mr-1"></i>Connected
+                            </span>
+                            {% elif session.status == 'pending' or session.status == 'connecting' %}
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200">
+                                <i class="ri-time-line mr-1"></i>Pending
+                            </span>
+                            {% elif session.status == 'disconnected' %}
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-200">
+                                <i class="ri-close-circle-fill mr-1"></i>Disconnected
+                            </span>
+                            {% else %}
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full bg-neutral-100 text-neutral-700 border border-neutral-200">
+                                <i class="ri-information-line mr-1"></i>{{ session.get_status_display }}
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
+                            {% if session.connected_at %}
+                                {{ session.connected_at|date:"M d, Y" }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-600">
+                            {{ session.created_at|date:"M d, Y" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
+                                {% if session.status == 'connected' %}
+                                <form method="POST" action="{% url 'whatsappapi:disconnect_session' session.id %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                            onclick="return confirm('Disconnect this session?')"
+                                            class="px-3 py-1.5 bg-orange-100 text-orange-700 border border-orange-200 rounded-lg hover:bg-orange-200 font-medium text-xs inline-flex items-center">
+                                        <i class="ri-link-unlink mr-1"></i>Disconnect
+                                    </button>
+                                </form>
+                                {% elif session.status == 'pending' or session.status == 'connecting' %}
+                                <a href="{% url 'whatsappapi:connect_session' session.id %}" 
+                                   class="px-3 py-1.5 bg-blue-100 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-200 font-medium text-xs inline-flex items-center">
+                                    <i class="ri-qr-code-line mr-1"></i>View QR
+                                </a>
+                                {% endif %}
+                                
+                                <form method="POST" action="{% url 'whatsappapi:delete_session' session.id %}" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                            onclick="return confirm('Delete this session permanently? This cannot be undone.')"
+                                            class="px-3 py-1.5 bg-red-100 text-red-700 border border-red-200 rounded-lg hover:bg-red-200 font-medium text-xs inline-flex items-center">
+                                        <i class="ri-delete-bin-line mr-1"></i>Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mobile Card View -->
+        <div class="lg:hidden divide-y divide-neutral-200">
+            {% for session in all_sessions %}
+            <div class="p-4 sm:p-5 hover:bg-neutral-50 transition-colors">
+                <!-- Session Header -->
+                <div class="flex items-start gap-3 mb-3">
+                    <div class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <i class="ri-smartphone-line text-blue-600 text-xl"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-semibold text-neutral-800 truncate">{{ session.session_name }}</h3>
+                        <p class="text-xs text-neutral-500 truncate">ID: {{ session.session_id }}</p>
+                    </div>
+                    {% if session.status == 'connected' %}
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-200 flex-shrink-0">
+                        <i class="ri-checkbox-circle-fill"></i>
+                    </span>
+                    {% elif session.status == 'pending' or session.status == 'connecting' %}
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700 border border-yellow-200 flex-shrink-0">
+                        <i class="ri-time-line"></i>
+                    </span>
+                    {% elif session.status == 'disconnected' %}
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700 border border-red-200 flex-shrink-0">
+                        <i class="ri-close-circle-fill"></i>
+                    </span>
+                    {% endif %}
+                </div>
+
+                <!-- Session Details -->
+                <div class="grid grid-cols-2 gap-3 mb-3 text-xs">
+                    <div>
+                        <p class="text-neutral-500 mb-1">Phone Number</p>
+                        <p class="font-medium text-neutral-800">
+                            {{ session.connected_phone_number|default:session.phone_number|default:"—" }}
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-neutral-500 mb-1">Created</p>
+                        <p class="font-medium text-neutral-800">{{ session.created_at|date:"M d, Y" }}</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-2">
+                    {% if session.status == 'connected' %}
+                    <form method="POST" action="{% url 'whatsappapi:disconnect_session' session.id %}" class="flex-1">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                onclick="return confirm('Disconnect this session?')"
+                                class="w-full px-3 py-2 bg-orange-100 text-orange-700 border border-orange-200 rounded-lg hover:bg-orange-200 font-medium text-xs inline-flex items-center justify-center">
+                            <i class="ri-link-unlink mr-1"></i>Disconnect
+                        </button>
+                    </form>
+                    {% elif session.status == 'pending' or session.status == 'connecting' %}
+                    <a href="{% url 'whatsappapi:connect_session' session.id %}" 
+                       class="flex-1 px-3 py-2 bg-blue-100 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-200 font-medium text-xs inline-flex items-center justify-center">
+                        <i class="ri-qr-code-line mr-1"></i>View QR
+                    </a>
+                    {% endif %}
+                    
+                    <form method="POST" action="{% url 'whatsappapi:delete_session' session.id %}" class="flex-1">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                onclick="return confirm('Delete this session permanently?')"
+                                class="w-full px-3 py-2 bg-red-100 text-red-700 border border-red-200 rounded-lg hover:bg-red-200 font-medium text-xs inline-flex items-center justify-center">
+                            <i class="ri-delete-bin-line mr-1"></i>Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="bg-white rounded-2xl shadow-lg border-2 border-dashed border-neutral-300 p-8 sm:p-12 text-center">
+        <div class="h-20 w-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="ri-smartphone-line text-4xl text-neutral-400"></i>
+        </div>
+        <h3 class="text-lg sm:text-xl font-semibold text-neutral-800 mb-2">No Sessions Found</h3>
+        <p class="text-sm sm:text-base text-neutral-600 mb-6">Create your first WhatsApp session to start sending campaigns</p>
+        <a href="{% url 'whatsappapi:dashboard' %}" 
+           class="inline-flex items-center px-6 py-3 bg-blue-100 text-blue-700 border border-blue-200 rounded-xl hover:bg-blue-200 font-semibold shadow-md">
+            <i class="ri-add-line mr-2 text-lg"></i>
+            Create Session
+        </a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

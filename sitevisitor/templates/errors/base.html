@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>{% block title %}WA Campaign Sender{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}WA Campaign Sender - Leading WhatsApp marketing platform{% endblock %}">
+  <meta name="robots" content="{% block robots %}noindex, nofollow{% endblock %}">
+  <link rel="canonical" href="https://wacampaignsender.com{{ request.get_full_path }}">
+
+  <!-- Tailwind (Stand-alone CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts & Remix Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet"/>
+
+  <!-- Global animation / utilities -->
+  <style>
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-10px); }
+    }
+    .float-animation { animation: float 3s ease-in-out infinite; }
+  </style>
+
+  <!-- Custom Tailwind config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#25D366', secondary: '#128C7E' },
+          borderRadius: { button: '8px' }
+        }
+      }
+    }
+  </script>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+  <!-- ===== Main Page Body ===== -->
+  {% block content %}{% endblock %}
+
+  <!-- ===== Global Footer ===== -->
+  <footer class="py-6 border-t border-gray-200">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <span class="text-gray-500 text-sm mb-4 md:mb-0">
+          © 2025 WA Campaign Sender. All rights reserved.
+        </span>
+
+        <div class="flex space-x-4">
+          <a href="/contact/" class="text-gray-500 hover:text-primary transition-colors">Contact</a>
+          <a href="/" class="text-gray-500 hover:text-primary transition-colors">Home</a>
+          <a href="/blogs/" class="text-gray-500 hover:text-primary transition-colors">Blog</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

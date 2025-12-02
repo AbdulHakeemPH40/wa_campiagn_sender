@@ -1,0 +1,316 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static 'image/title.png' %}">
+    <title>{% block title %}User Panel{% endblock %} - WA Campaign Sender</title>
+    <!-- Prevent search engine indexing -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Loading Animations CSS -->
+    <link rel="stylesheet" href="{% static 'css/loading-animations.css' %}">
+    <!-- User Panel Professional Styles -->
+    <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0078d4',
+                        secondary: '#106ebe',
+                        accent: '#005a9e',
+                        neutral: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '2px',
+                        DEFAULT: '4px',
+                        'md': '6px',
+                        'lg': '8px',
+                        'xl': '12px',
+                        '2xl': '16px',
+                        'full': '9999px'
+                    },
+                    boxShadow: {
+                        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+                        'elevated': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .sidebar-link {
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            margin: 2px 8px;
+        }
+        .sidebar-link:hover {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        .sidebar-link.active {
+            background-color: #0078d4;
+            color: white;
+            font-weight: 500;
+        }
+        .sidebar-link.active i {
+            color: white;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+        }
+        .btn-primary {
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #106ebe;
+            transform: translateY(-1px);
+        }
+        
+        /* Enhanced form styling */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="number"],
+        input[type="tel"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            background-color: white;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #0078d4;
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+        }
+        
+        /* Smooth page transitions */
+        body {
+            transition: opacity 0.15s ease-in-out;
+        }
+        
+        /* Loading spinner animation */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-neutral-50 font-sans">
+<!-- Messages Container -->
+<div id="messages-container" class="fixed top-20 right-4 z-[100] w-auto max-w-xs sm:max-w-sm space-y-3">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="relative flex items-start p-4 rounded-lg shadow-xl 
+            {% if message.tags == 'debug' %} bg-gray-100 border border-gray-400 text-gray-800 {% endif %}
+            {% if message.tags == 'info' %} bg-blue-100 border border-blue-400 text-blue-800 {% endif %}
+            {% if message.tags == 'success' %} bg-green-100 border border-green-400 text-green-800 {% endif %}
+            {% if message.tags == 'warning' %} bg-yellow-100 border border-yellow-400 text-yellow-800 {% endif %}
+            {% if message.tags == 'error' %} bg-red-100 border border-red-400 text-red-800 {% endif %}"
+            role="alert">
+            <div class="flex-shrink-0 pt-0.5">
+                {% if message.tags == 'success' %}<i class="ri-checkbox-circle-fill text-green-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'info' %}<i class="ri-information-fill text-blue-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'warning' %}<i class="ri-error-warning-fill text-yellow-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'error' %}<i class="ri-close-circle-fill text-red-500 text-xl"></i>{% endif %}
+                {% if message.tags == 'debug' %}<i class="ri-bug-fill text-gray-500 text-xl"></i>{% endif %}
+            </div>
+            <div class="ml-3 flex-grow">
+                <p class="text-sm font-medium">{{ message }}</p>
+            </div>
+            <div class="ml-auto pl-3">
+                <div class="-mx-1.5 -my-1.5">
+                    <button type="button" 
+                            class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                            {% if message.tags == 'debug' %} text-gray-500 hover:bg-gray-200 focus:ring-offset-gray-100 focus:ring-gray-600 {% endif %}
+                            {% if message.tags == 'info' %} text-blue-500 hover:bg-blue-200 focus:ring-offset-blue-100 focus:ring-blue-600 {% endif %}
+                            {% if message.tags == 'success' %} text-green-500 hover:bg-green-200 focus:ring-offset-green-100 focus:ring-green-600 {% endif %}
+                            {% if message.tags == 'warning' %} text-yellow-500 hover:bg-yellow-200 focus:ring-offset-yellow-100 focus:ring-yellow-600 {% endif %}
+                            {% if message.tags == 'error' %} text-red-500 hover:bg-red-200 focus:ring-offset-red-100 focus:ring-red-600 {% endif %}"
+                            onclick="this.closest('.relative.flex.items-start').remove();">
+                        <span class="sr-only">Dismiss</span>
+                        <i class="ri-close-line text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+    <div class="flex h-screen bg-neutral-50 overflow-hidden">
+        <!-- Mobile Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden transition-opacity duration-300 lg:hidden"></div>
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-64 bg-white border-r border-neutral-200 fixed inset-y-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 lg:static lg:inset-auto">
+            <div class="px-6 py-8">
+                <div class="flex items-center">
+                    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender Logo" class="h-8 mr-3">
+                    <span class="text-lg font-semibold text-neutral-800">WA Campaign Sender</span>
+                </div>
+            </div>
+            <nav class="px-2">
+                <div class="space-y-1">
+                    <a href="{% url 'userpanel:dashboard' %}" class="sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="{% url 'userpanel:orders' %}" class="sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium">
+                        <i class="ri-file-list-3-line mr-3 text-lg"></i>
+                        <span>Orders</span>
+                    </a>
+                    <a href="{% url 'userpanel:pricing' %}" class="sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium">
+                        <i class="ri-price-tag-3-line mr-3 text-lg"></i>
+                        <span>Pricing</span>
+                    </a>
+                    <a href="{% url 'userpanel:addresses' %}" class="sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium">
+                        <i class="ri-map-pin-line mr-3 text-lg"></i>
+                        <span>Addresses</span>
+                    </a>
+                    <a href="{% url 'whatsappapi:dashboard' %}" class="sidebar-link flex items-center px-4 py-3 text-blue-700 text-sm font-medium bg-gradient-to-r from-blue-300 to-sky-100 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200">
+                        <i class="ri-whatsapp-line mr-3 text-lg text-green-700"></i>
+                        <span>🚀 WhatsApp API</span>
+                        <i class="ri-arrow-right-s-line ml-auto text-lg"></i>
+                    </a>
+                    <a href="{% url 'userpanel:user_guide' %}" class="sidebar-link flex items-center px-4 py-3 text-blue-700 text-sm font-medium bg-gradient-to-r from-blue-300 to-sky-100 rounded-lg hover:shadow-md transition-all duration-200">
+                        <i class="ri-book-open-line mr-3 text-lg text-blue-700"></i>
+                        <span>📖 User Guide</span>
+                    </a>
+                    <a href="{% url 'userpanel:settings' %}" class="sidebar-link flex items-center px-4 py-3 text-neutral-700 text-sm font-medium">
+                        <i class="ri-settings-3-line mr-3 text-lg"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                <div class="border-t border-neutral-200 my-6 mx-4"></div>
+                <div class="px-2">
+                    <a href="{% url 'userpanel:logout' %}" class="sidebar-link flex items-center px-4 py-3 text-neutral-600 text-sm font-medium hover:bg-red-50 hover:text-red-700">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Sign out</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main content -->
+        <div class="flex-1 flex flex-col overflow-hidden w-full lg:pl-0">
+            <!-- Header -->
+            <header class="flex justify-between items-center px-6 py-4 bg-white border-b border-neutral-200">
+                <!-- Mobile menu button -->
+                <button id="mobileMenuBtn" class="lg:hidden text-neutral-600 focus:outline-none mr-4">
+                    <i class="ri-menu-line text-xl"></i>
+                </button>
+                <div class="flex-1">
+                    <h1 class="text-xl font-semibold text-neutral-900 truncate">{% block page_title %}Dashboard{% endblock %}</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-neutral-600 hidden md:inline font-medium">{{ request.user.full_name }}</span>
+                    <div class="relative">
+                        {% if request.user.profile.profile_picture %}
+                            <img class="h-8 w-8 rounded-full object-cover border border-neutral-200" src="{{ request.user.profile.profile_picture.url }}" alt="{{ request.user.full_name }}'s avatar">
+                        {% else %}
+                            <div class="h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
+                                <span>{{ request.user.full_name|slice:":1"|upper }}</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-neutral-50 p-6">
+                <div class="max-w-7xl mx-auto">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+    <script>
+        // Mobile sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            
+            function toggleSidebar() {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebarOverlay.classList.toggle('hidden');
+                document.body.classList.toggle('overflow-hidden');
+            }
+            
+            mobileMenuBtn.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', toggleSidebar);
+            
+            // Close mobile menu when clicking a link (for navigation)
+            const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 1024) { // lg breakpoint
+                        toggleSidebar();
+                    }
+                });
+            });
+            
+            // Highlight current page in sidebar
+            const currentPath = window.location.pathname;
+            sidebarLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+    <script src="{% static 'js/timezone_detector.js' %}"></script>
+    
+    <!-- Loading Manager JavaScript -->
+    <script src="{% static 'js/loading-manager.js' %}"></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

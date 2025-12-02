@@ -1,0 +1,45 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}Blog - WA Campaign Sender{% endblock %}
+
+{% block extra_head %}
+<!-- Preload first 3 blog images -->
+{% for post in posts|slice:":3" %}
+<link rel="preload" href="{% static post.image %}" as="image">
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+<section class="py-12 md:py-20 bg-gray-50">
+    <div class="container mx-auto px-4 md:px-6">
+        <div class="text-center mb-12 md:mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">The WA Campaign Sender Playbook</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Your expert guide to smarter, safer, and more effective WhatsApp marketing.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for post in posts %}
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                <div class="relative w-full h-48 bg-gray-100">
+                    <img src="{% static post.image %}" 
+                         alt="{{ post.title }}" 
+                         class="w-full h-48 object-cover transition-opacity duration-300" 
+                         loading="{% if forloop.counter <= 3 %}eager{% else %}lazy{% endif %}" 
+                         decoding="async"
+                         width="400" 
+                         height="192"
+                         onload="this.style.opacity='1'"
+                         style="opacity: 0; background-color: #f3f4f6;">
+                </div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-3">{{ post.title }}</h2>
+                    <p class="text-gray-600 text-sm mb-4 flex-grow">{{ post.description }}</p>
+                    <a href="{% url 'sitevisitor:'|add:post.url_name %}" class="mt-auto inline-block text-primary hover:text-primary-dark font-medium transition-colors">Read More &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

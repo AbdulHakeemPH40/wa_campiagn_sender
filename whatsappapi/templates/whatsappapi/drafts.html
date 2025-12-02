@@ -1,0 +1,346 @@
+{% extends 'whatsappapi/base.html' %}
+{% load static %}
+
+{% block title %}Saved Drafts{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-neutral-50 via-purple-50 to-pink-50 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-neutral-800">Saved Drafts</h1>
+                <p class="text-neutral-600 mt-1 text-sm sm:text-base">Manage your campaign templates and drafts</p>
+            </div>
+            <a href="{% url 'whatsappapi:send_campaign' %}" class="w-full sm:w-auto px-5 py-3 bg-green-100 text-green-700 border border-green-200 rounded-xl hover:bg-green-200 font-semibold shadow-md inline-flex items-center justify-center">
+                <i class="ri-add-line mr-2"></i>
+                Create New Campaign
+            </a>
+        </div>
+
+        {% if drafts %}
+        <!-- Drafts Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {% for draft in drafts %}
+            <div class="bg-white rounded-2xl shadow-md border border-purple-200 overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-1">
+                <!-- Card Header -->
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 px-4 sm:px-5 py-3 sm:py-4 border-b border-purple-200">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-neutral-800 text-base sm:text-lg mb-1 break-words">{{ draft.name }}</h3>
+                            <p class="text-xs text-neutral-500">
+                                <i class="ri-time-line mr-1"></i>
+                                Updated {{ draft.updated_at|timesince }} ago
+                            </p>
+                        </div>
+                        <div class="relative">
+                            <button onclick="toggleDraftMenu(event, {{ draft.id }})" class="p-2 hover:bg-purple-100 rounded-lg transition-colors">
+                                <i class="ri-more-2-fill text-neutral-600 text-xl"></i>
+                            </button>
+                            <!-- Dropdown Menu -->
+                            <div id="draft-menu-{{ draft.id }}" class="hidden absolute right-0 mt-1 w-48 bg-white rounded-xl shadow-2xl border border-neutral-200 z-50">
+                                <a href="{% url 'whatsappapi:send_campaign' %}?draft={{ draft.id }}" class="w-full text-left px-4 py-2.5 text-sm hover:bg-blue-50 hover:text-blue-700 flex items-center rounded-t-xl border-b border-neutral-100">
+                                    <i class="ri-edit-line mr-2"></i>Edit & Send
+                                </a>
+                                <button onclick="viewDraft({{ draft.id }})" class="w-full text-left px-4 py-2.5 text-sm hover:bg-green-50 hover:text-green-700 flex items-center border-b border-neutral-100">
+                                    <i class="ri-eye-line mr-2"></i>View Details
+                                </button>
+                                <button onclick="duplicateDraft({{ draft.id }})" class="w-full text-left px-4 py-2.5 text-sm hover:bg-purple-50 hover:text-purple-700 flex items-center border-b border-neutral-100">
+                                    <i class="ri-file-copy-line mr-2"></i>Duplicate
+                                </button>
+                                <button onclick="deleteDraft({{ draft.id }})" class="w-full text-left px-4 py-2.5 text-sm hover:bg-red-50 hover:text-red-700 flex items-center rounded-b-xl">
+                                    <i class="ri-delete-bin-line mr-2"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="p-4 sm:p-5">
+                    <!-- Message Preview -->
+                    <div class="mb-4">
+                        <label class="text-xs font-semibold text-neutral-500 uppercase mb-2 block">Message</label>
+                        <div class="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                            <p class="text-sm text-neutral-700 line-clamp-4 whitespace-pre-wrap">{{ draft.message }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Meta Info -->
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-neutral-500">Contact List:</span>
+                            <span class="font-semibold text-neutral-800">
+                                {% if draft.contact_list %}
+                                    {{ draft.contact_list.name }}
+                                {% else %}
+                                    <span class="text-neutral-400">Not selected</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-neutral-500">Recipients:</span>
+                            <span class="font-semibold text-neutral-800">
+                                {% if draft.contact_list %}
+                                    {{ draft.contact_list.total_contacts }} contacts
+                                {% else %}
+                                    <span class="text-neutral-400">-</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-neutral-500">Attachment:</span>
+                            <span class="font-semibold text-neutral-800">
+                                {% if draft.attachment %}
+                                    <i class="ri-attachment-line text-purple-600"></i>
+                                    {{ draft.attachment_type|title }}
+                                {% else %}
+                                    <span class="text-neutral-400">None</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-neutral-500">Status:</span>
+                            <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded-full font-semibold">
+                                {{ draft.status|title }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Footer -->
+                <div class="bg-neutral-50 px-4 sm:px-5 py-3 border-t border-neutral-200">
+                    <div class="flex items-center justify-between">
+                        <button onclick="viewDraft({{ draft.id }})" class="text-xs text-neutral-600 hover:text-neutral-800 font-medium flex items-center">
+                            <i class="ri-eye-line mr-1"></i>
+                            View
+                        </button>
+                        <a href="{% url 'whatsappapi:send_campaign' %}?draft={{ draft.id }}" class="text-xs text-green-600 hover:text-green-800 font-semibold flex items-center">
+                            Edit & Send
+                            <i class="ri-arrow-right-line ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination (if needed) -->
+        <div class="mt-8 text-center">
+            <p class="text-sm text-neutral-500">Showing {{ drafts.count }} draft{{ drafts.count|pluralize }}</p>
+        </div>
+
+        {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
+            <div class="h-24 w-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="ri-draft-line text-5xl text-purple-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-neutral-800 mb-3">No Drafts Yet</h3>
+            <p class="text-neutral-600 mb-6 max-w-md mx-auto">
+                Start creating campaign drafts to save your message templates and contact lists for later use.
+            </p>
+            <a href="{% url 'whatsappapi:send_campaign' %}" class="inline-flex items-center px-5 py-3 bg-purple-100 text-purple-700 border border-purple-200 rounded-xl hover:bg-purple-200 font-semibold shadow-md">
+                <i class="ri-add-line mr-2"></i>
+                Create First Draft
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- View Draft Modal -->
+<div id="viewDraftModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-y-auto">
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-5 border-b border-purple-200 sticky top-0">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                    <i class="ri-eye-line mr-2 text-purple-600"></i>
+                    Draft Details
+                </h2>
+                <button onclick="closeViewModal()" class="text-neutral-400 hover:text-neutral-600">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div class="p-6 space-y-5">
+            <div>
+                <label class="text-sm font-bold text-neutral-700 mb-2 block">Campaign Name</label>
+                <p id="viewName" class="text-neutral-800 text-lg"></p>
+            </div>
+            <div>
+                <label class="text-sm font-bold text-neutral-700 mb-2 block">Message Content</label>
+                <div class="bg-neutral-50 rounded-xl p-4 border border-neutral-200">
+                    <p id="viewMessage" class="text-neutral-800 whitespace-pre-wrap"></p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm font-bold text-neutral-700 mb-2 block">Contact List</label>
+                    <p id="viewContacts" class="text-neutral-800"></p>
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-neutral-700 mb-2 block">Status</label>
+                    <span id="viewStatus" class="inline-block px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold"></span>
+                </div>
+            </div>
+            <div>
+                <label class="text-sm font-bold text-neutral-700 mb-2 block">Created</label>
+                <p id="viewCreated" class="text-neutral-600 text-sm"></p>
+            </div>
+        </div>
+        <div class="bg-neutral-50 px-6 py-4 border-t border-neutral-200 flex justify-end space-x-3">
+            <button onclick="closeViewModal()" class="px-6 py-2.5 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 font-semibold">
+                Close
+            </button>
+            <a id="viewEditBtn" href="#" class="px-6 py-2.5 bg-green-100 text-green-700 border border-green-200 rounded-xl hover:bg-green-200 font-semibold">
+                Edit & Send
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteDraftModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <div class="bg-gradient-to-r from-red-50 to-rose-50 px-6 py-5 border-b border-red-200 rounded-t-2xl">
+            <h2 class="text-xl font-bold text-neutral-800 flex items-center">
+                <i class="ri-delete-bin-line text-red-600 mr-2 text-2xl"></i>
+                Delete Draft
+            </h2>
+        </div>
+        <div class="p-6">
+            <p class="text-neutral-700 mb-6">Are you sure you want to delete this draft? This action cannot be undone.</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeDeleteModal()" class="px-6 py-2.5 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 font-semibold">
+                    Cancel
+                </button>
+                <button onclick="confirmDeleteDraft()" class="px-6 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 font-semibold">
+                    Delete Draft
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Toast -->
+<div id="successToast" class="hidden fixed top-5 right-5 z-[100] max-w-sm">
+    <div class="bg-white rounded-xl shadow-2xl border-l-4 border-green-500 p-4 flex items-start space-x-3 animate-slide-in">
+        <div class="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <i class="ri-check-line text-2xl text-green-600"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="font-semibold text-neutral-800" id="toastTitle">Success!</h3>
+            <p class="text-sm text-neutral-600" id="toastMessage">Action completed successfully</p>
+        </div>
+        <button onclick="closeToast()" class="text-neutral-400 hover:text-neutral-600">
+            <i class="ri-close-line text-xl"></i>
+        </button>
+    </div>
+</div>
+
+<style>
+@keyframes slide-in {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in { animation: slide-in 0.3s ease-out; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let deleteDraftId = null;
+
+// Toggle dropdown menu
+function toggleDraftMenu(event, draftId) {
+    event.stopPropagation();
+    const menu = document.getElementById(`draft-menu-${draftId}`);
+    
+    // Close all other menus
+    document.querySelectorAll('[id^="draft-menu-"]').forEach(m => {
+        if (m.id !== `draft-menu-${draftId}`) m.classList.add('hidden');
+    });
+    
+    menu.classList.toggle('hidden');
+}
+
+// Close menus on outside click
+document.addEventListener('click', function() {
+    document.querySelectorAll('[id^="draft-menu-"]').forEach(m => m.classList.add('hidden'));
+});
+
+// View draft details
+function viewDraft(draftId) {
+    fetch(`/whatsappapi/drafts/${draftId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('viewName').textContent = data.name;
+            document.getElementById('viewMessage').textContent = data.message;
+            document.getElementById('viewContacts').textContent = data.contact_list_name || 'Not selected';
+            document.getElementById('viewStatus').textContent = data.status || 'Draft';
+            document.getElementById('viewEditBtn').href = `/whatsappapi/send-campaign/?draft=${draftId}`;
+            document.getElementById('viewDraftModal').classList.remove('hidden');
+        })
+        .catch(error => {
+            showToast('Error', 'Failed to load draft details', 'error');
+        });
+}
+
+function closeViewModal() {
+    document.getElementById('viewDraftModal').classList.add('hidden');
+}
+
+// Delete draft
+function deleteDraft(draftId) {
+    deleteDraftId = draftId;
+    document.getElementById('deleteDraftModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteDraftModal').classList.add('hidden');
+    deleteDraftId = null;
+}
+
+function confirmDeleteDraft() {
+    if (!deleteDraftId) return;
+    
+    fetch(`/whatsappapi/drafts/${deleteDraftId}/delete/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeDeleteModal();
+            showToast('Deleted!', 'Draft deleted successfully');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('Error', data.error || 'Failed to delete draft', 'error');
+        }
+    })
+    .catch(error => {
+        showToast('Error', error.message, 'error');
+    });
+}
+
+// Duplicate draft
+function duplicateDraft(draftId) {
+    showToast('Coming Soon', 'Duplicate feature will be available soon', 'info');
+}
+
+// Toast notification
+function showToast(title, message, type = 'success') {
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastMessage').textContent = message;
+    document.getElementById('successToast').classList.remove('hidden');
+    setTimeout(() => closeToast(), 3000);
+}
+
+function closeToast() {
+    document.getElementById('successToast').classList.add('hidden');
+}
+</script>
+{% endblock %}

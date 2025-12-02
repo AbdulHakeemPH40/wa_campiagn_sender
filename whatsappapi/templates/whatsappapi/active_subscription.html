@@ -1,0 +1,234 @@
+{% extends 'whatsappapi/base.html' %}
+{% block title %}Active Subscription{% endblock %}
+{% block content %}
+<section class="px-6 py-8">
+  <!-- Header -->
+  <div class="mb-8 flex items-center gap-2">
+    <i class="ri-vip-crown-2-line text-primary text-2xl"></i>
+    <h1 class="text-2xl font-bold text-neutral-900">Active Subscription</h1>
+  </div>
+
+  <!-- Current Plan Card -->
+  <div class="grid md:grid-cols-3 gap-6 mb-8">
+    <div class="md:col-span-2">
+      <div class="bg-gradient-to-br from-primary/10 to-green-500/10 rounded-2xl border-2 border-primary p-8">
+        <div class="flex items-start justify-between mb-6">
+          <div>
+            <p class="text-sm text-neutral-600 font-semibold mb-2">Current Plan</p>
+            <h2 class="text-3xl font-black text-neutral-900">Professional Plan</h2>
+          </div>
+          <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-bold">Active</span>
+        </div>
+
+        <!-- Plan Details -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8 pt-6 border-t border-neutral-200">
+          <div>
+            <p class="text-xs text-neutral-600 font-semibold mb-1">Monthly Cost</p>
+            <p class="text-3xl font-black text-neutral-900">$29</p>
+            <p class="text-sm text-neutral-600 mt-1">Renews on Dec 22, 2025</p>
+          </div>
+          <div>
+            <p class="text-xs text-neutral-600 font-semibold mb-1">Active Sessions</p>
+            <p class="text-3xl font-black text-neutral-900">5</p>
+            <p class="text-sm text-neutral-600 mt-1">Can add 5 more sessions</p>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="mb-6">
+          <div class="flex justify-between items-center mb-2">
+            <p class="text-xs text-neutral-600 font-semibold">Session Usage</p>
+            <p class="text-xs text-neutral-600 font-semibold">5 / 10 Used</p>
+          </div>
+          <div class="w-full bg-neutral-200 rounded-full h-2">
+            <div class="bg-gradient-to-r from-primary to-green-500 h-2 rounded-full" style="width: 50%;"></div>
+          </div>
+        </div>
+
+        <!-- Features List -->
+        <div class="grid md:grid-cols-2 gap-3">
+          <div class="flex items-center gap-2">
+            <i class="ri-check-circle-fill text-green-600"></i>
+            <span class="text-sm text-neutral-700">Unlimited messages</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="ri-check-circle-fill text-green-600"></i>
+            <span class="text-sm text-neutral-700">Priority support</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="ri-check-circle-fill text-green-600"></i>
+            <span class="text-sm text-neutral-700">Advanced analytics</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="ri-check-circle-fill text-green-600"></i>
+            <span class="text-sm text-neutral-700">API access</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Card -->
+    <div>
+      <div class="bg-white rounded-2xl border border-neutral-200 p-6 h-full flex flex-col justify-between">
+        <div class="space-y-3 mb-6">
+          <button class="w-full px-4 py-3 bg-gradient-to-r from-primary to-green-500 text-white font-bold rounded-xl hover:shadow-lg transition-all transform hover:scale-105">
+            <i class="ri-upgrade-cloud-line mr-2"></i>
+            Upgrade Plan
+          </button>
+          <button class="w-full px-4 py-3 border-2 border-primary text-primary font-bold rounded-xl hover:bg-primary/5 transition-colors">
+            <i class="ri-add-circle-line mr-2"></i>
+            Add Session
+          </button>
+          <button class="w-full px-4 py-3 border-2 border-neutral-200 text-neutral-700 font-bold rounded-xl hover:bg-neutral-50 transition-colors">
+            <i class="ri-edit-line mr-2"></i>
+            Update Billing
+          </button>
+        </div>
+
+        <!-- Danger Zone -->
+        <button class="w-full px-4 py-3 border-2 border-red-200 text-red-600 font-bold rounded-xl hover:bg-red-50 transition-colors">
+          <i class="ri-close-circle-line mr-2"></i>
+          Cancel Subscription
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Sessions -->
+  <div class="bg-white rounded-2xl border border-neutral-200 overflow-hidden mb-8">
+    <div class="px-6 py-4 border-b border-neutral-200 bg-neutral-50">
+      <h3 class="text-lg font-bold text-neutral-900">Additional Sessions</h3>
+    </div>
+    <div class="p-6">
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Session 1 -->
+        <div class="bg-gradient-to-br from-blue-50 to-primary/5 rounded-xl border border-primary/10 p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <p class="text-sm text-neutral-600 font-semibold">Extra Session 1</p>
+              <p class="text-2xl font-bold text-neutral-900">$10/month</p>
+            </div>
+            <span class="text-xl">💬</span>
+          </div>
+          <p class="text-sm text-neutral-600 mb-4">Added on Nov 15, 2025</p>
+          <button class="w-full px-3 py-2 border border-primary text-primary font-bold rounded-lg text-sm hover:bg-primary/5 transition-colors">
+            Remove
+          </button>
+        </div>
+
+        <!-- Session 2 -->
+        <div class="bg-gradient-to-br from-emerald-50 to-green-500/5 rounded-xl border border-green-500/10 p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <p class="text-sm text-neutral-600 font-semibold">Extra Session 2</p>
+              <p class="text-2xl font-bold text-neutral-900">$10/month</p>
+            </div>
+            <span class="text-xl">💬</span>
+          </div>
+          <p class="text-sm text-neutral-600 mb-4">Added on Oct 22, 2025</p>
+          <button class="w-full px-3 py-2 border border-green-500 text-green-600 font-bold rounded-lg text-sm hover:bg-green-50 transition-colors">
+            Remove
+          </button>
+        </div>
+
+        <!-- Add More -->
+        <div class="bg-white rounded-xl border-2 border-dashed border-neutral-300 p-6 flex flex-col items-center justify-center hover:border-primary transition-colors cursor-pointer group">
+          <div class="w-12 h-12 rounded-full bg-neutral-100 group-hover:bg-primary/10 flex items-center justify-center mb-3 transition-colors">
+            <i class="ri-add-line text-2xl text-neutral-600 group-hover:text-primary"></i>
+          </div>
+          <p class="text-sm font-bold text-neutral-900">Add Session</p>
+          <p class="text-xs text-neutral-600 mt-1">$10 / month</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Billing History -->
+  <div class="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+    <div class="px-6 py-4 border-b border-neutral-200 bg-neutral-50">
+      <h3 class="text-lg font-bold text-neutral-900">Billing History</h3>
+    </div>
+    <div class="p-6 overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="text-left text-neutral-600 border-b">
+            <th class="py-3 pr-6">Date</th>
+            <th class="py-3 pr-6">Description</th>
+            <th class="py-3 pr-6">Amount</th>
+            <th class="py-3 pr-6">Status</th>
+            <th class="py-3 pr-6">Invoice</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b hover:bg-neutral-50">
+            <td class="py-3 pr-6">Nov 22, 2025</td>
+            <td class="py-3 pr-6">Professional Plan - Monthly</td>
+            <td class="py-3 pr-6">$29.00</td>
+            <td class="py-3 pr-6"><span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Paid</span></td>
+            <td class="py-3 pr-6"><a href="#" class="text-primary hover:underline font-semibold">INV-001 ↓</a></td>
+          </tr>
+          <tr class="border-b hover:bg-neutral-50">
+            <td class="py-3 pr-6">Oct 22, 2025</td>
+            <td class="py-3 pr-6">Professional Plan - Monthly</td>
+            <td class="py-3 pr-6">$29.00</td>
+            <td class="py-3 pr-6"><span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Paid</span></td>
+            <td class="py-3 pr-6"><a href="#" class="text-primary hover:underline font-semibold">INV-002 ↓</a></td>
+          </tr>
+          <tr class="border-b hover:bg-neutral-50">
+            <td class="py-3 pr-6">Sep 22, 2025</td>
+            <td class="py-3 pr-6">Professional Plan - Monthly</td>
+            <td class="py-3 pr-6">$29.00</td>
+            <td class="py-3 pr-6"><span class="px-2 py-1 text-xs rounded bg-green-100 text-green-700">Paid</span></td>
+            <td class="py-3 pr-6"><a href="#" class="text-primary hover:underline font-semibold">INV-003 ↓</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="mt-8 bg-neutral-50 rounded-2xl border border-neutral-200 p-8">
+    <h3 class="text-lg font-bold text-neutral-900 mb-6">Subscription Management</h3>
+    <div class="space-y-4">
+      <details class="bg-white rounded-lg border border-neutral-200 p-4 cursor-pointer">
+        <summary class="font-bold text-neutral-900 flex items-center justify-between">
+          How can I upgrade my plan?
+          <i class="ri-arrow-down-s-line text-neutral-600"></i>
+        </summary>
+        <p class="text-neutral-600 mt-3">Click on "Upgrade Plan" button above to see available upgrade options. Your new plan will be activated immediately.</p>
+      </details>
+
+      <details class="bg-white rounded-lg border border-neutral-200 p-4 cursor-pointer">
+        <summary class="font-bold text-neutral-900 flex items-center justify-between">
+          Can I add more sessions anytime?
+          <i class="ri-arrow-down-s-line text-neutral-600"></i>
+        </summary>
+        <p class="text-neutral-600 mt-3">Yes! You can add or remove sessions anytime. Changes will be reflected immediately and billing will be adjusted proportionally.</p>
+      </details>
+
+      <details class="bg-white rounded-lg border border-neutral-200 p-4 cursor-pointer">
+        <summary class="font-bold text-neutral-900 flex items-center justify-between">
+          What happens if I cancel?
+          <i class="ri-arrow-down-s-line text-neutral-600"></i>
+        </summary>
+        <p class="text-neutral-600 mt-3">Cancelling your subscription will stop recurring charges at the end of your billing cycle. You'll retain access until the cycle ends.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<script>
+// Details toggle animation
+document.querySelectorAll('details').forEach(detail => {
+  detail.addEventListener('toggle', function() {
+    const icon = this.querySelector('i');
+    if (this.open) {
+      icon.classList.add('rotate-180');
+    } else {
+      icon.classList.remove('rotate-180');
+    }
+  });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "admin_panel/base.html" %}
+{% block title %}Subscriptions | WA Broadcast Sender{% endblock %}
+{% block admin_content %}
+<div class="bg-white rounded-lg shadow p-6">
+    <h1 class="text-2xl font-bold mb-4 text-primary">Subscriptions</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">Start</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">End</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+            {% for subscription in subscriptions %}
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <a href="{% url 'admin_panel:subscription_detail' pk=subscription.pk %}" class="text-blue-600 hover:text-blue-900">
+                        {{ subscription.user }}
+                    </a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if subscription.plan %}
+                        {{ subscription.plan.name }}
+                    {% else %}
+                        {{ subscription.plan_label|default:"Free Trial" }}
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if subscription.end_date and subscription.end_date < now %}
+                        Expired
+                    {% else %}
+                        {{ subscription.status|capfirst }}
+                    {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">{{ subscription.created_at|date:"Y-m-d" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">{{ subscription.end_date|date:"Y-m-d" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    {% if subscription.status == 'active' %}
+                        <a href="{% url 'admin_panel:cancel_subscription' pk=subscription.pk %}" class="bg-red-500 hover:bg-red-700 text-white py-1 px-3 rounded text-xs font-medium">Cancel Subscription</a>
+                    {% elif subscription.status == 'cancelled' %}
+                        <span class="text-gray-500 text-xs">Cancelled</span>
+                    {% else %}
+                        <span class="text-gray-500 text-xs">{{ subscription.status|capfirst }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center py-4">No subscriptions found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        </div>
+<div class="mt-4">
+    <nav class="inline-flex items-center">
+        {% if subscriptions.has_previous %}
+            <a href="?page={{ subscriptions.previous_page_number }}" class="px-3 py-1 border rounded-l hover:bg-gray-200">&laquo;</a>
+        {% else %}
+            <span class="px-3 py-1 border rounded-l text-gray-400">&laquo;</span>
+        {% endif %}
+        {% for num in subscriptions.paginator.page_range %}
+            {% if num == subscriptions.number %}
+                <span class="px-3 py-1 border-t border-b bg-gray-200">{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}" class="px-3 py-1 border-t border-b hover:bg-gray-100">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if subscriptions.has_next %}
+            <a href="?page={{ subscriptions.next_page_number }}" class="px-3 py-1 border rounded-r hover:bg-gray-200">&raquo;</a>
+        {% else %}
+            <span class="px-3 py-1 border rounded-r text-gray-400">&raquo;</span>
+        {% endif %}
+    </nav>
+</div>
+</div>
+{% endblock %}

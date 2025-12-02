@@ -1,0 +1,61 @@
+{% extends "errors/base.html" %}
+{% load static %}
+
+{% block title %}429 – Too Many Requests | WA Campaign Sender{% endblock %}
+
+{% block content %}
+<div class="flex-1 flex flex-col items-center justify-center px-4 py-16">
+  <div class="w-full max-w-4xl flex flex-col items-center">
+
+    <!-- Logo -->
+    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender" class="h-16 mb-8">
+    <!-- Error headline -->
+    <h1 class="text-9xl font-bold text-primary mb-6">429</h1>
+
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-gray-800 mb-4">Rate Limit Reached</h2>
+      <p class="text-xl text-gray-600 mb-2">
+        You’ve hit the maximum number of requests for your current plan.
+      </p>
+      <p class="text-gray-500">
+        Upgrade to Pro for higher limits, or try again later.
+      </p>
+    </div>
+
+    <!-- Illustration -->
+    <div class="mb-12 float-animation relative w-64 h-64">
+      <div class="absolute inset-0 bg-primary/10 rounded-full"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-40 h-40 bg-primary/20 rounded-full flex items-center justify-center">
+          <div class="w-28 h-28 bg-primary rounded-full flex items-center justify-center">
+            <i class="ri-timer-flash-line text-white ri-3x"></i>
+          </div>
+        </div>
+      </div>
+      <div class="absolute -top-4 -right-4 w-12 h-12 bg-primary/30 rounded-full"></div>
+      <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-primary/20 rounded-full"></div>
+    </div>
+
+    <!-- Call-to-action buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-8">
+      <a href="{% url 'sitevisitor:home' %}#pricing"
+         class="bg-primary hover:bg-primary/90 text-white font-medium px-8 py-3 rounded-button
+                shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+        <i class="ri-vip-crown-line"></i> Go&nbsp;Pro&nbsp;Now
+      </a>
+
+      <a href="/contact/"
+         class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-8 py-3 rounded-button
+                shadow-md hover:shadow-lg transition-all flex items-center gap-2">
+        <i class="ri-customer-service-2-line"></i> Contact&nbsp;Support
+      </a>
+    </div>
+
+    <a href="/" class="text-gray-600 hover:text-primary flex items-center gap-2 transition-colors">
+      <i class="ri-home-line"></i> Return&nbsp;to&nbsp;Homepage
+    </a>
+  </div>
+</div>
+{% endblock %}
+
+

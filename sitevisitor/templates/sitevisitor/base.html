@@ -1,0 +1,508 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}WA Campaign Sender | #1 WhatsApp Bulk Messaging Platform{% endblock %}</title>
+    <meta name="description" content="{% block description %}Send bulk WhatsApp messages safely with WA Campaign Sender. Personalized campaigns, contact management & analytics in your dashboard.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}WhatsApp bulk sender, WhatsApp marketing tool, WA sender, bulk WhatsApp, Chrome extension, WhatsApp campaign{% endblock %}">
+    <meta name="author" content="WA Campaign Sender">
+    <meta name="publisher" content="WA Campaign Sender">
+    <meta name="copyright" content="© 2025 WA Campaign Sender">
+    <meta name="language" content="en">
+    <meta name="geo.region" content="US">
+    <meta name="geo.placename" content="United States">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
+    <meta name="revisit-after" content="7 days">
+    <meta name="yandex-verification" content="8b641de1fc95556b" />
+    <meta name="robots" content="{% block robots %}index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1{% endblock %}">
+    <link rel="canonical" href="{% block canonical %}https://wacampaignsender.com{% if request.get_full_path != '/' %}{{ request.get_full_path|cut:'?' }}{% endif %}/{% endblock %}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="https://wacampaignsender.com{{ request.get_full_path }}">
+    <meta property="og:title" content="{% block og_title %}{{ block.super }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ block.super }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://wacampaignsender.com{% static 'image/og-image.jpg' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="WA Campaign Sender - WhatsApp Marketing Tool">
+    <meta property="og:site_name" content="WA Campaign Sender">
+    <meta property="og:locale" content="en_US">
+    <meta property="fb:app_id" content="your-facebook-app-id">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@wacampaignsender">
+    <meta name="twitter:creator" content="@wacampaignsender">
+    <meta name="twitter:url" content="https://wacampaignsender.com{{ request.get_full_path }}">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ block.super }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ block.super }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://wacampaignsender.com{% static 'image/og-image.jpg' %}{% endblock %}">
+    <meta name="twitter:image:alt" content="WA Campaign Sender - WhatsApp Marketing Tool">
+
+    <!-- Search Engine Verification -->
+    <meta name="google-site-verification" content="your-google-verification-code">
+    <meta name="msvalidate.01" content="your-bing-verification-code">
+    <meta name="yandex-verification" content="8b641de1fc95556b">
+
+    <!-- Performance & SEO -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="//www.googletagmanager.com">
+    <link rel="dns-prefetch" href="//mc.yandex.ru">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <link rel="preload" href="{% static 'image/logo.png' %}" as="image">
+
+    <!-- Mobile -->
+    <meta name="mobile-web-app-capable" content="no">
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="theme-color" content="#25D366">
+    
+    <!-- Critical CSS -->
+    <style>
+    body{font-family:'Inter',sans-serif;margin:0;padding:0}
+    .hero-section{position:relative;overflow:hidden}
+    .hero-section::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background-image:url('https://readdy.ai/api/search-image?query=modern%2520professional%2520workspace%2520with%2520a%2520sleek%2520laptop%2520showing%2520a%2520messaging%2520interface%252C%2520soft%2520gradient%2520background%2520transitioning%2520from%2520white%2520to%2520light%2520green%2520on%2520the%2520right%2520side%252C%2520clean%2520minimal%2520aesthetic%252C%2520perfect%2520for%2520text%2520overlay%2520on%2520left%2520side%252C%2520professional%2520lighting%252C%2520high%2520quality&width=1920&height=800&seq=1&orientation=landscape');background-position:right center;background-repeat:no-repeat;background-size:contain;filter:blur(4px);z-index:-2;transform:scale(1.02)}
+    .hero-section::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to right,rgba(255,255,255,0.85) 0%,rgba(255,255,255,0.8) 40%,rgba(255,255,255,0) 70%);z-index:-1}
+    header{position:sticky;top:0;z-index:50;transition:all 0.3s ease-in-out;padding:1rem 0}
+    .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+    .flex{display:flex}
+    .items-center{align-items:center}
+    .justify-between{justify-content:space-between}
+    .text-xl{font-size:1.25rem}
+    .font-semibold{font-weight:600}
+    .hidden{display:none}
+    @media (min-width:1280px){.xl\:flex{display:flex}.xl\:hidden{display:none}}
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#25D366',
+                        secondary: '#128C7E',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font loading -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'image/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'image/favicon-16x16.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'image/favicon-32x32.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'image/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "WA Campaign Sender",
+        "url": "https://wacampaignsender.com",
+        "logo": "https://wacampaignsender.com{% static 'image/logo.png' %}",
+        "description": "Leading WhatsApp marketing platform for bulk messaging and campaign management",
+        "sameAs": [
+            "https://facebook.com/wacampaignsender",
+            "https://twitter.com/wacampaignsender",
+            "https://linkedin.com/company/wacampaignsender"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "url": "https://wacampaignsender.com/contact/",
+            "availableLanguage": "English"
+        },
+        "foundingDate": "2024",
+        "numberOfEmployees": "1-10",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "US"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "250",
+            "bestRating": "5",
+            "worstRating": "1"
+        }
+    }
+    </script>
+
+    <!-- Breadcrumb Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://wacampaignsender.com/"
+            }
+        ]
+    }
+    </script>
+    <!-- Google tag (gtag.js) - Optimized -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-17389683440');
+      
+      // Load gtag.js asynchronously after page load
+      window.addEventListener('load', function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17389683440';
+        document.head.appendChild(script);
+      });
+    </script>
+    <script type="text/javascript">
+    // Load Clarity after page load
+    window.addEventListener('load', function() {
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "sjsc4jsq7g");
+    });
+    </script>
+    
+    <!-- Yandex.Metrica - Optimized -->
+    <script type="text/javascript">
+    // Load Yandex Metrica after page load
+    window.addEventListener('load', function() {
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();
+       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(98765432, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+       });
+    });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/98765432" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrica -->
+
+    {% block structured_data %}{% endblock %}
+    
+    <!-- Enhanced Schema Markup -->
+    {% include 'sitevisitor/schema_markup.html' %}
+    
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-white">
+    <!-- Header -->
+    <header id="site-header" class="sticky top-0 z-50 transition-all duration-300 ease-in-out py-4">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="{% url 'sitevisitor:home' %}" class="flex items-center text-secondary hover:opacity-90 transition-opacity flex-shrink-0">
+                    <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender Logo" class="h-10 w-auto" width="40" height="40" loading="eager">
+                    <span class="text-xl xl:text-2xl ml-2 font-semibold"><small>WA Campaign Sender</small></span>
+                </a>
+
+                <!-- Desktop Navigation & Action Buttons -->
+                <div class="hidden xl:flex items-center space-x-3">
+                    <nav class="hidden xl:flex items-center">
+                        <a href="{% url 'sitevisitor:home' %}#features" class="text-sm text-gray-700 hover:text-primary transition-colors whitespace-nowrap">Features</a><span class="mx-1 text-gray-300 select-none">|</span>
+                        <a href="{% url 'sitevisitor:home' %}#how-it-works" class="text-sm text-gray-700 hover:text-primary transition-colors whitespace-nowrap">How It Works</a><span class="mx-1 text-gray-300 select-none">|</span>
+                        <a href="{% url 'sitevisitor:home' %}#benefits" class="text-sm text-gray-700 hover:text-primary transition-colors whitespace-nowrap">Benefits</a><span class="mx-1 text-gray-300 select-none">|</span>
+                        <a href="{% url 'sitevisitor:home' %}#pricing" class="text-sm text-gray-700 hover:text-primary transition-colors whitespace-nowrap">Pricing</a><span class="mx-1 text-gray-300 select-none">|</span>
+                        <a href="{% url 'sitevisitor:blogs' %}" class="text-sm text-gray-700 hover:text-primary transition-colors whitespace-nowrap">Blog</a>
+                    </nav>
+                    <span class="mx-1 text-gray-300 select-none">|</span>
+                    <!-- Desktop Action Buttons -->
+                    <div class="flex items-center space-x-2">
+                        <a href="{% url 'sitevisitor:login' %}" class="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">Login</a>
+                        <!-- ... existing code ... -->
+                        <a href="{% url 'sitevisitor:home' %}#pricing"
+                           data-readdy="true"
+                           class="bg-primary text-white px-4 py-1 rounded whitespace-nowrap hover:bg-opacity-90 transition-colors flex items-center">
+                            <div class="w-5 h-5 mr-2 flex items-center justify-center">
+                                <i class="ri-shield-star-line"></i>
+                            </div>
+                            <span class="text-sm font-medium">Buy Pro</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="xl:hidden">
+                    <button id="mobile-menu-button" class="text-gray-700 hover:text-primary focus:outline-none p-2">
+                        <i id="mobile-menu-icon" class="ri-menu-line text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (hidden by default) -->
+        <div id="mobile-menu" class="hidden bg-white shadow-lg border-t border-gray-200">
+            <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{% url 'sitevisitor:home' %}#features" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Features</a>
+                <a href="{% url 'sitevisitor:home' %}#how-it-works" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">How It Works</a>
+                <a href="{% url 'sitevisitor:home' %}#benefits" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Benefits</a>
+                <a href="{% url 'sitevisitor:home' %}#pricing" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Pricing</a>
+                <a href="{% url 'sitevisitor:blogs' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50">Blog</a>
+            </nav>
+            <div class="px-4 pt-3 pb-4 space-y-3 border-t border-gray-100">
+                <a href="{% url 'sitevisitor:login' %}" class="block w-full text-center px-4 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-100 border border-gray-300">Login</a>
+                <a href="{% url 'sitevisitor:home' %}#pricing"
+                   data-readdy="true"
+                   class="block w-full text-center bg-primary text-white px-2 py-1 text-base font-medium whitespace-nowrap hover:bg-opacity-90 transition-colors flex items-center justify-center" style="border-radius: 5px;">
+                    <div class="w-5 h-5 mr-2 flex items-center justify-center">
+                        <i class="ri-shield-star-line"></i>
+                    </div>
+                    <span>Buy Pro</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" class="fixed bottom-6 right-6 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 opacity-0 invisible z-50">
+        <i class="ri-arrow-up-line text-xl"></i>
+    </button>
+
+    {% if messages %}
+        <div class="container mx-auto px-6 mt-4">
+            {% for message in messages %}
+                <div class="p-4 mb-4 text-sm {% if message.tags == 'success' %}text-green-800 bg-green-50{% elif message.tags == 'error' %}text-red-800 bg-red-50{% elif message.tags == 'warning' %}text-yellow-800 bg-yellow-50{% else %}text-blue-800 bg-blue-50{% endif %} rounded-lg" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-5 gap-8">
+                <!-- Company Info -->
+                <div class="md:col-span-2">
+                    <a href="{% url 'sitevisitor:home' %}" class="mb-4 inline-block">
+                        <img src="{% static 'image/logo.png' %}" alt="WA Campaign Sender Logo" class="h-10" width="40" height="40" loading="lazy">
+                    </a>
+                    <p class="text-gray-400 mb-6">WA Campaign Sender is the leading WhatsApp marketing platform helping businesses
+                        engage with customers through personalized messaging and automation.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                                <i class="ri-facebook-fill"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                                <i class="ri-twitter-x-fill"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                                <i class="ri-linkedin-fill"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center">
+                                <i class="ri-instagram-fill"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'sitevisitor:home' %}#features" class="text-gray-400 hover:text-white transition-colors">Features</a></li>
+                        <li><a href="{% url 'sitevisitor:pricing' %}" class="text-gray-400 hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="{% url 'sitevisitor:faqs' %}" class="text-gray-400 hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="{% url 'sitevisitor:blogs' %}" class="text-gray-400 hover:text-white transition-colors">Blog</a></li>
+                    </ul>
+                </div>
+                <!-- Company -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Company</h4>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'sitevisitor:about' %}" class="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="{% url 'sitevisitor:contact' %}" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                        <li><a href="{% url 'sitevisitor:privacy' %}" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="{% url 'sitevisitor:terms' %}" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="{% url 'sitevisitor:refund' %}" class="text-gray-400 hover:text-white transition-colors">Refund Policy</a></li>
+                    </ul>
+                </div>
+                <!-- Newsletter -->
+                <div class="max-w-xs">
+                    <h4 class="text-lg font-semibold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4 text-sm">Get updates</p>
+                    <form action="{% url 'sitevisitor:newsletter_subscribe' %}" method="POST" class="space-y-2">
+                        {% csrf_token %}
+                        <input type="email" name="email" id="id_email" placeholder="Your email"
+                            class="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 text-white text-sm focus:outline-none focus:border-primary">
+                        <button type="submit"
+                            class="w-full bg-primary text-white px-3 py-2 rounded-md hover:bg-opacity-90 transition-colors text-sm">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400"> 2025 WA Campaign Sender. All rights reserved.</p>
+                <div class="flex items-center space-x-4 mt-4 md:mt-0">
+                    <div class="flex items-center text-gray-400">
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <i class="ri-visa-fill ri-lg"></i>
+                        </div>
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <i class="ri-mastercard-fill ri-lg"></i>
+                        </div>
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <i class="ri-paypal-fill ri-lg"></i>
+                        </div>
+                        <div class="w-6 h-6 flex items-center justify-center">
+                            <i class="ri-apple-fill ri-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Commented out index.js to avoid potential conflicts; re-add after verifying its contents -->
+    <!-- <script src="{% static 'js/index.js' %}"></script> -->
+    {% block page_scripts %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Header scroll effect
+        const header = document.getElementById('site-header');
+        const scrollThreshold = 50;
+
+        function updateHeaderStyle() {
+            if (window.scrollY > scrollThreshold) {
+                header.classList.add('bg-white/95', 'backdrop-blur-sm', 'shadow-lg', 'rounded-xl', 'mx-auto', 'max-w-7xl', 'mt-2');
+            } else {
+                header.classList.remove('bg-white/95', 'backdrop-blur-sm', 'shadow-lg', 'rounded-xl', 'mx-auto', 'max-w-7xl', 'mt-2');
+            }
+        }
+
+        window.addEventListener('scroll', updateHeaderStyle, { passive: true });
+        updateHeaderStyle();
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+        if (mobileMenuButton && mobileMenu && mobileMenuIcon) {
+            mobileMenuButton.addEventListener('click', function () {
+                if (mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.remove('hidden');
+                } else {
+                    mobileMenu.classList.add('hidden');
+                }
+
+                const isHidden = mobileMenu.classList.contains('hidden');
+                mobileMenuIcon.classList.toggle('ri-menu-line', isHidden);
+                mobileMenuIcon.classList.toggle('ri-close-line', !isHidden);
+            });
+
+            // Close mobile menu when clicking nav links or action buttons
+            const mobileNavLinks = mobileMenu.querySelectorAll('nav a, div > a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuIcon.classList.remove('ri-close-line');
+                    mobileMenuIcon.classList.add('ri-menu-line');
+                });
+            });
+        }
+
+        // Modal toggle for YouTube video
+        const watchDemoBtn = document.getElementById('watchDemoBtn');
+        const demoModal = document.getElementById('demoModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalGetStarted = document.getElementById('modalGetStarted');
+        const modalLearnMore = document.getElementById('modalLearnMore');
+
+        if (watchDemoBtn && demoModal && closeModal) {
+            watchDemoBtn.addEventListener('click', function () {
+                demoModal.classList.remove('hidden');
+            });
+
+            closeModal.addEventListener('click', function () {
+                demoModal.classList.add('hidden');
+            });
+
+            if (modalGetStarted) {
+                modalGetStarted.addEventListener('click', function () {
+                    demoModal.classList.add('hidden');
+                });
+            }
+
+            if (modalLearnMore) {
+                modalLearnMore.addEventListener('click', function () {
+                    demoModal.classList.add('hidden');
+                });
+            }
+
+            demoModal.addEventListener('click', function (event) {
+                if (event.target === demoModal) {
+                    demoModal.classList.add('hidden');
+                }
+            });
+        }
+    });
+
+    // Scroll to Top Button
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.remove('opacity-0', 'invisible');
+            scrollToTopBtn.classList.add('opacity-100', 'visible');
+        } else {
+            scrollToTopBtn.classList.remove('opacity-100', 'visible');
+            scrollToTopBtn.classList.add('opacity-0', 'invisible');
+        }
+    });
+
+    scrollToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    </script>
+    {% endblock page_scripts %}
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

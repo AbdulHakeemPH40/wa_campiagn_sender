@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email Address</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    </style>
+</head>
+<body style="font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center" style="padding: 20px;">
+                <table class="container" width="600" border="0" cellspacing="0" cellpadding="0" style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden;">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header" style="background-color: #25d366; padding: 30px 20px; text-align: center;">
+                            <h1 style="color: #ffffff; font-size: 24px; font-weight: 600; margin: 0;">Verify Your Email</h1>
+                        </td>
+                    </tr>
+                    <!-- Content -->
+                    <tr>
+                        <td class="content" style="padding: 40px 30px; color: #555555; line-height: 1.6;">
+                            <h2 style="font-size: 20px; font-weight: 600; color: #333333; margin: 0 0 20px;">Hi {{ user.full_name }},</h2>
+                            <p style="margin: 0 0 25px;">Thanks for signing up for WA Campaign Sender! Please click the button below to confirm your email address and activate your account.</p>
+                            
+                            <!-- Button -->
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center" class="button-container" style="padding: 10px 0 20px;">
+                                        <a href="{{ verification_url }}" target="_blank" class="button" style="display: inline-block; padding: 14px 28px; background-color: #25d366; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: 600;">Verify Email Address</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin: 0 0 15px; font-size: 14px;">This verification link is valid for <strong>{{ expiry_days }} day{% if expiry_days > 1 %}s{% endif %}</strong>.</p>
+                            <p style="margin: 0; font-size: 14px;">If you did not sign up for this account, you can safely ignore this email.</p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer" style="text-align: center; padding: 20px 30px; background-color: #f8f9fa; border-top: 1px solid #eeeeee;">
+                            <p style="margin: 0 0 10px; font-size: 12px; color: #999999;">If you're having trouble with the button, copy and paste this URL into your web browser:</p>
+                            <p style="margin: 0;"><a href="{{ verification_url }}" style="color: #25d366; text-decoration: none; word-break: break-all; font-size: 12px;">{{ verification_url }}</a></p>
+                            <p style="margin-top: 15px; font-size: 12px; color: #999999;">&copy; {% now "Y" %} WA Campaign Sender. All Rights Reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,916 @@
+{% extends 'userpanel/base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}Secure Checkout - {{ block.super }}{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
+    <div class="container mx-auto px-4 max-w-5xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Secure Checkout</h1>
+            <p class="text-gray-600">Complete your purchase safely and securely</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Order Summary (Left/Top) -->
+            <div class="lg:col-span-1 order-2 lg:order-1">
+                <div class="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Order Summary</h2>
+                    
+                    {% if plan_info %}
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-gray-800">{{ plan_info.name }}</h3>
+                                <p class="text-sm text-gray-600 mt-1">{{ plan_info.description }}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-lg text-gray-800">${{ plan_info.price|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Features -->
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <h4 class="font-medium text-gray-700 mb-2 text-sm">What's Included:</h4>
+                            <ul class="text-xs text-gray-600 space-y-1">
+                                {% for feature in plan_info.features %}
+                                <li class="flex items-center">
+                                    <i class="ri-check-line text-green-500 mr-2 text-sm"></i>
+                                    {{ feature }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        
+                        <!-- Total -->
+                        <div class="border-t pt-4">
+                            <div class="flex justify-between items-center text-lg font-semibold">
+                                <span>Total:</span>
+                                <span class="text-blue-600">${{ plan_info.price|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Security Info -->
+                    <div class="mt-6 pt-4 border-t">
+                        <div class="flex items-center text-sm text-green-600 mb-2">
+                            <i class="ri-shield-check-line mr-2"></i>
+                            <span class="font-medium">Secure Payment</span>
+                        </div>
+                        <ul class="text-xs text-gray-600 space-y-1">
+                            <li>• 256-bit SSL encryption</li>
+                            <li>• PCI DSS compliant</li>
+                            <li>• No card details stored</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Methods (Right/Bottom) -->
+            <div class="lg:col-span-2 order-1 lg:order-2">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Choose Payment Method</h2>
+                    
+                    <!-- Payment Method Tabs -->
+                    <div class="flex border-b mb-6">
+                        <button id="card-tab" class="payment-tab active px-4 py-2 font-medium text-sm border-b-2 border-blue-600 text-blue-600 transition-all duration-200">
+                            <i class="ri-bank-card-line mr-2"></i>Credit/Debit Card
+                        </button>
+                        <button id="paypal-tab" class="payment-tab px-4 py-2 font-medium text-sm border-b-2 border-transparent text-gray-600 hover:text-gray-800 transition-all duration-200">
+                            <i class="ri-paypal-fill mr-2"></i>PayPal Account
+                        </button>
+                    </div>
+
+                    <!-- Card Payment Section (Default Active) -->
+                    <div id="card-section" class="payment-section">
+                        <!-- Guest Checkout Notice -->
+                        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="ri-user-line text-green-600 text-lg mr-3 mt-0.5"></i>
+                                <div>
+                                    <h3 class="font-medium text-green-800 mb-1">No Account Required</h3>
+                                    <p class="text-sm text-green-700">Pay securely with your credit or debit card without creating a PayPal account.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PayPal Smart Payment Buttons (Card-First) -->
+                        <div class="space-y-4">
+                            <div class="text-center">
+                                <p class="text-sm text-gray-600 mb-4">Pay with your card through PayPal's secure checkout</p>
+                            </div>
+                            
+                            <!-- Connection Status -->
+                            <div id="connection-status" class="mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 hidden">
+                                <div class="flex items-center">
+                                    <span id="status-icon" class="mr-2">🔵</span>
+                                    <span id="status-text" class="text-sm font-medium text-blue-800">Initializing...</span>
+                                </div>
+                            </div>
+                            
+                            <!-- PayPal Buttons Container -->
+                            <div id="paypal-card-container" class="min-h-[60px] bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                                <div class="text-center text-gray-500">
+                                    <i class="ri-loader-4-line animate-spin text-xl mb-2"></i>
+                                    <p class="text-sm">Loading secure payment...</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Accepted Cards -->
+                            <div class="flex items-center justify-center space-x-4 mt-4">
+                                <span class="text-xs text-gray-500">Accepted cards:</span>
+                                <div class="flex space-x-2">
+                                    <i class="ri-visa-line text-2xl text-blue-600"></i>
+                                    <i class="ri-mastercard-line text-2xl text-red-500"></i>
+                                    <i class="ri-bank-card-line text-2xl text-gray-600"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PayPal Account Section -->
+                    <div id="paypal-section" class="payment-section hidden">
+                        <!-- PayPal Account Notice -->
+                        <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-start">
+                                <i class="ri-paypal-fill text-blue-600 text-lg mr-3 mt-0.5"></i>
+                                <div>
+                                    <h3 class="font-medium text-blue-800 mb-1">Pay with PayPal Account</h3>
+                                    <p class="text-sm text-blue-700">Use your existing PayPal account balance or linked payment methods.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Express Checkout Button -->
+                        <div class="space-y-4">
+                            <a href="{% url 'userpanel:direct_paypal_redirect' %}?plan={{ plan_id }}" 
+                               class="w-full bg-blue-600 text-white font-medium py-4 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center transition-all duration-200 text-base">
+                                <i class="ri-paypal-fill mr-3 text-xl"></i>
+                                <span>Continue with PayPal</span>
+                            </a>
+                            
+                            <p class="text-xs text-gray-500 text-center">You'll be redirected to PayPal to complete your payment</p>
+                        </div>
+                    </div>
+
+
+                </div>
+                
+                <!-- Navigation -->
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                    <a href="{% url 'userpanel:cart' %}" 
+                       class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center border border-gray-300">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Cart
+                    </a>
+                    <a href="{% url 'userpanel:dashboard' %}" 
+                       class="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center border border-blue-300">
+                        <i class="ri-dashboard-line mr-2"></i>
+                        Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if PAYPAL_CLIENT_ID %}
+<script src="https://www.paypal.com/sdk/js?client-id={{ PAYPAL_CLIENT_ID }}&enable-funding=card&currency=USD&intent=capture&components=buttons" data-popups-disabled="true"></script>
+<script>
+// ===== POPUP PREVENTION SYSTEM =====
+// Override window.open to prevent about:blank popups
+const originalWindowOpen = window.open;
+window.open = function(url, name, specs) {
+    console.log('Intercepted window.open call:', { url, name, specs });
+    
+    // If it's an empty URL or about:blank, prevent it
+    if (!url || url === '' || url === 'about:blank') {
+        console.log('Blocked about:blank popup');
+        return null;
+    }
+    
+    // For PayPal URLs, force them to open in the same window
+    if (url && (url.includes('paypal.com') || url.includes('sandbox.paypal.com'))) {
+        console.log('Redirecting PayPal URL in same window:', url);
+        window.location.href = url;
+        return null;
+    }
+    
+    // Allow other legitimate popups
+    return originalWindowOpen.call(this, url, name, specs);
+};
+
+// ===== DJANGO TEMPLATE VARIABLES =====
+// Pre-render Django values to avoid template conflicts in JavaScript
+const DJANGO_URLS = {
+    directPaypalRedirect: "{% url 'userpanel:direct_paypal_redirect' %}",
+    csrfToken: "{{ csrf_token }}",
+    planId: "{{ request.GET.plan }}"
+};
+
+// ===== PAYMENT PROCESSING FUNCTIONS =====
+function showPaymentProcessing() {
+    const container = document.getElementById('paypal-card-container');
+    container.innerHTML = `
+        <div class="payment-processing text-center p-6 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="spinner mb-3">
+                <i class="ri-loader-line text-blue-600 text-3xl animate-spin"></i>
+            </div>
+            <h3 class="text-blue-800 font-semibold mb-2">Processing Your Payment...</h3>
+            <p class="text-sm text-blue-700 mb-2">Please wait while we verify your payment with PayPal.</p>
+            <p class="text-xs text-blue-600">Please do not refresh or close this page</p>
+            <div class="mt-4">
+                <div class="w-full bg-blue-200 rounded-full h-2">
+                    <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 70%"></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function hidePaymentProcessing() {
+    // This function can be used to hide loading if needed
+    console.log('Payment processing completed');
+}
+
+// ===== BULLETPROOF PAYMENT SYSTEM =====
+// Global variables for payment state management
+let paymentInProgress = false;
+let retryCount = 0;
+const MAX_RETRIES = 3;
+let paypalSDKLoaded = false;
+let connectionCheckInterval;
+
+// Connection monitoring
+function checkConnection() {
+    return navigator.onLine && typeof paypal !== 'undefined';
+}
+
+// Enhanced status display
+function updateConnectionStatus(status, message, type = 'info') {
+    const statusDiv = document.getElementById('connection-status');
+    const statusIcon = document.getElementById('status-icon');
+    const statusText = document.getElementById('status-text');
+    
+    statusDiv.classList.remove('hidden');
+    statusDiv.className = `mb-4 p-3 rounded-lg ${type === 'error' ? 'bg-red-50 border border-red-200' : type === 'success' ? 'bg-green-50 border border-green-200' : 'bg-blue-50 border border-blue-200'}`;
+    
+    statusIcon.innerHTML = type === 'error' ? '🔴' : type === 'success' ? '🟢' : '🔵';
+    statusText.textContent = message;
+    statusText.className = `text-sm font-medium ${type === 'error' ? 'text-red-800' : type === 'success' ? 'text-green-800' : 'text-blue-800'}`;
+}
+
+// Enhanced loading states
+function showAdvancedLoading(message = 'Loading secure payment options...', showProgress = false) {
+    const container = document.getElementById('paypal-card-container');
+    container.innerHTML = `
+        <div class="text-center p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
+            <div class="relative mb-4">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto"></div>
+                <div class="absolute inset-0 rounded-full border-2 border-blue-200 animate-pulse"></div>
+            </div>
+            <h3 class="text-blue-800 font-semibold mb-2">🔒 ${message}</h3>
+            <p class="text-sm text-blue-700 mb-3">Establishing secure connection with PayPal...</p>
+            ${showProgress ? '<div class="w-full bg-blue-200 rounded-full h-2 mb-2">' +
+                '<div id="loading-progress" class="bg-blue-600 h-2 rounded-full transition-all duration-1000" style="width: 0%"></div>' +
+            '</div>' +
+            '<p class="text-xs text-blue-600">This may take up to 10 seconds</p>' : ''}
+        </div>
+    `;
+    
+    if (showProgress) {
+        let progress = 0;
+        const progressBar = document.getElementById('loading-progress');
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 90) progress = 90;
+            progressBar.style.width = progress + '%';
+            if (progress >= 90) clearInterval(progressInterval);
+        }, 500);
+    }
+}
+
+// Tab switching with enhanced UX
+document.addEventListener('DOMContentLoaded', function() {
+    const cardTab = document.getElementById('card-tab');
+    const paypalTab = document.getElementById('paypal-tab');
+    const cardSection = document.getElementById('card-section');
+    const paypalSection = document.getElementById('paypal-section');
+    
+    function switchTab(activeTab, inactiveTab, activeSection, inactiveSection) {
+        // Prevent switching during payment
+        if (paymentInProgress) {
+            updateConnectionStatus('warning', 'Cannot switch payment method during transaction', 'error');
+            return;
+        }
+        
+        activeTab.classList.add('active', 'border-blue-600', 'text-blue-600');
+        activeTab.classList.remove('text-gray-600');
+        inactiveTab.classList.remove('active', 'border-blue-600', 'text-blue-600');
+        inactiveTab.classList.add('text-gray-600');
+        activeSection.classList.remove('hidden');
+        inactiveSection.classList.add('hidden');
+        
+        // Update connection status
+        updateConnectionStatus('info', `Switched to ${activeTab.textContent.trim()} payment method`, 'success');
+    }
+    
+    cardTab.addEventListener('click', function() {
+        switchTab(cardTab, paypalTab, cardSection, paypalSection);
+    });
+    
+    paypalTab.addEventListener('click', function() {
+        switchTab(paypalTab, cardTab, paypalSection, cardSection);
+    });
+    
+    // Enhanced PayPal Express button with loading state
+    const expressButton = document.querySelector('a[href*="direct_paypal_redirect"]');
+    if (expressButton) {
+        expressButton.addEventListener('click', function(e) {
+            if (paymentInProgress) {
+                e.preventDefault();
+                updateConnectionStatus('warning', 'Payment already in progress', 'error');
+                return;
+            }
+            
+            paymentInProgress = true;
+            this.innerHTML = '<i class="ri-loader-4-line animate-spin mr-3 text-xl"></i><span>🔒 Redirecting to PayPal...</span>';
+            this.classList.add('opacity-75', 'cursor-not-allowed');
+            updateConnectionStatus('info', 'Redirecting to PayPal Express Checkout...', 'info');
+        });
+    }
+    
+    // ===== BULLETPROOF PAYPAL SMART BUTTONS INITIALIZATION =====
+    function initializePayPalButtons(attempt = 1) {
+        const container = document.getElementById('paypal-card-container');
+        
+        // Show advanced loading with progress
+        showAdvancedLoading(`Initializing secure payment (Attempt ${attempt}/${MAX_RETRIES})...`, true);
+        
+        // Connection and SDK validation
+        if (!checkConnection()) {
+            if (attempt < MAX_RETRIES) {
+                updateConnectionStatus('warning', `Connection issue. Retrying in 3 seconds... (${attempt}/${MAX_RETRIES})`, 'error');
+                setTimeout(() => initializePayPalButtons(attempt + 1), 3000);
+                return;
+            } else {
+                showFallbackOptions('PayPal SDK failed to load after multiple attempts');
+                return;
+            }
+        }
+        
+        // Clear loading and initialize buttons
+        setTimeout(() => {
+            try {
+                // Create separate div for PayPal buttons to preserve notification
+                const indiaNotification = document.getElementById('popup-blocker-warning');
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.id = 'paypal-buttons-only';
+                
+                container.innerHTML = '';
+                if (indiaNotification) {
+                    container.appendChild(indiaNotification);
+                }
+                container.appendChild(buttonsDiv);
+                updateConnectionStatus('success', 'PayPal connection established successfully', 'success');
+                
+                paypal.Buttons({
+                    style: {
+                        layout: 'vertical',
+                        color: 'blue',
+                        shape: 'rect',
+                        height: 50,
+                        tagline: false,
+                        label: 'pay'
+                    },
+                    // Enhanced popup and window handling
+                    onInit: function(data, actions) {
+                        console.log('PayPal Smart Buttons initialized successfully');
+                        
+                        // Remove popup testing to prevent about:blank windows
+                        // Popup guidance will only show when actual PayPal errors occur
+                        console.log('Popup detection disabled - no test popups will be created');
+                        
+                        // Keep India notification visible - do not remove it
+                        console.log('India payment notification kept visible for user guidance');
+                    },
+                    createOrder: function(data, actions) {
+                        // Prevent multiple order creation
+                        if (paymentInProgress) {
+                            throw new Error('Payment already in progress');
+                        }
+                        
+                        paymentInProgress = true;
+                        updateConnectionStatus('info', 'Creating secure payment order...', 'info');
+                        
+                        return actions.order.create({
+                            intent: 'CAPTURE',
+                            purchase_units: [{
+                                amount: {
+                                    currency_code: 'USD',
+                                    value: '{{ plan_info.price|floatformat:2 }}'
+                                },
+                                description: '{{ plan_info.name|escapejs }}',
+                                custom_id: 'WA_PRO_{{ plan_id }}_' + Date.now()
+                            }],
+                            application_context: {
+                                brand_name: 'WA Campaign Sender',
+                                landing_page: 'BILLING',
+                                user_action: 'PAY_NOW',
+                                shipping_preference: 'NO_SHIPPING',
+                                return_url: window.location.origin + '/userpanel/paypal/success/',
+                                cancel_url: window.location.origin + '/userpanel/paypal/cancel/',
+                                // Enhanced popup handling for guest checkout
+                                payee_preferred: 'UNRESTRICTED',
+                                payment_method_preference: 'UNRESTRICTED'
+                            }
+                        }).then(function(orderID) {
+                            updateConnectionStatus('success', 'Payment order created successfully', 'success');
+                            return orderID;
+                        }).catch(function(error) {
+                            paymentInProgress = false;
+                            updateConnectionStatus('error', 'Failed to create payment order', 'error');
+                            throw error;
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                    console.log('PayPal payment approved, capturing...', data);
+                    
+                    // Log popup behavior for debugging
+                    logPopupBehavior('payment_approved', {
+                        orderID: data.orderID,
+                        payerID: data.payerID,
+                        facilitatorAccessToken: data.facilitatorAccessToken || 'not_provided'
+                    });
+                    
+                    console.log('Order details before capture:', {
+                        orderID: data.orderID,
+                        payerID: data.payerID,
+                        planPrice: '{{ plan_info.price|floatformat:2 }}',
+                        planName: '{{ plan_info.name|escapejs }}'
+                    });
+                    
+                    // Don't show loading UI immediately - let PayPal handle the popup first
+                    return actions.order.capture().then(function(details) {
+                        // Now show processing message after successful capture
+                        showPaymentProcessing();
+                        console.log('=== PayPal Smart Button Debug ===');
+                        console.log('Payment captured successfully:', details);
+                        console.log('Order ID:', data.orderID);
+                        console.log('Capture details:', details.purchase_units[0].payments.captures[0]);
+                        
+                        // Extract comprehensive payment details
+                        const paymentData = {
+                            orderID: data.orderID,
+                            paymentID: details.id,
+                            planType: '{{ plan_id }}',
+                            amount: '{{ plan_info.price|floatformat:2 }}',
+                            payerID: details.payer.payer_id,
+                            captureID: details.purchase_units[0].payments.captures[0].id,
+                            paymentSource: 'smart_buttons_guest',
+                            // Additional PayPal parameters for comprehensive tracking
+                            payerEmail: details.payer.email_address,
+                            payerName: details.payer.name ? details.payer.name.given_name + ' ' + details.payer.name.surname : '',
+                            paymentMethod: details.purchase_units[0].payments.captures[0].final_capture ? 'card' : 'paypal',
+                            transactionFee: details.purchase_units[0].payments.captures[0].seller_receivable_breakdown?.paypal_fee?.value || '0',
+                            currency: details.purchase_units[0].payments.captures[0].amount.currency_code,
+                            captureStatus: details.purchase_units[0].payments.captures[0].status,
+                            createTime: details.create_time,
+                            updateTime: details.update_time
+                        };
+                        
+                        console.log('Sending payment data to backend:', paymentData);
+                        
+                        // Send to Django backend for processing
+                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+                        if (!csrfToken) {
+                            throw new Error('CSRF token not found. Please refresh the page and try again.');
+                        }
+                        
+                        return fetch('/userpanel/paypal/process-direct-payment/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
+                            body: JSON.stringify(paymentData)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(result => {
+                            console.log('Backend response:', result);
+                            if (result.success) {
+                                document.getElementById('paypal-card-container').innerHTML = 
+                                    '<div class="text-center p-4 bg-green-50 rounded-lg border border-green-200"><i class="ri-check-line text-green-600 text-2xl mb-2"></i><h3 class="text-green-800 font-semibold mb-1">Payment Successful!</h3><p class="text-sm text-green-700">Your PRO subscription is now active. Redirecting to dashboard...</p></div>';
+                                
+                                // Redirect after showing success message
+                                setTimeout(function() {
+                                    window.location.href = '/userpanel/?payment=success';
+                                }, 2000);
+                            } else {
+                                throw new Error(result.error || 'Payment processing failed on server');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Payment processing error:', error);
+                            
+                            // Enhanced error handling with specific error types
+                            let userMessage = 'Payment processing failed. Please try again.';
+                            let actionButton = '<button onclick="location.reload()" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm mr-2">Try Again</button>';
+                            let alternativeAction = '';
+                            
+                            // Handle specific error types
+                            if (error.message.includes('Security token required') || error.message.includes('CSRF')) {
+                                userMessage = 'Security validation failed. Please refresh the page and try again.';
+                                actionButton = '<button onclick="location.reload()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Refresh Page</button>';
+                            } else if (error.message.includes('Payment verification failed')) {
+                                userMessage = 'Payment verification failed. Your card was not charged. Please try again.';
+                                alternativeAction = '<a href="/userpanel/cart/" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm ml-2">Back to Cart</a>';
+                            } else if (error.message.includes('You already have an active subscription')) {
+                                userMessage = 'You already have an active subscription. No payment was processed.';
+                                actionButton = '<a href="/userpanel/" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm">Go to Dashboard</a>';
+                            } else if (error.message.includes('Invalid payment amount') || error.message.includes('Invalid plan type')) {
+                                userMessage = 'Invalid payment information. Please try selecting your plan again.';
+                                actionButton = '<a href="/userpanel/pricing/" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Back to Pricing</a>';
+                            } else if (error.message.includes('Authentication required')) {
+                                userMessage = 'Please log in to complete your payment.';
+                                actionButton = '<a href="/login/" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">Log In</a>';
+                            } else if (error.message.includes('HTTP 500') || error.message.includes('server')) {
+                                userMessage = 'Server error occurred. Our team has been notified. Please try again in a few minutes.';
+                                alternativeAction = '<a href="/contact/" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm ml-2">Contact Support</a>';
+                            } else if (error.message.includes('network') || error.message.includes('timeout') || error.message.includes('fetch')) {
+                                userMessage = 'Network connection issue. Please check your internet connection and try again.';
+                            }
+                            
+                            document.getElementById('paypal-card-container').innerHTML = 
+                                '<div class="text-center p-4 bg-red-50 rounded-lg border border-red-200">' +
+                                '<i class="ri-error-warning-line text-red-600 text-2xl mb-2"></i>' +
+                                '<h3 class="text-red-800 font-semibold mb-1">Payment Processing Failed</h3>' +
+                                '<p class="text-sm text-red-700 mb-3">' + userMessage + '</p>' +
+                                '<div class="flex justify-center items-center">' + actionButton + alternativeAction + '</div>' +
+                                '</div>';
+                            
+                            // Only redirect for certain error types
+                            if (!error.message.includes('already have an active subscription') && 
+                                !error.message.includes('Authentication required')) {
+                                setTimeout(function() {
+                                    window.location.href = '/userpanel/?payment=failed&error=' + encodeURIComponent(error.message);
+                                }, 8000);
+                            }
+                        });
+                    }).catch(function(captureError) {
+                        console.error('=== PayPal Capture Error ===');
+                        console.error('Capture failed:', captureError);
+                        console.error('Error details:', {
+                            name: captureError.name,
+                            message: captureError.message,
+                            details: captureError.details,
+                            orderID: data.orderID
+                        });
+                        
+                        // Handle PayPal capture errors (card declined, insufficient funds, etc.)
+                        let errorMessage = 'Payment capture failed';
+                        
+                        if (captureError.details && captureError.details.length > 0) {
+                            const detail = captureError.details[0];
+                            if (detail.issue === 'INSTRUMENT_DECLINED') {
+                                errorMessage = 'Your card was declined. Please try a different payment method.';
+                            } else if (detail.issue === 'INSUFFICIENT_FUNDS') {
+                                errorMessage = 'Insufficient funds. Please try a different card.';
+                            } else if (detail.issue === 'PAYER_ACCOUNT_LOCKED') {
+                                errorMessage = 'Account temporarily locked. Please try again later.';
+                            } else {
+                                errorMessage = detail.description || errorMessage;
+                            }
+                        }
+                        
+                        document.getElementById('paypal-card-container').innerHTML = 
+                            '<div class="text-center p-4 bg-orange-50 rounded-lg border border-orange-200">' +
+                            '<i class="ri-information-line text-orange-600 text-2xl mb-2"></i>' +
+                            '<h3 class="text-orange-800 font-semibold mb-1">Payment Issue</h3>' +
+                            '<p class="text-sm text-orange-700 mb-3">' + errorMessage + '</p>' +
+                            '<p class="text-xs text-orange-600 mb-3">💡 Try using the "Pay with PayPal" button above for better compatibility</p>' +
+                            '<button onclick="document.getElementById(\'paypal-tab\').click()" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm mr-2">Use PayPal Button</button>' +
+                            '<button onclick="location.reload()" class="px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 text-sm">Retry</button>' +
+                            '</div>';
+                        
+                        throw captureError; // Re-throw to trigger onError if needed
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Smart Button error:', err);
+                    
+                    // Log popup behavior for debugging
+                    logPopupBehavior('payment_error', {
+                        error: err.toString(),
+                        errorName: err.name || 'unknown',
+                        errorMessage: err.message || 'no_message',
+                        errorStack: err.stack || 'no_stack'
+                    });
+                    
+                    paymentInProgress = false;
+                    
+                    // Determine error type and provide specific message
+                    let errorMessage = 'Payment failed. Please try again.';
+                    let errorDetails = '';
+                    let showIndiaGuidance = false;
+                    
+                    if (err && err.message) {
+                        // Check for India restriction message
+                        if (err.message.includes('not currently set up for transactions in India') || 
+                            err.message.includes('India') || 
+                            err.message.includes('country not supported')) {
+                            showIndiaGuidance = true;
+                            errorMessage = 'India payment restriction detected.';
+                            errorDetails = 'Please use the PayPal button for Indian card payments.';
+
+                        } else if (err.message.includes('network') || err.message.includes('connection')) {
+                            errorMessage = 'Network error. Please check your connection.';
+                            errorDetails = 'Verify your internet connection and try again.';
+                        } else if (err.message.includes('timeout')) {
+                            errorMessage = 'Payment timed out. Please try again.';
+                            errorDetails = 'The payment process took too long to complete.';
+                        } else {
+                            errorDetails = err.message;
+                        }
+                    }
+                    
+                    // Show India-specific guidance if restriction detected
+                    if (showIndiaGuidance) {
+                        showIndiaRestrictionGuidance();
+                        return; // Don't show generic error message
+                    }
+                    
+                    // Create helpful error display without scary red colors
+                    const container = document.getElementById('paypal-card-container');
+                    container.innerHTML = '';
+                    
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'text-center p-4 bg-blue-50 rounded-lg border border-blue-200';
+                    
+                    errorDiv.innerHTML = `
+                        <i class="ri-information-line text-blue-600 text-2xl mb-2"></i>
+                        <h3 class="text-blue-800 font-semibold mb-1">Let's Try Another Way</h3>
+                        <p class="text-sm text-blue-700 mb-2">${errorMessage}</p>
+                        ${errorDetails ? '<p class="text-xs text-blue-600 mb-3">' + errorDetails + '</p>' : ''}
+                        <p class="text-xs text-blue-600 mb-3">💡 The PayPal button above often works better for international payments</p>
+                        <div class="space-y-2">
+                            <button id="paypal-btn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm mr-2">Try PayPal Button</button>
+                            <button id="retry-btn" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm">Retry This Method</button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(errorDiv);
+                    
+                    // Add event listeners
+                    document.getElementById('paypal-btn').onclick = function() { 
+                        const tabButton = document.getElementById('paypal-tab');
+                        if (tabButton) tabButton.click();
+                    };
+                    document.getElementById('retry-btn').onclick = function() { location.reload(); };
+                    
+                    // Optional: Redirect to dashboard with error after delay
+                    setTimeout(function() {
+                        window.location.href = '/userpanel/?payment=failed';
+                    }, 8000);
+                },
+                onCancel: function(data) {
+                    console.log('PayPal Smart Button payment cancelled:', data);
+                    
+                    // Log popup behavior for debugging
+                    logPopupBehavior('payment_cancelled', {
+                        orderID: data.orderID || 'no_order_id',
+                        reason: 'user_cancelled'
+                    });
+                    
+                    // Create cancellation display with DOM manipulation
+                    const container = document.getElementById('paypal-card-container');
+                    container.innerHTML = '';
+                    
+                    const cancelDiv = document.createElement('div');
+                    cancelDiv.className = 'text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200';
+                    
+                    cancelDiv.innerHTML = `
+                        <i class="ri-information-line text-yellow-600 text-2xl mb-2"></i>
+                        <h3 class="text-yellow-800 font-semibold mb-1">Payment Cancelled</h3>
+                        <p class="text-sm text-yellow-700 mb-3">You cancelled the payment process. No charges were made.</p>
+                        <div class="space-y-2">
+                            <button id="retry-cancel-btn" class="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-sm mr-2">Try Again</button>
+                            <a href="/userpanel/pricing/" class="inline-block px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm">Back to Pricing</a>
+                        </div>
+                    `;
+                    
+                    container.appendChild(cancelDiv);
+                    
+                    // Add event listener
+                    document.getElementById('retry-cancel-btn').onclick = function() { location.reload(); };
+                },
+            }).render('#paypal-buttons-only');
+
+                // Mark PayPal SDK as successfully loaded
+                paypalSDKLoaded = true;
+                updateConnectionStatus('success', 'PayPal Smart Buttons loaded successfully', 'success');
+
+            } catch (error) {
+                console.error('PayPal Buttons initialization error:', error);
+                paymentInProgress = false;
+
+                if (attempt < MAX_RETRIES) {
+                    updateConnectionStatus('warning', `Initialization failed. Retrying... (${attempt}/${MAX_RETRIES})`, 'error');
+                    setTimeout(() => initializePayPalButtons(attempt + 1), 2000);
+                } else {
+                    showFallbackOptions('PayPal Smart Buttons failed to initialize after multiple attempts');
+                }
+            }
+        });
+    }
+
+    // Always show India guidance for all users (persistent notification)
+    function checkUserLocationAndShowGuidance() {
+        console.log('Showing persistent India payment guidance for all users');
+        showPopupBlockerWarning();
+    }
+
+    // India restriction and guest checkout guidance - always persistent
+    function showPopupBlockerWarning() {
+        // Check if notification already exists
+        if (document.getElementById('popup-blocker-warning')) {
+            return; // Don't create duplicate
+        }
+        
+        const warningDiv = document.createElement('div');
+        warningDiv.id = 'popup-blocker-warning';
+        warningDiv.className = 'mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg shadow-sm';
+        
+        warningDiv.innerHTML = `
+            <div class="flex items-start">
+                <i class="ri-information-line text-blue-600 text-lg mr-3 mt-0.5"></i>
+                <div class="flex-1">
+                    <h4 class="text-blue-800 font-semibold mb-1 text-sm">
+                        💳 Payment Options Available
+                    </h4>
+                    <p class="text-xs text-blue-700 leading-relaxed">
+                        Use the <strong>"Pay with PayPal"</strong> button above to pay with any debit/credit card - no PayPal account required.
+                    </p>
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                            class="mt-2 text-xs text-blue-600 hover:text-blue-800 underline">
+                        Dismiss
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Insert BEFORE the PayPal container, not inside it
+        const container = document.getElementById('paypal-card-container');
+        container.parentNode.insertBefore(warningDiv, container);
+    }
+
+
+
+    // Enhanced popup logging function
+    function logPopupBehavior(action, details = {}) {
+        const logData = {
+            timestamp: new Date().toISOString(),
+            action: action,
+            userAgent: navigator.userAgent,
+            url: window.location.href,
+            popupBlocked: false,
+            ...details
+        };
+        
+        // Test current popup status
+        const testPopup = window.open('', '_blank', 'width=1,height=1');
+        if (!testPopup || testPopup.closed || typeof testPopup.closed == 'undefined') {
+            logData.popupBlocked = true;
+        } else {
+            testPopup.close();
+        }
+        
+        console.log('PayPal Popup Log:', logData);
+        
+        // Send to backend for logging (optional)
+        try {
+            fetch('/userpanel/log-popup-behavior/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value
+                },
+                body: JSON.stringify(logData)
+            }).catch(err => console.log('Popup logging failed:', err));
+        } catch (e) {
+            console.log('Popup logging not available:', e);
+        }
+    }
+
+    // Fallback options display
+    function showFallbackOptions(errorMessage) {
+        const container = document.getElementById('paypal-card-container');
+        
+        // Create fallback HTML without template literals to avoid Django conflicts
+        const fallbackDiv = document.createElement('div');
+        fallbackDiv.className = 'text-center p-6 bg-red-50 rounded-lg border-2 border-red-200';
+        
+        // Build HTML string with proper concatenation
+        let htmlContent = '';
+        htmlContent += '<div class="text-red-500 text-4xl mb-4">⚠️</div>';
+        htmlContent += '<h3 class="text-red-800 font-semibold mb-2">Payment System Unavailable</h3>';
+        htmlContent += '<p class="text-sm text-red-700 mb-4">' + errorMessage + '</p>';
+        htmlContent += '<div class="space-y-3">';
+        htmlContent += '<button id="retry-smart-buttons" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors">';
+        htmlContent += '🔄 Retry Smart Buttons';
+        htmlContent += '</button>';
+        htmlContent += '<div id="express-checkout-form"></div>';
+        htmlContent += '<button id="contact-support-btn" class="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition-colors">';
+        htmlContent += '📞 Contact Support';
+        htmlContent += '</button>';
+        htmlContent += '</div>';
+        
+        fallbackDiv.innerHTML = htmlContent;
+        
+        container.innerHTML = '';
+        container.appendChild(fallbackDiv);
+        
+        // Add the PayPal Express form using pre-defined Django variables
+        const expressForm = document.getElementById('express-checkout-form');
+        expressForm.innerHTML = 
+            '<form method="post" action="' + DJANGO_URLS.directPaypalRedirect + '" class="w-full">' +
+                '<input type="hidden" name="csrfmiddlewaretoken" value="' + DJANGO_URLS.csrfToken + '">' +
+                '<input type="hidden" name="plan_id" value="' + DJANGO_URLS.planId + '">' +
+                '<button type="submit" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded transition-colors">' +
+                    '🏦 Use PayPal Express Checkout' +
+                '</button>' +
+            '</form>';
+
+        // Add event listeners for fallback options
+        document.getElementById('retry-smart-buttons').onclick = function() {
+            retryCount = 0;
+            paymentInProgress = false;
+            initializePayPalButtons(1);
+        };
+
+        document.getElementById('contact-support-btn').onclick = function() {
+            window.open('/contact/', '_blank');
+        };
+
+        updateConnectionStatus('error', 'Switched to fallback payment options', 'error');
+    }
+
+    // Start initialization with connection monitoring
+    updateConnectionStatus('info', 'Initializing secure payment system...', 'info');
+
+    // Monitor connection status
+    connectionCheckInterval = setInterval(() => {
+        if (!navigator.onLine) {
+            updateConnectionStatus('error', 'Internet connection lost', 'error');
+        } else if (!paypalSDKLoaded && typeof paypal === 'undefined') {
+            updateConnectionStatus('warning', 'PayPal SDK loading...', 'info');
+        }
+    }, 5000);
+
+    // Check if user is from India and show guidance accordingly
+    checkUserLocationAndShowGuidance();
+    
+    // Initialize PayPal buttons with delay to ensure DOM is ready
+    setTimeout(() => {
+        initializePayPalButtons(1);
+    }, 1500);
+}); // End of DOMContentLoaded event listener
+</script>
+{% else %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('paypal-card-container').innerHTML = 
+        '<div class="text-center p-4 bg-red-50 rounded-lg"><p class="text-red-600 text-sm">PayPal configuration error. Contact support.</p></div>';
+});
+</script>
+{% endif %}
+
+{% csrf_token %}
+
+<style>
+.payment-tab.active {
+    border-bottom: 2px solid #2563eb;
+    color: #2563eb;
+}
+
+.payment-section {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+{% endblock %}

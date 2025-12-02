@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Your Pro Version Subscription is Ending Soon!</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#FFC107;color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">Action Required: Your Pro Version is Ending Soon!</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px;text-align:left;line-height:1.6;">
+                            <p style="margin:0 0 15px;">Dear {{ user.full_name }},</p>
+                            
+                            <div style="background-color:#FFF3CD;border:1px solid #FFEAA7;padding:15px;border-radius:5px;margin:20px 0;">
+                                <p style="margin:0;color:#856404;text-align:center;"><strong>⏰ Your Pro subscription expires tomorrow!</strong></p>
+                            </div>
+                            
+                            <p style="margin:0 0 15px;">Your Pro Version subscription for WA Campaign Sender will expire on <strong>{{ subscription_end_date|date:"F j, Y" }}</strong> - that's tomorrow!</p>
+                            
+                            <p style="margin:0 0 15px;">Don't lose access to your premium features:</p>
+                            <ul style="margin:0 0 20px;padding-left:20px;">
+                                <li>✅ Unlimited WhatsApp campaigns</li>
+                                <li>✅ Multiple WhatsApp numbers</li>
+                                <li>✅ Advanced contact management</li>
+                                <li>✅ Priority customer support</li>
+                                <li>✅ Campaign analytics and insights</li>
+                            </ul>
+                            
+                            <p style="margin:0 0 25px;">Renew your subscription today to ensure uninterrupted access to all premium features and keep your business running smoothly!</p>
+                            <p style="margin:0 0 25px; text-align:center;">
+                                <a href="https://www.wacampaignsender.com/login/?next=/userpanel/pricing/" style="display:inline-block;padding:12px 25px;background-color:#25D366;color:#ffffff;text-decoration:none;border-radius:5px;font-weight:bold;">Renew Your Pro Version</a>
+                            </p>
+                            <div style="background-color:#E3F2FD;border-left:4px solid #2196F3;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;"><strong>💡 Questions about renewal?</strong> Our support team can help with billing questions, plan changes, or technical assistance.</p>
+                            </div>
+                            
+                            <p style="margin:0 0 15px;">If you have any questions or need assistance, please contact our support team at <strong>hi@wacampaignsender.com</strong>.</p>
+                            
+                            <p style="margin:0;">Best regards,<br>
+                            <strong>WA Campaign Sender Team</strong></p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {{ current_year }} WA Campaign Sender. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

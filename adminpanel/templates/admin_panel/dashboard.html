@@ -1,0 +1,268 @@
+{% extends 'admin_panel/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block admin_content %}
+<!-- Header -->
+<div class="mb-8">
+    <h1 class="text-2xl font-semibold text-neutral-900">Dashboard Overview</h1>
+    <p class="text-neutral-600 mt-1">Monitor your platform's performance and user activity</p>
+</div>
+
+<!-- Key Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+    <!-- Total Users -->
+    <div class="admin-card p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-neutral-600 mb-1">Total Users</p>
+                <p class="text-2xl font-semibold text-neutral-900">{{ total_users }}</p>
+                <p class="text-xs text-green-600 mt-1">+{{ new_users_this_month }} this month</p>
+            </div>
+            <div class="h-10 w-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                <i class="ri-user-line text-blue-600 text-lg"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Subscriptions -->
+    <div class="admin-card p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-neutral-600 mb-1">Active Subscriptions</p>
+                <p class="text-2xl font-semibold text-neutral-900">{{ active_subscriptions }}</p>
+                <p class="text-xs text-neutral-600 mt-1">{{ subscription_rate }}% conversion rate</p>
+            </div>
+            <div class="h-10 w-10 bg-green-50 rounded-lg flex items-center justify-center">
+                <i class="ri-vip-crown-line text-green-600 text-lg"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Revenue USD -->
+    <div class="admin-card p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-neutral-600 mb-1">Monthly Revenue (USD)</p>
+                <p class="text-2xl font-semibold text-neutral-900">${{ monthly_revenue_usd|floatformat:2 }}</p>
+                {% if revenue_change_usd > 0 %}
+                    <p class="text-xs text-green-600 mt-1">+{{ revenue_change_usd }}% from last month</p>
+                {% elif revenue_change_usd < 0 %}
+                    <p class="text-xs text-red-600 mt-1">{{ revenue_change_usd }}% from last month</p>
+                {% else %}
+                    <p class="text-xs text-neutral-600 mt-1">No change from last month</p>
+                {% endif %}
+            </div>
+            <div class="h-10 w-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                <i class="ri-money-dollar-circle-line text-blue-600 text-lg"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Revenue INR -->
+    <div class="admin-card p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm font-medium text-neutral-600 mb-1">Monthly Revenue (INR)</p>
+                <p class="text-2xl font-semibold text-neutral-900">₹{{ monthly_revenue_inr|floatformat:0 }}</p>
+                {% if revenue_change_inr > 0 %}
+                    <p class="text-xs text-green-600 mt-1">+{{ revenue_change_inr }}% from last month</p>
+                {% elif revenue_change_inr < 0 %}
+                    <p class="text-xs text-red-600 mt-1">{{ revenue_change_inr }}% from last month</p>
+                {% else %}
+                    <p class="text-xs text-neutral-600 mt-1">No change from last month</p>
+                {% endif %}
+            </div>
+            <div class="h-10 w-10 bg-green-50 rounded-lg flex items-center justify-center">
+                <i class="ri-money-rupee-circle-line text-green-600 text-lg"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="admin-card p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <p class="text-sm font-medium text-neutral-600">Quick Actions</p>
+            </div>
+            <div class="h-10 w-10 bg-orange-50 rounded-lg flex items-center justify-center">
+                <i class="ri-settings-line text-orange-600 text-lg"></i>
+            </div>
+        </div>
+        <div class="space-y-2">
+            <a href="{% url 'admin_panel:grant_subscription' %}" class="block w-full text-left px-3 py-2 text-sm text-primary hover:bg-primary/5 rounded transition-colors">
+                <i class="ri-gift-line mr-2"></i>Grant Subscription
+            </a>
+            <a href="{% url 'admin_panel:users' %}" class="block w-full text-left px-3 py-2 text-sm text-primary hover:bg-primary/5 rounded transition-colors">
+                <i class="ri-user-settings-line mr-2"></i>Manage Users
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Recent Activities -->
+    <div class="lg:col-span-2">
+        <div class="admin-card">
+            <div class="px-6 py-4 border-b border-neutral-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-neutral-900">Recent Activities</h2>
+                    <a href="{% url 'admin_panel:users' %}" class="text-sm text-primary hover:text-secondary font-medium">View all</a>
+                </div>
+            </div>
+            <div class="p-6">
+                {% if recent_activities %}
+                    <div class="space-y-4">
+                        {% for activity in recent_activities %}
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-shrink-0">
+                                    {% if activity.action_type == 'subscription' %}
+                                        <div class="w-8 h-8 bg-green-50 rounded-full flex items-center justify-center">
+                                            <i class="ri-vip-crown-line text-green-600 text-sm"></i>
+                                        </div>
+                                    {% else %}
+                                        <div class="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                                            <i class="ri-money-dollar-circle-line text-blue-600 text-sm"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-neutral-900">{{ activity.action }}</p>
+                                    <p class="text-sm text-neutral-500">{{ activity.user.email }}</p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <p class="text-sm text-neutral-500">{{ activity.timestamp|timesince }} ago</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-12">
+                        <div class="mx-auto h-12 w-12 bg-neutral-100 rounded-lg flex items-center justify-center mb-4">
+                            <i class="ri-history-line text-neutral-400 text-xl"></i>
+                        </div>
+                        <p class="text-sm text-neutral-500">No recent activities</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Chart -->
+    <div class="lg:col-span-1">
+        <div class="admin-card">
+            <div class="px-6 py-4 border-b border-neutral-200">
+                <h2 class="text-lg font-semibold text-neutral-900">Subscription Status</h2>
+            </div>
+            <div class="p-6">
+                <div class="relative h-64">
+                    <canvas id="subscriptionChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+    <!-- System Status -->
+    <div class="admin-card p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-neutral-900">System Status</h3>
+            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+        </div>
+        <div class="space-y-3">
+            <div class="flex justify-between">
+                <span class="text-sm text-neutral-600">Server Status</span>
+                <span class="text-sm font-medium text-green-600">Online</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-sm text-neutral-600">Email Service</span>
+                <span class="text-sm font-medium text-green-600">Active</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-sm text-neutral-600">Payment Gateway</span>
+                <span class="text-sm font-medium text-green-600">Connected</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Plans -->
+    <div class="admin-card p-6">
+        <h3 class="text-lg font-semibold text-neutral-900 mb-4">Popular Plans</h3>
+        <div class="space-y-3">
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-neutral-600">Pro Monthly</span>
+                <span class="text-sm font-medium text-neutral-900">45%</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-neutral-600">Pro Yearly</span>
+                <span class="text-sm font-medium text-neutral-900">35%</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-sm text-neutral-600">Free Trial</span>
+                <span class="text-sm font-medium text-neutral-900">20%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="admin-card p-6">
+        <h3 class="text-lg font-semibold text-neutral-900 mb-4">Quick Links</h3>
+        <div class="space-y-3">
+            <a href="{% url 'admin_panel:contact_messages' %}" class="flex items-center text-sm text-neutral-600 hover:text-primary transition-colors">
+                <i class="ri-message-line mr-3"></i>
+                Contact Messages
+            </a>
+            <a href="{% url 'admin_panel:newsletter_subscribers' %}" class="flex items-center text-sm text-neutral-600 hover:text-primary transition-colors">
+                <i class="ri-mail-line mr-3"></i>
+                Newsletter Subscribers
+            </a>
+            <a href="{% url 'admin_panel:payments' %}" class="flex items-center text-sm text-neutral-600 hover:text-primary transition-colors">
+                <i class="ri-bank-card-line mr-3"></i>
+                Payment History
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('subscriptionChart').getContext('2d');
+    
+    // Get data from Django template
+    const activeSubscriptions = parseInt('{{ active_subscriptions|default:0 }}') || 0;
+    const newUsers = parseInt('{{ new_users_this_month|default:0 }}') || 0;
+    
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Active', 'Trial', 'Inactive'],
+            datasets: [{
+                data: [activeSubscriptions, newUsers, 5],
+                backgroundColor: ['#10B981', '#F59E0B', '#EF4444'],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        usePointStyle: true
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

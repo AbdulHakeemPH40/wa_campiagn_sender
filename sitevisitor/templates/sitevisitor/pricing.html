@@ -1,0 +1,209 @@
+{% extends 'sitevisitor/base.html' %}
+{% load static %}
+
+{% block title %}Pricing Plans - WA Campaign Sender{% endblock %}
+{% block description %}Compare WhatsApp marketing plans starting at $5.99/month. Free 14-day trial, unlimited messages, multiple accounts. Choose your perfect plan today!{% endblock %}
+
+{% block content %}
+<div class="p-6 md:p-10">
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-10">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Choose the plan that fits your business needs</p>
+                
+                <!-- Currency Toggle -->
+                <div class="flex justify-center mt-6">
+                    <div class="inline-flex rounded-lg border border-gray-300 p-1 bg-gray-100">
+                        <button onclick="switchCurrency('usd')" id="usd-tab" class="currency-tab px-6 py-2 rounded-md font-medium text-sm transition-all bg-white text-primary shadow-sm">
+                            USD ($)
+                        </button>
+                        <button onclick="switchCurrency('inr')" id="inr-tab" class="currency-tab px-6 py-2 rounded-md font-medium text-sm transition-all text-gray-600 hover:text-gray-900">
+                            India (₹)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Plans - WhatsApp API Only -->
+            <div class="max-w-4xl mx-auto">
+                <!-- WhatsApp API Plan - Premium Design -->
+                <div class="bg-gradient-to-br from-white to-blue-50 p-12 rounded-2xl shadow-2xl border-2 border-primary overflow-hidden relative">
+                    <!-- Decorative top accent -->
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-blue-500 to-primary"></div>
+                    
+                    <!-- Badge -->
+                    <div class="inline-block mb-6">
+                        <span class="bg-gradient-to-r from-primary to-green-500 text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider">Premium Plan</span>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 items-start">
+                        <!-- Left side - Details -->
+                        <div>
+                            <h3 class="text-4xl font-black text-gray-900 mb-3">WhatsApp API</h3>
+                            <p class="text-lg text-gray-600 mb-8 font-medium">Everything you need to scale your messaging business</p>
+                            
+                            <!-- Price Section -->
+                            <div class="mb-10 pb-10 border-b-2 border-gray-200">
+                                <div class="mb-6">
+                                    <p class="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Base Plan</p>
+                                    <div class="flex items-baseline gap-2 mb-2">
+                                        <span class="text-5xl font-black text-gray-900">
+                                            <span class="price-usd">$20</span>
+                                            <span class="price-inr" style="display:none;">₹1299</span>
+                                        </span>
+                                        <span class="text-xl text-gray-600 font-semibold">/month</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500">Billed monthly. Cancel anytime.</p>
+                                </div>
+                                
+                            </div>
+
+                            <!-- Features List -->
+                            <h4 class="text-sm font-black text-gray-900 mb-5 uppercase tracking-widest">What's Included:</h4>
+                            <ul class="space-y-4 mb-10">
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">Unlimited Messages</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">Unlimited Conversations</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">Send Text, Images, Videos</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">1 Conversation Session</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">AI Content Draft</span>
+                                </li>
+                                
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">No Hidden Charges</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">No Meta Charges</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-green-500 flex items-center justify-center flex-shrink-0">
+                                        <i class="ri-check-line text-white font-bold"></i>
+                                    </div>
+                                    <span class="text-gray-800 font-medium">30 Days Money Back Guarantee</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Right side - CTA & Stats -->
+                        <div class="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
+                            <a href="{% url 'userpanel:pricing' %}" class="w-full bg-gradient-to-r from-primary to-green-500 hover:from-green-600 hover:to-emerald-600 text-white text-center px-8 py-4 rounded-xl font-black text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105 mb-8 inline-block">
+                                Buy Now
+                            </a>
+
+                            <!-- Stats Cards -->
+                            <div class="space-y-4">
+                                <div class="bg-gradient-to-br from-blue-50 to-primary/5 p-4 rounded-lg border border-primary/10">
+                                    <p class="text-xs text-gray-600 font-semibold mb-1">Monthly Capacity</p>
+                                    <p class="text-2xl font-black text-gray-900">Unlimited</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-emerald-50 to-green-500/5 p-4 rounded-lg border border-green-500/10">
+                                    <p class="text-xs text-gray-600 font-semibold mb-1">Response Time</p>
+                                    <p class="text-2xl font-black text-gray-900">Real-time</p>
+                                </div>
+                                <div class="bg-gradient-to-br from-purple-50 to-purple-500/5 p-4 rounded-lg border border-purple-500/10">
+                                    <p class="text-xs text-gray-600 font-semibold mb-1">Setup Time</p>
+                                    <p class="text-2xl font-black text-gray-900">5 Minutes</p>
+                                </div>
+                            </div>
+
+                            <!-- Trust badge -->
+                            <div class="mt-8 pt-8 border-t border-gray-200 text-center">
+                                <p class="text-xs text-gray-600 font-semibold mb-3">Trusted by 1000+ Businesses</p>
+                                <div class="flex justify-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center">
+                                        <i class="ri-star-fill text-yellow-600 text-sm"></i>
+                                    </div>
+                                    <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center">
+                                        <i class="ri-star-fill text-yellow-600 text-sm"></i>
+                                    </div>
+                                    <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center">
+                                        <i class="ri-star-fill text-yellow-600 text-sm"></i>
+                                    </div>
+                                    <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center">
+                                        <i class="ri-star-fill text-yellow-600 text-sm"></i>
+                                    </div>
+                                    <div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center">
+                                        <i class="ri-star-fill text-yellow-600 text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+// Currency Switcher for Pricing
+function switchCurrency(currency) {
+    const usdTab = document.getElementById('usd-tab');
+    const inrTab = document.getElementById('inr-tab');
+    const usdPrices = document.querySelectorAll('.price-usd');
+    const inrPrices = document.querySelectorAll('.price-inr');
+    
+    if (currency === 'usd') {
+        // Show USD prices
+        usdPrices.forEach(el => el.style.display = 'inline');
+        inrPrices.forEach(el => el.style.display = 'none');
+        
+        // Update tab styles
+        usdTab.classList.add('bg-white', 'text-primary', 'shadow-sm');
+        usdTab.classList.remove('text-gray-600');
+        inrTab.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+        inrTab.classList.add('text-gray-600');
+    } else {
+        // Show INR prices
+        usdPrices.forEach(el => el.style.display = 'none');
+        inrPrices.forEach(el => el.style.display = 'inline');
+        
+        // Update tab styles
+        inrTab.classList.add('bg-white', 'text-primary', 'shadow-sm');
+        inrTab.classList.remove('text-gray-600');
+        usdTab.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+        usdTab.classList.add('text-gray-600');
+    }
+    
+    // Save preference
+    localStorage.setItem('preferred_currency', currency);
+}
+
+// Load saved currency preference on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const savedCurrency = localStorage.getItem('preferred_currency') || 'usd';
+    switchCurrency(savedCurrency);
+});
+</script>
+{% endblock %}

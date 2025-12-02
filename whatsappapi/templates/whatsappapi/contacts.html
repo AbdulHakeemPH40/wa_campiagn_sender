@@ -1,0 +1,987 @@
+{% extends 'whatsappapi/base.html' %}
+{% load static %}
+
+{% block title %}Contacts{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-neutral-50 via-green-50 to-emerald-50 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8">
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-neutral-800">Contacts</h1>
+                <p class="text-neutral-600 mt-1 text-sm sm:text-base">Manage your contact lists for campaigns</p>
+            </div>
+            <button onclick="openImportModal()" class="w-full sm:w-auto px-5 py-3 bg-pink-100 text-pink-700 border border-pink-200 rounded-xl hover:bg-pink-200 font-semibold shadow-md inline-flex items-center justify-center">
+                <i class="ri-upload-line mr-2"></i>
+                Import Contact List
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bg-white rounded-t-2xl border border-neutral-200 border-b-0">
+            <div class="flex space-x-8 px-6 pt-4">
+                <button class="tab-btn active pb-4 px-2 text-sm font-semibold text-green-600 border-b-2 border-green-600">
+                    Contact List
+                </button>
+            </div>
+        </div>
+
+        <!-- Contact List Table -->
+        <div class="bg-white rounded-b-2xl shadow-lg border border-neutral-200 overflow-visible">
+            <table class="min-w-full divide-y divide-neutral-200">
+                <thead class="bg-neutral-50">
+                    <tr>
+                        <th class="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Contact List Name
+                        </th>
+                        <th class="hidden md:table-cell px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Uploaded On
+                        </th>
+                        <th class="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Contacts
+                        </th>
+                        <th class="px-4 sm:px-6 py-3 sm:py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-neutral-200">
+                    {% if contact_lists %}
+                        {% for contact_list in contact_lists %}
+                        <tr class="hover:bg-green-50 transition-colors">
+                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-semibold text-neutral-900">{{ contact_list.name }}</div>
+                            </td>
+                            <td class="hidden md:table-cell px-4 sm:px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-neutral-600">{{ contact_list.created_at|date:"d/m/Y, H:i:s" }}</div>
+                            </td>
+                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                                    <i class="ri-group-line mr-1"></i>
+                                    {{ contact_list.total_contacts }}
+                                </div>
+                            </td>
+                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right">
+                                <div class="relative inline-block">
+                                    <button onclick="toggleDropdown(event, '{{ contact_list.id }}')" class="p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+                                        <i class="ri-more-2-fill text-xl text-neutral-600"></i>
+                                    </button>
+                                    <!-- Dropdown Menu -->
+                                    <div id="dropdown-{{ contact_list.id }}" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-neutral-200 z-50">
+                                        <div class="py-2">
+                                            <button onclick="renameList('{{ contact_list.id }}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-pink-50 hover:text-pink-700 flex items-center transition-colors">
+                                                <i class="ri-edit-line mr-3 text-base"></i>
+                                                Rename List
+                                            </button>
+                                            <button onclick="exportList('{{ contact_list.id }}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-blue-50 hover:text-blue-700 flex items-center transition-colors">
+                                                <i class="ri-download-line mr-3 text-base"></i>
+                                                Export List
+                                            </button>
+                                            <button onclick="deleteList('{{ contact_list.id }}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-red-50 hover:text-red-700 flex items-center transition-colors">
+                                                <i class="ri-delete-bin-line mr-3 text-base"></i>
+                                                Delete List
+                                            </button>
+                                            <div class="border-t border-neutral-100 my-1"></div>
+                                            <button onclick="runBroadcast('{{ contact_list.id }}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-green-50 hover:text-green-700 flex items-center transition-colors">
+                                                <i class="ri-send-plane-fill mr-3 text-base"></i>
+                                                Run Broadcast
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr data-placeholder="no-lists">
+                        <td colspan="4" class="px-6 py-12">
+                            <div class="text-center">
+                                <div class="h-20 w-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="ri-contacts-line text-4xl text-green-600"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-neutral-900 mb-2">No Contact Lists Yet</h3>
+                                <p class="text-neutral-600 mb-6 max-w-md mx-auto">
+                                    Upload your first contact list to start sending campaigns
+                                </p>
+                                <button onclick="openImportModal()" class="w-full px-5 py-3 bg-pink-100 text-pink-700 border border-pink-200 rounded-xl hover:bg-pink-200 font-semibold shadow-md inline-flex items-center justify-center">
+                                    <i class="ri-upload-line mr-2"></i>
+                                    Import Contact List
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Import Contact List Modal -->
+<div id="importModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-5 border-b border-green-200 rounded-t-2xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="h-10 w-10 bg-green-500 rounded-lg flex items-center justify-center">
+                        <i class="ri-upload-cloud-line text-xl text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-neutral-800">Import Contact List</h2>
+                        <p class="text-xs text-neutral-600">Upload your contacts for campaigns</p>
+                    </div>
+                </div>
+                <button onclick="closeImportModal()" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                    <i class="ri-close-line text-2xl text-neutral-600"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal Body -->
+        <form id="importForm" class="p-6 space-y-6">
+            {% csrf_token %}
+            <!-- User Country List -->
+            <div>
+                <label class="block text-sm font-semibold text-neutral-700 mb-3">User Country List</label>
+                <div class="flex space-x-6">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="country_type" value="single" checked class="w-5 h-5 text-green-600 focus:ring-green-500" onchange="toggleCountryField()">
+                        <span class="text-neutral-700 font-medium">Single Country</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="country_type" value="multiple" class="w-5 h-5 text-green-600 focus:ring-green-500" onchange="toggleCountryField()">
+                        <span class="text-neutral-700 font-medium">Multiple Countries</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Country Selection (Only for Single Country) -->
+            <div id="countrySelectionSection">
+                <label class="block text-sm font-semibold text-neutral-700 mb-2">Country</label>
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        id="countrySearch" 
+                        placeholder="Search country..." 
+                        class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-xl text-neutral-800 placeholder-neutral-400 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        autocomplete="off"
+                        onclick="toggleCountryDropdown()"
+                        onkeyup="filterCountries()"
+                    >
+                    <i class="ri-search-line absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+                    
+                    <!-- Country Dropdown -->
+                    <div id="countryDropdown" class="hidden absolute z-50 w-full mt-2 bg-white border border-neutral-300 rounded-xl shadow-xl max-h-64 overflow-y-auto">
+                        <div id="countryList" class="py-2">
+                            <!-- Countries will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="selectedCountryCode" name="country_code" value="">
+                <p class="text-xs text-neutral-500 mt-2">Single country option will auto-format the phone numbers in phone column.</p>
+            </div>
+
+            <!-- Upload Contact List -->
+            <div>
+                <label class="block text-sm font-semibold text-neutral-700 mb-3">Upload Contact List</label>
+                <div class="border-2 border-dashed border-green-300 bg-green-50 rounded-xl p-8 text-center hover:border-green-500 hover:bg-green-100 transition-colors cursor-pointer" onclick="document.getElementById('fileInput').click()">
+                    <i class="ri-upload-cloud-line text-5xl text-green-500 mb-3"></i>
+                    <p class="text-neutral-700 mb-2 font-medium">Upload contact list file from computer</p>
+                    <button type="button" class="px-4 py-2 bg-white border border-green-300 text-green-700 rounded-lg hover:bg-green-50 transition-colors inline-flex items-center font-semibold">
+                        <i class="ri-add-line mr-2"></i>
+                        Browse
+                    </button>
+                    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" class="hidden" onchange="handleFileSelect(event)">
+                </div>
+                <div class="mt-3 flex items-start space-x-2 text-sm text-neutral-600">
+                    <i class="ri-information-line mt-0.5 text-green-600"></i>
+                    <div>
+                        <p>Kindly upload a valid file in CSV, XLS, or XLSX format.</p>
+                        <p class="mt-2">
+                            <a href="{% url 'whatsappapi:download_sample_csv' %}" class="text-green-600 hover:text-green-700 font-semibold inline-flex items-center">
+                                <i class="ri-download-line mr-1"></i>
+                                Download sample CSV file
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Selected File Display -->
+                <div id="selectedFile" class="hidden mt-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <i class="ri-file-excel-line text-2xl text-green-600"></i>
+                        <div>
+                            <p class="text-neutral-800 font-semibold" id="fileName"></p>
+                            <p class="text-xs text-neutral-600" id="fileSize"></p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="removeFile()" class="p-2 hover:bg-green-100 rounded-lg transition-colors">
+                        <i class="ri-close-line text-xl text-neutral-600"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contact List Name -->
+            <div id="listNameSection" class="hidden">
+                <label class="block text-sm font-semibold text-neutral-700 mb-2">Contact List Name</label>
+                <input type="text" id="listName" name="list_name" placeholder="Enter contact list name" class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-xl text-neutral-800 placeholder-neutral-400 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                <p class="text-xs text-neutral-500 mt-2">Only first 10000 records will be uploaded.</p>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="hidden p-4 bg-green-50 border border-green-200 rounded-xl">
+                <div class="flex items-center space-x-3">
+                    <div class="animate-spin h-5 w-5 border-2 border-green-600 border-t-transparent rounded-full"></div>
+                    <span class="text-neutral-700 font-medium">Importing contact list...</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-end space-x-3 pt-4 border-t border-neutral-200">
+                <button type="button" onclick="closeImportModal()" class="px-6 py-3 bg-white border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 font-semibold transition-all">
+                    Cancel
+                </button>
+                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 font-semibold shadow-lg transition-all">
+                    <i class="ri-save-line mr-2"></i>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-red-50 to-rose-50 px-6 py-5 border-b border-red-200 rounded-t-2xl">
+            <div class="flex items-center space-x-3">
+                <div class="h-12 w-12 bg-red-500 rounded-full flex items-center justify-center">
+                    <i class="ri-delete-bin-line text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-neutral-800">Delete Contact List</h2>
+                    <p class="text-xs text-neutral-600">This action cannot be undone</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6">
+            <p class="text-neutral-700 mb-2">Are you sure you want to delete this contact list?</p>
+            <p class="text-sm text-neutral-500">All contacts in this list will be permanently removed.</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end space-x-3 px-6 pb-6">
+            <button onclick="closeDeleteModal()" class="px-6 py-3 bg-white border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 font-semibold transition-all">
+                Cancel
+            </button>
+            <button onclick="confirmDelete()" class="px-6 py-3 bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-xl hover:from-red-700 hover:to-rose-700 font-semibold shadow-lg transition-all">
+                <i class="ri-delete-bin-line mr-2"></i>
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename Contact List Modal -->
+<div id="renameModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-pink-50 to-rose-50 px-6 py-5 border-b border-pink-200 rounded-t-2xl">
+            <div class="flex items-center space-x-3">
+                <div class="h-12 w-12 bg-pink-500 rounded-full flex items-center justify-center">
+                    <i class="ri-edit-line text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-neutral-800">Rename Contact List</h2>
+                    <p class="text-xs text-neutral-600">Enter a new name for your list</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6">
+            <label class="block text-sm font-semibold text-neutral-700 mb-2">New List Name</label>
+            <input type="text" id="newListName" placeholder="Enter new name" class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-xl text-neutral-800 placeholder-neutral-400 focus:ring-2 focus:ring-pink-500 focus:border-pink-500">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end space-x-3 px-6 pb-6">
+            <button onclick="closeRenameModal()" class="px-6 py-3 bg-white border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 font-semibold transition-all">
+                Cancel
+            </button>
+            <button onclick="confirmRename()" class="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 text-white rounded-xl hover:from-pink-700 hover:to-rose-700 font-semibold shadow-lg transition-all">
+                <i class="ri-save-line mr-2"></i>
+                Save
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Export Contact List Modal -->
+<div id="exportModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-blue-50 to-sky-50 px-6 py-5 border-b border-blue-200 rounded-t-2xl">
+            <div class="flex items-center space-x-3">
+                <div class="h-12 w-12 bg-blue-500 rounded-full flex items-center justify-center">
+                    <i class="ri-download-line text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-neutral-800">Export Contact List</h2>
+                    <p class="text-xs text-neutral-600">Choose your export format</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6">
+            <p class="text-neutral-700 mb-4">Select the format you want to export:</p>
+            <div class="space-y-3">
+                <button onclick="exportToCSV()" class="w-full px-4 py-3 bg-white border-2 border-green-300 text-neutral-700 rounded-xl hover:bg-green-50 hover:border-green-500 font-semibold transition-all flex items-center justify-center">
+                    <i class="ri-file-excel-line text-2xl text-green-600 mr-3"></i>
+                    Export as CSV
+                </button>
+                <button onclick="exportToExcel()" class="w-full px-4 py-3 bg-white border-2 border-blue-300 text-neutral-700 rounded-xl hover:bg-blue-50 hover:border-blue-500 font-semibold transition-all flex items-center justify-center">
+                    <i class="ri-file-excel-2-line text-2xl text-blue-600 mr-3"></i>
+                    Export as Excel
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end px-6 pb-6">
+            <button onclick="closeExportModal()" class="px-6 py-3 bg-white border border-neutral-300 text-neutral-700 rounded-xl hover:bg-neutral-50 font-semibold transition-all">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Toast Notification -->
+<div id="successToast" class="hidden fixed top-5 right-5 z-[100] max-w-sm">
+    <div class="bg-white rounded-xl shadow-2xl border-l-4 border-green-500 p-4 flex items-start space-x-3 animate-slide-in">
+        <div class="h-10 w-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <i class="ri-check-line text-2xl text-green-600"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="font-semibold text-neutral-800" id="toastTitle">Success!</h3>
+            <p class="text-sm text-neutral-600" id="toastMessage">Action completed successfully</p>
+        </div>
+        <button onclick="closeToast()" class="text-neutral-400 hover:text-neutral-600">
+            <i class="ri-close-line text-xl"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Error Toast Notification -->
+<div id="errorToast" class="hidden fixed top-5 right-5 z-[100] max-w-sm">
+    <div class="bg-white rounded-xl shadow-2xl border-l-4 border-red-500 p-4 flex items-start space-x-3 animate-slide-in">
+        <div class="h-10 w-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <i class="ri-error-warning-line text-2xl text-red-600"></i>
+        </div>
+        <div class="flex-1">
+            <h3 class="font-semibold text-neutral-800">Error</h3>
+            <p class="text-sm text-neutral-600" id="errorMessage">Something went wrong</p>
+        </div>
+        <button onclick="closeErrorToast()" class="text-neutral-400 hover:text-neutral-600">
+            <i class="ri-close-line text-xl"></i>
+        </button>
+    </div>
+</div>
+
+<style>
+@keyframes slide-in {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Toast Notification Functions
+function showToast(title, message) {
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastMessage').textContent = message;
+    document.getElementById('successToast').classList.remove('hidden');
+    
+    // Auto hide after 3 seconds
+    setTimeout(() => {
+        closeToast();
+    }, 3000);
+}
+
+function closeToast() {
+    document.getElementById('successToast').classList.add('hidden');
+}
+
+function showError(message) {
+    document.getElementById('errorMessage').textContent = message;
+    document.getElementById('errorToast').classList.remove('hidden');
+    
+    // Auto hide after 4 seconds
+    setTimeout(() => {
+        closeErrorToast();
+    }, 4000);
+}
+
+function closeErrorToast() {
+    document.getElementById('errorToast').classList.add('hidden');
+}
+// Dropdown Toggle
+function toggleDropdown(event, id) {
+    event.stopPropagation();
+    const dropdown = document.getElementById(`dropdown-${id}`);
+    
+    // Close all other dropdowns
+    document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+        if (d.id !== `dropdown-${id}`) {
+            d.classList.add('hidden');
+        }
+    });
+    
+    // Toggle current dropdown
+    dropdown.classList.toggle('hidden');
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function() {
+    document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+        d.classList.add('hidden');
+    });
+});
+
+// Close dropdowns on scroll
+window.addEventListener('scroll', function() {
+    document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+        d.classList.add('hidden');
+    });
+}, true);
+
+// Modal Functions
+function openImportModal() {
+    document.getElementById('importModal').classList.remove('hidden');
+}
+
+function closeImportModal() {
+    document.getElementById('importModal').classList.add('hidden');
+    document.getElementById('importForm').reset();
+    document.getElementById('selectedFile').classList.add('hidden');
+    document.getElementById('listNameSection').classList.add('hidden');
+}
+
+// File Upload Handling
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = formatFileSize(file.size);
+        document.getElementById('selectedFile').classList.remove('hidden');
+        document.getElementById('listNameSection').classList.remove('hidden');
+    }
+}
+
+function removeFile() {
+    document.getElementById('fileInput').value = '';
+    document.getElementById('selectedFile').classList.add('hidden');
+    document.getElementById('listNameSection').classList.add('hidden');
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' bytes';
+    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    else return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+// Action Functions
+function renameList(id) {
+    window.renameListId = id;
+    document.getElementById('renameModal').classList.remove('hidden');
+    document.getElementById('newListName').focus();
+}
+
+function closeRenameModal() {
+    document.getElementById('renameModal').classList.add('hidden');
+    document.getElementById('newListName').value = '';
+    window.renameListId = null;
+}
+
+function confirmRename() {
+    const listId = window.renameListId;
+    const newName = document.getElementById('newListName').value.trim();
+    
+    if (!newName) {
+        showError('Please enter a name');
+        return;
+    }
+    
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    fetch(`/whatsappapi/contacts/${listId}/rename/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: newName })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeRenameModal();
+            showToast('Renamed!', 'Contact list renamed successfully');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showError(data.error || 'Failed to rename');
+        }
+    })
+    .catch(error => {
+        showError(error.message);
+    });
+}
+
+function exportList(id) {
+    window.exportListId = id;
+    document.getElementById('exportModal').classList.remove('hidden');
+}
+
+function closeExportModal() {
+    document.getElementById('exportModal').classList.add('hidden');
+    window.exportListId = null;
+}
+
+function exportToCSV() {
+    const listId = window.exportListId;
+    showToast('Exporting...', 'Your CSV file is being downloaded');
+    window.location.href = `/whatsappapi/contacts/${listId}/export/csv/`;
+    closeExportModal();
+}
+
+function exportToExcel() {
+    const listId = window.exportListId;
+    showToast('Exporting...', 'Your Excel file is being downloaded');
+    window.location.href = `/whatsappapi/contacts/${listId}/export/excel/`;
+    closeExportModal();
+}
+
+function deleteList(id) {
+    // Store the ID for later use
+    window.deleteListId = id;
+    // Open custom modal
+    document.getElementById('deleteModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+    window.deleteListId = null;
+}
+
+function confirmDelete() {
+    const listId = window.deleteListId;
+    if (!listId) return;
+    
+    // Get CSRF token
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    // Call delete API
+    fetch(`/whatsappapi/contacts/${listId}/delete/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            closeDeleteModal();
+            showToast('Deleted!', 'Contact list deleted successfully');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showError(data.error || 'Failed to delete contact list');
+        }
+    })
+    .catch(error => {
+        showError(error.message);
+    });
+}
+
+function runBroadcast(id) {
+    window.location.href = '{% url "whatsappapi:send_campaign" %}?list=' + id;
+}
+
+// Country Selection Functions
+const countries = [
+    {name: "Afghanistan", code: "93", flag: "🇦🇫"}, {name: "Albania", code: "355", flag: "🇦🇱"}, {name: "Algeria", code: "213", flag: "🇩🇿"},
+    {name: "Andorra", code: "376", flag: "🇦🇩"}, {name: "Angola", code: "244", flag: "🇦🇴"}, {name: "Argentina", code: "54", flag: "🇦🇷"},
+    {name: "Armenia", code: "374", flag: "🇦🇲"}, {name: "Australia", code: "61", flag: "🇦🇺"}, {name: "Austria", code: "43", flag: "🇦🇹"},
+    {name: "Azerbaijan", code: "994", flag: "🇦🇿"}, {name: "Bahamas", code: "1242", flag: "🇧🇸"}, {name: "Bahrain", code: "973", flag: "🇧🇭"},
+    {name: "Bangladesh", code: "880", flag: "🇧🇩"}, {name: "Barbados", code: "1246", flag: "🇧🇧"}, {name: "Belarus", code: "375", flag: "🇧🇾"},
+    {name: "Belgium", code: "32", flag: "🇧🇪"}, {name: "Belize", code: "501", flag: "🇧🇿"}, {name: "Benin", code: "229", flag: "🇧🇯"},
+    {name: "Bhutan", code: "975", flag: "🇧🇹"}, {name: "Bolivia", code: "591", flag: "🇧🇴"}, {name: "Bosnia", code: "387", flag: "🇧🇦"},
+    {name: "Botswana", code: "267", flag: "🇧🇼"}, {name: "Brazil", code: "55", flag: "🇧🇷"}, {name: "Brunei", code: "673", flag: "🇧🇳"},
+    {name: "Bulgaria", code: "359", flag: "🇧🇬"}, {name: "Burkina Faso", code: "226", flag: "🇧🇫"}, {name: "Burundi", code: "257", flag: "🇧🇮"},
+    {name: "Cambodia", code: "855", flag: "🇰🇭"}, {name: "Cameroon", code: "237", flag: "🇨🇲"}, {name: "Canada", code: "1", flag: "🇨🇦"},
+    {name: "Cape Verde", code: "238", flag: "🇨🇻"}, {name: "Central African Republic", code: "236", flag: "🇨🇫"}, {name: "Chad", code: "235", flag: "🇹🇩"},
+    {name: "Chile", code: "56", flag: "🇨🇱"}, {name: "China", code: "86", flag: "🇨🇳"}, {name: "Colombia", code: "57", flag: "🇨🇴"},
+    {name: "Comoros", code: "269", flag: "🇰🇲"}, {name: "Congo", code: "242", flag: "🇨🇬"}, {name: "Costa Rica", code: "506", flag: "🇨🇷"},
+    {name: "Croatia", code: "385", flag: "🇭🇷"}, {name: "Cuba", code: "53", flag: "🇨🇺"}, {name: "Cyprus", code: "357", flag: "🇨🇾"},
+    {name: "Czech Republic", code: "420", flag: "🇨🇿"}, {name: "Denmark", code: "45", flag: "🇩🇰"}, {name: "Djibouti", code: "253", flag: "🇩🇯"},
+    {name: "Dominica", code: "1767", flag: "🇩🇲"}, {name: "Dominican Republic", code: "1809", flag: "🇩🇴"}, {name: "Ecuador", code: "593", flag: "🇪🇨"},
+    {name: "Egypt", code: "20", flag: "🇪🇬"}, {name: "El Salvador", code: "503", flag: "🇸🇻"}, {name: "Equatorial Guinea", code: "240", flag: "🇬🇶"},
+    {name: "Eritrea", code: "291", flag: "🇪🇷"}, {name: "Estonia", code: "372", flag: "🇪🇪"}, {name: "Ethiopia", code: "251", flag: "🇪🇹"},
+    {name: "Fiji", code: "679", flag: "🇫🇯"}, {name: "Finland", code: "358", flag: "🇫🇮"}, {name: "France", code: "33", flag: "🇫🇷"},
+    {name: "Gabon", code: "241", flag: "🇬🇦"}, {name: "Gambia", code: "220", flag: "🇬🇲"}, {name: "Georgia", code: "995", flag: "🇬🇪"},
+    {name: "Germany", code: "49", flag: "🇩🇪"}, {name: "Ghana", code: "233", flag: "🇬🇭"}, {name: "Greece", code: "30", flag: "🇬🇷"},
+    {name: "Grenada", code: "1473", flag: "🇬🇩"}, {name: "Guatemala", code: "502", flag: "🇬🇹"}, {name: "Guinea", code: "224", flag: "🇬🇳"},
+    {name: "Guinea-Bissau", code: "245", flag: "🇬🇼"}, {name: "Guyana", code: "592", flag: "🇬🇾"}, {name: "Haiti", code: "509", flag: "🇭🇹"},
+    {name: "Honduras", code: "504", flag: "🇭🇳"}, {name: "Hong Kong", code: "852", flag: "🇭🇰"}, {name: "Hungary", code: "36", flag: "🇭🇺"},
+    {name: "Iceland", code: "354", flag: "🇮🇸"}, {name: "India", code: "91", flag: "🇮🇳"}, {name: "Indonesia", code: "62", flag: "🇮🇩"},
+    {name: "Iran", code: "98", flag: "🇮🇷"}, {name: "Iraq", code: "964", flag: "🇮🇶"}, {name: "Ireland", code: "353", flag: "🇮🇪"},
+    {name: "Israel", code: "972", flag: "🇮🇱"}, {name: "Italy", code: "39", flag: "🇮🇹"}, {name: "Jamaica", code: "1876", flag: "🇯🇲"},
+    {name: "Japan", code: "81", flag: "🇯🇵"}, {name: "Jordan", code: "962", flag: "🇯🇴"}, {name: "Kazakhstan", code: "7", flag: "🇰🇿"},
+    {name: "Kenya", code: "254", flag: "🇰🇪"}, {name: "Kiribati", code: "686", flag: "🇰🇮"}, {name: "Kuwait", code: "965", flag: "🇰🇼"},
+    {name: "Kyrgyzstan", code: "996", flag: "🇰🇬"}, {name: "Laos", code: "856", flag: "🇱🇦"}, {name: "Latvia", code: "371", flag: "🇱🇻"},
+    {name: "Lebanon", code: "961", flag: "🇱🇧"}, {name: "Lesotho", code: "266", flag: "🇱🇸"}, {name: "Liberia", code: "231", flag: "🇱🇷"},
+    {name: "Libya", code: "218", flag: "🇱🇾"}, {name: "Liechtenstein", code: "423", flag: "🇱🇮"}, {name: "Lithuania", code: "370", flag: "🇱🇹"},
+    {name: "Luxembourg", code: "352", flag: "🇱🇺"}, {name: "Madagascar", code: "261", flag: "🇲🇬"}, {name: "Malawi", code: "265", flag: "🇲🇼"},
+    {name: "Malaysia", code: "60", flag: "🇲🇾"}, {name: "Maldives", code: "960", flag: "🇲🇻"}, {name: "Mali", code: "223", flag: "🇲🇱"},
+    {name: "Malta", code: "356", flag: "🇲🇹"}, {name: "Marshall Islands", code: "692", flag: "🇲🇭"}, {name: "Mauritania", code: "222", flag: "🇲🇷"},
+    {name: "Mauritius", code: "230", flag: "🇲🇺"}, {name: "Mexico", code: "52", flag: "🇲🇽"}, {name: "Micronesia", code: "691", flag: "🇫🇲"},
+    {name: "Moldova", code: "373", flag: "🇲🇩"}, {name: "Monaco", code: "377", flag: "🇲🇨"}, {name: "Mongolia", code: "976", flag: "🇲🇳"},
+    {name: "Montenegro", code: "382", flag: "🇲🇪"}, {name: "Morocco", code: "212", flag: "🇲🇦"}, {name: "Mozambique", code: "258", flag: "🇲🇿"},
+    {name: "Myanmar", code: "95", flag: "🇲🇲"}, {name: "Namibia", code: "264", flag: "🇳🇦"}, {name: "Nauru", code: "674", flag: "🇳🇷"},
+    {name: "Nepal", code: "977", flag: "🇳🇵"}, {name: "Netherlands", code: "31", flag: "🇳🇱"}, {name: "New Zealand", code: "64", flag: "🇳🇿"},
+    {name: "Nicaragua", code: "505", flag: "🇳🇮"}, {name: "Niger", code: "227", flag: "🇳🇪"}, {name: "Nigeria", code: "234", flag: "🇳🇬"},
+    {name: "North Korea", code: "850", flag: "🇰🇵"}, {name: "North Macedonia", code: "389", flag: "🇲🇰"}, {name: "Norway", code: "47", flag: "🇳🇴"},
+    {name: "Oman", code: "968", flag: "🇴🇲"}, {name: "Pakistan", code: "92", flag: "🇵🇰"}, {name: "Palau", code: "680", flag: "🇵🇼"},
+    {name: "Palestine", code: "970", flag: "🇵🇸"}, {name: "Panama", code: "507", flag: "🇵🇦"}, {name: "Papua New Guinea", code: "675", flag: "🇵🇬"},
+    {name: "Paraguay", code: "595", flag: "🇵🇾"}, {name: "Peru", code: "51", flag: "🇵🇪"}, {name: "Philippines", code: "63", flag: "🇵🇭"},
+    {name: "Poland", code: "48", flag: "🇵🇱"}, {name: "Portugal", code: "351", flag: "🇵🇹"}, {name: "Qatar", code: "974", flag: "🇶🇦"},
+    {name: "Romania", code: "40", flag: "🇷🇴"}, {name: "Russia", code: "7", flag: "🇷🇺"}, {name: "Rwanda", code: "250", flag: "🇷🇼"},
+    {name: "Saint Kitts and Nevis", code: "1869", flag: "🇰🇳"}, {name: "Saint Lucia", code: "1758", flag: "🇱🇨"}, {name: "Saint Vincent", code: "1784", flag: "🇻🇨"},
+    {name: "Samoa", code: "685", flag: "🇼🇸"}, {name: "San Marino", code: "378", flag: "🇸🇲"}, {name: "Sao Tome", code: "239", flag: "🇸🇹"},
+    {name: "Saudi Arabia", code: "966", flag: "🇸🇦"}, {name: "Senegal", code: "221", flag: "🇸🇳"}, {name: "Serbia", code: "381", flag: "🇷🇸"},
+    {name: "Seychelles", code: "248", flag: "🇸🇨"}, {name: "Sierra Leone", code: "232", flag: "🇸🇱"}, {name: "Singapore", code: "65", flag: "🇸🇬"},
+    {name: "Slovakia", code: "421", flag: "🇸🇰"}, {name: "Slovenia", code: "386", flag: "🇸🇮"}, {name: "Solomon Islands", code: "677", flag: "🇸🇧"},
+    {name: "Somalia", code: "252", flag: "🇸🇴"}, {name: "South Africa", code: "27", flag: "🇿🇦"}, {name: "South Korea", code: "82", flag: "🇰🇷"},
+    {name: "South Sudan", code: "211", flag: "🇸🇸"}, {name: "Spain", code: "34", flag: "🇪🇸"}, {name: "Sri Lanka", code: "94", flag: "🇱🇰"},
+    {name: "Sudan", code: "249", flag: "🇸🇩"}, {name: "Suriname", code: "597", flag: "🇸🇷"}, {name: "Sweden", code: "46", flag: "🇸🇪"},
+    {name: "Switzerland", code: "41", flag: "🇨🇭"}, {name: "Syria", code: "963", flag: "🇸🇾"}, {name: "Taiwan", code: "886", flag: "🇹🇼"},
+    {name: "Tajikistan", code: "992", flag: "🇹🇯"}, {name: "Tanzania", code: "255", flag: "🇹🇿"}, {name: "Thailand", code: "66", flag: "🇹🇭"},
+    {name: "Timor-Leste", code: "670", flag: "🇹🇱"}, {name: "Togo", code: "228", flag: "🇹🇬"}, {name: "Tonga", code: "676", flag: "🇹🇴"},
+    {name: "Trinidad and Tobago", code: "1868", flag: "🇹🇹"}, {name: "Tunisia", code: "216", flag: "🇹🇳"}, {name: "Turkey", code: "90", flag: "🇹🇷"},
+    {name: "Turkmenistan", code: "993", flag: "🇹🇲"}, {name: "Tuvalu", code: "688", flag: "🇹🇻"}, {name: "Uganda", code: "256", flag: "🇺🇬"},
+    {name: "Ukraine", code: "380", flag: "🇺🇦"}, {name: "United Arab Emirates", code: "971", flag: "🇦🇪"}, {name: "United Kingdom", code: "44", flag: "🇬🇧"},
+    {name: "United States", code: "1", flag: "🇺🇸"}, {name: "Uruguay", code: "598", flag: "🇺🇾"}, {name: "Uzbekistan", code: "998", flag: "🇺🇿"},
+    {name: "Vanuatu", code: "678", flag: "🇻🇺"}, {name: "Vatican City", code: "379", flag: "🇻🇦"}, {name: "Venezuela", code: "58", flag: "🇻🇪"},
+    {name: "Vietnam", code: "84", flag: "🇻🇳"}, {name: "Yemen", code: "967", flag: "🇾🇪"}, {name: "Zambia", code: "260", flag: "🇿🇲"},
+    {name: "Zimbabwe", code: "263", flag: "🇿🇼"}
+];
+
+let allCountries = [...countries];
+
+// Initialize country list on page load
+document.addEventListener('DOMContentLoaded', function() {
+    renderCountries(allCountries);
+});
+
+function renderCountries(countryList) {
+    const countryListDiv = document.getElementById('countryList');
+    countryListDiv.innerHTML = '';
+    
+    countryList.forEach(country => {
+        const div = document.createElement('div');
+        div.className = 'px-4 py-2.5 hover:bg-green-50 cursor-pointer flex items-center space-x-3 transition-colors';
+        div.innerHTML = `
+            <span class="text-2xl">${country.flag}</span>
+            <div class="flex-1">
+                <span class="text-neutral-800 font-medium">${country.name}</span>
+                <span class="text-neutral-500 text-sm ml-2">(+${country.code})</span>
+            </div>
+        `;
+        div.onclick = () => selectCountry(country);
+        countryListDiv.appendChild(div);
+    });
+}
+
+function toggleCountryDropdown() {
+    const dropdown = document.getElementById('countryDropdown');
+    dropdown.classList.toggle('hidden');
+}
+
+function filterCountries() {
+    const searchInput = document.getElementById('countrySearch').value.toLowerCase();
+    const filtered = allCountries.filter(country => 
+        country.name.toLowerCase().includes(searchInput) || 
+        country.code.includes(searchInput)
+    );
+    renderCountries(filtered);
+    document.getElementById('countryDropdown').classList.remove('hidden');
+}
+
+function selectCountry(country) {
+    document.getElementById('countrySearch').value = `${country.flag} ${country.name} (+${country.code})`;
+    document.getElementById('selectedCountryCode').value = country.code;
+    document.getElementById('countryDropdown').classList.add('hidden');
+}
+
+function toggleCountryField() {
+    const countrySection = document.getElementById('countrySelectionSection');
+    const singleCountry = document.querySelector('input[name="country_type"][value="single"]').checked;
+    
+    if (singleCountry) {
+        countrySection.classList.remove('hidden');
+    } else {
+        countrySection.classList.add('hidden');
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const countrySearch = document.getElementById('countrySearch');
+    const countryDropdown = document.getElementById('countryDropdown');
+    
+    if (!countrySearch.contains(event.target) && !countryDropdown.contains(event.target)) {
+        countryDropdown.classList.add('hidden');
+    }
+});
+
+// Form Submission
+document.getElementById('importForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const fileInput = document.getElementById('fileInput');
+    const listName = document.getElementById('listName').value;
+    const countryCode = document.getElementById('selectedCountryCode').value;
+    const countryType = document.querySelector('input[name="country_type"]:checked').value;
+    
+    // Validation
+    if (!fileInput.files[0]) {
+        showError('Please select a file to upload');
+        return;
+    }
+    
+    if (!listName) {
+        showError('Please enter a contact list name');
+        return;
+    }
+    
+    if (countryType === 'single' && !countryCode) {
+        showError('Please select a country');
+        return;
+    }
+    
+    // Show loading indicator
+    document.getElementById('loadingIndicator').classList.remove('hidden');
+    document.querySelector('button[type="submit"]').disabled = true;
+    
+    // Create FormData
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('list_name', listName);
+    formData.append('country_code', countryCode);
+    formData.append('country_type', countryType);
+    
+    // Get CSRF token
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    // Submit via AJAX
+    fetch('{% url "whatsappapi:upload_contacts" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('loadingIndicator').classList.add('hidden');
+        document.querySelector('button[type="submit"]').disabled = false;
+        
+        if (data.success) {
+            closeImportModal();
+            showToast('Success!', `Imported ${data.total_contacts} contacts successfully`);
+            // Redirect to send campaign with the new list preselected
+            setTimeout(() => {
+                window.location.href = '{% url "whatsappapi:send_campaign" %}?list=' + data.list_id;
+            }, 1000);
+        } else {
+            showError(data.error || 'Failed to import contacts');
+        }
+    })
+    .catch(error => {
+        document.getElementById('loadingIndicator').classList.add('hidden');
+        document.querySelector('button[type="submit"]').disabled = false;
+        showError(error.message);
+    });
+});
+
+// Real-time updates via WebSocket
+(function initUpdatesSocket() {
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socketUrl = `${protocol}://${window.location.host}/ws/updates/`;
+    let ws;
+
+    try {
+        ws = new WebSocket(socketUrl);
+    } catch (e) {
+        // Silently ignore if WebSocket cannot be created
+        return;
+    }
+
+    ws.onmessage = function(event) {
+        try {
+            const payload = JSON.parse(event.data);
+            if (!payload || !payload.event) return;
+
+            switch (payload.event) {
+                case 'contact_list_created':
+                    addContactListRow(payload.list);
+                    showToast('New list', `Created: ${payload.list?.name || ''}`);
+                    break;
+                case 'contacts_count_updated':
+                    updateContactsCount(payload.list);
+                    break;
+                case 'contact_list_renamed':
+                    updateContactListName(payload.list);
+                    showToast('Renamed', `Updated: ${payload.list?.name || ''}`);
+                    break;
+                case 'contact_list_deleted':
+                    removeContactListRow(payload.list_id);
+                    showToast('Deleted', 'Contact list removed');
+                    break;
+                default:
+                    break;
+            }
+        } catch (err) {
+            // Ignore malformed messages
+        }
+    };
+})();
+
+function getContactsTbody() {
+    return document.querySelector('table.min-w-full tbody') || document.querySelector('table tbody');
+}
+
+function ensureTableVisible() {
+    // If placeholder row exists, remove it
+    const tbody = getContactsTbody();
+    if (!tbody) return;
+    const placeholder = tbody.querySelector('[data-placeholder="no-lists"]');
+    if (placeholder) placeholder.remove();
+}
+
+function addContactListRow(list) {
+    if (!list || !list.id) return;
+    const tbody = getContactsTbody();
+    if (!tbody) return;
+    ensureTableVisible();
+
+    // If row already exists, update instead of duplicating
+    const existing = document.getElementById(`contact-row-${list.id}`);
+    if (existing) {
+        updateContactsCount(list);
+        updateContactListName(list);
+        return;
+    }
+
+    const tr = document.createElement('tr');
+    tr.id = `contact-row-${list.id}`;
+    tr.className = 'hover:bg-green-50 transition-colors';
+    tr.innerHTML = `
+        <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm font-semibold text-neutral-900">${escapeHtml(list.name || '')}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+            <div class="text-sm text-neutral-600">${escapeHtml(list.created_at || '')}</div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+            <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700">
+                <i class="ri-group-line mr-1"></i>
+                <span id="contacts-count-${list.id}">${Number(list.total_contacts || 0)}</span>
+            </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-right">
+            <div class="relative inline-block">
+                <button onclick="toggleDropdown(event, '${list.id}')" class="p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+                    <i class="ri-more-2-fill text-xl text-neutral-600"></i>
+                </button>
+                <div id="dropdown-${list.id}" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-neutral-200 z-50">
+                    <div class="py-2">
+                        <button onclick="renameList('${list.id}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-pink-50 hover:text-pink-700 flex items-center transition-colors">
+                            <i class="ri-edit-line mr-3 text-base"></i>
+                            Rename List
+                        </button>
+                        <button onclick="exportList('${list.id}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-blue-50 hover:text-blue-700 flex items-center transition-colors">
+                            <i class="ri-download-line mr-3 text-base"></i>
+                            Export List
+                        </button>
+                        <button onclick="deleteList('${list.id}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-red-50 hover:text-red-700 flex items-center transition-colors">
+                            <i class="ri-delete-bin-line mr-3 text-base"></i>
+                            Delete List
+                        </button>
+                        <div class="border-t border-neutral-100 my-1"></div>
+                        <button onclick="runBroadcast('${list.id}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-green-50 hover:text-green-700 flex items-center transition-colors">
+                            <i class="ri-send-plane-fill mr-3 text-base"></i>
+                            Run Broadcast
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </td>
+    `;
+    // Prepend to show freshest first
+    tbody.insertBefore(tr, tbody.firstChild);
+}
+
+function updateContactsCount(list) {
+    if (!list || !list.id) return;
+    const countEl = document.getElementById(`contacts-count-${list.id}`);
+    if (countEl) {
+        countEl.textContent = Number(list.total_contacts || 0);
+    }
+}
+
+function updateContactListName(list) {
+    if (!list || !list.id) return;
+    const row = document.getElementById(`contact-row-${list.id}`);
+    if (!row) return;
+    const nameEl = row.querySelector('td:first-child .text-sm');
+    if (nameEl) {
+        nameEl.textContent = list.name || '';
+    }
+}
+
+function removeContactListRow(listId) {
+    if (!listId) return;
+    const row = document.getElementById(`contact-row-${listId}`);
+    if (row) row.remove();
+}
+
+// Basic HTML escaping to avoid injection in injected rows
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+</script>
+{% endblock %}

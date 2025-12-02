@@ -1,0 +1,1323 @@
+{% extends 'whatsappapi/base.html' %}
+{% load static %}
+
+{% block title %}WA Campaign Sender{% endblock %}
+
+{% block content %}
+<div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+<div class="space-y-6 sm:space-y-8" {% if active_session %}data-session-active="true"{% endif %}>
+    {% if not active_session %}
+    <!-- Hero Section - Only when NO session -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-green-600 via-green-700 to-green-900 rounded-xl sm:rounded-2xl shadow-2xl">
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="relative px-4 sm:px-6 py-8 sm:py-12 text-white">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="mb-3 sm:mb-4">
+                    <i class="ri-whatsapp-line text-4xl sm:text-5xl"></i>
+                </div>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-3">WA Campaign Sender</h1>
+                <p class="text-sm sm:text-base md:text-lg text-green-100 mb-4 sm:mb-6 max-w-xl mx-auto px-2">
+                    Send WhatsApp campaigns safely with personalized captions and attachments (images, videos, PDFs). Runs in the background with account protection and real‑time analytics.
+                </p>
+                <button onclick="document.getElementById('phoneModal').classList.remove('hidden')" 
+                        class="inline-flex items-center px-5 sm:px-6 py-2.5 sm:py-3 bg-white text-green-700 rounded-lg sm:rounded-xl text-sm sm:text-base font-semibold hover:bg-green-50 transform hover:scale-105 transition-all shadow-lg">
+                    <i class="ri-rocket-line mr-2 text-lg sm:text-xl"></i>
+                    Get Started Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Features - Only when NO session -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div class="card p-6 sm:p-8 text-center hover:shadow-xl transition-shadow border border-neutral-200 rounded-xl sm:rounded-2xl bg-white">
+            <div class="h-14 w-14 sm:h-16 sm:w-16 bg-blue-100 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <i class="ri-message-3-line text-2xl sm:text-3xl text-blue-600"></i>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 sm:mb-3">Safe Campaigns</h3>
+            <p class="text-sm sm:text-base text-neutral-600">Send campaigns with built-in account protection. Smart delays keep your account safe.</p>
+        </div>
+
+        <div class="card p-6 sm:p-8 text-center hover:shadow-xl transition-shadow border border-neutral-200 rounded-xl sm:rounded-2xl bg-white">
+            <div class="h-14 w-14 sm:h-16 sm:w-16 bg-purple-100 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <i class="ri-group-line text-2xl sm:text-3xl text-purple-600"></i>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 sm:mb-3">Bulk Campaigns</h3>
+            <p class="text-sm sm:text-base text-neutral-600">Create and schedule campaigns to thousands of recipients with personalized messages.</p>
+        </div>
+
+        <div class="card p-6 sm:p-8 text-center hover:shadow-xl transition-shadow border border-neutral-200 rounded-xl sm:rounded-2xl bg-white sm:col-span-2 lg:col-span-1">
+            <div class="h-14 w-14 sm:h-16 sm:w-16 bg-orange-100 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <i class="ri-line-chart-line text-2xl sm:text-3xl text-orange-600"></i>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 sm:mb-3">Real-time Analytics</h3>
+            <p class="text-sm sm:text-base text-neutral-600">Track message delivery, read status, and campaign performance in real-time.</p>
+        </div>
+    </div>
+    {% else %}
+    <!-- Connected Header - Only when session EXISTS -->
+    <div class="bg-gradient-to-r from-green-50 to-green-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 border-2 border-green-200">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6">
+            <div class="flex items-start sm:items-center gap-3 sm:gap-4">
+                <div class="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="ri-whatsapp-line text-2xl sm:text-3xl text-white"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-2">
+                        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-neutral-900 break-words">WhatsApp {% if active_session.status == 'connected' %}Connected{% elif active_session.status == 'pending' %}Pending{% else %}Disconnected{% endif %}</h2>
+                    </div>
+                    <div class="mt-2 space-y-1">
+                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                            <span class="text-xs sm:text-sm text-neutral-600">Registered Number:</span>
+                            <span class="font-semibold text-sm sm:text-base text-neutral-900 break-all">{{ active_session.phone_number|default:"Not set" }}</span>
+                        </div>
+                        {% if active_session.status == 'connected' and active_session.connected_phone_number %}
+                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                            <span class="text-xs sm:text-sm text-neutral-600">Connected WhatsApp:</span>
+                            <span class="font-semibold text-sm sm:text-base text-green-700 break-all">{{ active_session.connected_phone_number }}</span>
+                            {% if active_session.phone_number != active_session.connected_phone_number %}
+                            <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium inline-flex items-center">
+                                <i class="ri-alert-line mr-1"></i> Different
+                            </span>
+                            {% else %}
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium inline-flex items-center">
+                                <i class="ri-checkbox-line mr-1"></i> Matched
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% elif active_session.status == 'pending' %}
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs sm:text-sm text-yellow-600">
+                                <i class="ri-qr-code-line"></i> Waiting for QR scan...
+                            </span>
+                        </div>
+                        {% elif active_session.status == 'disconnected' %}
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs sm:text-sm text-red-600">
+                                <i class="ri-logout-box-line"></i> Not connected
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if active_session.phone_number and active_session.connected_phone_number and active_session.phone_number != active_session.connected_phone_number %}
+                    <div class="mt-3 flex items-start gap-2 px-3 sm:px-4 py-2 sm:py-3 bg-red-50 border-2 border-red-300 rounded-lg">
+                        <i class="ri-error-warning-line text-red-700 text-lg sm:text-xl mt-0.5 flex-shrink-0"></i>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs sm:text-sm font-bold text-red-900">⚠️ Phone Number Mismatch - Campaign Sending Disabled</p>
+                            <p class="text-xs text-red-800 mt-1 break-words">
+                                You registered with <strong>{{ active_session.phone_number }}</strong> but scanned with <strong>{{ active_session.connected_phone_number }}</strong>.
+                            </p>
+                            <p class="text-xs text-red-800 mt-2">
+                                <strong>Solution:</strong> Delete this session and create a new one with the correct phone number ({{ active_session.connected_phone_number }}).
+                            </p>
+                            <div class="mt-3 flex flex-col sm:flex-row gap-2">
+                                <form method="post" action="{% url 'whatsappapi:delete_session' active_session.id %}" onsubmit="return confirm('Delete this session and create a new one?');" class="inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="w-full sm:w-auto px-3 sm:px-4 py-2 bg-red-600 text-white text-xs rounded-lg hover:bg-red-700 inline-flex items-center justify-center font-semibold">
+                                        <i class="ri-delete-bin-line mr-1"></i>
+                                        Delete & Recreate
+                                    </button>
+                                </form>
+                                <p class="text-xs text-red-700 self-center">Then create new session with {{ active_session.connected_phone_number }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                {% if active_session.status == 'connected' %}
+                    {% if active_session.phone_number and active_session.connected_phone_number and active_session.phone_number != active_session.connected_phone_number %}
+                    <!-- Mismatch: Disable send campaign -->
+                    <button disabled class="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-400 text-white rounded-lg sm:rounded-xl cursor-not-allowed inline-flex items-center justify-center text-sm font-semibold shadow-lg opacity-50">
+                        <i class="ri-send-plane-line mr-2"></i>
+                        <span class="truncate">Send Campaign (Disabled)</span>
+                    </button>
+                    {% else %}
+                    <!-- Numbers match: Allow campaign -->
+                    <a href="{% url 'whatsappapi:send_campaign' %}?session={{ active_session.id }}" class="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 text-white rounded-lg sm:rounded-xl hover:bg-green-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg">
+                        <i class="ri-send-plane-line mr-2"></i>
+                        <span>Send Campaign</span>
+                    </a>
+                    {% endif %}
+                {% elif active_session.status == 'pending' %}
+                <a href="{% url 'whatsappapi:connect_session' active_session.id %}" class="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-yellow-600 text-white rounded-lg sm:rounded-xl hover:bg-yellow-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg">
+                    <i class="ri-qr-code-line mr-2"></i>
+                    <span>Scan QR Code</span>
+                </a>
+                {% elif active_session.status == 'disconnected' %}
+                <a href="{% url 'whatsappapi:connect_session' active_session.id %}" class="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg sm:rounded-xl hover:bg-blue-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg">
+                    <i class="ri-refresh-line mr-2"></i>
+                    <span>Reconnect</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid - Only when session EXISTS -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <!-- Messages Today - Blue Card -->
+        <div class="relative overflow-hidden rounded-2xl shadow-lg">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-blue-600"></div>
+            <div class="relative p-5 sm:p-6 text-white">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                        <p class="text-xs sm:text-sm font-medium text-blue-100 mb-1">Messages Today</p>
+                        <p class="text-3xl sm:text-4xl font-bold">{{ sent_today }}</p>
+                        {% if active_session.account_protection_enabled %}
+                        <p class="text-xs text-blue-100 mt-2 opacity-90">🛡️ Safe Mode Active</p>
+                        {% endif %}
+                    </div>
+                    <div class="h-12 w-12 sm:h-14 sm:w-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                        <i class="ri-message-3-line text-2xl sm:text-3xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Messages - Purple Card -->
+        <div class="relative overflow-hidden rounded-2xl shadow-lg">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500 to-purple-600"></div>
+            <div class="relative p-5 sm:p-6 text-white">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                        <p class="text-xs sm:text-sm font-medium text-purple-100 mb-1">Total Messages</p>
+                        <p class="text-3xl sm:text-4xl font-bold">{{ total_messages }}</p>
+                    </div>
+                    <div class="h-12 w-12 sm:h-14 sm:w-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                        <i class="ri-mail-send-line text-2xl sm:text-3xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- This Month - Orange Card -->
+        <div class="relative overflow-hidden rounded-2xl shadow-lg">
+            <div class="absolute inset-0 bg-gradient-to-br from-orange-500 to-orange-600"></div>
+            <div class="relative p-5 sm:p-6 text-white">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                        <p class="text-xs sm:text-sm font-medium text-orange-100 mb-1">This Month</p>
+                        <p class="text-3xl sm:text-4xl font-bold">{{ sent_this_month|default:0 }}</p>
+                    </div>
+                    <div class="h-12 w-12 sm:h-14 sm:w-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                        <i class="ri-calendar-line text-2xl sm:text-3xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status - Green Card -->
+        <div class="relative overflow-hidden rounded-2xl shadow-lg">
+            <div class="absolute inset-0 bg-gradient-to-br from-green-500 to-green-600"></div>
+            <div class="relative p-5 sm:p-6 text-white">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                        <p class="text-xs sm:text-sm font-medium text-green-100 mb-1">Status</p>
+                        <p class="text-2xl sm:text-3xl font-bold capitalize">{{ active_session.status }}</p>
+                    </div>
+                    <div class="h-12 w-12 sm:h-14 sm:w-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+                        <i class="ri-checkbox-circle-line text-2xl sm:text-3xl text-white"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not active_session %}
+    <!-- How It Works Section -->
+    <div class="card p-4 sm:p-6 border border-neutral-200 rounded-xl sm:rounded-2xl bg-white">
+        <h3 class="text-base sm:text-lg font-semibold text-neutral-900 mb-4 flex items-center">
+            <i class="ri-information-line text-blue-600 mr-2"></i>
+            How to Connect WhatsApp
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div class="text-center">
+                <div class="h-10 w-10 sm:h-12 sm:w-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-base sm:text-lg font-bold text-blue-600">1</span>
+                </div>
+                <h4 class="font-semibold text-sm sm:text-base text-neutral-900 mb-2">Enter Phone Number</h4>
+                <p class="text-xs sm:text-sm text-neutral-600">Click "Create Session" and enter your WhatsApp phone number</p>
+            </div>
+            <div class="text-center">
+                <div class="h-10 w-10 sm:h-12 sm:w-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-base sm:text-lg font-bold text-blue-600">2</span>
+                </div>
+                <h4 class="font-semibold text-sm sm:text-base text-neutral-900 mb-2">Get QR Code</h4>
+                <p class="text-xs sm:text-sm text-neutral-600">System generates a unique QR code for your session</p>
+            </div>
+            <div class="text-center">
+                <div class="h-10 w-10 sm:h-12 sm:w-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-base sm:text-lg font-bold text-blue-600">3</span>
+                </div>
+                <h4 class="font-semibold text-sm sm:text-base text-neutral-900 mb-2">Scan with WhatsApp</h4>
+                <p class="text-xs sm:text-sm text-neutral-600">Open WhatsApp → Linked Devices → Scan QR code</p>
+            </div>
+            <div class="text-center">
+                <div class="h-10 w-10 sm:h-12 sm:w-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="ri-checkbox-circle-fill text-green-600 text-lg sm:text-xl"></i>
+                </div>
+                <h4 class="font-semibold text-sm sm:text-base text-neutral-900 mb-2">Start Sending</h4>
+                <p class="text-xs sm:text-sm text-neutral-600">Connected! Send campaigns to unlimited recipients</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% if active_session %}
+    <!-- Modern Session Card with Lighter Gradient Background -->
+    <div class="bg-gradient-to-br from-green-50 via-green-100 to-emerald-100 rounded-xl sm:rounded-2xl shadow-lg overflow-hidden border border-green-200">
+        <!-- Header Section -->
+        <div class="px-4 sm:px-6 md:px-8 py-4 sm:py-6 border-b border-green-200/50 bg-white/50">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div class="flex items-start sm:items-center gap-3 sm:gap-4">
+                    <div class="h-12 w-12 sm:h-14 sm:w-14 bg-green-500 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
+                        <i class="ri-whatsapp-line text-2xl sm:text-3xl text-white"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-lg sm:text-xl font-bold text-neutral-800 mb-1">WhatsApp Session</h3>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="px-2 sm:px-3 py-1 rounded-full text-xs font-semibold
+                                {% if active_session.status == 'connected' %}bg-green-500 text-white shadow-sm
+                                {% elif active_session.status == 'pending' %}bg-yellow-400 text-neutral-800 shadow-sm
+                                {% else %}bg-red-400 text-white shadow-sm{% endif %}">
+                                <i class="ri-checkbox-circle-fill mr-1"></i>
+                                {{ active_session.status|title }}
+                            </span>
+                            <span class="hidden sm:inline text-xs text-neutral-400">•</span>
+                            <span class="text-xs text-neutral-600 font-medium break-all">{{ active_session.phone_number|default:"Not connected" }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex flex-col lg:flex-row gap-3">
+                    <!-- Refresh Status Button - Blue -->
+                    <button type="button" id="refreshStatusBtn" 
+                            class="w-full lg:w-auto px-4 py-3.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+                            title="Refresh session status to detect external disconnections">
+                        <i class="ri-refresh-line mr-2 text-lg"></i>
+                        <span>Refresh Status</span>
+                    </button>
+                    
+                    {% if active_session.status == 'connected' %}
+                        {% if active_session.phone_number and active_session.connected_phone_number and active_session.phone_number != active_session.connected_phone_number %}
+                        <!-- Disabled Send Campaign Button -->
+                        <button type="button" onclick="document.getElementById('mismatchModal').classList.remove('hidden')"
+                           class="w-full lg:w-auto px-4 py-3.5 bg-gray-400 text-white rounded-2xl inline-flex items-center justify-center text-sm font-semibold shadow-lg opacity-60 cursor-not-allowed">
+                            <i class="ri-alert-line mr-2 text-lg"></i>
+                            <span>Campaign Disabled</span>
+                        </button>
+                        {% else %}
+                        <!-- Send Campaign Button - Green -->
+                        <a href="{% url 'whatsappapi:send_campaign' %}" 
+                           class="w-full lg:w-auto px-4 py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl hover:from-green-600 hover:to-green-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                            <i class="ri-send-plane-fill mr-2 text-lg"></i>
+                            <span>Send Campaign</span>
+                        </a>
+                        {% endif %}
+                    {% elif active_session.status == 'pending' %}
+                        <!-- Scan QR Code Button - Yellow -->
+                        <a href="{% url 'whatsappapi:connect_session' active_session.id %}" 
+                           class="w-full lg:w-auto px-4 py-3.5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-neutral-900 rounded-2xl hover:from-yellow-500 hover:to-yellow-600 inline-flex items-center justify-center text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                            <i class="ri-qr-code-line mr-2 text-lg"></i>
+                            <span>Scan QR Code</span>
+                        </a>
+                    {% elif active_session.status == 'disconnected' %}
+                        <!-- Reconnect Button - Green -->
+                        <a href="{% url 'whatsappapi:connect_session' active_session.id %}" 
+                           class="w-full lg:w-auto px-4 py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl hover:from-green-600 hover:to-green-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                            <i class="ri-refresh-line mr-2 text-lg"></i>
+                            <span>Reconnect</span>
+                        </a>
+                    {% endif %}
+                    
+                    {% if active_session.status == 'connected' %}
+                    <!-- Disconnect Button - Orange -->
+                    <form method="post" action="{% url 'whatsappapi:disconnect_session' active_session.id %}" class="w-full lg:w-auto">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                class="w-full px-4 py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-2xl hover:from-orange-600 hover:to-orange-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                            <i class="ri-logout-box-line mr-2 text-lg"></i>
+                            <span>Disconnect</span>
+                        </button>
+                    </form>
+                    {% endif %}
+                    
+                    <!-- Delete Button - Red -->
+                    <form method="post" action="{% url 'whatsappapi:delete_session' active_session.id %}" class="w-full lg:w-auto" 
+                          onsubmit="return confirm('Are you sure you want to delete this session?');">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                class="w-full px-4 py-3.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-2xl hover:from-red-600 hover:to-red-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                            <i class="ri-delete-bin-line mr-2 text-lg"></i>
+                            <span>Delete Session</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="px-4 sm:px-6 md:px-8 py-4 sm:py-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Session Details Card -->
+                <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 border border-green-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-3 sm:mb-4">
+                        <h4 class="text-xs sm:text-sm font-semibold text-neutral-700 uppercase tracking-wide">Session Details</h4>
+                        <div class="h-7 w-7 sm:h-8 sm:w-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="ri-information-line text-blue-600 text-sm sm:text-base"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-2 sm:space-y-3">
+                        <div>
+                            <p class="text-xs text-neutral-500 mb-1">Session Name</p>
+                            <p class="text-xs sm:text-sm font-semibold text-neutral-800 truncate">{{ active_session.session_name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-neutral-500 mb-1">Phone Number</p>
+                            <p class="text-xs sm:text-sm font-semibold text-neutral-800 break-all">{{ active_session.phone_number|default:"Not connected" }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-neutral-500 mb-1">Connected At</p>
+                            <p class="text-xs sm:text-sm font-semibold text-neutral-800">
+                                {% if active_session.connected_at %}
+                                    {{ active_session.connected_at|date:"M d, Y H:i" }}
+                                {% else %}
+                                    Not connected
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Message Stats Card -->
+                <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 border border-purple-200 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center justify-between mb-3 sm:mb-4">
+                        <h4 class="text-xs sm:text-sm font-semibold text-neutral-700 uppercase tracking-wide">Message Statistics</h4>
+                        <div class="h-7 w-7 sm:h-8 sm:w-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="ri-bar-chart-box-line text-purple-600 text-sm sm:text-base"></i>
+                        </div>
+                    </div>
+                    <div class="space-y-3 sm:space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-neutral-500 mb-1">Messages Today</p>
+                                <p class="text-xl sm:text-2xl font-bold text-neutral-800">{{ active_session.messages_sent_today }}</p>
+                            </div>
+                            <div class="h-10 w-10 sm:h-12 sm:w-12 bg-blue-100 rounded-lg sm:rounded-xl flex items-center justify-center">
+                                <i class="ri-calendar-line text-lg sm:text-xl text-blue-600"></i>
+                            </div>
+                        </div>
+                        <div class="h-px bg-neutral-200"></div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-neutral-500 mb-1">Messages This Month</p>
+                                <p class="text-xl sm:text-2xl font-bold text-neutral-800">{{ active_session.messages_sent_this_month }}</p>
+                            </div>
+                            <div class="h-10 w-10 sm:h-12 sm:w-12 bg-purple-100 rounded-lg sm:rounded-xl flex items-center justify-center">
+                                <i class="ri-calendar-check-line text-lg sm:text-xl text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Protection Card -->
+                <div class="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 border border-green-200 shadow-sm hover:shadow-md transition-shadow md:col-span-2 lg:col-span-1">
+                    <div class="flex items-center justify-between mb-3 sm:mb-4">
+                        <h4 class="text-xs sm:text-sm font-semibold text-neutral-700 uppercase tracking-wide">Account Protection</h4>
+                        <div class="h-7 w-7 sm:h-8 sm:w-8 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="ri-shield-check-line text-green-600 text-sm sm:text-base"></i>
+                        </div>
+                    </div>
+                    <div class="text-center py-3 sm:py-4">
+                        {% if active_session.account_protection_enabled %}
+                            <div class="h-14 w-14 sm:h-16 sm:w-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="ri-shield-check-fill text-2xl sm:text-3xl text-green-600"></i>
+                            </div>
+                            <p class="text-base sm:text-lg font-bold text-neutral-800 mb-1">Enabled</p>
+                            <p class="text-xs text-neutral-500">Smart delays between messages</p>
+                            <div class="mt-3 sm:mt-4 px-3 sm:px-4 py-2 bg-green-50 rounded-lg border border-green-200">
+                                <p class="text-xs text-green-700 font-medium">✅ Safe Campaign Enabled</p>
+                            </div>
+                        {% else %}
+                            <div class="h-16 w-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="ri-shield-line text-3xl text-orange-500"></i>
+                            </div>
+                            <p class="text-lg font-bold text-neutral-800 mb-1">Disabled</p>
+                            <p class="text-xs text-neutral-500">No rate limiting</p>
+                            <div class="mt-4 px-4 py-2 bg-orange-50 rounded-lg border border-orange-200">
+                                <p class="text-xs text-orange-700 font-medium">⚠️ Risk of account ban</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if active_sessions.count > 1 %}
+    <!-- Multiple Active Sessions List -->
+    <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg border border-neutral-200 overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 sm:px-6 py-4 border-b border-neutral-200">
+            <div class="flex items-center justify-between">
+                <h3 class="text-base sm:text-lg font-bold text-neutral-800">All Active Sessions ({{ active_sessions.count }})</h3>
+                <a href="{% url 'whatsappapi:sessions' %}" class="text-sm font-medium text-blue-600 hover:text-blue-700 inline-flex items-center">
+                    View All
+                    <i class="ri-arrow-right-line ml-1"></i>
+                </a>
+            </div>
+        </div>
+        <div class="divide-y divide-neutral-200">
+            {% for session in active_sessions %}
+            <div class="p-4 sm:p-5 hover:bg-neutral-50 transition-colors">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                        <div class="h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="ri-smartphone-line text-green-600 text-lg"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-neutral-800 truncate">{{ session.session_name }}</p>
+                            <p class="text-xs text-neutral-600 truncate">{{ session.connected_phone_number|default:session.phone_number|default:"No number" }}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 border border-green-200 flex-shrink-0">
+                            <i class="ri-checkbox-circle-fill"></i>
+                        </span>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="{% url 'whatsappapi:send_campaign' %}?session={{ session.id }}" 
+                           class="px-3 py-1.5 bg-green-100 text-green-700 border border-green-200 rounded-lg hover:bg-green-200 font-medium text-xs inline-flex items-center">
+                            <i class="ri-send-plane-line mr-1"></i>Send
+                        </a>
+                        <form method="post" action="{% url 'whatsappapi:disconnect_session' session.id %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" 
+                                    onclick="return confirm('Disconnect this session?')"
+                                    class="px-3 py-1.5 bg-orange-100 text-orange-700 border border-orange-200 rounded-lg hover:bg-orange-200 font-medium text-xs inline-flex items-center">
+                                <i class="ri-link-unlink mr-1"></i>Disconnect
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if active_session and active_session.phone_number and active_session.connected_phone_number and active_session.phone_number != active_session.connected_phone_number %}
+    <!-- Phone Mismatch Modal -->
+    <div id="mismatchModal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center">
+      <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-red-200">
+        <div class="p-5 border-b border-red-200 flex items-start justify-between">
+          <div class="flex items-center gap-2">
+            <span class="h-9 w-9 rounded-full bg-red-100 flex items-center justify-center"><i class="ri-error-warning-line text-red-600"></i></span>
+            <h3 class="text-lg font-semibold text-red-800">Phone Number Mismatch - Campaign Sending Disabled</h3>
+          </div>
+          <button type="button" class="text-neutral-500 hover:text-neutral-800" onclick="document.getElementById('mismatchModal').classList.add('hidden')">
+            <i class="ri-close-line text-xl"></i>
+          </button>
+        </div>
+        <div class="p-5">
+          <p class="text-sm text-neutral-700">You registered with <strong>{{ active_session.phone_number }}</strong> but scanned with <strong>{{ active_session.connected_phone_number }}</strong>.</p>
+          <p class="text-sm text-neutral-700 mt-2"><strong>Solution:</strong> Delete this session and create a new one with the correct phone number ({{ active_session.connected_phone_number }}).</p>
+          <div class="mt-4 flex items-center gap-2">
+            <form method="post" action="{% url 'whatsappapi:delete_session' active_session.id %}" class="inline" onsubmit="return confirm('Delete this session and create a new one?');">
+              {% csrf_token %}
+              <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 inline-flex items-center">
+                <i class="ri-delete-bin-line mr-1"></i> Delete & Recreate
+              </button>
+            </form>
+            <span class="text-xs text-neutral-600">Then create new session with {{ active_session.connected_phone_number }}</span>
+          </div>
+        </div>
+        <div class="p-5 border-t border-neutral-200 flex items-center justify-end">
+          <button type="button" class="px-3 py-2 bg-neutral-100 text-neutral-800 rounded-lg text-sm font-semibold hover:bg-neutral-200" onclick="document.getElementById('mismatchModal').classList.add('hidden')">Close</button>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- No Session State -->
+    {% if not active_session %}
+    <div class="card p-12 text-center border border-neutral-200 rounded-2xl bg-white">
+        <div class="h-20 w-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="ri-whatsapp-line text-4xl text-green-600"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-neutral-900 mb-2">Connect Your WhatsApp</h3>
+        <p class="text-neutral-600 mb-6 max-w-md mx-auto">
+            Create a session to start sending WhatsApp messages via API. You'll need to scan a QR code with your WhatsApp mobile app.
+        </p>
+        <button onclick="document.getElementById('phoneModal').classList.remove('hidden')" class="btn-primary inline-flex items-center">
+            <i class="ri-add-line mr-2"></i>
+            Create WhatsApp Session
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- Phone Number Modal -->
+    <div id="phoneModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-lg w-full mx-4 shadow-2xl border border-neutral-200">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span class="h-9 w-9 rounded-full bg-green-100 flex items-center justify-center"><i class="ri-whatsapp-line text-green-600"></i></span>
+                <h3 class="text-xl font-bold text-neutral-900">Enter Your WhatsApp Number</h3>
+              </div>
+              <button type="button" class="text-neutral-500 hover:text-neutral-800" onclick="document.getElementById('phoneModal').classList.add('hidden')">
+                <i class="ri-close-line text-xl"></i>
+              </button>
+            </div>
+            <p class="text-neutral-600 mb-4">Enter a phone number to add a new WhatsApp session. You can have multiple active sessions with different phone numbers.</p>
+            
+            <!-- Important Note -->
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-3 mb-6 rounded text-sm text-blue-800">
+              <p class="font-semibold mb-1">💡 Multiple Sessions Supported:</p>
+              <ul class="list-disc list-inside space-y-1 text-xs">
+                <li>You can create multiple sessions with different phone numbers</li>
+                <li>Each phone number can only have ONE active session</li>
+                <li>Disconnected sessions will be automatically cleaned up</li>
+                <li>Use valid WhatsApp phone numbers in E.164 format (e.g., +919876543210)</li>
+              </ul>
+            </div>
+            
+            <form method="post" action="{% url 'whatsappapi:create_session' %}" id="phoneForm">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-neutral-700 mb-2">WhatsApp Phone Number</label>
+                    
+                    <div class="flex space-x-2">
+                        <!-- Country Selector -->
+                        <div class="relative" style="width: 180px;">
+                            <button type="button" id="countryBtn" onclick="openCountryOverlay()" class="w-full px-3 py-2.5 border border-neutral-300 rounded-lg hover:bg-neutral-50 flex items-center justify-between text-left">
+                                <span id="selectedCountry" class="flex items-center text-neutral-500">
+                                    <i class="ri-global-line text-xl mr-2"></i>
+                                    <span class="text-sm font-medium">Select Country</span>
+                                </span>
+                                <i class="ri-arrow-down-s-line text-lg"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Phone Number Input -->
+                        <input type="tel" id="phoneInput" 
+                               placeholder="Enter phone number" 
+                               class="flex-1 px-4 py-2.5 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-base"
+                               required>
+                        
+                        <!-- Hidden field for full number with country code -->
+                        <input type="hidden" id="fullPhoneNumber" name="phone_number">
+                    </div>
+                    <p class="text-xs text-neutral-500 mt-2">Country code will be added automatically</p>
+                </div>
+                
+                <div class="flex space-x-3">
+                    <button type="button" 
+                            onclick="document.getElementById('phoneModal').classList.add('hidden')"
+                            class="flex-1 px-4 py-2.5 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 font-medium">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 btn-primary py-2.5 border-2 border-green-600 rounded-lg">
+                        Create Session
+                    </button>
+                </div>
+            </form>
+            <!-- Country Dropdown Overlay (moved to root inside modal for reliable stacking) -->
+            <div id="countryDropdownOverlay" class="hidden fixed inset-0 z-[1000] bg-black/30">
+              <div class="bg-white rounded-xl border border-neutral-300 shadow-2xl w-full max-w-md mx-auto mt-24" onclick="event.stopPropagation()">
+                <div class="p-3 border-b bg-neutral-50 flex items-center justify-between">
+                  <input type="text" id="countrySearch" placeholder="Search country..." class="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                </div>
+                <div id="countryList" class="overflow-y-auto max-h-[60vh]"></div>
+                <div class="p-3 border-t flex justify-end">
+                  <button type="button" class="px-3 py-2 text-sm rounded border border-neutral-300 hover:bg-neutral-50" onclick="closeCountryOverlay()">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Session data for JavaScript -->
+{% if active_session %}
+<script id="session-data" type="application/json">
+{
+    "hasSession": true,
+    "status": "{{ active_session.status }}",
+    "sessionId": {{ active_session.id }},
+    "checkStatusUrl": "{% url 'whatsappapi:check_session_status' active_session.id %}",
+    "csrfToken": "{{ csrf_token }}"
+}
+</script>
+{% else %}
+<script id="session-data" type="application/json">
+{
+    "hasSession": false
+}
+</script>
+{% endif %}
+
+<script>
+// Country selector with keyboard navigation - Version 4.0 (FIXED: Function name conflict)
+console.log('🔥 Dashboard Script Loaded - Version 4.0 - ' + new Date().toISOString());
+
+function closeCountryOverlay(){
+  const dd = document.getElementById('countryDropdownOverlay');
+  if (dd) { dd.classList.add('hidden'); dd.style.display = 'none'; }
+}
+// Close dropdown when clicking on overlay background
+document.addEventListener('click', function(e){
+  const dd = document.getElementById('countryDropdownOverlay');
+  if (!dd) return;
+  if (e.target === dd) {
+    closeCountryOverlay();
+  }
+});
+// Close on ESC (global listener)
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape') {
+    const dd = document.getElementById('countryDropdownOverlay');
+    if (dd && !dd.classList.contains('hidden')) {
+      closeCountryOverlay();
+    }
+  }
+});
+
+// Track selected index for keyboard navigation
+let selectedCountryIndex = -1;
+let filteredCountries = [];
+let countryListenersAttached = false;
+let selectedCountry = null; // Store selected country object
+
+function openCountryOverlay(){
+  const dd = document.getElementById('countryDropdownOverlay');
+  if (!dd) return;
+  dd.classList.remove('hidden');
+  dd.style.display = 'block';
+  
+  // Reset selection state
+  selectedCountryIndex = -1;
+  
+  // Focus search and render list
+  const search = document.getElementById('countrySearch');
+  if (search) { 
+    search.value = ''; 
+    renderCountryList();
+    
+    // Attach event listeners only once
+    if (!countryListenersAttached) {
+      search.addEventListener('input', renderCountryList);
+      search.addEventListener('keydown', handleCountryKeyboard);
+      countryListenersAttached = true;
+    }
+    
+    // Focus after a small delay to ensure modal is visible
+    setTimeout(() => search.focus(), 100);
+  }
+}
+
+// Render countries and handle selection
+function renderCountryList(){
+  const list = document.getElementById('countryList');
+  const search = document.getElementById('countrySearch');
+  if (!list || !search) return;
+  const q = (search.value || '').toLowerCase().trim();
+  filteredCountries = countries.filter(c => c.name.toLowerCase().includes(q) || c.code.replace('+','').includes(q));
+  list.innerHTML = '';
+  selectedCountryIndex = -1; // Reset selection when list changes
+  
+  filteredCountries.forEach((c, index) => {
+    const row = document.createElement('button');
+    row.type = 'button';
+    row.className = 'w-full text-left px-3 py-2 hover:bg-neutral-50 flex items-center justify-between country-item';
+    row.setAttribute('data-index', index);
+    row.innerHTML = `<span class="flex items-center"><span class="text-xl mr-2">${c.flag}</span><span class="text-sm font-medium">${c.name}</span></span><span class="text-sm text-neutral-600">${c.code}</span>`;
+    row.addEventListener('click', () => selectCountryFromModal(c));
+    list.appendChild(row);
+  });
+}
+
+// Function to select a country from modal
+function selectCountryFromModal(country) {
+  console.log('selectCountryFromModal called with:', country, 'type:', typeof country);
+  
+  // Comprehensive null check for country object
+  if (!country) {
+    console.error('selectCountryFromModal called with null/undefined country');
+    return;
+  }
+  
+  if (typeof country !== 'object') {
+    console.error('selectCountryFromModal called with non-object:', country);
+    return;
+  }
+  
+  // Check if it has required properties
+  const hasFlag = country.hasOwnProperty('flag');
+  const hasCode = country.hasOwnProperty('code');
+  console.log('Has flag:', hasFlag, 'Has code:', hasCode);
+  
+  if (!hasFlag || !hasCode) {
+    console.error('Country object missing required properties. Has flag:', hasFlag, 'Has code:', hasCode, 'Object:', country);
+    return;
+  }
+  
+  // Extra safety: check values are not undefined
+  if (country.flag === undefined || country.code === undefined) {
+    console.error('Country properties are undefined:', country);
+    return;
+  }
+  
+  // Store the selected country globally
+  selectedCountry = country;
+  
+  const selected = document.getElementById('selectedCountry');
+  if (selected) {
+    selected.innerHTML = `<span class="text-xl mr-2">${country.flag}</span><span class="text-sm font-medium">${country.code}</span>`;
+    selected.classList.remove('text-neutral-500');
+    selected.classList.add('text-neutral-800');
+  }
+  closeCountryOverlay();
+}
+
+// Highlight country item at index
+function highlightCountryItem(index) {
+  const items = document.querySelectorAll('.country-item');
+  items.forEach((item, i) => {
+    if (i === index) {
+      item.classList.add('bg-blue-100');
+      item.classList.remove('bg-neutral-50');
+      // Scroll into view if needed
+      item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    } else {
+      item.classList.remove('bg-blue-100');
+    }
+  });
+}
+
+// Keyboard navigation for country search
+function handleCountryKeyboard(e) {
+  const list = document.getElementById('countryList');
+  if (!list || filteredCountries.length === 0) return;
+  
+  switch(e.key) {
+    case 'ArrowDown':
+      e.preventDefault();
+      selectedCountryIndex = Math.min(selectedCountryIndex + 1, filteredCountries.length - 1);
+      highlightCountryItem(selectedCountryIndex);
+      break;
+    
+    case 'ArrowUp':
+      e.preventDefault();
+      selectedCountryIndex = Math.max(selectedCountryIndex - 1, 0);
+      highlightCountryItem(selectedCountryIndex);
+      break;
+    
+    case 'Enter':
+      e.preventDefault();
+      if (selectedCountryIndex >= 0 && selectedCountryIndex < filteredCountries.length) {
+        const country = filteredCountries[selectedCountryIndex];
+        console.log('Enter pressed - selecting country at index:', selectedCountryIndex, country);
+        selectCountryFromModal(country);
+      } else {
+        console.warn('Enter pressed but invalid index:', selectedCountryIndex, 'filtered length:', filteredCountries.length);
+      }
+      break;
+    
+    case 'Escape':
+      e.preventDefault();
+      closeCountryOverlay();
+      break;
+  }
+}
+
+// Complete list of all 195 countries with flags and phone codes
+const countries = [
+    { name: 'Afghanistan', code: '+93', flag: '🇦🇫' },
+    { name: 'Albania', code: '+355', flag: '🇦🇱' },
+    { name: 'Algeria', code: '+213', flag: '🇩🇿' },
+    { name: 'Andorra', code: '+376', flag: '🇦🇩' },
+    { name: 'Angola', code: '+244', flag: '🇦🇴' },
+    { name: 'Antigua and Barbuda', code: '+1268', flag: '🇦🇬' },
+    { name: 'Argentina', code: '+54', flag: '🇦🇷' },
+    { name: 'Armenia', code: '+374', flag: '🇦🇲' },
+    { name: 'Australia', code: '+61', flag: '🇦🇺' },
+    { name: 'Austria', code: '+43', flag: '🇦🇹' },
+    { name: 'Azerbaijan', code: '+994', flag: '🇦🇿' },
+    { name: 'Bahamas', code: '+1242', flag: '🇧🇸' },
+    { name: 'Bahrain', code: '+973', flag: '🇧🇭' },
+    { name: 'Bangladesh', code: '+880', flag: '🇧🇩' },
+    { name: 'Barbados', code: '+1246', flag: '🇧🇧' },
+    { name: 'Belarus', code: '+375', flag: '🇧🇾' },
+    { name: 'Belgium', code: '+32', flag: '🇧🇪' },
+    { name: 'Belize', code: '+501', flag: '🇧🇿' },
+    { name: 'Benin', code: '+229', flag: '🇧🇯' },
+    { name: 'Bhutan', code: '+975', flag: '🇧🇹' },
+    { name: 'Bolivia', code: '+591', flag: '🇧🇴' },
+    { name: 'Bosnia and Herzegovina', code: '+387', flag: '🇧🇦' },
+    { name: 'Botswana', code: '+267', flag: '🇧🇼' },
+    { name: 'Brazil', code: '+55', flag: '🇧🇷' },
+    { name: 'Brunei', code: '+673', flag: '🇧🇳' },
+    { name: 'Bulgaria', code: '+359', flag: '🇧🇬' },
+    { name: 'Burkina Faso', code: '+226', flag: '🇧🇫' },
+    { name: 'Burundi', code: '+257', flag: '🇧🇮' },
+    { name: 'Cambodia', code: '+855', flag: '🇰🇭' },
+    { name: 'Cameroon', code: '+237', flag: '🇨🇲' },
+    { name: 'Canada', code: '+1', flag: '🇨🇦' },
+    { name: 'Cape Verde', code: '+238', flag: '🇨🇻' },
+    { name: 'Central African Republic', code: '+236', flag: '🇨🇫' },
+    { name: 'Chad', code: '+235', flag: '🇹🇩' },
+    { name: 'Chile', code: '+56', flag: '🇨🇱' },
+    { name: 'China', code: '+86', flag: '🇨🇳' },
+    { name: 'Colombia', code: '+57', flag: '🇨🇴' },
+    { name: 'Comoros', code: '+269', flag: '🇰🇲' },
+    { name: 'Congo', code: '+242', flag: '🇨🇬' },
+    { name: 'Costa Rica', code: '+506', flag: '🇨🇷' },
+    { name: 'Croatia', code: '+385', flag: '🇭🇷' },
+    { name: 'Cuba', code: '+53', flag: '🇨🇺' },
+    { name: 'Cyprus', code: '+357', flag: '🇨🇾' },
+    { name: 'Czech Republic', code: '+420', flag: '🇨🇿' },
+    { name: 'Denmark', code: '+45', flag: '🇩🇰' },
+    { name: 'Djibouti', code: '+253', flag: '🇩🇯' },
+    { name: 'Dominica', code: '+1767', flag: '🇩🇲' },
+    { name: 'Dominican Republic', code: '+1809', flag: '🇩🇴' },
+    { name: 'DR Congo', code: '+243', flag: '🇨🇩' },
+    { name: 'Ecuador', code: '+593', flag: '🇪🇨' },
+    { name: 'Egypt', code: '+20', flag: '🇪🇬' },
+    { name: 'El Salvador', code: '+503', flag: '🇸🇻' },
+    { name: 'Equatorial Guinea', code: '+240', flag: '🇬🇶' },
+    { name: 'Eritrea', code: '+291', flag: '🇪🇷' },
+    { name: 'Estonia', code: '+372', flag: '🇪🇪' },
+    { name: 'Eswatini', code: '+268', flag: '🇸🇿' },
+    { name: 'Ethiopia', code: '+251', flag: '🇪🇹' },
+    { name: 'Fiji', code: '+679', flag: '🇫🇯' },
+    { name: 'Finland', code: '+358', flag: '🇫🇮' },
+    { name: 'France', code: '+33', flag: '🇫🇷' },
+    { name: 'Gabon', code: '+241', flag: '🇬🇦' },
+    { name: 'Gambia', code: '+220', flag: '🇬🇲' },
+    { name: 'Georgia', code: '+995', flag: '🇬🇪' },
+    { name: 'Germany', code: '+49', flag: '🇩🇪' },
+    { name: 'Ghana', code: '+233', flag: '🇬🇭' },
+    { name: 'Greece', code: '+30', flag: '🇬🇷' },
+    { name: 'Grenada', code: '+1473', flag: '🇬🇩' },
+    { name: 'Guatemala', code: '+502', flag: '🇬🇹' },
+    { name: 'Guinea', code: '+224', flag: '🇬🇳' },
+    { name: 'Guinea-Bissau', code: '+245', flag: '🇬🇼' },
+    { name: 'Guyana', code: '+592', flag: '🇬🇾' },
+    { name: 'Haiti', code: '+509', flag: '🇭🇹' },
+    { name: 'Honduras', code: '+504', flag: '🇭🇳' },
+    { name: 'Hungary', code: '+36', flag: '🇭🇺' },
+    { name: 'Iceland', code: '+354', flag: '🇮🇸' },
+    { name: 'India', code: '+91', flag: '🇮🇳' },
+    { name: 'Indonesia', code: '+62', flag: '🇮🇩' },
+    { name: 'Iran', code: '+98', flag: '🇮🇷' },
+    { name: 'Iraq', code: '+964', flag: '🇮🇶' },
+    { name: 'Ireland', code: '+353', flag: '🇮🇪' },
+    { name: 'Israel', code: '+972', flag: '🇮🇱' },
+    { name: 'Italy', code: '+39', flag: '🇮🇹' },
+    { name: 'Ivory Coast', code: '+225', flag: '🇨🇮' },
+    { name: 'Jamaica', code: '+1876', flag: '🇯🇲' },
+    { name: 'Japan', code: '+81', flag: '🇯🇵' },
+    { name: 'Jordan', code: '+962', flag: '🇯🇴' },
+    { name: 'Kazakhstan', code: '+7', flag: '🇰🇿' },
+    { name: 'Kenya', code: '+254', flag: '🇰🇪' },
+    { name: 'Kiribati', code: '+686', flag: '🇰🇮' },
+    { name: 'Kosovo', code: '+383', flag: '🇽🇰' },
+    { name: 'Kuwait', code: '+965', flag: '🇰🇼' },
+    { name: 'Kyrgyzstan', code: '+996', flag: '🇰🇬' },
+    { name: 'Laos', code: '+856', flag: '🇱🇦' },
+    { name: 'Latvia', code: '+371', flag: '🇱🇻' },
+    { name: 'Lebanon', code: '+961', flag: '🇱🇧' },
+    { name: 'Lesotho', code: '+266', flag: '🇱🇸' },
+    { name: 'Liberia', code: '+231', flag: '🇱🇷' },
+    { name: 'Libya', code: '+218', flag: '🇱🇾' },
+    { name: 'Liechtenstein', code: '+423', flag: '🇱🇮' },
+    { name: 'Lithuania', code: '+370', flag: '🇱🇹' },
+    { name: 'Luxembourg', code: '+352', flag: '🇱🇺' },
+    { name: 'Madagascar', code: '+261', flag: '🇲🇬' },
+    { name: 'Malawi', code: '+265', flag: '🇲🇼' },
+    { name: 'Malaysia', code: '+60', flag: '🇲🇾' },
+    { name: 'Maldives', code: '+960', flag: '🇲🇻' },
+    { name: 'Mali', code: '+223', flag: '🇲🇱' },
+    { name: 'Malta', code: '+356', flag: '🇲🇹' },
+    { name: 'Marshall Islands', code: '+692', flag: '🇲🇭' },
+    { name: 'Mauritania', code: '+222', flag: '🇲🇷' },
+    { name: 'Mauritius', code: '+230', flag: '🇲🇺' },
+    { name: 'Mexico', code: '+52', flag: '🇲🇽' },
+    { name: 'Micronesia', code: '+691', flag: '🇫🇲' },
+    { name: 'Moldova', code: '+373', flag: '🇲🇩' },
+    { name: 'Monaco', code: '+377', flag: '🇲🇨' },
+    { name: 'Mongolia', code: '+976', flag: '🇲🇳' },
+    { name: 'Montenegro', code: '+382', flag: '🇲🇪' },
+    { name: 'Morocco', code: '+212', flag: '🇲🇦' },
+    { name: 'Mozambique', code: '+258', flag: '🇲🇿' },
+    { name: 'Myanmar', code: '+95', flag: '🇲🇲' },
+    { name: 'Namibia', code: '+264', flag: '🇳🇦' },
+    { name: 'Nauru', code: '+674', flag: '🇳🇷' },
+    { name: 'Nepal', code: '+977', flag: '🇳🇵' },
+    { name: 'Netherlands', code: '+31', flag: '🇳🇱' },
+    { name: 'New Zealand', code: '+64', flag: '🇳🇿' },
+    { name: 'Nicaragua', code: '+505', flag: '🇳🇮' },
+    { name: 'Niger', code: '+227', flag: '🇳🇪' },
+    { name: 'Nigeria', code: '+234', flag: '🇳🇬' },
+    { name: 'North Korea', code: '+850', flag: '🇰🇵' },
+    { name: 'North Macedonia', code: '+389', flag: '🇲🇰' },
+    { name: 'Norway', code: '+47', flag: '🇳🇴' },
+    { name: 'Oman', code: '+968', flag: '🇴🇲' },
+    { name: 'Pakistan', code: '+92', flag: '🇵🇰' },
+    { name: 'Palau', code: '+680', flag: '🇵🇼' },
+    { name: 'Palestine', code: '+970', flag: '🇵🇸' },
+    { name: 'Panama', code: '+507', flag: '🇵🇦' },
+    { name: 'Papua New Guinea', code: '+675', flag: '🇵🇬' },
+    { name: 'Paraguay', code: '+595', flag: '🇵🇾' },
+    { name: 'Peru', code: '+51', flag: '🇵🇪' },
+    { name: 'Philippines', code: '+63', flag: '🇵🇭' },
+    { name: 'Poland', code: '+48', flag: '🇵🇱' },
+    { name: 'Portugal', code: '+351', flag: '🇵🇹' },
+    { name: 'Qatar', code: '+974', flag: '🇶🇦' },
+    { name: 'Romania', code: '+40', flag: '🇷🇴' },
+    { name: 'Russia', code: '+7', flag: '🇷🇺' },
+    { name: 'Rwanda', code: '+250', flag: '🇷🇼' },
+    { name: 'Saint Kitts and Nevis', code: '+1869', flag: '🇰🇳' },
+    { name: 'Saint Lucia', code: '+1758', flag: '🇱🇨' },
+    { name: 'Saint Vincent', code: '+1784', flag: '🇻🇨' },
+    { name: 'Samoa', code: '+685', flag: '🇼🇸' },
+    { name: 'San Marino', code: '+378', flag: '🇸🇲' },
+    { name: 'Sao Tome and Principe', code: '+239', flag: '🇸🇹' },
+    { name: 'Saudi Arabia', code: '+966', flag: '🇸🇦' },
+    { name: 'Senegal', code: '+221', flag: '🇸🇳' },
+    { name: 'Serbia', code: '+381', flag: '🇷🇸' },
+    { name: 'Seychelles', code: '+248', flag: '🇸🇨' },
+    { name: 'Sierra Leone', code: '+232', flag: '🇸🇱' },
+    { name: 'Singapore', code: '+65', flag: '🇸🇬' },
+    { name: 'Slovakia', code: '+421', flag: '🇸🇰' },
+    { name: 'Slovenia', code: '+386', flag: '🇸🇮' },
+    { name: 'Solomon Islands', code: '+677', flag: '🇸🇧' },
+    { name: 'Somalia', code: '+252', flag: '🇸🇴' },
+    { name: 'South Africa', code: '+27', flag: '🇿🇦' },
+    { name: 'South Korea', code: '+82', flag: '🇰🇷' },
+    { name: 'South Sudan', code: '+211', flag: '🇸🇸' },
+    { name: 'Spain', code: '+34', flag: '🇪🇸' },
+    { name: 'Sri Lanka', code: '+94', flag: '🇱🇰' },
+    { name: 'Sudan', code: '+249', flag: '🇸🇩' },
+    { name: 'Suriname', code: '+597', flag: '🇸🇷' },
+    { name: 'Sweden', code: '+46', flag: '🇸🇪' },
+    { name: 'Switzerland', code: '+41', flag: '🇨🇭' },
+    { name: 'Syria', code: '+963', flag: '🇸🇾' },
+    { name: 'Taiwan', code: '+886', flag: '🇹🇼' },
+    { name: 'Tajikistan', code: '+992', flag: '🇹🇯' },
+    { name: 'Tanzania', code: '+255', flag: '🇹🇿' },
+    { name: 'Thailand', code: '+66', flag: '🇹🇭' },
+    { name: 'Timor-Leste', code: '+670', flag: '🇹🇱' },
+    { name: 'Togo', code: '+228', flag: '🇹🇬' },
+    { name: 'Tonga', code: '+676', flag: '🇹🇴' },
+    { name: 'Trinidad and Tobago', code: '+1868', flag: '🇹🇹' },
+    { name: 'Tunisia', code: '+216', flag: '🇹🇳' },
+    { name: 'Turkey', code: '+90', flag: '🇹🇷' },
+    { name: 'Turkmenistan', code: '+993', flag: '🇹🇲' },
+    { name: 'Tuvalu', code: '+688', flag: '🇹🇻' },
+    { name: 'Uganda', code: '+256', flag: '🇺🇬' },
+    { name: 'Ukraine', code: '+380', flag: '🇺🇦' },
+    { name: 'United Arab Emirates', code: '+971', flag: '🇦🇪' },
+    { name: 'United Kingdom', code: '+44', flag: '🇬🇧' },
+    { name: 'United States', code: '+1', flag: '🇺🇸' },
+    { name: 'Uruguay', code: '+598', flag: '🇺🇾' },
+    { name: 'Uzbekistan', code: '+998', flag: '🇺🇿' },
+    { name: 'Vanuatu', code: '+678', flag: '🇻🇺' },
+    { name: 'Vatican City', code: '+379', flag: '🇻🇦' },
+    { name: 'Venezuela', code: '+58', flag: '🇻🇪' },
+    { name: 'Vietnam', code: '+84', flag: '🇻🇳' },
+    { name: 'Yemen', code: '+967', flag: '🇾🇪' },
+    { name: 'Zambia', code: '+260', flag: '🇿🇲' },
+    { name: 'Zimbabwe', code: '+263', flag: '🇿🇼' },
+].sort((a, b) => a.name.localeCompare(b.name));
+
+// Render country list
+function renderCountries(filter = '') {
+    const list = document.getElementById('countryList');
+    const filtered = countries.filter(c => 
+        c.name.toLowerCase().includes(filter.toLowerCase()) || 
+        c.code.includes(filter)
+    );
+    
+    list.innerHTML = filtered.map(country => `
+        <button type="button" 
+                class="w-full px-4 py-2.5 hover:bg-neutral-50 flex items-center justify-between text-left border-b border-neutral-100 last:border-b-0"
+                onclick="selectCountry('${country.code}')">
+            <div class="flex items-center space-x-3 flex-1">
+                <span class="text-2xl">${country.flag}</span>
+                <span class="text-sm font-medium text-neutral-900">${country.name}</span>
+            </div>
+            <span class="text-sm font-semibold text-neutral-600 ml-2">${country.code}</span>
+        </button>
+    `).join('');
+}
+
+// Select country
+function selectCountry(code) {
+    selectedCountry = countries.find(c => c.code === code);
+    document.getElementById('selectedCountry').innerHTML = `
+        <span class="text-xl mr-2">${selectedCountry.flag}</span>
+        <span class="text-sm font-medium">${selectedCountry.code}</span>
+    `;
+    // Close any open dropdowns
+    const dd = document.getElementById('countryDropdown');
+    if (dd) dd.classList.add('hidden');
+    const overlay = document.getElementById('countryDropdownOverlay');
+    if (overlay) overlay.classList.add('hidden');
+    // Clear and blur search field
+    const searchEl = document.getElementById('countrySearch');
+    if (searchEl) { searchEl.value = ''; searchEl.blur(); }
+    document.getElementById('phoneInput').focus();
+}
+
+// Toggle dropdown
+const countryBtnElement = document.getElementById('countryBtn');
+if (countryBtnElement) {
+    countryBtnElement.addEventListener('click', function() {
+        const dropdown = document.getElementById('countryDropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('hidden');
+            if (!dropdown.classList.contains('hidden')) {
+                const searchEl = document.getElementById('countrySearch');
+                if (searchEl) {
+                    searchEl.focus();
+                    renderCountries();
+                }
+            }
+        }
+    });
+}
+
+// Search functionality
+const countrySearchElement = document.getElementById('countrySearch');
+if (countrySearchElement) {
+    countrySearchElement.addEventListener('input', function(e) {
+        renderCountries(e.target.value);
+    });
+}
+
+// Phone input formatting - Allow manual typing
+const phoneInputElement = document.getElementById('phoneInput');
+if (phoneInputElement) {
+    phoneInputElement.addEventListener('input', function(e) {
+        let value = e.target.value;
+        
+        // Remove all non-numeric characters
+        value = value.replace(/[^0-9]/g, '');
+        
+        // ONLY remove leading 0 if it's the first character
+        if (value.startsWith('0') && value.length > 1) {
+            value = value.substring(1);
+        }
+        
+        // Update the input value
+        e.target.value = value;
+    });
+}
+
+// Form submission
+const phoneFormElement = document.getElementById('phoneForm');
+if (phoneFormElement) {
+    phoneFormElement.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Check if country is selected
+        if (!selectedCountry) {
+            alert('Please select a country code first');
+            return;
+        }
+        
+        const phoneInput = document.getElementById('phoneInput');
+        const phoneNumber = phoneInput ? phoneInput.value.trim() : '';
+        if (!phoneNumber) {
+            alert('Please enter a phone number');
+            return;
+        }
+        
+        // Combine country code + phone number
+        const fullNumber = selectedCountry.code + phoneNumber;
+        console.log('Submitting phone number:', fullNumber);
+        
+        // Set the hidden field
+        const hiddenField = document.getElementById('fullPhoneNumber');
+        if (hiddenField) {
+            hiddenField.value = fullNumber;
+        }
+        
+        // Submit the form
+        this.submit();
+    });
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('countryDropdown');
+    if (!dropdown) return;
+    
+    if (!e.target.closest('#countryBtn') && !e.target.closest('#countryDropdown')) {
+        dropdown.classList.add('hidden');
+    }
+});
+
+// Initialize
+renderCountries();
+
+// Auto-refresh page when navigating back (browser back button)
+window.addEventListener('pageshow', function(event) {
+    // Check if page was loaded from cache (back/forward button)
+    if (event.persisted || performance.getEntriesByType('navigation')[0].type === 'back_forward') {
+        location.reload();
+    }
+});
+
+// Also refresh when page becomes visible again (tab switching)
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        // Only reload if there's an active session
+        const hasActiveSession = document.querySelector('[data-session-active]');
+        if (hasActiveSession) {
+            location.reload();
+        }
+    }
+});
+
+// Auto-check session status for pending sessions
+// Read session data from JSON script tag
+const sessionDataEl = document.getElementById('session-data');
+const sessionData = sessionDataEl ? JSON.parse(sessionDataEl.textContent) : { hasSession: false };
+
+if (sessionData.hasSession && sessionData.status === 'pending' && sessionData.sessionId) {
+    // Status is pending - start polling
+    let pendingCheckInterval = setInterval(function() {
+        fetch(sessionData.checkStatusUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': sessionData.csrfToken,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.connected || data.status === 'connected') {
+                // Session connected! Reload page to show connected state
+                clearInterval(pendingCheckInterval);
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Status check error:', error));
+    }, 5000);
+
+    // IMPORTANT: Check status immediately on page load
+    // This catches the case where user just scanned QR and was redirected
+    fetch(sessionData.checkStatusUrl, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': sessionData.csrfToken,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.connected || data.status === 'connected') {
+            // Status changed! Reload immediately to show connected view
+            location.reload();
+        }
+    })
+    .catch(error => console.error('Initial status check error:', error));
+}
+
+// FORCE RELOAD: If showing hero section but session might exist
+// This handles the case where DB was updated but page is stale
+if (!sessionData.hasSession) {
+    // Check if we should reload (from localStorage flag)
+    const shouldCheckSession = localStorage.getItem('wa_should_check_session');
+    if (shouldCheckSession === 'true') {
+        console.log('Reloading to check for new session...');
+        localStorage.removeItem('wa_should_check_session');
+        location.reload();
+    }
+}
+
+// AUTO-REFRESH: Check for external disconnections every 6 hours
+// This handles cases where WaSender API disconnects the session externally
+setInterval(function() {
+    console.log('Auto-checking session status for external disconnections...');
+    fetch('{% url "whatsappapi:refresh_all_sessions" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.sessions) {
+            // Check if any session status changed
+            let statusChanged = false;
+            data.sessions.forEach(session => {
+                // Log status check
+                console.log(`Session ${session.session_id}: ${session.status}`);
+            });
+            // If status changed, reload page to show updated status
+            if (statusChanged) {
+                console.log('Session status changed, reloading...');
+                location.reload();
+            }
+        }
+    })
+    .catch(error => console.log('Session refresh check error (non-critical):', error));
+}, 21600000);  // Every 6 hours (6 * 60 * 60 * 1000 ms)
+
+// MANUAL REFRESH BUTTON HANDLER
+document.getElementById('refreshStatusBtn')?.addEventListener('click', function() {
+    const btn = this;
+    const icon = btn.querySelector('i');
+    
+    // Add spinning animation
+    icon.classList.add('animate-spin');
+    btn.disabled = true;
+    
+    fetch('{% url "whatsappapi:refresh_all_sessions" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || '',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Session status refreshed:', data);
+            // Show toast notification
+            if (window.showToast) {
+                window.showToast('success', 'Session status refreshed');
+            }
+            // Reload page after short delay to show updated status
+            setTimeout(() => {
+                location.reload();
+            }, 800);
+        } else {
+            if (window.showToast) {
+                window.showToast('error', 'Failed to refresh session status');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error refreshing session:', error);
+        if (window.showToast) {
+            window.showToast('error', 'Error refreshing session status');
+        }
+    })
+    .finally(() => {
+        // Remove spinning animation
+        icon.classList.remove('animate-spin');
+        btn.disabled = false;
+    });
+});
+</script>
+{% endblock %}

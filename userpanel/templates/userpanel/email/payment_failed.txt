@@ -1,0 +1,8 @@
+Dear Customer,
+
+There was an issue with your payment for order #{{ order_invoice_id }}.
+Status: {{ payment_status }}{% if reason %} – {{ reason }}{% endif %}.
+
+Please contact support if you need assistance.
+
+– WA Campaign Sender

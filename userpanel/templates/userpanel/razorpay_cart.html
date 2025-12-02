@@ -1,0 +1,209 @@
+{% extends 'userpanel/base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}Your Cart - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="p-6 md:p-10">
+    <div class="container mx-auto">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Left Column: Billing & Shipping Information -->
+            <div class="lg:w-3/5 bg-white p-8 shadow-xl rounded-lg">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4">WhatsApp API Setup</h2>
+                
+                <!-- WhatsApp Number -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Activation WhatsApp Number</h3>
+                    {% if user_profile.whatsapp_number %}
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <p class="text-gray-800 font-medium">{{ user_profile.whatsapp_number }}</p>
+                            <a href="{% url 'userpanel:settings' %}" class="text-sm font-medium text-primary hover:underline">Edit</a>
+                        </div>
+                    {% else %}
+                         <div class="p-4 bg-yellow-100 text-yellow-800 rounded-lg">
+                            <p>Your WhatsApp number is missing. Please add it in your settings.</p>
+                            <a href="{% url 'userpanel:settings' %}" class="font-bold hover:underline">Go to Settings</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- User Information -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Payment & Billing</h3>
+                    <div class="text-gray-800 leading-relaxed mt-1 text-sm p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <p><strong>📱 WhatsApp API Sessions (Monthly Billing)</strong></p>
+                        <ul class="mt-2 space-y-1 ml-4">
+                            <li>✓ Each session = 1 WhatsApp number you can manage</li>
+                            <li>✓ Base Plan (₹1299/month) includes 1 session</li>
+                            <li>✓ Monthly subscription - renew payment required each month</li>
+                        </ul>
+                        <a href="{% url 'userpanel:settings' %}" class="text-xs font-medium text-primary hover:underline mt-3 inline-block">View Payment History</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Your Order -->
+            <div class="lg:w-2/5">
+                <div class="bg-white p-8 shadow-xl rounded-lg">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4">Your Order</h2>
+                    
+                    <!-- Product List -->
+                    <div class="space-y-4 mb-6">
+                        {% for item in cart_items %}
+                        <div class="border-b pb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <p class="text-gray-900 font-semibold">{{ item.name }}</p>
+                                <p class="text-gray-900 font-bold">₹{{ item.item_total_price|floatformat:0|intcomma }}</p>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">{{ item.description }}</p>
+                            <ul class="text-xs text-gray-600 space-y-1">
+                                {% for feature in item.features %}
+                                <li class="flex items-start">
+                                    <i class="ri-check-line text-green-600 mr-1 mt-0.5"></i>
+                                    <span>{{ feature }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Subtotal -->
+                    <div class="flex justify-between items-center py-3 border-t border-b text-gray-700">
+                        <p class="font-medium">Subtotal</p>
+                        <p class="font-semibold text-gray-800">₹{{ cart_subtotal|floatformat:0|intcomma }}</p>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="flex justify-between items-center py-4 font-semibold text-lg text-gray-800">
+                        <p>Total</p>
+                        <p id="cart-total">₹{{ cart_total_overall|floatformat:0|intcomma }}</p>
+                    </div>
+                    
+                    <!-- Payment Button -->
+                    <div class="p-4 border rounded-lg bg-gray-50">
+                        <p class="text-center text-gray-700 mb-4">Complete your purchase securely with Razorpay. Your API sessions will be activated immediately.</p>
+                        <button id="razorpay-button" 
+                               class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium py-3 px-4 rounded-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:shadow-outline flex items-center justify-center transition-all duration-200">
+                            <i class="ri-secure-payment-line mr-2 text-xl"></i>
+                            <span>Pay ₹{{ cart_total_overall|floatformat:0 }} with Razorpay</span>
+                        </button>
+                        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <p class="text-sm text-gray-700 font-medium">💳 Secure WhatsApp API Activation</p>
+                            <p class="text-sm text-gray-700 mt-2">Your API sessions will be ready to use immediately. Pay with Credit/Debit Card, UPI, Net Banking, or Wallets</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Razorpay Checkout Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+document.getElementById('razorpay-button').onclick = function(e) {
+    e.preventDefault();
+    
+    var options = {
+        "key": "{{ razorpay_key_id }}", 
+        "amount": "{{ razorpay_amount }}", // Amount in paise
+        "currency": "INR",
+        "name": "WA Campaign Sender",
+        "description": "{{ cart_items.0.name }}",
+        "image": "{% static 'image/logo.png' %}",
+        "order_id": "{{ razorpay_order_id }}",
+        "handler": function (response){
+            // Payment successful - verify on server
+            // Show loading state
+            document.getElementById('razorpay-button').disabled = true;
+            document.getElementById('razorpay-button').innerHTML = '<i class="ri-loader-4-line animate-spin mr-2"></i>Verifying payment...';
+            
+            fetch("{% url 'userpanel:razorpay_payment_verify' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    // Redirect to dashboard with success message
+                    window.location.href = data.redirect_url + '?payment_success=1';
+                } else {
+                    // Show error and reload page
+                    alert('Payment verification failed: ' + data.error);
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                alert('Error verifying payment: ' + error);
+                window.location.reload();
+            });
+        },
+        "prefill": {
+            "name": "{{ user_name }}",
+            "email": "{{ user_email }}",
+            "contact": "{{ user_profile.whatsapp_number }}"
+        },
+        "notes": {
+            "plan_type": "{{ cart_items.0.id }}"
+        },
+        "theme": {
+            "color": "#25D366"
+        },
+        "modal": {
+            "ondismiss": function(){
+                console.log('Payment cancelled by user');
+            }
+        }
+    };
+    
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function (response){
+        // Payment failed - show error message
+        console.error('Payment failed:', response.error);
+        alert('Payment failed: ' + response.error.description + '\n\nPlease try again or contact support if the issue persists.');
+    });
+    rzp1.open();
+};
+</script>
+
+<!-- Cache prevention scripts -->
+<script>
+// Prevent browser caching of cart page
+document.addEventListener('DOMContentLoaded', function() {
+    if (performance.navigation.type === 2) {
+        location.reload(true);
+    }
+    
+    if (typeof(Storage) !== "undefined") {
+        localStorage.removeItem('razorpay_cart_data');
+        sessionStorage.removeItem('razorpay_cart_data');
+    }
+});
+
+window.addEventListener('beforeunload', function() {
+    if (typeof(Storage) !== "undefined") {
+        localStorage.removeItem('razorpay_cart_data');
+        sessionStorage.removeItem('razorpay_cart_data');
+    }
+});
+
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        location.reload(true);
+    }
+});
+</script>
+{% endblock %}

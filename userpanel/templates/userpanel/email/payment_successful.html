@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Successful</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f4f4f4;">
+        <tr>
+            <td align="center" style="padding:20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:600px;background:#ffffff;border-radius:5px;box-shadow:0 0 10px rgba(0,0,0,0.05);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background:#25D366;color:#ffffff;padding:20px 40px;border-radius:5px 5px 0 0;text-align:center;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">Thank You For Your Purchase!</h1>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:30px 40px;">
+                            <p style="margin:0 0 15px 0;">Dear {{ user.full_name|default:'Valued Customer' }},</p>
+                            <p style="margin:0 0 15px 0;">Your subscription purchase has been successfully processed.</p>
+
+                            <p style="margin:0 0 10px 0;"><strong>Invoice Number:</strong> {{ order.order_id }}</p>
+                            <p style="margin:0 0 10px 0;"><strong>Date:</strong> {{ order.created_at|date:"F j, Y" }}</p>
+                            <p style="margin:0 0 10px 0;"><strong>Total Amount:</strong> ${{ order.total }}</p>
+                            <p style="margin:0 0 10px 0;"><strong>Payment Method:</strong> {{ order.payment_method|default:'PayPal' }}</p>
+
+                            {% if order.items.all %}
+                                <p style="margin:20px 0 5px 0;font-weight:600;">Subscription Details:</p>
+                                {% for item in order.items.all %}
+                                    <p style="margin:0 0 5px 0;">• {{ item.product_name }}</p>
+                                {% endfor %}
+                            {% endif %}
+
+                            <div style="background-color:#DCF8C6;border-left:4px solid #25D366;padding:15px;margin:20px 0;border-radius:0 5px 5px 0;">
+                                <p style="margin:0;"><strong>📄 Invoice:</strong> Your invoice is attached as a PDF. You can also view and download it anytime from your dashboard.</p>
+                            </div>
+
+                            <p style="text-align:center;margin:30px 0;">
+                                <a href="https://www.wacampaignsender.com/login/?next=/userpanel/" style="background:#25D366;color:#ffffff;padding:12px 24px;border-radius:5px;text-decoration:none;font-weight:600;margin-right:10px;">Access Dashboard</a>
+                                <a href="mailto:hi@wacampaignsender.com?subject=Support Request" style="background:#007bff;color:#ffffff;padding:12px 24px;border-radius:5px;text-decoration:none;font-weight:600;">Contact Support</a>
+                            </p>
+
+                            <p style="margin:0 0 15px 0;">Thank you for choosing WA Campaign Sender! If you need any assistance getting started, our support team is here to help.</p>
+                            
+                            <p style="margin:0;">Best regards,<br>
+                            <strong>WA Campaign Sender Team</strong></p>
+                        </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding:20px 40px;background:#f8f8f8;border-top:1px solid #eee;border-radius:0 0 5px 5px;text-align:center;font-size:12px;color:#999;">
+                            <p style="margin:0;">&copy; {% now "Y" %} WA Campaign Sender. All rights reserved.<br>
+                            Support: hi@wacampaignsender.com | P13 France Cluster, International City, Dubai</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

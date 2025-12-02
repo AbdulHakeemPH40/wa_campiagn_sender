@@ -1,0 +1,24 @@
+<aside class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 h-fit sticky top-24">
+    <h3 class="text-xl font-bold mb-4 text-gray-900 border-b pb-2">Playbook Chapters</h3>
+    <nav>
+        <ul class="space-y-2">
+            {% for post in posts %}
+            <li>
+                <a href="{% url 'sitevisitor:'|add:post.url_name %}" 
+                   class="block py-2 px-3 rounded-md transition-colors text-gray-700 hover:bg-primary-light hover:text-primary-dark
+                          {% if post.slug == current_slug %} bg-primary-light text-primary-dark font-semibold {% endif %}">
+                    {{ post.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <div class="mt-6 border-t pt-4">
+        <a href="{% url 'sitevisitor:blogs' %}" class="inline-flex items-center text-primary hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+              <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+            </svg>
+            Back to Blog List
+        </a>
+    </div>
+</aside>
