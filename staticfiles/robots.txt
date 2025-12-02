@@ -1,0 +1,19 @@
+# robots.txt for wacampaignsender.com
+
+# Allow all crawlers by default
+User-agent: *
+Disallow:
+
+# Yandex-specific: consolidate duplicate URLs with tracking params
+User-agent: Yandex
+Clean-param: utm_source /
+Clean-param: utm_medium /
+Clean-param: utm_campaign /
+Clean-param: utm_term /
+Clean-param: utm_content /
+Clean-param: gclid /
+Clean-param: fbclid /
+Clean-param: yclid /
+
+# Primary sitemaps
+Sitemap: https://wacampaignsender.com/sitemap.xml

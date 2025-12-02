@@ -1,0 +1,24 @@
+{
+    "name": "WA Campaign Sender",
+    "short_name": "WA Sender",
+    "icons": [
+        {
+            "src": "/static/image/favicon-16x16.png",
+            "sizes": "16x16",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/image/favicon-32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/image/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#25D366",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

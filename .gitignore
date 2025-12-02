@@ -50,9 +50,6 @@ env/
 .DS_Store
 
 # Static and media files
-staticfiles/
-/static/
-/media/
 
 # Log files
 logs/

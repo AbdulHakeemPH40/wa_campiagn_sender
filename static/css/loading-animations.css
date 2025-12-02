@@ -1,0 +1,407 @@
+/* Global Loading Animations CSS - WhatsApp Themed */
+
+/* Page Loading Overlay - Light Transparent */
+.page-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(1px);
+    transition: opacity 0.3s ease;
+}
+
+.page-loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Button Loading States */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn-loading .btn-text {
+    opacity: 0;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Form Loading Overlay - Light Transparent */
+.form-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.form-container {
+    position: relative;
+}
+
+/* WhatsApp Themed Circular Loader */
+.loader {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    border-right-color: #25D366;
+    animation: l15 1s infinite linear;
+}
+.loader::before,
+.loader::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+}
+.loader::after {
+    margin: 8px;
+    animation-duration: 3s;
+}
+
+/* Size Variations */
+.loader-small {
+    width: 30px;
+}
+.loader-small::before {
+    margin: 1px;
+}
+.loader-small::after {
+    margin: 5px;
+}
+
+.loader-large {
+    width: 70px;
+}
+.loader-large::before {
+    margin: 3px;
+}
+.loader-large::after {
+    margin: 12px;
+}
+
+/* Legacy spinner class for compatibility */
+.spinner {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: 4px solid #0000;
+    border-radius: 50%;
+    border-right-color: #25D366;
+    animation: l15 1s infinite linear;
+}
+.spinner::before,
+.spinner::after {
+    content: "";
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+}
+.spinner::after {
+    margin: 8px;
+    animation-duration: 3s;
+}
+
+.spinner-small {
+    width: 30px;
+}
+.spinner-small::before {
+    margin: 1px;
+}
+.spinner-small::after {
+    margin: 5px;
+}
+
+.spinner-large {
+    width: 70px;
+}
+.spinner-large::before {
+    margin: 3px;
+}
+.spinner-large::after {
+    margin: 12px;
+}
+
+/* WhatsApp Pulse Animation */
+.pulse-loader {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #25D366;
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* WhatsApp Dots Animation */
+.dots-loader {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 20px;
+}
+
+.dots-loader div {
+    position: absolute;
+    top: 50%;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #25D366;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    transform: translateY(-50%);
+}
+
+.dots-loader div:nth-child(1) {
+    left: 8px;
+    animation: dots1 0.6s infinite;
+}
+
+.dots-loader div:nth-child(2) {
+    left: 8px;
+    animation: dots2 0.6s infinite;
+}
+
+.dots-loader div:nth-child(3) {
+    left: 32px;
+    animation: dots2 0.6s infinite;
+}
+
+.dots-loader div:nth-child(4) {
+    left: 56px;
+    animation: dots3 0.6s infinite;
+}
+
+/* Table Loading - Light Transparent */
+.table-loading {
+    position: relative;
+}
+
+.table-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.25);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card Loading */
+.card-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation: shimmer 1.5s infinite;
+    z-index: 1;
+}
+
+/* Loading Text */
+.loading-text {
+    margin-top: 15px;
+    color: #666;
+    font-size: 14px;
+    text-align: center;
+}
+
+.loading-text.pulse-text {
+    animation: textPulse 1.5s ease-in-out infinite;
+}
+
+/* WhatsApp Progress Bar */
+.progress-loader {
+    width: 200px;
+    height: 4px;
+    background: #f0f0f0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-loader::before {
+    content: '';
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #25D366, #128C7E);
+    border-radius: 2px;
+    animation: progress 2s ease-in-out infinite;
+}
+
+/* Keyframe Animations */
+@keyframes l15 {
+    100% { transform: rotate(1turn); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+}
+
+@keyframes dots1 {
+    0% { transform: scale(0) translateY(-50%); }
+    100% { transform: scale(1) translateY(-50%); }
+}
+
+@keyframes dots3 {
+    0% { transform: scale(1) translateY(-50%); }
+    100% { transform: scale(0) translateY(-50%); }
+}
+
+@keyframes dots2 {
+    0% { transform: translate(0, -50%); }
+    100% { transform: translate(24px, -50%); }
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+@keyframes textPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes progress {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(0%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .spinner {
+        width: 30px;
+        height: 30px;
+        border-width: 3px;
+    }
+    
+    .loading-text {
+        font-size: 12px;
+    }
+    
+    .progress-loader {
+        width: 150px;
+    }
+}
+
+/* Dark Theme Support */
+@media (prefers-color-scheme: dark) {
+    .page-loading-overlay {
+        background: rgba(33, 37, 41, 0.25);
+    }
+    
+    .form-loading-overlay {
+        background: rgba(33, 37, 41, 0.25);
+    }
+    
+    .table-loading-overlay {
+        background: rgba(33, 37, 41, 0.25);
+    }
+    
+    .loader, .spinner {
+        border-right-color: #25D366;
+    }
+    
+    .loading-text {
+        color: #25D366;
+    }
+}
+
+/* WhatsApp Themed App Styles */
+.sitevisitor-loading {
+    background: rgba(255, 255, 255, 0.25);
+    color: #25D366;
+}
+
+.userpanel-loading {
+    background: rgba(255, 255, 255, 0.25);
+    color: #25D366;
+}
+
+.adminpanel-loading {
+    background: rgba(255, 255, 255, 0.25);
+    color: #25D366;
+}
+
+/* Loading States for Common Elements */
+.navbar-loading {
+    position: relative;
+}
+
+.navbar-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #007bff, transparent);
+    animation: progress 2s ease-in-out infinite;
+}
+
+.sidebar-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.content-loading {
+    min-height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

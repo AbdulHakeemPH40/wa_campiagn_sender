@@ -1,0 +1,71 @@
+/* Modern styling touches for moderation page */
+
+.mod-risk-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  border: 1px solid #fecaca; /* red-200 */
+  color: #b91c1c; /* red-700 */
+  background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%);
+}
+
+.mod-chip {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb; /* neutral-200 */
+  color: #374151; /* neutral-700 */
+  background: #f3f4f6; /* neutral-100 */
+}
+
+.mod-segmented { display:flex; flex-wrap:wrap; gap:12px; }
+
+.mod-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb; /* neutral-200 */
+  background: #ffffff;
+  transition: background 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+.mod-radio:hover { background:#f8fafc; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+
+.mod-radio input[type="radio"] {
+  accent-color: #2563eb; /* primary-ish */
+  width: 14px;
+  height: 14px;
+}
+
+.mod-radio input[type="radio"]:checked + span {
+  color: #1d4ed8; /* primary-700 */
+  font-weight: 600;
+  background: #eff6ff; /* blue-50 */
+  border: 1px solid #bfdbfe; /* blue-200 */
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.mod-save { width: 100%; }
+@media (min-width: 640px) { .mod-save { width: auto; } }
+
+/* Save button: bordered card-like treatment */
+.mod-save-btn {
+  border: 1px solid #bfdbfe; /* blue-200 */
+  color: #1d4ed8; /* blue-700 */
+  background: linear-gradient(180deg, #eff6ff 0%, #ffffff 100%);
+  box-shadow: 0 1px 2px rgba(29,78,216,0.15), inset 0 -1px 0 rgba(191,219,254,0.6);
+  border-radius: 10px;
+  font-weight: 600;
+}
+.mod-save-btn:hover {
+  border-color: #93c5fd; /* blue-300 */
+  background: linear-gradient(180deg, #e0f2fe 0%, #ffffff 100%);
+}
+.mod-save-btn:active { transform: translateY(1px); }
+.mod-save-btn i { color: #1d4ed8; }

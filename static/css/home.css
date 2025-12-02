@@ -1,0 +1,59 @@
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+}
+.hero-section {
+    position: relative; /* For positioning pseudo-elements */
+    overflow: hidden; /* To contain the blur effect */
+    /* Previous background styles are removed from here */
+    
+}
+
+.hero-section::before { /* For the blurred background image */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://readdy.ai/api/search-image?query=modern%2520professional%2520workspace%2520with%2520a%2520sleek%2520laptop%2520showing%2520a%2520messaging%2520interface%252C%2520soft%2520gradient%2520background%2520transitioning%2520from%2520white%2520to%2520light%2520green%2520on%2520the%2520right%2520side%252C%2520clean%2520minimal%2520aesthetic%252C%2520perfect%2520for%2520text%2520overlay%2520on%2520left%2520side%252C%2520professional%2520lighting%252C%2520high%2520quality&width=1920&height=800&seq=1&orientation=landscape');
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: blur(4px); /* Adjust blur radius as needed */
+    z-index: -2; /* Behind the overlay */
+    transform: scale(1.02); /* Slightly scale to prevent blurred edges */
+}
+
+.hero-section::after { /* For the semi-transparent white overlay */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, 
+        rgba(255, 255, 255, 0.85) 0%,  /* Opaque white on the far left */
+        rgba(255, 255, 255, 0.8) 40%, /* Still quite opaque over the typical text area */
+        rgba(255, 255, 255, 0) 70%   /* Fades to fully transparent by 70% of the width */
+    );
+    z-index: -1; /* On top of blurred image, behind content */
+}
+input:focus {
+outline: none;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+-webkit-appearance: none;
+margin: 0;
+}
+.pricing-toggle:checked + .toggle-circle {
+transform: translateX(100%);
+}
+.testimonial-slide {
+transition: opacity 0.3s ease;
+}
+
+.image-slight-blur {
+    filter: blur(2px);
+}
