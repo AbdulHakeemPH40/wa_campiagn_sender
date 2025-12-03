@@ -979,6 +979,45 @@
     </div>
 </div>
 
+<!-- Validation Error Modal -->
+<div id="validationErrorModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-red-200 transform transition-all">
+        <div class="bg-gradient-to-r from-red-50 to-rose-50 px-6 py-5 border-b border-red-200 rounded-t-2xl">
+            <div class="flex items-center gap-3">
+                <div class="h-12 w-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <i class="ri-error-warning-line text-red-600 text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-neutral-900">Validation Error</h3>
+                    <p class="text-sm text-neutral-600 mt-0.5">Please check the following</p>
+                </div>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-5">
+                <p class="text-sm font-semibold text-red-800 mb-2 flex items-center">
+                    <i class="ri-information-line mr-2"></i>Missing Required Fields:
+                </p>
+                <ul id="validationErrorList" class="space-y-1.5 text-sm text-red-700">
+                    <!-- Dynamically populated -->
+                </ul>
+            </div>
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <p class="text-xs text-blue-800">
+                    <i class="ri-lightbulb-line mr-1"></i>
+                    <strong>Tip:</strong> All fields marked with <span class="text-red-500 font-bold">*</span> are required to send a campaign.
+                </p>
+            </div>
+        </div>
+        <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-200 rounded-b-2xl flex justify-end">
+            <button onclick="closeValidationModal()" 
+                    class="px-6 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl hover:from-red-600 hover:to-red-700 font-semibold transition-all transform hover:scale-105">
+                <i class="ri-checkbox-circle-line mr-2"></i>Got It
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Toast Notifications -->
 <div id="successToast" class="hidden fixed top-5 right-5 z-40 max-w-sm">
     <div class="bg-white rounded-xl shadow-2xl border-l-4 border-green-500 p-4 flex items-start space-x-3 animate-slide-in">
@@ -2132,16 +2171,21 @@ async function showSendConfirmation() {
     const contactList = contactListSelect.value;
     const attachment = document.getElementById('attachment').files[0];
     
-    // Validate required fields
-    if (!campaignName || !message || !contactList) {
-        alert('Please fill in all required fields: Campaign Name, Message, and Contact List');
+    // Validate required fields with beautiful modal
+    const missingFields = [];
+    if (!campaignName) missingFields.push('Campaign Name');
+    if (!message) missingFields.push('Message Content');
+    if (!contactList) missingFields.push('Contact List');
+    
+    if (missingFields.length > 0) {
+        showValidationError(missingFields);
         return;
     }
     
     // Validate campaign name format
     const validPattern = /^[a-z0-9_]+$/;
     if (!validPattern.test(campaignName)) {
-        alert('Campaign name must contain only lowercase letters, numbers, and underscores');
+        showValidationError(['Campaign Name format (use only lowercase, numbers, and underscores)']);
         document.getElementById('campaignName').focus();
         return;
     }
@@ -2279,6 +2323,50 @@ function showToast(title, message) {
 function closeToast() {
     document.getElementById('successToast').classList.add('hidden');
 }
+
+// ==================== Validation Error Modal ====================
+function showValidationError(missingFields) {
+    const list = document.getElementById('validationErrorList');
+    list.innerHTML = ''; // Clear previous errors
+    
+    missingFields.forEach(field => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center';
+        li.innerHTML = `
+            <i class="ri-close-circle-fill text-red-500 mr-2"></i>
+            <span class="font-medium">${field}</span>
+        `;
+        list.appendChild(li);
+    });
+    
+    // Show modal with animation
+    const modal = document.getElementById('validationErrorModal');
+    modal.classList.remove('hidden');
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        closeValidationModal();
+    }, 5000);
+}
+
+function closeValidationModal() {
+    document.getElementById('validationErrorModal').classList.add('hidden');
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('validationErrorModal');
+    if (e.target === modal) {
+        closeValidationModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeValidationModal();
+    }
+});
 
 // Form submission - removed old confirm dialog
 document.getElementById('campaignForm').addEventListener('submit', function(e) {
