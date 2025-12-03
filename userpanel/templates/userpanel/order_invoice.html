@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Invoice #{{ order.order_id }} - WA Campaign Sender{% endblock %}
+{% block title %}Invoice #{{ order.order_id }} - Focus Web Solutions{% endblock %}
 
 {% block content %}
 <div class="container mx-auto py-6 px-4" id="invoice-content">
@@ -29,7 +29,7 @@
                 <div>
                     <div class="flex items-center mb-4">
                         <div class="bg-white p-2 rounded-[5px] mb-0 flex items-center justify-center shadow-sm mr-3">
-                            <img src="{% if logo_data_uri %}{{ logo_data_uri }}{% else %}{% static 'image/logo.png' %}{% endif %}" alt="WA Campaign Sender Logo" class="h-10 w-10 object-contain">
+                            <img src="{% if logo_data_uri %}{{ logo_data_uri }}{% else %}{% static 'image/logo.png' %}{% endif %}" alt="Focus Web Solutions Logo" class="h-10 w-10 object-contain">
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold">{{ company_name }}</h3>

@@ -872,8 +872,8 @@ def view_order_invoice(request, order_id):
             'logo_data_uri': logo_data_uri,
             'order': order,
             'order_items': order_items,
-            'company_name': 'WA Campaign Sender',
-            'company_address': 'France Cluster, International City, Dubai,UAE',
+            'company_name': 'Focus Web Solutions',
+            'company_address': 'Grand Hamad Bank Street, Doha - Qatar',
             'company_support_email': 'hi@wacampaignsender.com',
             'subscription_start_date': start_date,
             'subscription_end_date': expiry_date,
@@ -933,8 +933,8 @@ def view_order_invoice(request, order_id):
                 'subscription_start': start_date.strftime('%Y-%m-%d'),
                 'subscription_end': expiry_date.strftime('%Y-%m-%d') if expiry_date else None,
                 'company_info': {
-                    'name': 'WA Campaign Sender',
-                    'address': 'France Cluster, International City, Dubai,UAE',
+                    'name': 'Focus Web Solutions',
+                    'address': 'Grand Hamad Bank Street, Doha - Qatar',
                     'support_email': 'hi@wacampaignsender.com'
                 },
                 'user_address': address_data

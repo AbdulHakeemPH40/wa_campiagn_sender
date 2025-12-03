@@ -41,8 +41,8 @@ def generate_invoice_pdf_for_email(order):
         context = {
             'order': order,
             'order_items': order.items.all(),
-            'company_name': 'WA Campaign Sender',
-            'company_address': 'France Cluster, International City, Dubai,UAE',
+            'company_name': 'Focus Web Solutions',
+            'company_address': 'Grand Hamad Bank Street, Doha - Qatar',
             'company_support_email': 'hi@wacampaignsender.com',
             'subscription_start_date': start_date,
             'subscription_end_date': expiry_date,
