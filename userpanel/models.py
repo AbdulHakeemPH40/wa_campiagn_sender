@@ -316,7 +316,7 @@ class WASenderCampaign(models.Model):
     status = models.CharField(max_length=20, choices=CAMPAIGN_STATUS_CHOICES, default='draft', db_index=True)
     
     # Message template
-    message_template = models.TextField()  # Can include variables like {name}, {phone}
+    message_template = models.TextField(db_collation='utf8mb4_unicode_ci')  # Can include variables like {name}, {phone} - supports emojis
     message_type = models.CharField(max_length=20, default='text')
     media_url = models.URLField(max_length=500, blank=True, null=True)  # For media campaigns
     
