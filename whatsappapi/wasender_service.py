@@ -549,6 +549,13 @@ class WASenderService:
                 
                 logger.info(f"Session {session.session_id} status: {session.status}")
                 return session_data
+            elif response.status_code == 404:
+                # Session not found on WASender - mark as disconnected
+                logger.warning(f"Session {session.session_id} not found on WASender (404) - marking as disconnected")
+                session.status = 'disconnected'
+                session.disconnected_at = timezone.now()
+                session.save()
+                return {'status': 'disconnected', 'reason': 'Session not found on WASender'}
             else:
                 # Sanitize noisy HTML error pages (e.g., Cloudflare 5xx) and prefer concise messages
                 try:
