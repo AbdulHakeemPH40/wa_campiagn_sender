@@ -886,7 +886,54 @@ class WASenderService:
             }
         }
     
-    def send_text_message(self, session, recipient, message):
+    def send_presence_update(self, session, recipient_jid, presence_type='composing'):
+        """
+        Send presence update (typing indicator) to make messages look more human
+        POST /api/send-presence-update
+        
+        As per WASender API docs: https://wasenderapi.com/api-docs/sessions/send-presence-update
+        
+        Args:
+            session: WASenderSession instance
+            recipient_jid: JID of recipient (e.g., "1234567890@s.whatsapp.net")
+            presence_type: 'composing', 'recording', 'available', 'unavailable'
+        
+        Returns:
+            bool: True if successful
+        """
+        try:
+            session_api_key = self._decrypt_token(session.api_token)
+            
+            # Format JID if not already formatted
+            if not recipient_jid.endswith('@s.whatsapp.net'):
+                # Remove + and format as JID
+                phone = recipient_jid.lstrip('+')
+                recipient_jid = f"{phone}@s.whatsapp.net"
+            
+            payload = {
+                "jid": recipient_jid,
+                "type": presence_type
+            }
+            
+            response = requests.post(
+                f"{self.BASE_URL}/send-presence-update",
+                headers=self._get_headers(session_api_key),
+                json=payload,
+                timeout=10
+            )
+            
+            if response.status_code in [200, 201]:
+                logger.debug(f"Presence update sent: {presence_type} to {recipient_jid}")
+                return True
+            else:
+                logger.warning(f"Presence update failed: {response.status_code}")
+                return False
+                
+        except Exception as e:
+            logger.warning(f"Presence update error (non-critical): {e}")
+            return False
+    
+    def send_text_message(self, session, recipient, message, send_typing=True):
         """
         Send text message via WhatsApp
         POST /api/send-message
@@ -895,6 +942,7 @@ class WASenderService:
             session: WASenderSession instance
             recipient: Phone number (without + or country code)
             message: Message text
+            send_typing: If True, send "typing..." indicator before message (more human-like)
         
         Returns:
             WASenderMessage instance or None
@@ -907,6 +955,16 @@ class WASenderService:
         
         # Get session-specific API key
         session_api_key = self._decrypt_token(session.api_token)
+        
+        # Send typing indicator to make message look more human (optional, non-blocking)
+        # This helps prevent WhatsApp from detecting bot-like behavior
+        if send_typing and getattr(settings, 'WASENDER_SEND_TYPING', True):
+            try:
+                self.send_presence_update(session, recipient, 'composing')
+                import time
+                time.sleep(0.5)  # Brief pause to simulate typing
+            except Exception:
+                pass  # Non-critical, continue with message
 
         # Detect upstream outage early and fail fast with clear status
         if not self._is_api_available():
@@ -949,11 +1007,12 @@ class WASenderService:
                 error_message=error_msg
             )
         
-        # Payload format - simpler format that WASender expects
+        # Payload format - exactly as per WASender API docs
+        # https://wasenderapi.com/api-docs/messages/send-text-message
+        # NOTE: Do NOT include "type" field - it's not in the official docs
         payload = {
             "to": recipient,
-            "type": "text",
-            "text": message  # Direct string, not object
+            "text": message
         }
 
         logger.info(f"Sending text to {recipient}: {repr(message)[:200]}")
@@ -1819,11 +1878,35 @@ class WASenderService:
         }
         """
         try:
-            messages = payload.get('data', {}).get('messages', [])
+            data = payload.get('data', {})
+            
+            # Handle different webhook data structures
+            if isinstance(data, dict):
+                messages_data = data.get('messages', {})
+            else:
+                logger.error(f"❌ Unexpected data type in webhook: {type(data)}")
+                return False
+            
+            # messages_data can be a dict or a list
+            if isinstance(messages_data, dict):
+                # Single message as dict
+                messages = [messages_data]
+            elif isinstance(messages_data, list):
+                # Multiple messages as list
+                messages = messages_data
+            else:
+                logger.error(f"❌ Unexpected messages type: {type(messages_data)}")
+                return False
+            
             if not messages:
                 return False
             
             for msg_data in messages:
+                # Ensure msg_data is a dict
+                if not isinstance(msg_data, dict):
+                    logger.error(f"❌ Message data is not a dict: {type(msg_data)}")
+                    continue
+                
                 key = msg_data.get('key', {})
                 message_obj = msg_data.get('message', {})
                 
@@ -1937,19 +2020,49 @@ class WASenderService:
             
             logger.info(f"📊 MESSAGE STATUS UPDATE | Message ID: {message_id} | Status: {status} | Recipient: {recipient}")
             
+            # Skip if message_id is empty
+            if not message_id or message_id.strip() == '':
+                logger.warning(f"⚠️ Skipping status update - empty message_id | Status: {status} | Recipient: {recipient}")
+                return False
+            
             # Find and update the message in database
             try:
-                message = WASenderMessage.objects.get(message_id=message_id)
-                old_status = message.status
-                message.status = status
-                message.save(update_fields=['status'])
+                # Handle potential duplicate message_ids by getting the most recent one
+                messages = WASenderMessage.objects.filter(message_id=message_id).order_by('-created_at')
                 
-                logger.info(f"✅ Updated message status | ID: {message.id} | {old_status} → {status}")
+                if not messages.exists():
+                    logger.warning(f"⚠️ Message not found in database: {message_id}")
+                    return False
                 
-                # Update campaign stats if this is a campaign message
-                if hasattr(message, 'metadata') and message.metadata.get('campaign_id'):
-                    campaign_id = message.metadata['campaign_id']
-                    logger.info(f"📈 Updating campaign #{campaign_id} stats after status change")
+                # Update all matching messages (in case of duplicates)
+                updated_count = 0
+                for message in messages:
+                    old_status = message.status
+                    message.status = status
+                    
+                    # Update timestamps based on status
+                    if status == 'sent' and not message.sent_at:
+                        message.sent_at = timezone.now()
+                        message.save(update_fields=['status', 'sent_at'])
+                    elif status == 'delivered' and not message.delivered_at:
+                        message.delivered_at = timezone.now()
+                        message.save(update_fields=['status', 'delivered_at'])
+                    elif status == 'read' and not message.read_at:
+                        message.read_at = timezone.now()
+                        message.save(update_fields=['status', 'read_at'])
+                    else:
+                        message.save(update_fields=['status'])
+                    
+                    updated_count += 1
+                    logger.info(f"✅ Updated message status | ID: {message.id} | {old_status} → {status}")
+                    
+                    # Update campaign stats if this is a campaign message
+                    if hasattr(message, 'metadata') and message.metadata.get('campaign_id'):
+                        campaign_id = message.metadata['campaign_id']
+                        logger.info(f"📈 Updating campaign #{campaign_id} stats after status change")
+                
+                if updated_count > 1:
+                    logger.warning(f"⚠️ Updated {updated_count} duplicate messages with ID: {message_id}")
                 
                 return True
                 
@@ -1967,14 +2080,36 @@ class WASenderService:
         Updates session status when connection state changes
         """
         try:
-            session_id = payload.get('session_id', '')
-            status = payload.get('status', '')
-            phone_number = payload.get('data', {}).get('phone_number', '')
+            # Extract session identifier - can be session_id or sessionId (API key)
+            session_id = payload.get('session_id') or payload.get('sessionId', '')
+            data = payload.get('data', {})
+            status = data.get('status', payload.get('status', ''))  # Status can be in data or root
+            phone_number = data.get('phone_number', '')
             
             logger.info(f"🔌 SESSION STATUS UPDATE | Session: {session_id} | Status: {status} | Phone: {phone_number}")
             
+            # Try to find session by session_id first, then by matching decrypted api_token
+            session = None
             try:
-                session = WASenderSession.objects.get(session_id=session_id)
+                # First try by numeric session_id
+                if session_id and session_id.isdigit():
+                    session = WASenderSession.objects.get(session_id=session_id)
+                else:
+                    # sessionId is the API key hash - need to find by decrypting api_token
+                    # Get all sessions and check which one matches when decrypted
+                    all_sessions = WASenderSession.objects.all()
+                    for s in all_sessions:
+                        try:
+                            decrypted_token = self._decrypt_token(s.api_token)
+                            if decrypted_token == session_id:
+                                session = s
+                                break
+                        except:
+                            continue
+                    
+                    if not session:
+                        logger.error(f"❌ Could not find session matching API key hash: {session_id[:20]}...")
+                        return False
                 old_status = session.status
                 session.status = status
                 
@@ -1984,12 +2119,26 @@ class WASenderService:
                         session.connected_phone_number = phone_number
                     logger.info(f"✅ Session connected | {session.session_name} | Phone: {phone_number}")
                     
-                elif status == 'disconnected':
+                elif status in ['disconnected', 'logged_out']:
+                    # Treat both 'disconnected' and 'logged_out' as disconnected
+                    session.status = 'disconnected'
                     session.disconnected_at = timezone.now()
-                    logger.warning(f"⚠️ Session disconnected | {session.session_name}")
+                    logger.warning(f"🚨 SESSION DISCONNECTED | User: {session.user.email} | Session: {session.session_name} | Phone: {session.connected_phone_number or session.phone_number}")
+                    logger.warning(f"⚠️ This may affect running campaigns for user: {session.user.email}")
+                    
+                    # Check if there are active campaigns for this session
+                    from userpanel.models import WASenderCampaign
+                    active_campaigns = WASenderCampaign.objects.filter(
+                        session=session,
+                        status__in=['pending', 'running']
+                    )
+                    if active_campaigns.exists():
+                        logger.error(f"🚨 CRITICAL: {active_campaigns.count()} active campaigns affected by session disconnect!")
+                        for camp in active_campaigns:
+                            logger.error(f"   - Campaign #{camp.id}: {camp.name} (Status: {camp.status})")
                 
                 session.save()
-                logger.info(f"✅ Session status updated | {session_id} | {old_status} → {status}")
+                logger.info(f"✅ Session status updated | {session_id} | {old_status} → {status} | User: {session.user.email}")
                 return True
                 
             except WASenderSession.DoesNotExist:

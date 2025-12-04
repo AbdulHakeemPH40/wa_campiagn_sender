@@ -165,7 +165,10 @@ def send_campaign_async(campaign_id):
             campaign.save()
             return {'error': 'No contact list'}
         
-        # CRITICAL: Verify session is still connected before starting
+        # CRITICAL: Verify session is still connected before starting (DATABASE CHECK ONLY)
+        # NOTE: We removed the WASender API call (get_session_status) because it was causing
+        # session conflicts when multiple campaigns started simultaneously. The API call
+        # might trigger a global session refresh that disconnects other active sessions.
         session = campaign.session
         if not session or session.status != 'connected':
             error_msg = f'Session not connected (status: {session.status if session else "None"})'
@@ -174,21 +177,11 @@ def send_campaign_async(campaign_id):
             campaign.save()
             return {'error': error_msg}
         
-        # Initialize service and verify session status with WASender API
+        # Initialize service for sending messages (NO API status check to avoid conflicts)
         service = WASenderService()
-        try:
-            service.get_session_status(session)
-            session.refresh_from_db()
-            if session.status != 'connected':
-                logger.error(f"Campaign {campaign_id} session disconnected on WASender: {session.status}")
-                campaign.status = 'failed'
-                campaign.save()
-                return {'error': f'Session disconnected on WASender (status: {session.status})'}
-        except Exception as e:
-            logger.error(f"Campaign {campaign_id} failed to verify session: {e}")
-            campaign.status = 'failed'
-            campaign.save()
-            return {'error': f'Failed to verify session: {str(e)}'}
+        logger.info(f"✅ Session {session.session_id} verified from database (status: {session.status})")
+        logger.info(f"📱 Session phone: {session.connected_phone_number or session.phone_number}")
+        logger.info(f"👤 User: {session.user.email}")
         
         # Get all contacts
         all_contacts = Contact.objects.filter(contact_list=contact_list)

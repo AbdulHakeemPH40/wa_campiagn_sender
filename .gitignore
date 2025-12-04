@@ -1,6 +1,6 @@
 # Django Settings with API Keys
 wa_campiagn_sender/settings.py
-wa_campiagn_sender/pythonanywhere_settings.py
+# wa_campiagn_sender/pythonanywhere_settings.py
 
 # Django Migrations (keep only __init__.py)
 */migrations/*.py
