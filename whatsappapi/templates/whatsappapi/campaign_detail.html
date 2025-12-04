@@ -74,12 +74,13 @@
     </div>
 
     <!-- Statistics Cards -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+        <!-- Total Recipients -->
         <div class="bg-white rounded-lg shadow-sm border border-neutral-200 p-3 sm:p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-medium text-neutral-600">Total</p>
-                    <p class="text-2xl font-bold text-neutral-900 mt-1">{{ campaign.total_recipients }}</p>
+                    <p class="text-2xl font-bold text-neutral-900 mt-1" data-stat="total-recipients">{{ campaign.total_recipients }}</p>
                 </div>
                 <div class="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <i class="ri-group-line text-xl text-blue-600"></i>
@@ -87,11 +88,12 @@
             </div>
         </div>
 
+        <!-- Messages Sent -->
         <div class="bg-white rounded-lg shadow-sm border border-neutral-200 p-3 sm:p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-xs font-medium text-neutral-600">Sent</p>
-                    <p class="text-2xl font-bold text-neutral-900 mt-1">{{ campaign.messages_sent }}</p>
+                    <p class="text-2xl font-bold text-neutral-900 mt-1" data-stat="messages-sent">{{ campaign.messages_sent }}</p>
                 </div>
                 <div class="h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">
                     <i class="ri-send-plane-2-line text-xl text-green-600"></i>
@@ -99,26 +101,56 @@
             </div>
         </div>
 
+        <!-- Messages Delivered -->
         <div class="bg-white rounded-lg shadow-sm border border-neutral-200 p-3 sm:p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-medium text-neutral-600">Delivered</p>
-                    <p class="text-2xl font-bold text-neutral-900 mt-1">{{ campaign.messages_delivered }}</p>
+                    <p class="text-xs font-medium text-neutral-600">✅ Delivered</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1" data-stat="messages-delivered">{{ campaign.messages_delivered|default:0 }}</p>
                 </div>
-                <div class="h-10 w-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <i class="ri-checkbox-circle-line text-xl text-purple-600"></i>
+                <div class="h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="ri-checkbox-circle-line text-xl text-green-600"></i>
                 </div>
             </div>
         </div>
 
+        <!-- Messages Read -->
         <div class="bg-white rounded-lg shadow-sm border border-neutral-200 p-3 sm:p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-xs font-medium text-neutral-600">Failed</p>
-                    <p class="text-2xl font-bold text-neutral-900 mt-1">{{ campaign.messages_failed }}</p>
+                    <p class="text-xs font-medium text-neutral-600">📖 Read</p>
+                    <p class="text-2xl font-bold text-blue-600 mt-1" data-stat="messages-read">{{ campaign.messages_read|default:0 }}</p>
+                </div>
+                <div class="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="ri-eye-line text-xl text-blue-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages Failed -->
+        <div class="bg-white rounded-lg shadow-sm border border-neutral-200 p-3 sm:p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-neutral-600">❌ Failed</p>
+                    <p class="text-2xl font-bold text-red-600 mt-1" data-stat="messages-failed">{{ campaign.messages_failed }}</p>
                 </div>
                 <div class="h-10 w-10 bg-red-100 rounded-lg flex items-center justify-center">
                     <i class="ri-close-circle-line text-xl text-red-600"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Rate -->
+        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg shadow-sm border-2 border-green-200 p-3 sm:p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-green-700">Success Rate</p>
+                    <p class="text-2xl font-bold text-green-600 mt-1">
+                        <span data-stat="success-rate">{% widthratio campaign.messages_delivered campaign.total_recipients 100 %}</span>%
+                    </p>
+                </div>
+                <div class="h-10 w-10 bg-green-200 rounded-lg flex items-center justify-center">
+                    <i class="ri-trophy-line text-xl text-green-700"></i>
                 </div>
             </div>
         </div>
@@ -244,152 +276,278 @@
                 </div>
             </div>
 
-            <!-- Success Rate -->
-            <div class="bg-white rounded-xl shadow-sm border border-neutral-200 p-5">
-                <h3 class="font-semibold text-neutral-900 mb-3">Success Rate</h3>
-                {% if campaign.total_recipients > 0 %}
-                    {% widthratio campaign.messages_sent campaign.total_recipients 100 as success_rate %}
-                    <div class="relative pt-1">
-                        <div class="flex mb-1.5 items-center justify-between">
-                            <div>
-                                <span class="text-xs font-semibold inline-block py-0.5 px-1.5 uppercase rounded-full text-green-600 bg-green-200">
-                                    Sent
-                                </span>
+            <!-- Batch Progress & Cooldown Status (Only for Advanced Controls) -->
+            {% if campaign.use_advanced_controls and campaign.status == 'running' %}
+            <div id="cooldownStatusCard" class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-sm border-2 border-orange-200 p-5">
+                <h3 class="font-semibold text-neutral-900 mb-3 flex items-center">
+                    <i class="ri-timer-line text-orange-600 mr-2"></i>
+                    Batch Progress
+                </h3>
+                
+                <!-- Batch Counter -->
+                <div class="mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-neutral-600">Current Batch</span>
+                        <span class="text-sm font-bold text-orange-600" id="batchCounter">
+                            <span data-stat="current-batch">{{ campaign.current_batch|default:0 }}</span> / <span data-stat="total-batches">{{ campaign.total_batches|default:0 }}</span>
+                        </span>
+                    </div>
+                    <div class="w-full bg-orange-200 rounded-full h-2">
+                        <div id="batchProgressBar" class="bg-orange-500 h-2 rounded-full transition-all duration-300" 
+                             style="width: {% if campaign.total_batches > 0 %}{{ campaign.current_batch|default:0|floatformat:0 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+                
+                <!-- Cooldown Status -->
+                <div id="cooldownStatusDisplay" class="{% if not campaign.cooldown_status %}hidden{% endif %}">
+                    <div class="bg-white rounded-lg p-3 border border-orange-300">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="animate-spin rounded-full h-5 w-5 border-2 border-orange-500 border-t-transparent"></div>
                             </div>
-                            <div class="text-right">
-                                <span class="text-xs font-semibold inline-block text-green-600">
-                                    {{ success_rate|default:0 }}%
+                            <div class="ml-3 flex-1">
+                                <p class="text-xs font-semibold text-orange-800 mb-1">⏳ Cooldown Active</p>
+                                <p class="text-xs text-orange-700" id="cooldownStatusText" data-stat="cooldown-status">
+                                    {{ campaign.cooldown_status|default:"Waiting between batches..." }}
+                                </p>
+                                <div class="mt-2">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-orange-600">Time Remaining:</span>
+                                        <span class="font-bold text-orange-700" id="cooldownTimeRemaining" data-stat="cooldown-remaining">
+                                            {{ campaign.cooldown_remaining|default:0 }}s
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- No Cooldown Message -->
+                <div id="noCooldownMessage" class="{% if campaign.cooldown_status %}hidden{% endif %} text-center py-2">
+                    <p class="text-xs text-neutral-500">
+                        <i class="ri-checkbox-circle-line text-green-500 mr-1"></i>
+                        Sending messages...
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Message Statistics -->
+            <div class="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 border-b border-neutral-200">
+                    <h3 class="font-semibold text-neutral-900 text-sm flex items-center gap-2">
+                        <i class="ri-bar-chart-box-line text-blue-600"></i>
+                        Message Statistics
+                    </h3>
+                </div>
+                
+                {% if campaign.total_recipients > 0 %}
+                <div class="p-4 space-y-3">
+                    <!-- Sent -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <i class="ri-send-plane-fill text-green-600 text-sm"></i>
+                                <span class="text-xs font-semibold text-neutral-700">Sent</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-neutral-800" data-stat="messages-sent">{{ campaign.messages_sent|default:0 }}</span>
+                                <span class="text-xs text-neutral-500">/</span>
+                                <span class="text-xs text-neutral-500">{{ campaign.total_recipients }}</span>
+                                <span class="text-xs font-semibold text-green-600 ml-1" data-stat="sent-percent">
+                                    {% widthratio campaign.messages_sent campaign.total_recipients 100 as sent_rate %}{{ sent_rate|default:0 }}%
                                 </span>
                             </div>
                         </div>
-                        <div class="overflow-hidden h-1.5 mb-3 text-xs flex rounded bg-green-200">
-                            <div style="width: {{ success_rate|default:0|floatformat:0 }}%;" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
+                        <div class="w-full bg-green-100 rounded-full h-1.5">
+                            {% widthratio campaign.messages_sent campaign.total_recipients 100 as sent_rate %}
+                            <div class="bg-green-500 h-1.5 rounded-full transition-all" data-stat="sent-bar" style="width: {{ sent_rate|default:0 }}%"></div>
                         </div>
                     </div>
 
-                    {% if campaign.messages_delivered > 0 %}
-                        {% widthratio campaign.messages_delivered campaign.total_recipients 100 as delivery_rate %}
-                        <div class="relative pt-1 mt-3">
-                            <div class="flex mb-1.5 items-center justify-between">
-                                <div>
-                                    <span class="text-xs font-semibold inline-block py-0.5 px-1.5 uppercase rounded-full text-blue-600 bg-blue-200">
-                                        Delivered
-                                    </span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs font-semibold inline-block text-blue-600">
-                                        {{ delivery_rate|default:0 }}%
-                                    </span>
-                                </div>
+                    <!-- Delivered -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <i class="ri-checkbox-circle-fill text-blue-600 text-sm"></i>
+                                <span class="text-xs font-semibold text-neutral-700">Delivered</span>
                             </div>
-                            <div class="overflow-hidden h-1.5 mb-3 text-xs flex rounded bg-blue-200">
-                                <div style="width: {{ delivery_rate|default:0|floatformat:0 }}%;" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500"></div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-neutral-800" data-stat="messages-delivered">{{ campaign.messages_delivered|default:0 }}</span>
+                                <span class="text-xs text-neutral-500">/</span>
+                                <span class="text-xs text-neutral-500">{{ campaign.total_recipients }}</span>
+                                <span class="text-xs font-semibold text-blue-600 ml-1" data-stat="delivered-percent">
+                                    {% widthratio campaign.messages_delivered campaign.total_recipients 100 as delivered_rate %}{{ delivered_rate|default:0 }}%
+                                </span>
                             </div>
                         </div>
-                    {% endif %}
+                        <div class="w-full bg-blue-100 rounded-full h-1.5">
+                            {% widthratio campaign.messages_delivered campaign.total_recipients 100 as delivered_rate %}
+                            <div class="bg-blue-500 h-1.5 rounded-full transition-all" data-stat="delivered-bar" style="width: {{ delivered_rate|default:0 }}%"></div>
+                        </div>
+                    </div>
 
-                    {% if campaign.messages_failed > 0 %}
-                        {% widthratio campaign.messages_failed campaign.total_recipients 100 as failure_rate %}
-                        <div class="relative pt-1 mt-3">
-                            <div class="flex mb-1.5 items-center justify-between">
-                                <div>
-                                    <span class="text-xs font-semibold inline-block py-0.5 px-1.5 uppercase rounded-full text-red-600 bg-red-200">
-                                        Failed
-                                    </span>
-                                </div>
-                                <div class="text-right">
-                                    <span class="text-xs font-semibold inline-block text-red-600">
-                                        {{ failure_rate|default:0 }}%
-                                    </span>
-                                </div>
+                    <!-- Read -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <i class="ri-eye-fill text-purple-600 text-sm"></i>
+                                <span class="text-xs font-semibold text-neutral-700">Read</span>
                             </div>
-                            <div class="overflow-hidden h-1.5 mb-3 text-xs flex rounded bg-red-200">
-                                <div style="width: {{ failure_rate|default:0|floatformat:0 }}%;" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"></div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-neutral-800" data-stat="messages-read">{{ campaign.messages_read|default:0 }}</span>
+                                <span class="text-xs text-neutral-500">/</span>
+                                <span class="text-xs text-neutral-500">{{ campaign.total_recipients }}</span>
+                                <span class="text-xs font-semibold text-purple-600 ml-1" data-stat="read-percent">
+                                    {% widthratio campaign.messages_read campaign.total_recipients 100 as read_rate %}{{ read_rate|default:0 }}%
+                                </span>
                             </div>
                         </div>
-                    {% endif %}
+                        <div class="w-full bg-purple-100 rounded-full h-1.5">
+                            {% widthratio campaign.messages_read campaign.total_recipients 100 as read_rate %}
+                            <div class="bg-purple-500 h-1.5 rounded-full transition-all" data-stat="read-bar" style="width: {{ read_rate|default:0 }}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Failed -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <div class="flex items-center gap-2">
+                                <i class="ri-close-circle-fill text-red-600 text-sm"></i>
+                                <span class="text-xs font-semibold text-neutral-700">Failed</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-bold text-neutral-800" data-stat="messages-failed">{{ campaign.messages_failed|default:0 }}</span>
+                                <span class="text-xs text-neutral-500">/</span>
+                                <span class="text-xs text-neutral-500">{{ campaign.total_recipients }}</span>
+                                <span class="text-xs font-semibold text-red-600 ml-1" data-stat="failed-percent">
+                                    {% widthratio campaign.messages_failed campaign.total_recipients 100 as failed_rate %}{{ failed_rate|default:0 }}%
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-red-100 rounded-full h-1.5">
+                            {% widthratio campaign.messages_failed campaign.total_recipients 100 as failed_rate %}
+                            <div class="bg-red-500 h-1.5 rounded-full transition-all" data-stat="failed-bar" style="width: {{ failed_rate|default:0 }}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Info Note -->
+                    <div class="pt-2 border-t border-neutral-200">
+                        <p class="text-xs text-neutral-500 flex items-center gap-1">
+                            <i class="ri-information-line"></i>
+                            Delivered & Read stats update via webhook
+                        </p>
+                    </div>
+                </div>
                 {% else %}
-                    <p class="text-xs text-neutral-600">No recipients</p>
+                    <div class="p-4">
+                        <p class="text-xs text-neutral-600 text-center">No recipients</p>
+                    </div>
                 {% endif %}
             </div>
 
-            <!-- Live Countdown Timer (for running campaigns) -->
+            <!-- Campaign Progress (for running campaigns) -->
             {% if campaign.status == 'running' %}
-            <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl shadow-sm border-2 border-orange-200 p-5">
-                <h3 class="font-semibold text-orange-900 mb-3 flex items-center">
-                    <i class="ri-timer-line mr-2 text-orange-600"></i>
-                    Campaign Progress
-                </h3>
-                <div class="space-y-3">
-                    <!-- Configured Settings Display -->
-                    <div class="bg-white rounded-lg p-3 border border-orange-200">
-                        <p class="text-xs font-semibold text-neutral-700 mb-2">Configured Sending Settings:</p>
-                        <div class="space-y-1 text-xs text-neutral-600">
-                            <div class="flex justify-between">
-                                <span>Message Delay:</span>
-                                <span class="font-semibold text-orange-600">{{ campaign.random_delay_min }}-{{ campaign.random_delay_max }}s</span>
+            <div class="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-3 border-b border-neutral-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="h-8 w-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                <i class="ri-play-circle-fill text-white text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-neutral-800 text-sm">Campaign Running</h3>
+                                <p class="text-xs text-neutral-600">Live progress updates</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 px-3 py-1 bg-green-100 rounded-full">
+                            <div class="animate-pulse h-2 w-2 bg-green-500 rounded-full"></div>
+                            <span class="text-xs font-semibold text-green-700">Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-4 space-y-3">
+                    <!-- Progress Stats -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
+                            <p class="text-xs text-neutral-600 mb-1">Sent</p>
+                            <p class="text-lg font-bold text-green-600">
+                                <span data-stat="messages-sent">{{ campaign.messages_sent }}</span>
+                                <span class="text-sm text-neutral-500">/ {{ campaign.total_recipients }}</span>
+                            </p>
+                            <div class="mt-2 w-full bg-green-200 rounded-full h-1.5">
+                                {% widthratio campaign.messages_sent campaign.total_recipients 100 as progress %}
+                                <div class="bg-green-500 h-1.5 rounded-full transition-all" data-stat="progress-bar" style="width: {{ progress|default:0 }}%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-lg p-3 border border-red-200">
+                            <p class="text-xs text-neutral-600 mb-1">Failed</p>
+                            <p class="text-lg font-bold text-red-600" data-stat="messages-failed">{{ campaign.messages_failed }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Settings -->
+                    <div class="bg-neutral-50 rounded-lg p-3 border border-neutral-200">
+                        <p class="text-xs font-semibold text-neutral-700 mb-2 flex items-center gap-1">
+                            <i class="ri-settings-3-line text-neutral-500"></i>
+                            Sending Configuration
+                        </p>
+                        <div class="grid grid-cols-{% if campaign.use_advanced_controls %}3{% else %}1{% endif %} gap-2 text-xs">
+                            <div class="flex items-center gap-2">
+                                <i class="ri-time-line text-orange-500"></i>
+                                <span class="text-neutral-600">Delay:</span>
+                                <span class="font-semibold text-neutral-800">{{ campaign.random_delay_min }}-{{ campaign.random_delay_max }}s</span>
                             </div>
                             {% if campaign.use_advanced_controls %}
-                            <div class="flex justify-between">
-                                <span>Batch Size:</span>
-                                <span class="font-semibold text-purple-600">{{ campaign.batch_size_min }}-{{ campaign.batch_size_max }} contacts</span>
+                            <div class="flex items-center gap-2">
+                                <i class="ri-stack-line text-purple-500"></i>
+                                <span class="text-neutral-600">Batch:</span>
+                                <span class="font-semibold text-neutral-800">{{ campaign.batch_size_min }}-{{ campaign.batch_size_max }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span>Batch Cooldown:</span>
-                                <span class="font-semibold text-blue-600">{{ campaign.batch_cooldown_min }}-{{ campaign.batch_cooldown_max }} min</span>
+                            <div class="flex items-center gap-2">
+                                <i class="ri-timer-line text-blue-500"></i>
+                                <span class="text-neutral-600">Cooldown:</span>
+                                <span class="font-semibold text-neutral-800">{{ campaign.batch_cooldown_min }}-{{ campaign.batch_cooldown_max }}m</span>
                             </div>
                             {% endif %}
                         </div>
-                        <p class="text-xs text-neutral-500 mt-2 italic">✓ Backend is using these settings for actual sending</p>
                     </div>
-                    
-                    <!-- Estimated Countdown Display -->
-                    <div class="bg-white rounded-lg p-3 border border-amber-200">
-                        <p class="text-xs font-semibold text-neutral-700 mb-2">Estimated Next Message:</p>
-                        <div class="flex items-baseline gap-2">
-                            <span id="countdownDisplay" class="text-2xl font-bold text-amber-600">--</span>
-                            <span class="text-xs text-neutral-500" id="countdownUnit">seconds</span>
-                        </div>
-                        <p class="text-xs text-neutral-500 mt-1" id="countdownDesc">⏱️ Random delay: {{ campaign.random_delay_min }}-{{ campaign.random_delay_max }}s per message</p>
-                    </div>
-                    
-                    <!-- Batch Cooldown Display (only if using advanced controls) -->
+
+                    <!-- Batch Cooldown Status (only if using advanced controls) -->
                     {% if campaign.use_advanced_controls %}
-                    <div class="bg-white rounded-lg p-3 border border-blue-200">
-                        <p class="text-xs font-semibold text-neutral-700 mb-2">Batch Cooldown Status:</p>
-                        <div class="flex items-baseline gap-2">
-                            <span id="batchCooldownDisplay" class="text-2xl font-bold text-blue-600 font-mono">--:--</span>
-                            <span class="text-xs text-neutral-500">min:sec</span>
+                    <div id="batchCooldownCard" class="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                        <div id="cooldownActive" class="hidden">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs font-semibold text-blue-800 mb-1">Batch Cooldown</p>
+                                    <p class="text-xs text-blue-600" id="realCooldownStatus">Waiting between batches...</p>
+                                </div>
+                                <div class="text-right">
+                                    <span id="realCooldownDisplay" class="text-2xl font-bold text-blue-600 font-mono">--:--</span>
+                                    <p class="text-xs text-neutral-500">remaining</p>
+                                </div>
+                            </div>
                         </div>
-                        <p class="text-xs text-neutral-500 mt-1" id="batchCooldownDesc">🧊 Cooldown range: {{ campaign.batch_cooldown_min }}-{{ campaign.batch_cooldown_max }} min between batches</p>
+                        <div id="cooldownInactive">
+                            <div class="flex items-center gap-2">
+                                <i class="ri-checkbox-circle-fill text-green-500"></i>
+                                <div>
+                                    <p class="text-xs font-semibold text-neutral-700">Sending Messages</p>
+                                    <p class="text-xs text-neutral-500">No cooldown active</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     {% endif %}
-                    
-                    <!-- Real-time Stats -->
-                    <div class="bg-white rounded-lg p-3 border border-green-200">
-                        <p class="text-xs font-semibold text-neutral-700 mb-2">Current Progress:</p>
-                        <div class="space-y-1 text-xs text-neutral-600">
-                            <div class="flex justify-between">
-                                <span>Messages Sent:</span>
-                                <span class="font-bold text-green-600">
-                                    <span data-stat="messages-sent">{{ campaign.messages_sent }}</span> / {{ campaign.total_recipients }}
-                                </span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Failed:</span>
-                                <span class="font-bold text-red-600" data-stat="messages-failed">{{ campaign.messages_failed }}</span>
-                            </div>
-                        </div>
-                        <div class="mt-2 w-full bg-neutral-200 rounded-full h-2">
-                            {% widthratio campaign.messages_sent campaign.total_recipients 100 as progress %}
-                            <div class="bg-green-500 h-2 rounded-full transition-all" data-stat="progress-bar" style="width: {{ progress|default:0 }}%"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Progress Text -->
-                    <div class="text-xs text-neutral-600 text-center pt-2 border-t border-orange-200">
-                        <p class="font-medium">⏳ Campaign is running in background</p>
-                        <p class="text-neutral-500 mt-1">Stats update every 3 seconds</p>
+
+                    <!-- Info Footer -->
+                    <div class="flex items-center justify-center gap-2 pt-2 border-t border-neutral-200">
+                        <i class="ri-information-line text-neutral-400 text-sm"></i>
+                        <p class="text-xs text-neutral-500">Updates every 3 seconds • Backend controlled</p>
                     </div>
                 </div>
             </div>
@@ -429,7 +587,12 @@
             </div>
         </div>
     </div>
-    
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
     <!-- Stop Campaign Script -->
     <script>
     let stopCampaignId = null;
@@ -533,132 +696,8 @@
     const batchCooldownMin = {{ campaign.batch_cooldown_min|default:5.0 }};
     const batchCooldownMax = {{ campaign.batch_cooldown_max|default:10.0 }};
     
-    // Storage key for persisting countdown across page refreshes
-    const countdownStorageKey = `campaign_${campaignIdForRefresh}_countdown`;
-    
-    // Load or initialize countdown from sessionStorage
-    function loadCountdownState() {
-        const stored = sessionStorage.getItem(countdownStorageKey);
-        if (stored) {
-            try {
-                const state = JSON.parse(stored);
-                const elapsed = Math.floor((Date.now() - state.timestamp) / 1000);  // Seconds since last save
-                
-                // Adjust countdown based on elapsed time
-                let messageCountdown = state.messageCountdown - elapsed;
-                let batchCooldown = state.batchCooldown - (elapsed / 60);  // Convert to minutes
-                let isBatchActive = state.isBatchCooldownActive;
-                
-                // If countdown went negative, generate new random
-                if (messageCountdown <= 0 && !isBatchActive) {
-                    messageCountdown = Math.floor(Math.random() * (delayMax - delayMin + 1)) + delayMin;
-                } else if (batchCooldown <= 0 && isBatchActive) {
-                    isBatchActive = false;
-                    messageCountdown = Math.floor(Math.random() * (delayMax - delayMin + 1)) + delayMin;
-                }
-                
-                return {
-                    messageCountdown: messageCountdown,
-                    batchCooldown: Math.max(0, batchCooldown),
-                    isBatchCooldownActive: isBatchActive
-                };
-            } catch (e) {
-                console.error('Failed to load countdown state:', e);
-            }
-        }
-        
-        // Initialize fresh
-        return {
-            messageCountdown: Math.floor(Math.random() * (delayMax - delayMin + 1)) + delayMin,
-            batchCooldown: 0,
-            isBatchCooldownActive: false
-        };
-    }
-    
-    // Save countdown state to sessionStorage
-    function saveCountdownState(messageCountdown, batchCooldown, isBatchCooldownActive) {
-        const state = {
-            messageCountdown: messageCountdown,
-            batchCooldown: batchCooldown,
-            isBatchCooldownActive: isBatchCooldownActive,
-            timestamp: Date.now()
-        };
-        sessionStorage.setItem(countdownStorageKey, JSON.stringify(state));
-    }
-    
-    // Initialize countdowns from storage
-    const initialState = loadCountdownState();
-    let currentMessageCountdown = initialState.messageCountdown;
-    let currentBatchCooldown = initialState.batchCooldown;
-    let isBatchCooldownActive = initialState.isBatchCooldownActive;
-    
     if (campaignStatusForRefresh === 'running' || campaignStatusForRefresh === 'pending') {
-        // Update both countdowns
-        function updateCountdowns() {
-            const countdownEl = document.getElementById('countdownDisplay');
-            const countdownUnitEl = document.getElementById('countdownUnit');
-            const countdownDescEl = document.getElementById('countdownDesc');
-            const batchCooldownEl = document.getElementById('batchCooldownDisplay');
-            const batchCooldownUnitEl = document.getElementById('batchCooldownUnit');
-            const batchCooldownDescEl = document.getElementById('batchCooldownDesc');
-            
-            if (isBatchCooldownActive && batchCooldownEl) {
-                // Show batch cooldown
-                if (currentBatchCooldown > 0) {
-                    // Convert minutes to minutes:seconds format
-                    const totalSeconds = Math.ceil(currentBatchCooldown * 60);
-                    const minutes = Math.floor(totalSeconds / 60);
-                    const seconds = totalSeconds % 60;
-                    const displayTime = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                    
-                    batchCooldownEl.textContent = displayTime;
-                    batchCooldownEl.classList.remove('hidden');
-                    countdownEl.classList.add('text-opacity-50');
-                    countdownDescEl.innerHTML = '⚠️ Waiting for batch cooldown...';
-                    currentBatchCooldown -= 0.0167;  // Decrease by ~1 second in minutes
-                } else {
-                    // Cooldown finished, back to message delay
-                    isBatchCooldownActive = false;
-                    batchCooldownEl.textContent = '--:--';
-                    batchCooldownEl.classList.add('hidden');
-                    countdownEl.classList.remove('text-opacity-50');
-                    currentMessageCountdown = Math.floor(Math.random() * (delayMax - delayMin + 1)) + delayMin;
-                    countdownDescEl.innerHTML = '⏱️ Random delay: {{ campaign.random_delay_min }}-{{ campaign.random_delay_max }}s per message';
-                }
-            } else {
-                // Show message countdown
-                if (countdownEl) {
-                    if (currentMessageCountdown > 0) {
-                        countdownEl.textContent = currentMessageCountdown;
-                        countdownUnitEl.textContent = 'seconds';
-                        currentMessageCountdown--;
-                    } else {
-                        // Message sent, generate new countdown or start batch cooldown
-                        if (useAdvancedControls && Math.random() < 0.2) {  // 20% chance to simulate batch completion
-                            // Start batch cooldown
-                            isBatchCooldownActive = true;
-                            currentBatchCooldown = Math.random() * (batchCooldownMax - batchCooldownMin) + batchCooldownMin;
-                            countdownEl.textContent = '--';
-                            countdownUnitEl.textContent = 'seconds';
-                            countdownDescEl.innerHTML = '⚠️ Batch completed, waiting for cooldown';
-                        } else {
-                            // Next message
-                            currentMessageCountdown = Math.floor(Math.random() * (delayMax - delayMin + 1)) + delayMin;
-                            countdownEl.textContent = currentMessageCountdown;
-                            countdownUnitEl.textContent = 'seconds';
-                        }
-                    }
-                }
-            }
-            
-            // Save state to sessionStorage so it persists across page refreshes
-            saveCountdownState(currentMessageCountdown, currentBatchCooldown, isBatchCooldownActive);
-        }
-        
-        // Update countdowns every second
-        const countdownInterval = setInterval(updateCountdowns, 1000);
-        
-        // Use AJAX to update real stats without full page reload
+        // Use AJAX to update REAL backend stats without page reload
         let hasReloaded = false;  // Prevent infinite reloads
         function updateCampaignStats() {
             fetch(`/whatsappapi/campaigns/${campaignIdForRefresh}/stats/`, {
@@ -671,23 +710,130 @@
             .then(data => {
                 console.log('📊 Stats Update:', data);  // Log the data
                 
-                // Update messages sent
+                // Update messages sent (no flickering - only if changed)
                 const sentElements = document.querySelectorAll('[data-stat="messages-sent"]');
                 sentElements.forEach(el => {
-                    el.textContent = data.messages_sent || 0;
+                    const newValue = data.messages_sent || 0;
+                    if (el.textContent != newValue) {
+                        el.textContent = newValue;
+                    }
+                });
+                
+                // Update messages delivered
+                const deliveredElements = document.querySelectorAll('[data-stat="messages-delivered"]');
+                deliveredElements.forEach(el => {
+                    const newValue = data.messages_delivered || 0;
+                    if (el.textContent != newValue) {
+                        el.textContent = newValue;
+                    }
+                });
+                
+                // Update messages read
+                const readElements = document.querySelectorAll('[data-stat="messages-read"]');
+                readElements.forEach(el => {
+                    const newValue = data.messages_read || 0;
+                    if (el.textContent != newValue) {
+                        el.textContent = newValue;
+                    }
                 });
                 
                 // Update messages failed
                 const failedElements = document.querySelectorAll('[data-stat="messages-failed"]');
                 failedElements.forEach(el => {
-                    el.textContent = data.messages_failed || 0;
+                    const newValue = data.messages_failed || 0;
+                    if (el.textContent != newValue) {
+                        el.textContent = newValue;
+                    }
                 });
                 
-                // Update progress bar
+                // Update success rate
+                const successRateElements = document.querySelectorAll('[data-stat="success-rate"]');
+                successRateElements.forEach(el => {
+                    const newValue = data.success_rate || 0;
+                    if (el.textContent != newValue) {
+                        el.textContent = newValue;
+                    }
+                });
+                
+                // Update progress bar smoothly
                 const progressBar = document.querySelector('[data-stat="progress-bar"]');
                 if (progressBar && data.total_recipients > 0) {
                     const progress = Math.round((data.messages_sent / data.total_recipients) * 100);
                     progressBar.style.width = progress + '%';
+                }
+                
+                // Update Message Statistics percentages and bars
+                if (data.total_recipients > 0) {
+                    // Sent percentage
+                    const sentPercent = Math.round((data.messages_sent / data.total_recipients) * 100);
+                    const sentPercentEl = document.querySelector('[data-stat="sent-percent"]');
+                    if (sentPercentEl) sentPercentEl.textContent = sentPercent + '%';
+                    const sentBar = document.querySelector('[data-stat="sent-bar"]');
+                    if (sentBar) sentBar.style.width = sentPercent + '%';
+                    
+                    // Delivered percentage
+                    const deliveredPercent = Math.round((data.messages_delivered / data.total_recipients) * 100);
+                    const deliveredPercentEl = document.querySelector('[data-stat="delivered-percent"]');
+                    if (deliveredPercentEl) deliveredPercentEl.textContent = deliveredPercent + '%';
+                    const deliveredBar = document.querySelector('[data-stat="delivered-bar"]');
+                    if (deliveredBar) deliveredBar.style.width = deliveredPercent + '%';
+                    
+                    // Read percentage
+                    const readPercent = Math.round((data.messages_read / data.total_recipients) * 100);
+                    const readPercentEl = document.querySelector('[data-stat="read-percent"]');
+                    if (readPercentEl) readPercentEl.textContent = readPercent + '%';
+                    const readBar = document.querySelector('[data-stat="read-bar"]');
+                    if (readBar) readBar.style.width = readPercent + '%';
+                    
+                    // Failed percentage
+                    const failedPercent = Math.round((data.messages_failed / data.total_recipients) * 100);
+                    const failedPercentEl = document.querySelector('[data-stat="failed-percent"]');
+                    if (failedPercentEl) failedPercentEl.textContent = failedPercent + '%';
+                    const failedBar = document.querySelector('[data-stat="failed-bar"]');
+                    if (failedBar) failedBar.style.width = failedPercent + '%';
+                }
+                
+                // Update batch progress & cooldown (if advanced controls enabled)
+                if (data.use_advanced_controls) {
+                    const currentBatchEl = document.querySelector('[data-stat="current-batch"]');
+                    const totalBatchesEl = document.querySelector('[data-stat="total-batches"]');
+                    const batchProgressBar = document.getElementById('batchProgressBar');
+                    
+                    if (currentBatchEl && data.current_batch !== undefined) {
+                        currentBatchEl.textContent = data.current_batch || 0;
+                    }
+                    if (totalBatchesEl && data.total_batches !== undefined) {
+                        totalBatchesEl.textContent = data.total_batches || 0;
+                    }
+                    if (batchProgressBar && data.total_batches > 0) {
+                        const batchProgress = Math.round((data.current_batch / data.total_batches) * 100);
+                        batchProgressBar.style.width = batchProgress + '%';
+                    }
+                    
+                    // Update cooldown status
+                    const cooldownStatusDisplay = document.getElementById('cooldownStatusDisplay');
+                    const noCooldownMessage = document.getElementById('noCooldownMessage');
+                    const cooldownStatusText = document.getElementById('cooldownStatusText');
+                    const cooldownTimeRemaining = document.getElementById('cooldownTimeRemaining');
+                    
+                    if (data.cooldown_remaining > 0 && data.cooldown_status) {
+                        // Show cooldown
+                        if (cooldownStatusDisplay) cooldownStatusDisplay.classList.remove('hidden');
+                        if (noCooldownMessage) noCooldownMessage.classList.add('hidden');
+                        
+                        if (cooldownStatusText) {
+                            cooldownStatusText.textContent = data.cooldown_status;
+                        }
+                        if (cooldownTimeRemaining) {
+                            const minutes = Math.floor(data.cooldown_remaining / 60);
+                            const seconds = data.cooldown_remaining % 60;
+                            cooldownTimeRemaining.textContent = `${minutes}m ${seconds}s`;
+                        }
+                    } else {
+                        // Hide cooldown
+                        if (cooldownStatusDisplay) cooldownStatusDisplay.classList.add('hidden');
+                        if (noCooldownMessage) noCooldownMessage.classList.remove('hidden');
+                    }
                 }
                 
                 // If status changed to completed/failed/paused, reload page ONLY ONCE
@@ -695,7 +841,7 @@
                     (data.status === 'completed' || data.status === 'failed' || data.status === 'paused')) {
                     console.log('Campaign status changed to', data.status, ', reloading...');
                     hasReloaded = true;
-                    clearInterval(countdownInterval);
+                    clearInterval(statsInterval);
                     window.location.reload();
                 }
             })
@@ -704,7 +850,7 @@
             });
         }
         
-        // Update stats every 3 seconds (faster than page reload)
+        // Update stats every 3 seconds
         const statsInterval = setInterval(updateCampaignStats, 3000);
         
         // Initial update
@@ -713,11 +859,7 @@
         // Clear interval when page is about to unload
         window.addEventListener('beforeunload', () => {
             clearInterval(statsInterval);
-            clearInterval(countdownInterval);
         });
     }
     </script>
-</div>
-</div>
-</div>
 {% endblock %}

@@ -253,8 +253,13 @@ def send_campaign_async(campaign_id):
         # Initialize processed_phones tracking BEFORE batch or standard processing
         processed_phones = set()  # Track normalized phones we've already processed in this run
         
-        # Batch processing logic
+        # Batch processing logic - only if Advanced Controls enabled with batching
         if campaign.use_advanced_controls and campaign.batch_size_max > 0:
+            logger.info(f"🎯 ADVANCED MODE: Random delays + Batching enabled")
+            logger.info(f"   Delay: {campaign.random_delay_min}-{campaign.random_delay_max}s")
+            logger.info(f"   Batch: {campaign.batch_size_min}-{campaign.batch_size_max} contacts")
+            logger.info(f"   Cooldown: {campaign.batch_cooldown_min}-{campaign.batch_cooldown_max} min")
+            
             # Split contacts into batches with random sizes
             batches = []
             remaining_contacts = unique_contacts.copy()
@@ -269,12 +274,22 @@ def send_campaign_async(campaign_id):
             
             logger.info(f"Campaign {campaign_id}: Split {len(unique_contacts)} contacts into {len(batches)} batches")
             
+            # Store total batches for progress tracking
+            campaign.total_batches = len(batches)
+            campaign.save(update_fields=['total_batches'])
+            
             # Process batches with cooldown
             total_sent = 0
             total_failed = 0
             
             for batch_index, batch in enumerate(batches, 1):
                 logger.info(f"Campaign {campaign_id}: Processing batch {batch_index}/{len(batches)} ({len(batch)} contacts)")
+                
+                # Update current batch number and clear cooldown status
+                campaign.current_batch = batch_index
+                campaign.cooldown_remaining = 0
+                campaign.cooldown_status = None
+                campaign.save(update_fields=['current_batch', 'cooldown_remaining', 'cooldown_status'])
                 
                 # Process contacts in this batch
                 batch_sent, batch_failed = _process_contact_batch(
@@ -302,24 +317,47 @@ def send_campaign_async(campaign_id):
                     logger.info(f"🧊 BATCH COOLDOWN: {cooldown_minutes:.1f} minutes ({cooldown_seconds}s) - Range: {campaign.batch_cooldown_min}-{campaign.batch_cooldown_max} min")
                     logger.info(f"⏸️ Waiting {cooldown_minutes:.1f} minutes before batch {batch_index + 1}...")
                     
-                    # Sleep with pause checks
-                    for _ in range(cooldown_seconds):
+                    # Update campaign with cooldown status
+                    campaign.current_batch = batch_index
+                    campaign.cooldown_remaining = cooldown_seconds
+                    campaign.cooldown_status = f"Cooling down: {cooldown_minutes:.1f} minutes remaining"
+                    campaign.save(update_fields=['current_batch', 'cooldown_remaining', 'cooldown_status'])
+                    
+                    # Sleep with pause checks AND progress updates
+                    for second in range(cooldown_seconds):
                         try:
                             campaign.refresh_from_db()
                             if campaign.status == 'paused':
                                 logger.info(f"Campaign {campaign_id} paused during batch cooldown")
                                 campaign.messages_sent = total_sent
                                 campaign.messages_failed = total_failed
-                                campaign.save(update_fields=['messages_sent', 'messages_failed'])
+                                campaign.cooldown_remaining = 0
+                                campaign.cooldown_status = None
+                                campaign.save(update_fields=['messages_sent', 'messages_failed', 'cooldown_remaining', 'cooldown_status'])
                                 return {
                                     'campaign_id': campaign_id,
                                     'sent_count': total_sent,
                                     'failed_count': total_failed,
                                     'status': 'paused'
                                 }
-                        except Exception:
-                            pass
+                            
+                            # Update cooldown progress every 30 seconds
+                            if second % 30 == 0 and second > 0:
+                                remaining_seconds = cooldown_seconds - second
+                                remaining_minutes = remaining_seconds / 60
+                                campaign.cooldown_remaining = remaining_seconds
+                                campaign.cooldown_status = f"Cooling down: {remaining_minutes:.1f} minutes remaining"
+                                campaign.save(update_fields=['cooldown_remaining', 'cooldown_status'])
+                                logger.info(f"❄️ Cooldown progress: {remaining_minutes:.1f} minutes remaining")
+                        except Exception as e:
+                            logger.warning(f"Error during cooldown check: {e}")
                         time.sleep(1)
+                    
+                    # Clear cooldown status after cooldown completes
+                    campaign.cooldown_remaining = 0
+                    campaign.cooldown_status = None
+                    campaign.save(update_fields=['cooldown_remaining', 'cooldown_status'])
+                    logger.info(f"✅ Cooldown complete, starting batch {batch_index + 1}")
             
             # Mark campaign as completed after all batches
             campaign.status = 'completed'
@@ -338,6 +376,10 @@ def send_campaign_async(campaign_id):
             }
         
         # Standard processing (no batching) - original logic below
+        logger.info(f"🎯 STANDARD MODE: Fixed delays based on session protection")
+        logger.info(f"   Protection: {'ON' if session.account_protection_enabled else 'OFF'}")
+        logger.info(f"   Delay: {settings.MESSAGE_DELAY_WITH_PROTECTION if session.account_protection_enabled else settings.MESSAGE_DELAY_WITHOUT_PROTECTION}s")
+        logger.info(f"   No batching, no cooldowns")
         
         # Process each unique contact with safety limit to prevent infinite loops
         max_iterations = len(unique_contacts) * 2  # Safety limit: at most 2x the unique contacts
@@ -495,8 +537,9 @@ def send_campaign_async(campaign_id):
                         current_meta.update({'campaign_id': campaign.id})
                         msg.metadata = current_meta
                         msg.save(update_fields=['metadata'])
+                        logger.info(f"✅ Tagged message {msg.id} with campaign_id={campaign.id}")
                     except Exception as e:
-                        logger.warning(f"Unable to tag message {getattr(msg, 'id', '?')} with campaign_id: {e}")
+                        logger.error(f"❌ FAILED to tag message {getattr(msg, 'id', '?')} with campaign_id: {e}", exc_info=True)
                     if msg.status == 'sent':
                         sent_count += 1
                         logger.info(f"✅ Message sent successfully to {phone_norm}")
@@ -727,8 +770,9 @@ def _process_contact_batch(campaign, batch_contacts, service, session, message_t
                     current_meta.update({'campaign_id': campaign.id})
                     msg.metadata = current_meta
                     msg.save(update_fields=['metadata'])
+                    logger.info(f"✅ Tagged message {msg.id} with campaign_id={campaign.id}")
                 except Exception as e:
-                    logger.warning(f"Unable to tag message {getattr(msg, 'id', '?')} with campaign_id: {e}")
+                    logger.error(f"❌ FAILED to tag message {getattr(msg, 'id', '?')} with campaign_id: {e}", exc_info=True)
                 
                 if msg.status == 'sent':
                     sent_count += 1

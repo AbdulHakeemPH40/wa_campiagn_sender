@@ -268,7 +268,16 @@ def create_session(request):
                 old_session.delete()
         
         try:
-            session = service.create_session(request.user, None, phone_number)
+            # Auto-generate webhook URL for this user
+            webhook_url = request.build_absolute_uri(
+                reverse('whatsappapi:wasender_webhook', kwargs={'user_id': request.user.id})
+            )
+            
+            # Log webhook URL generation
+            logger.info(f"🔗 Auto-generated webhook URL for user {request.user.id}: {webhook_url}")
+            
+            # Create session with automatic webhook configuration
+            session = service.create_session(request.user, webhook_url, phone_number)
             if session:
                 # Initiate connection to get QR code
                 service.connect_session(session)
@@ -801,33 +810,78 @@ def send_campaign(request):
         # Get advanced controls from POST if enabled
         use_advanced_controls = request.POST.get('use_advanced_controls') == 'true'
         
-        # Extract user-defined values or use defaults
+        # Extract user-defined values or use defaults from settings.py
         if use_advanced_controls:
             # User enabled advanced controls - use their custom values
-            random_delay_min = int(request.POST.get('random_delay_min', 5))
-            random_delay_max = int(request.POST.get('random_delay_max', 20))
-            batch_size_min = int(request.POST.get('batch_size_min', 50))
-            batch_size_max = int(request.POST.get('batch_size_max', 70))
-            batch_cooldown_min = float(request.POST.get('batch_cooldown_min', 16.0))
-            batch_cooldown_max = float(request.POST.get('batch_cooldown_max', 30.0))
+            random_delay_min = int(request.POST.get('random_delay_min', settings.DEFAULT_RANDOM_DELAY_MIN))
+            random_delay_max = int(request.POST.get('random_delay_max', settings.DEFAULT_RANDOM_DELAY_MAX))
+            batch_size_min = int(request.POST.get('batch_size_min', settings.DEFAULT_BATCH_SIZE_MIN))
+            batch_size_max = int(request.POST.get('batch_size_max', settings.DEFAULT_BATCH_SIZE_MAX))
+            batch_cooldown_min = float(request.POST.get('batch_cooldown_min', settings.DEFAULT_BATCH_COOLDOWN_MIN))
+            batch_cooldown_max = float(request.POST.get('batch_cooldown_max', settings.DEFAULT_BATCH_COOLDOWN_MAX))
+            
+            # Validate Advanced Controls input
+            if random_delay_min < 3:
+                messages.error(request, "❌ Minimum delay must be at least 3 seconds for account safety")
+                return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+            
+            if random_delay_max < random_delay_min:
+                messages.error(request, "❌ Maximum delay must be greater than minimum delay")
+                return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+            
+            if random_delay_max > 60:
+                messages.error(request, "❌ Maximum delay cannot exceed 60 seconds (too slow)")
+                return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+            
+            # Validate batch sizes (if batching is enabled)
+            if batch_size_max > 0:
+                if batch_size_min < 10:
+                    messages.error(request, "❌ Minimum batch size must be at least 10 contacts")
+                    return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+                
+                if batch_size_max < batch_size_min:
+                    messages.error(request, "❌ Maximum batch size must be greater than minimum batch size")
+                    return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+                
+                if batch_size_max > 500:
+                    messages.error(request, "❌ Maximum batch size cannot exceed 500 contacts")
+                    return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+            
+            # Validate cooldowns (if cooldown is enabled)
+            if batch_cooldown_max > 0:
+                if batch_cooldown_min < 1:
+                    messages.error(request, "❌ Minimum cooldown must be at least 1 minute")
+                    return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+                
+                if batch_cooldown_max < batch_cooldown_min:
+                    messages.error(request, "❌ Maximum cooldown must be greater than minimum cooldown")
+                    return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+                
+                if batch_cooldown_max > 120:
+                    messages.error(request, "❌ Maximum cooldown cannot exceed 120 minutes (2 hours)")
+                    return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
             
             logger.info(f"✅ Advanced Controls ENABLED for campaign '{campaign_name}'")
             logger.info(f"   Delay Range: {random_delay_min}-{random_delay_max} seconds")
             logger.info(f"   Batch Size Range: {batch_size_min}-{batch_size_max} contacts")
             logger.info(f"   Cooldown Range: {batch_cooldown_min}-{batch_cooldown_max} minutes")
+            logger.info(f"✅ Advanced Controls validation passed")
         else:
-            # Advanced controls disabled - use recommended defaults
-            random_delay_min = 3
-            random_delay_max = 8
-            batch_size_min = 50
-            batch_size_max = 70
-            batch_cooldown_min = 5.0
-            batch_cooldown_max = 10.0
+            # Advanced controls disabled - use standard mode (NO batching, fixed delays)
+            # Standard mode uses MESSAGE_DELAY_WITH_PROTECTION or MESSAGE_DELAY_WITHOUT_PROTECTION
+            # based on session's account_protection_enabled setting (handled in tasks.py)
+            random_delay_min = 0  # Not used in standard mode
+            random_delay_max = 0  # Not used in standard mode
+            batch_size_min = 0    # Disable batching in standard mode
+            batch_size_max = 0    # Disable batching in standard mode
+            batch_cooldown_min = 0  # No cooldown in standard mode
+            batch_cooldown_max = 0  # No cooldown in standard mode
             
-            logger.info(f"ℹ️ Advanced Controls DISABLED for campaign '{campaign_name}' - using defaults")
-            logger.info(f"   Default Delay: {random_delay_min}-{random_delay_max} seconds")
-            logger.info(f"   Default Batch: {batch_size_min}-{batch_size_max} contacts")
-            logger.info(f"   Default Cooldown: {batch_cooldown_min}-{batch_cooldown_max} minutes")
+            logger.info(f"ℹ️ STANDARD MODE for campaign '{campaign_name}'")
+            logger.info(f"   Will use fixed delays based on session protection setting:")
+            logger.info(f"   - Protection ON: {settings.MESSAGE_DELAY_WITH_PROTECTION}s")
+            logger.info(f"   - Protection OFF: {settings.MESSAGE_DELAY_WITHOUT_PROTECTION}s")
+            logger.info(f"   No batching, no cooldowns")
         
         campaign = WASenderCampaign.objects.create(
             user=request.user,
@@ -1285,17 +1339,51 @@ def wasender_webhook(request, user_id):
     """
     Webhook endpoint for WASender callbacks
     Receives message status updates and connection events
+    
+    Webhook URL format: https://yourdomain.com/whatsappapi/webhook/{user_id}/
+    
+    Events handled:
+    - messages.received: Incoming messages
+    - messages.update: Message status updates (sent, delivered, read, failed)
+    - session.status: Session connection status changes
     """
+    import time
+    start_time = time.time()
+    
     try:
+        # Parse payload
         payload = json.loads(request.body)
-        logger.info(f"Webhook received for user {user_id}: {payload}")
+        event_type = payload.get('event', 'unknown')
+        session_id = payload.get('session_id', 'unknown')
         
+        # Log webhook receipt with full details
+        logger.info(f"📥 WEBHOOK RECEIVED | User: {user_id} | Event: {event_type} | Session: {session_id}")
+        logger.info(f"📦 Webhook Payload: {json.dumps(payload, indent=2)}")
+        
+        # Process webhook
         service = WASenderService()
-        service.process_webhook(payload)
+        result = service.process_webhook(payload)
         
-        return JsonResponse({'status': 'ok'})
+        # Calculate processing time
+        processing_time = (time.time() - start_time) * 1000  # Convert to ms
+        
+        if result:
+            logger.info(f"✅ WEBHOOK PROCESSED | User: {user_id} | Event: {event_type} | Time: {processing_time:.2f}ms")
+        else:
+            logger.warning(f"⚠️ WEBHOOK PROCESSING FAILED | User: {user_id} | Event: {event_type}")
+        
+        return JsonResponse({
+            'status': 'ok',
+            'event': event_type,
+            'processed': result,
+            'processing_time_ms': round(processing_time, 2)
+        })
+        
+    except json.JSONDecodeError as e:
+        logger.error(f"❌ WEBHOOK JSON ERROR | User: {user_id} | Error: {e} | Body: {request.body}")
+        return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
     except Exception as e:
-        logger.error(f"Webhook error: {e}")
+        logger.error(f"❌ WEBHOOK CRITICAL ERROR | User: {user_id} | Error: {e}", exc_info=True)
         return JsonResponse({'error': str(e)}, status=500)
 
 
@@ -1375,20 +1463,25 @@ def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(WASenderCampaign, id=campaign_id, user=request.user)
     
     # Calculate real-time stats from messages
-    messages_qs = WASenderMessage.objects.filter(
+    # Try metadata-based query first (most accurate for new campaigns)
+    messages_qs_metadata = WASenderMessage.objects.filter(
         metadata__campaign_id=campaign.id
     )
     
-    # Fallback to time-based if no metadata
-    if not messages_qs.exists():
-        messages_qs = WASenderMessage.objects.filter(
-            session=campaign.session,
-            created_at__gte=campaign.created_at
-        )
+    # Always also get time-based query (fallback for old campaigns)
+    messages_qs_time = WASenderMessage.objects.filter(
+        session=campaign.session,
+        created_at__gte=campaign.created_at
+    )
+    
+    # Use metadata query if it has messages, otherwise use time-based
+    # This ensures we always get stats even for old campaigns
+    messages_qs = messages_qs_metadata if messages_qs_metadata.exists() else messages_qs_time
     
     # Update campaign object with real-time stats
     campaign.messages_sent = messages_qs.filter(status__in=['sent', 'delivered', 'read']).count()
     campaign.messages_delivered = messages_qs.filter(status__in=['delivered', 'read']).count()
+    campaign.messages_read = messages_qs.filter(status='read').count()
     campaign.messages_failed = messages_qs.filter(status='failed').count()
     
     # Also save to database for persistence
@@ -1460,35 +1553,59 @@ def campaign_stats_api(request, campaign_id):
     campaign = get_object_or_404(WASenderCampaign, id=campaign_id, user=request.user)
     
     # Calculate real-time stats from messages
-    messages_qs = WASenderMessage.objects.filter(
+    # Try metadata-based query first (most accurate for new campaigns)
+    messages_qs_metadata = WASenderMessage.objects.filter(
         metadata__campaign_id=campaign.id
     )
     
-    # Fallback to time-based if no metadata
-    if not messages_qs.exists():
-        messages_qs = WASenderMessage.objects.filter(
-            session=campaign.session,
-            created_at__gte=campaign.created_at
-        )
+    # Always also get time-based query (fallback for old campaigns)
+    messages_qs_time = WASenderMessage.objects.filter(
+        session=campaign.session,
+        created_at__gte=campaign.created_at
+    )
     
-    # Calculate counts
+    # Use metadata query if it has messages, otherwise use time-based
+    messages_qs = messages_qs_metadata if messages_qs_metadata.exists() else messages_qs_time
+    
+    # Calculate counts by status
     messages_sent = messages_qs.filter(status__in=['sent', 'delivered', 'read']).count()
+    messages_delivered = messages_qs.filter(status__in=['delivered', 'read']).count()
+    messages_read = messages_qs.filter(status='read').count()
     messages_failed = messages_qs.filter(status='failed').count()
+    
+    # Calculate success rate
+    success_rate = 0
+    if campaign.total_recipients > 0:
+        success_rate = round((messages_delivered / campaign.total_recipients) * 100, 2)
     
     # Update database with latest stats
     try:
         WASenderCampaign.objects.filter(id=campaign.id).update(
             messages_sent=messages_sent,
+            messages_delivered=messages_delivered,
+            messages_read=messages_read,
             messages_failed=messages_failed
         )
     except Exception:
         pass
     
+    # Refresh campaign data from DB to get latest cooldown info
+    campaign.refresh_from_db()
+    
     return JsonResponse({
         'messages_sent': messages_sent,
+        'messages_delivered': messages_delivered,
+        'messages_read': messages_read,
         'messages_failed': messages_failed,
+        'success_rate': success_rate,
         'total_recipients': campaign.total_recipients,
-        'status': campaign.status
+        'status': campaign.status,
+        # Cooldown tracking fields
+        'cooldown_remaining': campaign.cooldown_remaining,
+        'cooldown_status': campaign.cooldown_status,
+        'current_batch': campaign.current_batch,
+        'total_batches': campaign.total_batches,
+        'use_advanced_controls': campaign.use_advanced_controls
     })
 
 
@@ -1743,9 +1860,18 @@ def upload_contacts(request):
         except Exception:
             pass
         
+        # Remove duplicate phone numbers from DataFrame
+        df_cleaned = df.drop_duplicates(subset=['phone'], keep='first')
+        duplicates_removed = len(df) - len(df_cleaned)
+        
+        if duplicates_removed > 0:
+            logger.info(f"Removed {duplicates_removed} duplicate phone numbers from upload")
+        
         # Process contacts (limit to 10000)
         contacts_added = 0
-        for index, row in df.head(10000).iterrows():
+        seen_phones = set()  # Track phones to prevent duplicates within this upload
+        
+        for index, row in df_cleaned.head(10000).iterrows():
             try:
                 phone = str(row.get('phone', '')).strip()
                 
@@ -1759,6 +1885,18 @@ def upload_contacts(request):
                     # Add country code if not present
                     if not phone.startswith(country_code):
                         phone = f"{country_code}{phone}"
+                
+                # Skip if this phone was already processed in this upload
+                if phone in seen_phones:
+                    logger.debug(f"Skipping duplicate phone in same upload: {phone}")
+                    continue
+                
+                # Check if phone already exists in THIS contact list
+                if Contact.objects.filter(contact_list=contact_list, phone_number=phone).exists():
+                    logger.debug(f"Skipping existing phone in contact list: {phone}")
+                    continue
+                
+                seen_phones.add(phone)
                 
                 # Build dynamic fields dictionary (all columns except 'phone')
                 contact_fields = {}
@@ -1816,7 +1954,9 @@ def upload_contacts(request):
         return JsonResponse({
             'success': True,
             'total_contacts': contacts_added,
-            'list_id': contact_list.id
+            'list_id': contact_list.id,
+            'duplicates_removed': duplicates_removed,
+            'message': f'Successfully imported {contacts_added} contacts' + (f' ({duplicates_removed} duplicates removed)' if duplicates_removed > 0 else '')
         })
         
     except Exception as e:
@@ -2293,11 +2433,74 @@ def export_campaign_messages_excel(request, campaign_id):
                     messages = messages.order_by('-created_at')
         
         wb = openpyxl.Workbook()
-        ws = wb.active
-        ws.title = f"{campaign.name[:25]}_messages"  # Excel limit
+        
+        # ==================== SUMMARY SHEET ====================
+        ws_summary = wb.active
+        ws_summary.title = "Campaign Summary"
+        
+        # Calculate statistics
+        total_messages = messages.count()
+        messages_sent = messages.filter(status__in=['sent', 'delivered', 'read']).count()
+        messages_delivered = messages.filter(status__in=['delivered', 'read']).count()
+        messages_read = messages.filter(status='read').count()
+        messages_failed = messages.filter(status='failed').count()
+        messages_pending = messages.filter(status='pending').count()
+        
+        success_rate = 0
+        if campaign.total_recipients > 0:
+            success_rate = round((messages_delivered / campaign.total_recipients) * 100, 2)
+        
+        # Title
+        ws_summary.append(['CAMPAIGN REPORT'])
+        ws_summary['A1'].font = Font(bold=True, size=16, color="FFFFFF")
+        ws_summary['A1'].fill = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
+        ws_summary.merge_cells('A1:B1')
+        
+        ws_summary.append([])  # Empty row
+        
+        # Campaign Info
+        ws_summary.append(['Campaign Name:', campaign.name])
+        ws_summary.append(['Created:', campaign.created_at.strftime('%Y-%m-%d %H:%M:%S')])
+        ws_summary.append(['Status:', campaign.status.upper()])
+        ws_summary.append(['WhatsApp Number:', campaign.session.connected_phone_number or campaign.session.phone_number])
+        
+        ws_summary.append([])  # Empty row
+        
+        # Statistics Header
+        ws_summary.append(['CAMPAIGN STATISTICS'])
+        ws_summary['A8'].font = Font(bold=True, size=14, color="FFFFFF")
+        ws_summary['A8'].fill = PatternFill(start_color="70AD47", end_color="70AD47", fill_type="solid")
+        ws_summary.merge_cells('A8:B8')
+        
+        ws_summary.append([])  # Empty row
+        
+        # Statistics
+        ws_summary.append(['Total Recipients:', campaign.total_recipients])
+        ws_summary.append(['Messages Sent:', messages_sent])
+        ws_summary.append(['✅ Delivered:', messages_delivered])
+        ws_summary.append(['📖 Read:', messages_read])
+        ws_summary.append(['❌ Failed:', messages_failed])
+        ws_summary.append(['⏳ Pending:', messages_pending])
+        ws_summary.append([])
+        ws_summary.append(['Success Rate:', f"{success_rate}%"])
+        
+        # Style statistics
+        for row in range(10, 18):
+            ws_summary[f'A{row}'].font = Font(bold=True)
+            if row == 17:  # Success Rate
+                ws_summary[f'A{row}'].fill = PatternFill(start_color="C6E0B4", end_color="C6E0B4", fill_type="solid")
+                ws_summary[f'B{row}'].fill = PatternFill(start_color="C6E0B4", end_color="C6E0B4", fill_type="solid")
+                ws_summary[f'B{row}'].font = Font(bold=True, size=14, color="70AD47")
+        
+        # Adjust column widths for summary
+        ws_summary.column_dimensions['A'].width = 25
+        ws_summary.column_dimensions['B'].width = 30
+        
+        # ==================== MESSAGES DETAIL SHEET ====================
+        ws = wb.create_sheet(title="Message Details")
         
         # Headers
-        headers = ['Phone', 'Status', 'Sent At']
+        headers = ['Phone', 'Status', 'Sent At', 'Message ID']
         ws.append(headers)
         
         # Style header
@@ -2320,11 +2523,29 @@ def export_campaign_messages_excel(request, campaign_id):
                 except:
                     pass  # If JSON parsing fails, use recipient as is
             
-            ws.append([
+            # Color code status
+            row_data = [
                 phone,
-                message.status,
-                message.sent_at.astimezone(timezone.get_current_timezone()).strftime('%Y-%m-%d %H:%M:%S') if message.sent_at else ''
-            ])
+                message.status.upper(),
+                message.sent_at.astimezone(timezone.get_current_timezone()).strftime('%Y-%m-%d %H:%M:%S') if message.sent_at else '',
+                message.message_id or ''
+            ]
+            ws.append(row_data)
+            
+            # Apply color based on status
+            current_row = ws.max_row
+            if message.status == 'delivered' or message.status == 'read':
+                fill = PatternFill(start_color="C6E0B4", end_color="C6E0B4", fill_type="solid")
+            elif message.status == 'failed':
+                fill = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
+            elif message.status == 'pending':
+                fill = PatternFill(start_color="FFEB9C", end_color="FFEB9C", fill_type="solid")
+            else:
+                fill = None
+            
+            if fill:
+                for cell in ws[current_row]:
+                    cell.fill = fill
         
         # Adjust column widths
         for column in ws.columns:
