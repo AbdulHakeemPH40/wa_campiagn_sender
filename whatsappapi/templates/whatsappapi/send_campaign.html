@@ -1841,7 +1841,8 @@ function formatText(type) {
     }
     
     // Replace selected text with formatted version, keeping surrounding spaces outside the markers
-    textarea.value = textarea.value.substring(0, start) + leadingSpaces + formattedCore + trailingSpaces + textarea.value.substring(end);
+    const formattedText = leadingSpaces + formattedCore + trailingSpaces;
+    textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
     
     // Update cursor position
     const newCursorPos = start + formattedText.length;
