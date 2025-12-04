@@ -2113,21 +2113,27 @@ class WASenderService:
                                 break
                         except:
                             continue
-                    
-                    if not session:
-                        logger.error(f"❌ Could not find session matching API key hash: {session_id[:20]}...")
-                        return False
-                old_status = session.status
-                session.status = status
                 
-                if status == 'connected':
+                # Check if session was found
+                if not session:
+                    logger.error(f"❌ Could not find session matching: {session_id[:20] if session_id else 'None'}...")
+                    return False
+                
+                # Update session status (THIS CODE NOW RUNS FOR ALL FOUND SESSIONS)
+                old_status = session.status
+                
+                # Map status to lowercase for consistency
+                status_lower = status.lower() if status else ''
+                
+                if status_lower == 'connected' or status_lower == 'open':
+                    session.status = 'connected'
                     session.connected_at = timezone.now()
                     if phone_number:
                         session.connected_phone_number = phone_number
                     logger.info(f"✅ Session connected | {session.session_name} | Phone: {phone_number}")
                     
-                elif status in ['disconnected', 'logged_out']:
-                    # Treat both 'disconnected' and 'logged_out' as disconnected
+                elif status_lower in ['disconnected', 'logged_out', 'close']:
+                    # Treat 'disconnected', 'logged_out', and 'close' as disconnected
                     session.status = 'disconnected'
                     session.disconnected_at = timezone.now()
                     logger.warning(f"🚨 SESSION DISCONNECTED | User: {session.user.email} | Session: {session.session_name} | Phone: {session.connected_phone_number or session.phone_number}")
@@ -2144,8 +2150,17 @@ class WASenderService:
                         for camp in active_campaigns:
                             logger.error(f"   - Campaign #{camp.id}: {camp.name} (Status: {camp.status})")
                 
+                elif status_lower in ['qr', 'need_scan']:
+                    session.status = 'need_scan'
+                    logger.info(f"📱 Session needs QR scan | {session.session_name}")
+                
+                else:
+                    # Unknown status - just save it
+                    session.status = status_lower or status
+                    logger.warning(f"⚠️ Unknown session status: {status}")
+                
                 session.save()
-                logger.info(f"✅ Session status updated | {session_id} | {old_status} → {status} | User: {session.user.email}")
+                logger.info(f"✅ Session status updated | {session_id} | {old_status} → {session.status} | User: {session.user.email}")
                 return True
                 
             except WASenderSession.DoesNotExist:
