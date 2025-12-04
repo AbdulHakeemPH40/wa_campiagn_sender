@@ -816,11 +816,13 @@ document.getElementById('importForm').addEventListener('submit', function(e) {
         
         if (data.success) {
             closeImportModal();
-            showToast('Success!', `Imported ${data.total_contacts} contacts successfully`);
+            // Show message with duplicate info if any
+            const message = data.message || `Imported ${data.total_contacts} contacts successfully`;
+            showToast('Success!', message);
             // Redirect to send campaign with the new list preselected
             setTimeout(() => {
                 window.location.href = '{% url "whatsappapi:send_campaign" %}?list=' + data.list_id;
-            }, 1000);
+            }, 1500);
         } else {
             showError(data.error || 'Failed to import contacts');
         }

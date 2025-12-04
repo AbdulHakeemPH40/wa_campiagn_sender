@@ -52,8 +52,8 @@ env/
 # Static and media files
 
 # Log files
-logs/
-*.log
+# logs/
+# *.log
 
 # Cache
 .cache/

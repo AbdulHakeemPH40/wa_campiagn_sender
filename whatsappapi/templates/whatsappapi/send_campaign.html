@@ -461,13 +461,16 @@
                         </div>
                     </div>
                     <div class="p-6">
-                        <p class="text-sm text-neutral-600 mb-4">
-                            Configure random delays, batch splitting, and cooldown intervals to minimize account ban risks.
-                        </p>
+                        <div class="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                            <p class="text-sm text-blue-800">
+                                <i class="ri-information-line mr-1"></i>
+                                <strong>Optional:</strong> Configure random delays, batch sizes, and cooldowns for more natural sending patterns. Recommended for large campaigns (500+ contacts).
+                            </p>
+                        </div>
                         <button type="button" onclick="showAdvancedControlsModal()" 
                                 class="w-full px-5 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl hover:from-orange-600 hover:to-amber-700 font-semibold transition-all inline-flex items-center justify-center shadow-md hover:shadow-lg">
                             <i class="ri-equalizer-line mr-2 text-lg"></i>
-                            <span>Configure Sending Controls</span>
+                            <span>Configure Advanced Controls</span>
                         </button>
                         <div id="advancedControlsStatus" class="hidden mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
                             <p class="text-xs font-semibold text-green-700 mb-1">✓ Advanced Controls Enabled</p>
@@ -690,115 +693,101 @@
 
 <!-- Advanced Sending Controls Modal -->
 <div id="advancedControlsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="bg-gradient-to-r from-orange-50 to-amber-50 px-6 py-5 border-b border-orange-200 sticky top-0 rounded-t-2xl">
-            <div class="flex items-center justify-between">
-                <h2 class="text-xl font-bold text-neutral-800 flex items-center">
-                    <i class="ri-settings-3-fill text-orange-600 mr-2"></i>
-                    Advanced Sending Controls
-                </h2>
-                <button onclick="closeAdvancedControlsModal()" class="text-neutral-400 hover:text-neutral-600">
-                    <i class="ri-close-line text-2xl"></i>
-                </button>
-            </div>
+    <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-orange-50 to-amber-50 px-5 py-3 border-b border-orange-200 rounded-t-xl flex items-center justify-between">
+            <h2 class="text-lg font-bold text-neutral-800 flex items-center">
+                <i class="ri-settings-3-fill text-orange-600 mr-2"></i>
+                Advanced Sending Controls
+            </h2>
+            <button onclick="closeAdvancedControlsModal()" class="text-neutral-400 hover:text-neutral-600">
+                <i class="ri-close-line text-2xl"></i>
+            </button>
         </div>
-        <div class="p-6 space-y-6">
-            <!-- Enable/Disable Toggle -->
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <label class="flex items-center justify-between cursor-pointer">
-                    <div class="flex items-center space-x-3">
-                        <i class="ri-flashlight-line text-blue-600 text-2xl"></i>
+
+        <!-- Content -->
+        <div class="p-5">
+            <!-- Enable Toggle & Info in one row -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="checkbox" id="useAdvancedControls" class="h-5 w-5 rounded border-blue-300 text-blue-600 focus:ring-blue-500 mr-2">
                         <div>
-                            <p class="font-semibold text-neutral-800">Enable Advanced Controls</p>
-                            <p class="text-xs text-neutral-600">Activate batch processing and random delays</p>
+                            <p class="text-sm font-semibold text-neutral-800">Enable Advanced Controls</p>
+                            <p class="text-xs text-neutral-600">Activate batch processing</p>
                         </div>
-                    </div>
-                    <input type="checkbox" id="useAdvancedControls" class="h-6 w-6 rounded border-blue-300 text-blue-600 focus:ring-blue-500">
-                </label>
+                    </label>
+                </div>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center">
+                    <i class="ri-information-line text-blue-600 mr-2"></i>
+                    <p class="text-xs text-blue-800">System randomly picks values within your MIN-MAX ranges</p>
+                </div>
             </div>
 
-            <div id="advancedControlsFields" class="space-y-6">
-                <!-- Random Delay Section -->
-                <div>
-                    <h3 class="font-bold text-neutral-800 mb-3 flex items-center">
-                        <i class="ri-time-line text-green-600 mr-2"></i>
-                        Random Delay Between Messages
-                    </h3>
-                    <p class="text-sm text-neutral-600 mb-4">Set randomized delays between each message to reduce detection risks</p>
-                    <div class="grid grid-cols-2 gap-4">
+            <!-- All 3 sections in one row -->
+            <div id="advancedControlsFields" class="grid grid-cols-3 gap-4">
+                <!-- Message Delay -->
+                <div class="border border-neutral-200 rounded-lg p-3">
+                    <div class="flex items-center mb-2">
+                        <i class="ri-time-line text-green-600 mr-1"></i>
+                        <h3 class="text-sm font-bold text-neutral-800">Delay (sec)</h3>
+                    </div>
+                    <p class="text-xs text-neutral-600 mb-3">Wait between messages</p>
+                    <div class="space-y-2">
                         <div>
-                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Minimum Delay (seconds)</label>
-                            <input type="number" id="randomDelayMin" min="1" max="120" value="5" 
-                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-neutral-500 mt-1">Recommended: 5 seconds</p>
+                            <label class="text-xs font-medium text-neutral-600">Min</label>
+                            <input type="number" id="randomDelayMin" min="3" max="60" value="5" 
+                                   class="w-full px-2 py-1.5 border border-neutral-300 rounded text-sm focus:ring-1 focus:ring-orange-500">
+                            <p class="text-xs text-neutral-400 mt-0.5">Range: 3-60s</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Maximum Delay (seconds)</label>
+                            <label class="text-xs font-medium text-neutral-600">Max</label>
                             <input type="number" id="randomDelayMax" min="1" max="120" value="10" 
-                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-neutral-500 mt-1">Recommended: 10 seconds</p>
+                                   class="w-full px-2 py-1.5 border border-neutral-300 rounded text-sm focus:ring-1 focus:ring-orange-500">
                         </div>
                     </div>
                 </div>
 
-                <!-- Batch Size Section -->
-                <div>
-                    <h3 class="font-bold text-neutral-800 mb-3 flex items-center">
-                        <i class="ri-stack-line text-purple-600 mr-2"></i>
-                        Batch Splitting
-                    </h3>
-                    <p class="text-sm text-neutral-600 mb-4">Split large contact lists into smaller batches for controlled distribution</p>
-                    <div class="grid grid-cols-2 gap-4">
+                <!-- Batch Size -->
+                <div class="border border-neutral-200 rounded-lg p-3">
+                    <div class="flex items-center mb-2">
+                        <i class="ri-stack-line text-purple-600 mr-1"></i>
+                        <h3 class="text-sm font-bold text-neutral-800">Batch Size</h3>
+                    </div>
+                    <p class="text-xs text-neutral-600 mb-3">Contacts per batch</p>
+                    <div class="space-y-2">
                         <div>
-                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Minimum Batch Size</label>
+                            <label class="text-xs font-medium text-neutral-600">Min</label>
                             <input type="number" id="batchSizeMin" min="10" max="500" value="50" 
-                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-neutral-500 mt-1">Recommended: 50 contacts</p>
+                                   class="w-full px-2 py-1.5 border border-neutral-300 rounded text-sm focus:ring-1 focus:ring-orange-500">
+                            <p class="text-xs text-neutral-400 mt-0.5">Range: 10-500</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Maximum Batch Size</label>
+                            <label class="text-xs font-medium text-neutral-600">Max</label>
                             <input type="number" id="batchSizeMax" min="10" max="500" value="70" 
-                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-neutral-500 mt-1">Recommended: 70 contacts</p>
+                                   class="w-full px-2 py-1.5 border border-neutral-300 rounded text-sm focus:ring-1 focus:ring-orange-500">
                         </div>
                     </div>
                 </div>
 
-                <!-- Batch Cooldown Section -->
-                <div>
-                    <h3 class="font-bold text-neutral-800 mb-3 flex items-center">
-                        <i class="ri-timer-line text-blue-600 mr-2"></i>
-                        Batch Cooldown Time
-                    </h3>
-                    <p class="text-sm text-neutral-600 mb-4">Rest period between batches to maintain account health and prevent detection</p>
-                    <div class="grid grid-cols-2 gap-4">
+                <!-- Cooldown -->
+                <div class="border border-neutral-200 rounded-lg p-3">
+                    <div class="flex items-center mb-2">
+                        <i class="ri-timer-line text-blue-600 mr-1"></i>
+                        <h3 class="text-sm font-bold text-neutral-800">Cooldown (min)</h3>
+                    </div>
+                    <p class="text-xs text-neutral-600 mb-3">Wait between batches</p>
+                    <div class="space-y-2">
                         <div>
-                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Minimum Cooldown (minutes)</label>
+                            <label class="text-xs font-medium text-neutral-600">Min</label>
                             <input type="number" id="batchCooldownMin" min="0.5" max="180" step="0.5" value="5" 
-                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-neutral-500 mt-1">Recommended: 5 minutes</p>
+                                   class="w-full px-2 py-1.5 border border-neutral-300 rounded text-sm focus:ring-1 focus:ring-orange-500">
+                            <p class="text-xs text-neutral-400 mt-0.5">Range: 1-120m</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-neutral-700 mb-2">Maximum Cooldown (minutes)</label>
+                            <label class="text-xs font-medium text-neutral-600">Max</label>
                             <input type="number" id="batchCooldownMax" min="0.5" max="180" step="0.5" value="10" 
-                                   class="w-full px-4 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-neutral-500 mt-1">Recommended: 10 minutes</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Warning Notice -->
-                <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                    <div class="flex items-start space-x-3">
-                        <i class="ri-alert-line text-yellow-600 text-xl mt-0.5"></i>
-                        <div>
-                            <p class="text-sm font-semibold text-yellow-900 mb-1">Important Guidelines:</p>
-                            <ul class="text-xs text-yellow-800 space-y-1 list-disc list-inside">
-                                <li>Higher delays and longer cooldowns reduce ban risk significantly</li>
-                                <li>Smaller batches with extended cooldown periods are recommended for new accounts</li>
-                                <li>These settings override standard account protection delays</li>
-                                <li>Monitor account health regularly when using bulk sending features</li>
-                            </ul>
+                                   class="w-full px-2 py-1.5 border border-neutral-300 rounded text-sm focus:ring-1 focus:ring-orange-500">
                         </div>
                     </div>
                 </div>
@@ -806,12 +795,12 @@
         </div>
 
         <!-- Footer -->
-        <div class="sticky bottom-0 bg-neutral-50 px-6 py-4 border-t border-neutral-200 rounded-b-2xl flex justify-end space-x-3">
-            <button onclick="closeAdvancedControlsModal()" class="px-6 py-3 bg-neutral-100 text-neutral-700 rounded-xl hover:bg-neutral-200 font-semibold">
+        <div class="bg-neutral-50 px-5 py-3 border-t border-neutral-200 rounded-b-xl flex justify-end space-x-3">
+            <button onclick="closeAdvancedControlsModal()" class="px-5 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 font-medium text-sm">
                 <i class="ri-close-line mr-1"></i>Cancel
             </button>
-            <button onclick="saveAdvancedControls()" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-xl hover:from-orange-600 hover:to-amber-700 font-bold">
-                <i class="ri-save-line mr-2"></i>Save Settings
+            <button onclick="saveAdvancedControls()" class="px-5 py-2 bg-gradient-to-r from-orange-500 to-amber-600 text-white rounded-lg hover:from-orange-600 hover:to-amber-700 font-semibold text-sm">
+                <i class="ri-save-line mr-1"></i>Save Settings
             </button>
         </div>
     </div>
@@ -3025,15 +3014,15 @@ function clearAiDraft() {
 }
 
 // ==================== Advanced Sending Controls ====================
-// Store advanced controls state
+// Store advanced controls configuration - SAFE DEFAULTS from settings.py
 let advancedControlsConfig = {
     enabled: false,
-    randomDelayMin: 5,
-    randomDelayMax: 10,
-    batchSizeMin: 50,
-    batchSizeMax: 70,
-    batchCooldownMin: 5.0,
-    batchCooldownMax: 10.0
+    randomDelayMin: 5,      // DEFAULT_RANDOM_DELAY_MIN from settings.py
+    randomDelayMax: 10,     // DEFAULT_RANDOM_DELAY_MAX from settings.py
+    batchSizeMin: 50,       // DEFAULT_BATCH_SIZE_MIN from settings.py
+    batchSizeMax: 100,      // DEFAULT_BATCH_SIZE_MAX from settings.py
+    batchCooldownMin: 10.0, // DEFAULT_BATCH_COOLDOWN_MIN from settings.py
+    batchCooldownMax: 20.0  // DEFAULT_BATCH_COOLDOWN_MAX from settings.py
 };
 
 // Show advanced controls modal
@@ -3093,44 +3082,59 @@ function saveAdvancedControls() {
         const cooldownMin = parseFloat(document.getElementById('batchCooldownMin').value);
         const cooldownMax = parseFloat(document.getElementById('batchCooldownMax').value);
         
-        // Validation
+        // Enhanced Validation
+        if (delayMin < 3) {
+            showCustomAlert('Invalid Delay', 'Minimum delay must be at least 3 seconds for account safety.', 'error');
+            return;
+        }
+        if (delayMax > 60) {
+            showCustomAlert('Invalid Delay', 'Maximum delay cannot exceed 60 seconds (too slow).', 'error');
+            return;
+        }
         if (delayMin > delayMax) {
-            alert('Minimum delay cannot be greater than maximum delay');
+            showCustomAlert('Invalid Delay', 'Minimum delay cannot be greater than maximum delay.', 'error');
+            return;
+        }
+        if (batchMin < 5 && batchMax > 0) {
+            showCustomAlert('Invalid Batch Size', 'Minimum batch size must be at least 5 contacts. Smaller batches are inefficient.', 'error');
+            return;
+        }
+        if (batchMin < 10 && batchMax > 0) {
+            // Warning for small batches
+            showCustomConfirm(
+                'Small Batch Size Warning',
+                'Batch size less than 10 is not recommended. Small batches mean more cooldown time than actual sending time. Recommended minimum: 10-20 contacts per batch. Do you want to continue anyway?',
+                () => {
+                    // Continue with save if user confirms
+                    completeSaveAdvancedControls(delayMin, delayMax, batchMin, batchMax, cooldownMin, cooldownMax);
+                },
+                'warning'
+            );
+            return;
+        }
+        if (batchMax > 500) {
+            showCustomAlert('Invalid Batch Size', 'Maximum batch size cannot exceed 500 contacts.', 'error');
             return;
         }
         if (batchMin > batchMax) {
-            alert('Minimum batch size cannot be greater than maximum batch size');
+            showCustomAlert('Invalid Batch Size', 'Minimum batch size cannot be greater than maximum batch size.', 'error');
+            return;
+        }
+        if (cooldownMin < 1 && cooldownMax > 0) {
+            showCustomAlert('Invalid Cooldown', 'Minimum cooldown must be at least 1 minute.', 'error');
+            return;
+        }
+        if (cooldownMax > 120) {
+            showCustomAlert('Invalid Cooldown', 'Maximum cooldown cannot exceed 120 minutes (2 hours).', 'error');
             return;
         }
         if (cooldownMin > cooldownMax) {
-            alert('Minimum cooldown cannot be greater than maximum cooldown');
+            showCustomAlert('Invalid Cooldown', 'Minimum cooldown cannot be greater than maximum cooldown.', 'error');
             return;
         }
         
-        // Save configuration with ENABLED = TRUE
-        advancedControlsConfig = {
-            enabled: true,
-            randomDelayMin: delayMin,
-            randomDelayMax: delayMax,
-            batchSizeMin: batchMin,
-            batchSizeMax: batchMax,
-            batchCooldownMin: cooldownMin,
-            batchCooldownMax: cooldownMax
-        };
-        
-        // Update status display
-        const statusDiv = document.getElementById('advancedControlsStatus');
-        const summaryText = document.getElementById('advancedControlsSummary');
-        statusDiv.classList.remove('hidden');
-        summaryText.textContent = `Delays: ${delayMin}-${delayMax}s | Batches: ${batchMin}-${batchMax} | Cooldown: ${cooldownMin}-${cooldownMax}min`;
-        
-        console.log('✅ Advanced Controls SAVED:');
-        console.log(`   Enabled: true`);
-        console.log(`   Delay: ${delayMin}-${delayMax}s`);
-        console.log(`   Batch: ${batchMin}-${batchMax}`);
-        console.log(`   Cooldown: ${cooldownMin}-${cooldownMax}min`);
-        
-        showToast('Settings Saved!', 'Advanced sending controls have been configured');
+        // If all validations pass, complete the save
+        completeSaveAdvancedControls(delayMin, delayMax, batchMin, batchMax, cooldownMin, cooldownMax);
     } else {
         // DISABLED - Reset config to indicate no custom values
         advancedControlsConfig = {
@@ -3149,6 +3153,35 @@ function saveAdvancedControls() {
         showToast('Controls Disabled', 'Using default sending mode (5-10s, 50-70, 5-10min)');
     }
     
+    closeAdvancedControlsModal();
+}
+
+// Helper function to complete save (used after validation or confirmation)
+function completeSaveAdvancedControls(delayMin, delayMax, batchMin, batchMax, cooldownMin, cooldownMax) {
+    // Save configuration with ENABLED = TRUE
+    advancedControlsConfig = {
+        enabled: true,
+        randomDelayMin: delayMin,
+        randomDelayMax: delayMax,
+        batchSizeMin: batchMin,
+        batchSizeMax: batchMax,
+        batchCooldownMin: cooldownMin,
+        batchCooldownMax: cooldownMax
+    };
+    
+    // Update status display
+    const statusDiv = document.getElementById('advancedControlsStatus');
+    const summaryText = document.getElementById('advancedControlsSummary');
+    statusDiv.classList.remove('hidden');
+    summaryText.textContent = `Delays: ${delayMin}-${delayMax}s | Batches: ${batchMin}-${batchMax} | Cooldown: ${cooldownMin}-${cooldownMax}min`;
+    
+    console.log('✅ Advanced Controls SAVED:');
+    console.log(`   Enabled: true`);
+    console.log(`   Delay: ${delayMin}-${delayMax}s`);
+    console.log(`   Batch: ${batchMin}-${batchMax}`);
+    console.log(`   Cooldown: ${cooldownMin}-${cooldownMax}min`);
+    
+    showToast('Settings Saved!', 'Advanced sending controls have been configured');
     closeAdvancedControlsModal();
 }
 
@@ -3416,5 +3449,129 @@ Best regards,
     backdrop-filter: blur(4px);
 }
 </style>
+
+<!-- Custom Alert/Confirm Modal -->
+<div id="customAlertModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-[100] flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full animate-scale-in">
+        <!-- Header -->
+        <div id="alertHeader" class="px-5 py-4 border-b border-neutral-200 flex items-center">
+            <div id="alertIcon" class="h-10 w-10 rounded-full flex items-center justify-center mr-3">
+                <i id="alertIconElement" class="text-2xl"></i>
+            </div>
+            <h3 id="alertTitle" class="text-lg font-bold text-neutral-800"></h3>
+        </div>
+        
+        <!-- Body -->
+        <div class="px-5 py-4">
+            <p id="alertMessage" class="text-sm text-neutral-600 leading-relaxed"></p>
+        </div>
+        
+        <!-- Footer -->
+        <div id="alertFooter" class="px-5 py-4 bg-neutral-50 border-t border-neutral-200 rounded-b-xl flex justify-end space-x-3">
+            <!-- Buttons will be inserted here -->
+        </div>
+    </div>
+</div>
+
+<script>
+// Custom Alert/Confirm System
+let alertCallback = null;
+
+function showCustomAlert(title, message, type = 'info') {
+    const modal = document.getElementById('customAlertModal');
+    const alertTitle = document.getElementById('alertTitle');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = document.getElementById('alertIcon');
+    const alertIconElement = document.getElementById('alertIconElement');
+    const alertFooter = document.getElementById('alertFooter');
+    
+    // Set content
+    alertTitle.textContent = title;
+    alertMessage.textContent = message;
+    
+    // Set icon and colors based on type
+    if (type === 'error') {
+        alertIcon.className = 'h-10 w-10 rounded-full flex items-center justify-center mr-3 bg-red-100';
+        alertIconElement.className = 'text-2xl ri-error-warning-line text-red-600';
+    } else if (type === 'warning') {
+        alertIcon.className = 'h-10 w-10 rounded-full flex items-center justify-center mr-3 bg-yellow-100';
+        alertIconElement.className = 'text-2xl ri-alert-line text-yellow-600';
+    } else if (type === 'success') {
+        alertIcon.className = 'h-10 w-10 rounded-full flex items-center justify-center mr-3 bg-green-100';
+        alertIconElement.className = 'text-2xl ri-checkbox-circle-line text-green-600';
+    } else {
+        alertIcon.className = 'h-10 w-10 rounded-full flex items-center justify-center mr-3 bg-blue-100';
+        alertIconElement.className = 'text-2xl ri-information-line text-blue-600';
+    }
+    
+    // Set footer with OK button
+    alertFooter.innerHTML = `
+        <button onclick="closeCustomAlert()" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 font-semibold text-sm">
+            OK
+        </button>
+    `;
+    
+    modal.classList.remove('hidden');
+}
+
+function showCustomConfirm(title, message, onConfirm, type = 'warning') {
+    const modal = document.getElementById('customAlertModal');
+    const alertTitle = document.getElementById('alertTitle');
+    const alertMessage = document.getElementById('alertMessage');
+    const alertIcon = document.getElementById('alertIcon');
+    const alertIconElement = document.getElementById('alertIconElement');
+    const alertFooter = document.getElementById('alertFooter');
+    
+    // Set content
+    alertTitle.textContent = title;
+    alertMessage.textContent = message;
+    
+    // Set icon and colors
+    if (type === 'warning') {
+        alertIcon.className = 'h-10 w-10 rounded-full flex items-center justify-center mr-3 bg-yellow-100';
+        alertIconElement.className = 'text-2xl ri-alert-line text-yellow-600';
+    } else if (type === 'danger') {
+        alertIcon.className = 'h-10 w-10 rounded-full flex items-center justify-center mr-3 bg-red-100';
+        alertIconElement.className = 'text-2xl ri-error-warning-line text-red-600';
+    } else {
+        alertIcon.className = 'h-10 w-10 rounded-full flex items-center justify-center mr-3 bg-blue-100';
+        alertIconElement.className = 'text-2xl ri-question-line text-blue-600';
+    }
+    
+    // Store callback
+    alertCallback = onConfirm;
+    
+    // Set footer with Cancel and Confirm buttons
+    alertFooter.innerHTML = `
+        <button onclick="closeCustomAlert()" class="px-5 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 font-medium text-sm">
+            Cancel
+        </button>
+        <button onclick="confirmCustomAlert()" class="px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 font-semibold text-sm">
+            Continue
+        </button>
+    `;
+    
+    modal.classList.remove('hidden');
+}
+
+function closeCustomAlert() {
+    document.getElementById('customAlertModal').classList.add('hidden');
+    alertCallback = null;
+}
+
+function confirmCustomAlert() {
+    if (alertCallback) {
+        alertCallback();
+    }
+    closeCustomAlert();
+}
+
+// Close on outside click
+document.getElementById('customAlertModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeCustomAlert();
+    }
+});
+</script>
 
 {% endblock %}

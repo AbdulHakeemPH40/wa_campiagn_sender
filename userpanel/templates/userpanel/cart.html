@@ -12,22 +12,6 @@
             <div class="lg:w-3/5 bg-white p-8 shadow-xl rounded-lg">
                 <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-4">WhatsApp API Setup</h2>
                 
-                <!-- WhatsApp Number -->
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">Activation WhatsApp Number</h3>
-                    {% if user_profile.whatsapp_number %}
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                            <p class="text-gray-800 font-medium">{{ user_profile.whatsapp_number }}</p>
-                            <a href="{% url 'userpanel:settings' %}" class="text-sm font-medium text-primary hover:underline">Edit</a>
-                        </div>
-                    {% else %}
-                         <div class="p-4 bg-yellow-100 text-yellow-800 rounded-lg">
-                            <p>Your WhatsApp number is missing. Please add it in your settings.</p>
-                            <a href="{% url 'userpanel:settings' %}" class="font-bold hover:underline">Go to Settings</a>
-                        </div>
-                    {% endif %}
-                </div>
-
                 <!-- API Sessions Info -->
                 <div>
                     <h3 class="text-lg font-semibold text-gray-700 mb-2">WhatsApp API Sessions</h3>

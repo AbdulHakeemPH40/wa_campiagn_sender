@@ -1755,8 +1755,9 @@ class WASenderService:
         Process incoming webhook from WASender
         
         Webhook Events:
-        - messages.upsert: New incoming messages
-        - connection.update: Session connection status changes
+        - messages.received: New incoming messages
+        - messages.update: Message status updates (sent, delivered, read, failed)
+        - session.status: Session connection status changes
         
         Args:
             payload: Webhook JSON payload
@@ -1765,20 +1766,31 @@ class WASenderService:
             bool: True if processed successfully
         """
         try:
-            # Check if it's a message event
-            if 'data' in payload and 'messages' in payload['data']:
+            event_type = payload.get('event', '')
+            session_id = payload.get('session_id', 'unknown')
+            
+            logger.info(f"🔄 Processing webhook | Event: {event_type} | Session: {session_id}")
+            
+            # Route to appropriate handler
+            if event_type == 'messages.received' or ('data' in payload and 'messages' in payload['data']):
+                logger.info(f"📨 Incoming message event detected")
                 return self._process_incoming_message(payload)
             
-            # Check for connection update
-            event_type = payload.get('event', '')
-            if event_type == 'connection.update':
+            elif event_type == 'messages.update':
+                logger.info(f"📊 Message status update event detected")
+                return self._process_message_status_update(payload)
+            
+            elif event_type == 'session.status' or event_type == 'connection.update':
+                logger.info(f"🔌 Session status change event detected")
                 return self._process_connection_update(payload)
+            
             else:
-                logger.warning(f"Unknown webhook event: {event_type}")
+                logger.warning(f"⚠️ Unknown webhook event type: {event_type}")
+                logger.warning(f"Payload keys: {list(payload.keys())}")
                 return False
                 
         except Exception as e:
-            logger.error(f"Error processing webhook: {e}")
+            logger.error(f"❌ Error processing webhook: {e}", exc_info=True)
             return False
     
     def _process_incoming_message(self, payload):
@@ -1852,8 +1864,8 @@ class WASenderService:
                             message_text = media_info['caption']
                         break
                 
-                # Log received message
-                logger.info(f"Received message from {phone_number}: {message_text or media_type}")
+                # Log received message with full details
+                logger.info(f"📨 INCOMING MESSAGE | From: {phone_number} ({push_name}) | Type: {media_type or 'text'} | Message: {message_text[:50] if message_text else 'N/A'}...")
                 
                 # Find the session by phone number or webhook data
                 # WASender should include session info in webhook
@@ -1886,42 +1898,106 @@ class WASenderService:
                             timestamp=timestamp,
                             raw_data=msg_data
                         )
-                        logger.info(f"Saved incoming message ID: {incoming_msg.id}")
+                        logger.info(f"✅ Saved incoming message | ID: {incoming_msg.id} | Session: {session.session_name}")
                     except Exception as e:
-                        logger.error(f"Error saving incoming message: {e}")
+                        logger.error(f"❌ Error saving incoming message: {e}", exc_info=True)
                 else:
-                    logger.warning("No session found for incoming message, skipping save")
+                    logger.warning(f"⚠️ No session found for incoming message from {phone_number}, skipping save")
                 
+            logger.info(f"✅ Processed {len(messages)} incoming message(s)")
             return True
                 
         except Exception as e:
-            logger.error(f"Error processing incoming message: {e}")
+            logger.error(f"❌ Error processing incoming message: {e}", exc_info=True)
+            return False
+    
+    def _process_message_status_update(self, payload):
+        """
+        Process message status update webhook
+        Updates message delivery status (sent, delivered, read, failed)
+        
+        Payload structure:
+        {
+            "event": "messages.update",
+            "session_id": "session_123",
+            "data": {
+                "message_id": "BAE5...",
+                "status": "delivered",  # sent, delivered, read, failed
+                "recipient": "+1234567890",
+                "timestamp": 1678886400
+            }
+        }
+        """
+        try:
+            data = payload.get('data', {})
+            message_id = data.get('message_id', '')
+            status = data.get('status', '')
+            recipient = data.get('recipient', '')
+            session_id = payload.get('session_id', '')
+            
+            logger.info(f"📊 MESSAGE STATUS UPDATE | Message ID: {message_id} | Status: {status} | Recipient: {recipient}")
+            
+            # Find and update the message in database
+            try:
+                message = WASenderMessage.objects.get(message_id=message_id)
+                old_status = message.status
+                message.status = status
+                message.save(update_fields=['status'])
+                
+                logger.info(f"✅ Updated message status | ID: {message.id} | {old_status} → {status}")
+                
+                # Update campaign stats if this is a campaign message
+                if hasattr(message, 'metadata') and message.metadata.get('campaign_id'):
+                    campaign_id = message.metadata['campaign_id']
+                    logger.info(f"📈 Updating campaign #{campaign_id} stats after status change")
+                
+                return True
+                
+            except WASenderMessage.DoesNotExist:
+                logger.warning(f"⚠️ Message not found in database: {message_id}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"❌ Error processing message status update: {e}", exc_info=True)
             return False
     
     def _process_connection_update(self, payload):
-        """Process session connection status update"""
+        """
+        Process session connection status update webhook
+        Updates session status when connection state changes
+        """
         try:
             session_id = payload.get('session_id', '')
             status = payload.get('status', '')
+            phone_number = payload.get('data', {}).get('phone_number', '')
+            
+            logger.info(f"🔌 SESSION STATUS UPDATE | Session: {session_id} | Status: {status} | Phone: {phone_number}")
             
             try:
                 session = WASenderSession.objects.get(session_id=session_id)
+                old_status = session.status
                 session.status = status
                 
                 if status == 'connected':
                     session.connected_at = timezone.now()
+                    if phone_number:
+                        session.connected_phone_number = phone_number
+                    logger.info(f"✅ Session connected | {session.session_name} | Phone: {phone_number}")
+                    
                 elif status == 'disconnected':
                     session.disconnected_at = timezone.now()
+                    logger.warning(f"⚠️ Session disconnected | {session.session_name}")
                 
                 session.save()
-                logger.info(f"Session {session_id} status updated to {status}")
+                logger.info(f"✅ Session status updated | {session_id} | {old_status} → {status}")
                 return True
+                
             except WASenderSession.DoesNotExist:
-                logger.warning(f"Session not found: {session_id}")
+                logger.error(f"❌ Session not found in database: {session_id}")
                 return False
                 
         except Exception as e:
-            logger.error(f"Error processing connection update: {e}")
+            logger.error(f"❌ Error processing connection update: {e}", exc_info=True)
             return False
     
     # ==================== Contact Management ====================

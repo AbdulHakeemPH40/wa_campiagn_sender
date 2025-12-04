@@ -316,7 +316,9 @@ class WASenderCampaign(models.Model):
     status = models.CharField(max_length=20, choices=CAMPAIGN_STATUS_CHOICES, default='draft', db_index=True)
     
     # Message template
-    message_template = models.TextField(db_collation='utf8mb4_unicode_ci')  # Can include variables like {name}, {phone} - supports emojis
+    # Use utf8mb4_unicode_ci collation only for MySQL (production), not SQLite (local)
+    message_template = models.TextField()  # Can include variables like {name}, {phone} - supports emojis
+    # message_template = models.TextField(db_collation='utf8mb4_unicode_ci') # #this is for mysql only#
     message_type = models.CharField(max_length=20, default='text')
     media_url = models.URLField(max_length=500, blank=True, null=True)  # For media campaigns
     
@@ -359,6 +361,12 @@ class WASenderCampaign(models.Model):
     batch_size_max = models.IntegerField(default=70)  # Maximum batch size
     batch_cooldown_min = models.FloatField(default=5.0)  # Minimum cooldown between batches (minutes)
     batch_cooldown_max = models.FloatField(default=10.0)  # Maximum cooldown between batches (minutes)
+    
+    # Cooldown tracking (for real-time progress updates)
+    cooldown_remaining = models.IntegerField(default=0, help_text="Seconds remaining in current cooldown")
+    cooldown_status = models.CharField(max_length=200, null=True, blank=True, help_text="Current cooldown status message")
+    current_batch = models.IntegerField(default=0, help_text="Current batch number being processed")
+    total_batches = models.IntegerField(default=0, help_text="Total number of batches in campaign")
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
