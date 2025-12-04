@@ -319,15 +319,20 @@ def connect_session(request, session_id):
     service = WASenderService()
     
     # Always call connect first to ensure session is ready for QR
-    if session.status in ['disconnected', 'logged_out']:
+    # Use lowercase comparison for status checks
+    status_lower = (session.status or '').lower()
+    if status_lower in ['disconnected', 'logged_out']:
         logger.info(f"Session {session.session_id} is {session.status}, calling connect...")
         service.connect_session(session)
+        session.refresh_from_db()  # Reload to get updated status
+        status_lower = (session.status or '').lower()
     
-    # Get QR code if session is pending/need_scan
+    # Get QR code if session is pending/need_scan (case-insensitive check)
     qr_code = None
-    if session.status in ['pending', 'need_scan']:
+    if status_lower in ['pending', 'need_scan']:
         try:
             qr_code = service.get_qr_code(session)
+            logger.info(f"QR code fetched for session {session.session_id}: {'Success' if qr_code else 'None'}")
         except Exception as e:
             logger.error(f"Error getting QR code: {e}")
             messages.error(request, "Failed to get QR code. Please try again")
