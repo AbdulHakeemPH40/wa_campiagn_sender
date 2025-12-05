@@ -26,6 +26,10 @@ def send_campaign_async(campaign_id):
         dict: Campaign results (sent_count, failed_count)
     """
     try:
+        # Close stale database connections to ensure fresh data
+        from django.db import close_old_connections
+        close_old_connections()
+        
         # Get campaign
         campaign = WASenderCampaign.objects.get(id=campaign_id)
         
