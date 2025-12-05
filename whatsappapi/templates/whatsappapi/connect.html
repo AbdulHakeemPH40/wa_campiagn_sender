@@ -48,7 +48,7 @@
                     <p class="font-medium">
                         <span id="sessionStatus" class="px-2 py-1 rounded-full text-xs
                             {% if session.status == 'connected' %}bg-green-100 text-green-800
-                            {% elif session.status == 'pending' %}bg-yellow-100 text-yellow-800
+                            {% elif session.status == 'pending' or session.status == 'need_scan' %}bg-yellow-100 text-yellow-800
                             {% else %}bg-red-100 text-red-800{% endif %}">
                             {{ session.status|title }}
                         </span>
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        {% if session.status == 'pending' %}
+        {% if session.status == 'pending' or session.status == 'need_scan' %}
         <!-- QR Code Section -->
         <div class="text-center mb-6">
             {% if qr_code %}
@@ -140,7 +140,7 @@
                 Back to Dashboard
             </a>
             
-            {% if session.status == 'pending' %}
+            {% if session.status == 'pending' or session.status == 'need_scan' %}
             <div class="inline-flex items-center gap-2">
                 <button id="refreshQRBtnFooter" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-neutral-100 border border-neutral-300 text-neutral-800 hover:bg-neutral-200" type="button">
                     <i class="ri-refresh-line"></i>
@@ -179,7 +179,7 @@
     </div>
 </div>
 
-{% if session.status == 'pending' %}
+{% if session.status == 'pending' or session.status == 'need_scan' %}
 <script>
 // Auto-check session status every 5 seconds
 let statusCheckInterval;
