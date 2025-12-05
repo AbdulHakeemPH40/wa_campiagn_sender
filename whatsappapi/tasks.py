@@ -43,21 +43,22 @@ def send_campaign_async(campaign_id):
                 return {'status': 'already_running', 'message': 'Campaign is already running'}
         
         # CRITICAL: Atomically transition to running to prevent race conditions
-        # This UPDATE will only succeed if status is NOT already 'running'
+        # This UPDATE will only succeed if status is 'pending'
         from django.db import transaction
         with transaction.atomic():
             # Lock the row for update
             campaign_locked = WASenderCampaign.objects.select_for_update().get(id=campaign_id)
             
-            # Double check status after lock
-            if campaign_locked.status == 'running':
-                logger.warning(f"RACE CONDITION PREVENTED: Campaign {campaign_id} already running after lock")
-                return {'status': 'already_running', 'message': 'Campaign is already running'}
+            # Only start campaigns that are pending
+            if campaign_locked.status != 'pending':
+                logger.warning(f"Campaign {campaign_id} status is '{campaign_locked.status}', not 'pending'. Skipping.")
+                return {'status': campaign_locked.status, 'message': f'Campaign status is {campaign_locked.status}, not pending'}
             
             # Set to running
             campaign_locked.status = 'running'
             campaign_locked.started_at = timezone.now()
             campaign_locked.save(update_fields=['status', 'started_at'])
+            logger.info(f"Campaign {campaign_id} status changed: pending → running")
         
         campaign.refresh_from_db()
         
