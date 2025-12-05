@@ -2265,7 +2265,7 @@ class WASenderService:
                     # If timestamp is in milliseconds (13 digits), convert to seconds
                     if ts > 9999999999:
                         ts = ts // 1000
-                    event_time = datetime.fromtimestamp(ts, tz=timezone.UTC)
+                    event_time = datetime.fromtimestamp(ts, tz=datetime.timezone.utc)
                 except (ValueError, TypeError):
                     event_time = timezone.now()
             else:
