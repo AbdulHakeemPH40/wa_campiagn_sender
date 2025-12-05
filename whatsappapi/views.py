@@ -934,6 +934,19 @@ def send_campaign(request):
             batch_cooldown_max=batch_cooldown_max
         )
         
+        # Force commit to ensure campaign exists in DB before worker picks it up
+        from django.db import transaction
+        if transaction.get_autocommit():
+            # Already in autocommit mode, campaign is saved
+            pass
+        else:
+            # Force commit current transaction
+            transaction.commit()
+        
+        # Small delay to ensure DB replication (if any) catches up
+        import time
+        time.sleep(0.5)
+        
         # Queue background task to send campaign (idempotent at task start)
         try:
             from django_q.tasks import async_task
