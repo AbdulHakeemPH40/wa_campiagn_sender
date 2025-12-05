@@ -165,21 +165,31 @@ def send_campaign_async(campaign_id):
             campaign.save()
             return {'error': 'No contact list'}
         
-        # CRITICAL: Verify session is still connected before starting (DATABASE CHECK ONLY)
-        # NOTE: We removed the WASender API call (get_session_status) because it was causing
-        # session conflicts when multiple campaigns started simultaneously. The API call
-        # might trigger a global session refresh that disconnects other active sessions.
+        # CRITICAL: Verify session is still connected before starting
+        # Use safe status check with session-specific API key (not personal access token)
+        # This avoids triggering global session refresh that could disconnect other sessions
         session = campaign.session
-        if not session or session.status != 'connected':
-            error_msg = f'Session not connected (status: {session.status if session else "None"})'
-            logger.error(f"Campaign {campaign_id} session is not connected: {session.status if session else 'None'}")
+        if not session:
+            error_msg = 'No session assigned to campaign'
+            logger.error(f"Campaign {campaign_id} has no session")
             campaign.status = 'failed'
             campaign.save()
             return {'error': error_msg}
         
-        # Initialize service for sending messages (NO API status check to avoid conflicts)
+        # Initialize service for sending messages
         service = WASenderService()
-        logger.info(f"✅ Session {session.session_id} verified from database (status: {session.status})")
+        
+        # Safe API status check using session-specific key (recommended by WASender support)
+        is_connected, api_status, error = service.check_session_status_safe(session)
+        
+        if not is_connected:
+            error_msg = f'Session not connected (API status: {api_status}, error: {error})'
+            logger.error(f"Campaign {campaign_id} session check failed: {error_msg}")
+            campaign.status = 'failed'
+            campaign.save()
+            return {'error': error_msg}
+        
+        logger.info(f"✅ Session {session.session_id} verified via API (status: {api_status})")
         logger.info(f"📱 Session phone: {session.connected_phone_number or session.phone_number}")
         logger.info(f"👤 User: {session.user.email}")
         
@@ -378,6 +388,10 @@ def send_campaign_async(campaign_id):
         max_iterations = len(unique_contacts) * 2  # Safety limit: at most 2x the unique contacts
         iteration_count = 0
         
+        # Track messages sent for periodic status check
+        messages_since_status_check = 0
+        STATUS_CHECK_INTERVAL = 50  # Check session status every N messages
+        
         for contact in unique_contacts:
             # Check for cancel/pause request
             try:
@@ -387,6 +401,23 @@ def send_campaign_async(campaign_id):
                     break
             except Exception:
                 pass
+            
+            # Periodic session status check (every N messages) to detect disconnects early
+            messages_since_status_check += 1
+            if messages_since_status_check >= STATUS_CHECK_INTERVAL:
+                messages_since_status_check = 0
+                is_still_connected, current_status, check_error = service.check_session_status_safe(session)
+                if not is_still_connected:
+                    logger.error(f"🚨 Session disconnected during campaign! Status: {current_status}, Error: {check_error}")
+                    campaign.status = 'failed'
+                    campaign.error_message = f'Session disconnected during sending: {current_status}'
+                    campaign.save()
+                    return {
+                        'sent_count': sent_count,
+                        'failed_count': failed_count,
+                        'error': f'Session disconnected: {current_status}'
+                    }
+                logger.info(f"✅ Periodic status check OK (every {STATUS_CHECK_INTERVAL} msgs): Session still connected")
             
             # Format phone number once
             phone_norm = service._format_phone_number(contact.phone_number or '')

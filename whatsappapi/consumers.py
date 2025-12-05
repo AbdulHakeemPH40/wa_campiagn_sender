@@ -154,16 +154,19 @@ class UpdatesConsumer(AsyncWebsocketConsumer):
         """
         Send WhatsApp session status updates to client.
         Called when session connects/disconnects.
+        Enables real-time dashboard updates and QR code prompt on disconnect.
         """
         try:
             await self.send(text_data=json.dumps({
                 'type': 'session_status',
                 'session_id': event.get('session_id'),
-                'status': event.get('status'),  # connected, disconnected, pending, error
+                'session_name': event.get('session_name', ''),
+                'status': event.get('status'),  # connected, disconnected, pending, need_scan, error
                 'phone_number': event.get('phone_number'),
                 'message': event.get('message', ''),
-                'timestamp': event.get('timestamp')
+                'timestamp': event.get('timestamp'),
+                'needs_reconnect': event.get('needs_reconnect', False)  # True if QR scan needed
             }))
-            logger.debug(f"Session status update sent for session {event.get('session_id')}")
+            logger.info(f"📡 Session status update sent | Session: {event.get('session_id')} | Status: {event.get('status')}")
         except Exception as e:
             logger.error(f"Error sending session status update: {e}")

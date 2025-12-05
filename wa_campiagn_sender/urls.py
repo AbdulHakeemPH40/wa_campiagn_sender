@@ -8,6 +8,7 @@ from django.contrib.sitemaps import views as sitemap_views
 from sitevisitor.sitemaps import StaticViewSitemap, BlogSitemap
 from django.views.generic import TemplateView
 from django.http import HttpResponsePermanentRedirect
+from userpanel.webhook_handler import paypal_webhook_handler
 
 
 
@@ -40,6 +41,9 @@ urlpatterns = [
     path('security.txt', TemplateView.as_view(template_name='security.txt', content_type='text/plain')),
     # Favicon handling - redirect to existing favicon
     path('favicon.ico', lambda request: HttpResponsePermanentRedirect('/static/image/favicon.ico')),
+    # PayPal Webhook - Root level URL to match PayPal dashboard config
+    # PayPal sends webhooks to: https://wacampaignsender.com/paypal-webhook/
+    path('paypal-webhook/', paypal_webhook_handler, name='paypal_webhook_root'),
     # Extension license verification removed - Users access campaigns via dashboard using WASender API
 ]
 

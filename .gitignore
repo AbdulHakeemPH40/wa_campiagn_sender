@@ -1,5 +1,9 @@
 # Django Settings with API Keys
 wa_campiagn_sender/settings.py
+
+# Ngrok
+ngrok.yml
+ngrok_urls.txt
 # wa_campiagn_sender/pythonanywhere_settings.py
 
 # Django Migrations (keep only __init__.py)

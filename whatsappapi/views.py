@@ -78,6 +78,28 @@ def dashboard(request):
     # Get all user's sessions (support multiple sessions)
     all_sessions = WASenderSession.objects.filter(user=request.user).order_by('-created_at')
     
+    # AUTO-UPDATE WEBHOOKS: When accessing via ngrok/public URL, update all sessions' webhooks
+    # This ensures webhooks are correctly configured even if sessions were created via localhost
+    current_host = request.get_host()
+    is_public_url = 'ngrok' in current_host or ('localhost' not in current_host and '127.0.0.1' not in current_host)
+    
+    if is_public_url and all_sessions.exists():
+        service = WASenderService()
+        for session in all_sessions:
+            # Build the correct webhook URL for this user
+            expected_webhook_url = request.build_absolute_uri(
+                reverse('whatsappapi:wasender_webhook', kwargs={'user_id': session.user.id})
+            )
+            
+            # Check if webhook needs updating (different URL or not set)
+            if session.webhook_url != expected_webhook_url:
+                logger.info(f"🔄 Auto-updating webhook for session {session.session_id} | Old: {session.webhook_url} | New: {expected_webhook_url}")
+                try:
+                    if service.update_session_webhook(session, expected_webhook_url):
+                        messages.info(request, f"Webhook updated for session {session.session_name}")
+                except Exception as e:
+                    logger.error(f"Failed to auto-update webhook for session {session.session_id}: {e}")
+    
     # Get active sessions (connected)
     active_sessions = all_sessions.filter(status='connected')
     
@@ -394,6 +416,7 @@ def refresh_all_sessions(request):
     for session in all_sessions:
         try:
             service.get_session_status(session)
+            # session object is already updated by get_session_status() - no refresh needed
             updated_sessions.append({
                 'id': session.id,
                 'session_id': session.session_id,
@@ -1347,27 +1370,66 @@ def wasender_webhook(request, user_id):
     
     Webhook URL format: https://yourdomain.com/whatsappapi/webhook/{user_id}/
     
-    Events handled:
-    - messages.received: Incoming messages
-    - messages.update: Message status updates (sent, delivered, read, failed)
-    - session.status: Session connection status changes
+    WASender Webhook Events (essential for bulk campaigns):
+    - session.status: Session status changes (connected, disconnected, need_scan) - CRITICAL
+    - messages.update: Message status update (delivered, read) - ESSENTIAL
+    - message-receipt.update: Receipt status changes (delivery/read receipts) - ESSENTIAL
+    - qrcode.updated: New QR code generated - ESSENTIAL
+    - message.sent: Message sent from session - USEFUL
+    - messages.upsert: New message received (replies) - USEFUL
     """
     import time
     start_time = time.time()
     
     try:
+        # Get webhook signature for verification
+        webhook_signature = request.headers.get('X-Webhook-Signature', '')
+        
         # Parse payload
         payload = json.loads(request.body)
         event_type = payload.get('event', 'unknown')
-        session_id = payload.get('session_id', 'unknown')
+        session_id = payload.get('sessionId') or payload.get('session_id', 'unknown')
         
         # Log webhook receipt with full details
-        logger.info(f"📥 WEBHOOK RECEIVED | User: {user_id} | Event: {event_type} | Session: {session_id}")
+        logger.info(f"📥 WEBHOOK RECEIVED | User: {user_id} | Event: {event_type} | Session: {session_id[:20] if len(str(session_id)) > 20 else session_id}...")
+        logger.info(f"🔐 Webhook Signature: {webhook_signature[:20]}..." if webhook_signature else "🔐 No signature provided")
         logger.info(f"📦 Webhook Payload: {json.dumps(payload, indent=2)}")
         
-        # Process webhook
+        # Verify webhook signature (if configured)
+        if settings.WASENDER_VERIFY_WEBHOOK_SIGNATURE and not settings.DEBUG:
+            # Try to get session-specific webhook secret
+            session_secret = None
+            try:
+                if session_id and session_id != 'unknown':
+                    from userpanel.models import WASenderSession
+                    # Try to find session by API token (sessionId is the API key)
+                    sessions = WASenderSession.objects.all()
+                    service = WASenderService()
+                    for s in sessions:
+                        try:
+                            decrypted = service._decrypt_token(s.api_token)
+                            if decrypted == session_id:
+                                session_secret = getattr(s, 'webhook_secret', None)
+                                break
+                        except:
+                            continue
+            except Exception as e:
+                logger.warning(f"⚠️ Could not retrieve session webhook secret: {e}")
+            
+            # Use session secret or global secret
+            secret_to_verify = session_secret or settings.WASENDER_WEBHOOK_SECRET
+            
+            if secret_to_verify and webhook_signature:
+                if webhook_signature != secret_to_verify:
+                    logger.error(f"❌ WEBHOOK SIGNATURE MISMATCH | Expected: {secret_to_verify[:10]}... | Got: {webhook_signature[:10]}...")
+                    return JsonResponse({'error': 'Invalid webhook signature'}, status=401)
+                logger.info(f"✅ Webhook signature verified")
+            elif secret_to_verify and not webhook_signature:
+                logger.warning(f"⚠️ Webhook signature expected but not provided - allowing in DEBUG mode")
+        
+        # Process webhook - pass user_id for session isolation
         service = WASenderService()
-        result = service.process_webhook(payload)
+        result = service.process_webhook(payload, user_id=user_id)
         
         # Calculate processing time
         processing_time = (time.time() - start_time) * 1000  # Convert to ms
@@ -1377,8 +1439,10 @@ def wasender_webhook(request, user_id):
         else:
             logger.warning(f"⚠️ WEBHOOK PROCESSING FAILED | User: {user_id} | Event: {event_type}")
         
+        # Always respond with 200 OK quickly (WASender best practice)
         return JsonResponse({
             'status': 'ok',
+            'received': True,
             'event': event_type,
             'processed': result,
             'processing_time_ms': round(processing_time, 2)
@@ -2739,16 +2803,52 @@ def drafts_list(request):
 
 
 @login_required
-def drafts_list(request):
+def update_all_webhooks(request):
     """
-    Display all saved draft templates
+    Manually update webhook URLs for all user's sessions
+    Useful when ngrok URL changes or webhooks weren't set initially
+    
+    Access: GET /whatsappapi/update-webhooks/
     """
-    from .models import CampaignTemplate
+    # Check for public URL
+    current_host = request.get_host()
+    is_public_url = 'ngrok' in current_host or ('localhost' not in current_host and '127.0.0.1' not in current_host)
     
-    drafts = CampaignTemplate.objects.filter(user=request.user, status='draft').order_by('-updated_at')
+    if not is_public_url:
+        messages.error(request, "Please access this page via your ngrok URL to update webhooks")
+        return redirect('whatsappapi:dashboard')
     
-    context = {
-        'drafts': drafts,
-    }
+    # Get all sessions for current user
+    all_sessions = WASenderSession.objects.filter(user=request.user)
     
-    return render(request, 'whatsappapi/drafts.html', context)
+    if not all_sessions.exists():
+        messages.warning(request, "No sessions found to update")
+        return redirect('whatsappapi:dashboard')
+    
+    service = WASenderService()
+    updated_count = 0
+    failed_count = 0
+    
+    for session in all_sessions:
+        # Build the correct webhook URL for this user
+        expected_webhook_url = request.build_absolute_uri(
+            reverse('whatsappapi:wasender_webhook', kwargs={'user_id': session.user.id})
+        )
+        
+        logger.info(f"🔄 Updating webhook for session {session.session_id} -> {expected_webhook_url}")
+        
+        try:
+            if service.update_session_webhook(session, expected_webhook_url):
+                updated_count += 1
+            else:
+                failed_count += 1
+        except Exception as e:
+            logger.error(f"Failed to update webhook for session {session.session_id}: {e}")
+            failed_count += 1
+    
+    if updated_count > 0:
+        messages.success(request, f"Successfully updated webhooks for {updated_count} session(s)")
+    if failed_count > 0:
+        messages.warning(request, f"Failed to update {failed_count} session(s)")
+    
+    return redirect('whatsappapi:dashboard')

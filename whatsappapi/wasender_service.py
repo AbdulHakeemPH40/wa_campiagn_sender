@@ -8,6 +8,7 @@ import requests
 import logging
 import base64
 import io
+from datetime import datetime
 from django.conf import settings
 from django.utils import timezone
 from cryptography.fernet import Fernet
@@ -361,6 +362,66 @@ class WASenderService:
             logger.error(f"Error creating session: {e}")
             return None
     
+    def update_session_webhook(self, session, webhook_url):
+        """
+        Update webhook URL for an existing session
+        PUT /api/whatsapp-sessions/{id}
+        
+        This is needed when:
+        - Session was created without webhook (localhost)
+        - Webhook URL changed (new ngrok URL)
+        
+        Args:
+            session: WASenderSession instance
+            webhook_url: New webhook URL (must be HTTPS public URL)
+        
+        Returns:
+            bool: True if updated successfully
+        """
+        try:
+            # Skip localhost URLs
+            if not webhook_url or 'localhost' in webhook_url or '127.0.0.1' in webhook_url:
+                logger.warning(f"Cannot update webhook with localhost URL: {webhook_url}")
+                return False
+            
+            payload = {
+                "webhook_url": webhook_url,
+                "webhook_enabled": True,
+                "webhook_events": [
+                    "messages.received",
+                    "session.status",
+                    "messages.update"
+                ]
+            }
+            
+            url = f"{self.BASE_URL}/whatsapp-sessions/{session.session_id}"
+            logger.info(f"📝 Updating webhook for session {session.session_id}")
+            logger.info(f"📝 New webhook URL: {webhook_url}")
+            
+            response = requests.put(
+                url,
+                headers=self._get_headers(),
+                json=payload,
+                timeout=30
+            )
+            
+            logger.info(f"Update response status: {response.status_code}")
+            logger.info(f"Update response: {_brief_response_text(response)}")
+            
+            if response.status_code in [200, 201]:
+                # Update local database
+                session.webhook_url = webhook_url
+                session.save()
+                logger.info(f"✅ Webhook updated for session {session.session_id} -> {webhook_url}")
+                return True
+            else:
+                logger.error(f"❌ Failed to update webhook: {response.status_code} - {_brief_response_text(response)}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"❌ Error updating session webhook: {e}")
+            return False
+    
     def connect_session(self, session):
         """
         Initiate connection process for a session
@@ -463,6 +524,71 @@ class WASenderService:
         except Exception as e:
             logger.error(f"Error getting QR code: {e}")
             return None
+    
+    def check_session_status_safe(self, session):
+        """
+        Safely check if session is connected using personal access token.
+        This is the recommended way to check status before sending campaigns.
+        
+        Args:
+            session: WASenderSession instance
+        
+        Returns:
+            tuple: (is_connected: bool, status: str, error: str or None)
+        """
+        try:
+            # Use personal access token (not session API key) for status checks
+            # Session API key returns 401 for status endpoint
+            response = requests.get(
+                f"{self.BASE_URL}/whatsapp-sessions/{session.session_id}",
+                headers=self._get_headers(),  # Uses personal access token
+                timeout=15  # Short timeout for status check
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                session_data = data.get('data', data)
+                api_status = session_data.get('status', '').lower()
+                
+                # Map to our status
+                is_connected = api_status in ['connected', 'open']
+                
+                # Update local status if different
+                if is_connected and session.status != 'connected':
+                    session.status = 'connected'
+                    session.save(update_fields=['status'])
+                    logger.info(f"✅ Session {session.session_id} confirmed connected via API")
+                elif not is_connected and session.status == 'connected':
+                    session.status = 'disconnected'
+                    session.disconnected_at = timezone.now()
+                    session.save(update_fields=['status', 'disconnected_at'])
+                    logger.warning(f"⚠️ Session {session.session_id} found disconnected via API check")
+                
+                return (is_connected, api_status, None)
+                
+            elif response.status_code == 401:
+                # Session logged out or API key invalid
+                logger.warning(f"Session {session.session_id} returned 401 - likely logged out")
+                session.status = 'disconnected'
+                session.disconnected_at = timezone.now()
+                session.save(update_fields=['status', 'disconnected_at'])
+                return (False, 'logged_out', 'Session logged out (401)')
+                
+            elif response.status_code == 404:
+                logger.warning(f"Session {session.session_id} not found on WASender (404)")
+                return (False, 'not_found', 'Session not found on WASender')
+                
+            else:
+                # Other error - don't change status, just report
+                logger.warning(f"Status check returned {response.status_code} for session {session.session_id}")
+                return (session.status == 'connected', session.status, f'API returned {response.status_code}')
+                
+        except requests.exceptions.Timeout:
+            logger.warning(f"Status check timeout for session {session.session_id} - assuming OK")
+            return (session.status == 'connected', session.status, 'Timeout')
+        except Exception as e:
+            logger.error(f"Error checking session status: {e}")
+            return (session.status == 'connected', session.status, str(e))
     
     def get_session_status(self, session):
         """
@@ -1147,11 +1273,16 @@ class WASenderService:
                         logger.warning(f"WASender response missing success indicator - marking as failed. Response: {data}")
             
             if success:
+                # Extract both WhatsApp message ID and WASender internal msgId
+                whatsapp_msg_id = msg_data.get('id') or str(msg_data.get('key', {}).get('id', '')) or data.get('id', '')
+                wasender_internal_id = msg_data.get('msgId') or data.get('msgId')
+                
                 # Create message record as sent
                 msg = WASenderMessage.objects.create(
                     session=session,
                     user=session.user,
-                    message_id=msg_data.get('id', str(msg_data.get('key', {}).get('id', ''))),
+                    message_id=whatsapp_msg_id,
+                    wasender_msg_id=wasender_internal_id,  # Store WASender's internal ID for webhook lookups
                     recipient=recipient,
                     message_type='text',
                     content=message,
@@ -1816,44 +1947,81 @@ class WASenderService:
     
     # ==================== Webhook Processing ====================
     
-    def process_webhook(self, payload):
+    def process_webhook(self, payload, user_id=None):
         """
         Process incoming webhook from WASender
         
-        Webhook Events:
-        - messages.received: New incoming messages
-        - messages.update: Message status updates (sent, delivered, read, failed)
-        - session.status: Session connection status changes
+        Essential Webhook Events (for bulk campaigns):
+        - session.status: Session status changes (connected, disconnected, need_scan) - CRITICAL
+        - messages.update: Message status update (delivered, read) - ESSENTIAL
+        - message-receipt.update: Receipt status changes (delivery/read receipts) - ESSENTIAL
+        - qrcode.updated: New QR code generated - ESSENTIAL
+        - message.sent: Message sent from session - USEFUL
+        - messages.upsert: New message received (replies) - USEFUL
         
         Args:
             payload: Webhook JSON payload
+            user_id: User ID from webhook URL for session isolation (important!)
         
         Returns:
             bool: True if processed successfully
         """
+        # Store user_id for use in sub-methods
+        self._webhook_user_id = user_id
         try:
             event_type = payload.get('event', '')
-            session_id = payload.get('session_id', 'unknown')
+            session_id = payload.get('sessionId') or payload.get('session_id', 'unknown')
             
-            logger.info(f"🔄 Processing webhook | Event: {event_type} | Session: {session_id}")
+            logger.info(f"🔄 Processing webhook | Event: {event_type} | Session: {session_id[:20] if len(str(session_id)) > 20 else session_id}...")
             
-            # Route to appropriate handler
-            if event_type == 'messages.received' or ('data' in payload and 'messages' in payload['data']):
-                logger.info(f"📨 Incoming message event detected")
-                return self._process_incoming_message(payload)
+            # Route to appropriate handler based on event type
             
+            # CRITICAL: Session status changes (detect disconnects during campaigns)
+            if event_type == 'session.status' or event_type == 'connection.update':
+                logger.info(f"🔌 Session status change event detected")
+                return self._process_connection_update(payload)
+            
+            # ESSENTIAL: Message status updates (delivery/read tracking)
             elif event_type == 'messages.update':
                 logger.info(f"📊 Message status update event detected")
                 return self._process_message_status_update(payload)
             
-            elif event_type == 'session.status' or event_type == 'connection.update':
-                logger.info(f"🔌 Session status change event detected")
-                return self._process_connection_update(payload)
+            elif event_type == 'message-receipt.update':
+                logger.info(f"📬 Message receipt update event detected")
+                return self._process_message_receipt_update(payload)
+            
+            # ESSENTIAL: QR code updates (session needs scan)
+            elif event_type == 'qrcode.updated':
+                logger.info(f"📱 QR code updated event detected")
+                return self._process_qrcode_update(payload)
+            
+            # USEFUL: Message sent confirmation
+            elif event_type == 'message.sent':
+                logger.info(f"📤 Message sent event detected")
+                return self._process_message_sent(payload)
+            
+            # USEFUL: Incoming messages (replies from contacts)
+            elif event_type == 'messages.upsert' or event_type == 'messages.received':
+                logger.info(f"📨 Incoming message event detected")
+                return self._process_incoming_message(payload)
+            
+            # Legacy fallback - check for message data in payload
+            elif 'data' in payload and 'messages' in payload.get('data', {}):
+                logger.info(f"📨 Legacy message format detected")
+                return self._process_incoming_message(payload)
+            
+            # Acknowledge but ignore non-essential events
+            elif event_type in ['messages.delete', 'messages.reaction', 
+                               'chats.upsert', 'chats.update', 'chats.delete',
+                               'groups.upsert', 'groups.update', 'group-participants.update',
+                               'contacts.upsert', 'contacts.update']:
+                logger.info(f"ℹ️ Ignoring non-essential event: {event_type}")
+                return True  # Acknowledge receipt
             
             else:
                 logger.warning(f"⚠️ Unknown webhook event type: {event_type}")
-                logger.warning(f"Payload keys: {list(payload.keys())}")
-                return False
+                # Return True to acknowledge receipt (don't fail on unknown events)
+                return True
                 
         except Exception as e:
             logger.error(f"❌ Error processing webhook: {e}", exc_info=True)
@@ -1958,19 +2126,54 @@ class WASenderService:
                 logger.info(f"📨 INCOMING MESSAGE | From: {phone_number} ({push_name}) | Type: {media_type or 'text'} | Message: {message_text[:50] if message_text else 'N/A'}...")
                 
                 # Find the session by phone number or webhook data
-                # WASender should include session info in webhook
-                session_id = payload.get('session_id') or payload.get('data', {}).get('session_id')
+                # WASender sends sessionId (camelCase) not session_id (snake_case)
+                # IMPORTANT: Filter by user_id from webhook URL to ensure session isolation
+                session_id = payload.get('session_id') or payload.get('sessionId') or payload.get('data', {}).get('session_id')
+                user_id = getattr(self, '_webhook_user_id', None)
+                
+                # Build base queryset - filter by user if user_id provided
+                if user_id:
+                    base_queryset = WASenderSession.objects.filter(user_id=user_id)
+                    logger.info(f"🔒 Incoming message lookup filtered by user_id: {user_id}")
+                else:
+                    base_queryset = WASenderSession.objects.all()
+                    logger.warning(f"⚠️ No user_id for incoming message - searching all sessions")
                 
                 session = None
                 if session_id:
                     try:
-                        session = WASenderSession.objects.get(session_id=session_id)
+                        # First try direct session_id match (numeric ID)
+                        if str(session_id).isdigit():
+                            session = base_queryset.filter(session_id=session_id).first()
+                        else:
+                            # sessionId from WASender is the API key hash - find by matching
+                            logger.info(f"Looking up session by API key hash: {session_id[:20]}...")
+                            for s in base_queryset:
+                                try:
+                                    decrypted_token = s.get_decrypted_token()
+                                    if decrypted_token and session_id in decrypted_token:
+                                        session = s
+                                        logger.info(f"Found session by API key match: {s.session_id} (User: {s.user_id})")
+                                        break
+                                except Exception:
+                                    continue
                     except WASenderSession.DoesNotExist:
                         logger.warning(f"Session not found: {session_id}")
-                else:
-                    # Try to find session by connected phone number
-                    # This is fallback if session_id not in webhook
-                    logger.warning("No session_id in webhook payload, searching by phone")
+                
+                # Fallback: Try to find session by connected phone number (still filtered by user)
+                if not session:
+                    logger.warning("No session_id match in webhook payload, searching by phone")
+                    # Extract sender phone and try to match with session's connected phone
+                    sender_phone_clean = phone_number.replace('+', '').replace(' ', '').replace('-', '')
+                    try:
+                        # Try to find a session where the connected phone matches
+                        session = base_queryset.filter(
+                            connected_phone_number__icontains=sender_phone_clean[-10:]  # Last 10 digits
+                        ).first()
+                        if session:
+                            logger.info(f"Found session by phone match: {session.session_id} (User: {session.user_id})")
+                    except Exception as e:
+                        logger.warning(f"Error searching session by phone: {e}")
                 
                 if session:
                     # Store incoming message in database
@@ -2020,12 +2223,55 @@ class WASenderService:
         """
         try:
             data = payload.get('data', {})
-            message_id = data.get('message_id', '')
-            status = data.get('status', '')
-            recipient = data.get('recipient', '')
-            session_id = payload.get('session_id', '')
+            key_data = data.get('key', {})
             
-            logger.info(f"📊 MESSAGE STATUS UPDATE | Message ID: {message_id} | Status: {status} | Recipient: {recipient}")
+            # Skip incoming messages (fromMe: false) - we only track outgoing campaign messages
+            from_me = key_data.get('fromMe', True)  # Default to True for backwards compatibility
+            if from_me is False:
+                # Silently ignore status updates for incoming messages
+                return True
+            
+            # Extract message_id from multiple possible locations in the webhook payload
+            # WASender sends it in data.key.id, data.id, or data.message_id
+            message_id = (
+                key_data.get('id', '') or  # Primary: data.key.id
+                data.get('id', '') or       # Fallback: data.id
+                data.get('message_id', '')  # Legacy: data.message_id
+            )
+            
+            # Also extract WASender's internal msgId for fallback lookup
+            wasender_msg_id = data.get('msgId')
+            
+            # Status can be numeric (2=sent, 3=delivered, 4=read) or string
+            raw_status = data.get('status', '')
+            status_map = {2: 'sent', 3: 'delivered', 4: 'read', 5: 'failed'}
+            if isinstance(raw_status, int):
+                status = status_map.get(raw_status, str(raw_status))
+            else:
+                status = str(raw_status)
+            
+            # Extract recipient from remoteJid (format: 971501464078@s.whatsapp.net)
+            remote_jid = key_data.get('remoteJid', '') or data.get('remoteJid', '')
+            recipient = data.get('recipient', '') or remote_jid.split('@')[0] if remote_jid else ''
+            
+            session_id = payload.get('session_id', '') or payload.get('sessionId', '')
+            
+            # Extract timestamp from webhook (messageTimestamp or timestamp)
+            msg_timestamp = data.get('messageTimestamp', '') or payload.get('timestamp', '')
+            if msg_timestamp:
+                try:
+                    # Convert to datetime - handle both string and int timestamps
+                    ts = int(msg_timestamp)
+                    # If timestamp is in milliseconds (13 digits), convert to seconds
+                    if ts > 9999999999:
+                        ts = ts // 1000
+                    event_time = datetime.fromtimestamp(ts, tz=timezone.UTC)
+                except (ValueError, TypeError):
+                    event_time = timezone.now()
+            else:
+                event_time = timezone.now()
+            
+            logger.info(f"📊 MESSAGE STATUS UPDATE | Message ID: {message_id} | Status: {status} | Recipient: {recipient} | Timestamp: {event_time}")
             
             # Skip if message_id is empty
             if not message_id or message_id.strip() == '':
@@ -2035,10 +2281,16 @@ class WASenderService:
             # Find and update the message in database
             try:
                 # Handle potential duplicate message_ids by getting the most recent one
+                # First try by WhatsApp message_id
                 messages = WASenderMessage.objects.filter(message_id=message_id).order_by('-created_at')
                 
+                # If not found by message_id, try by WASender internal msgId
+                if not messages.exists() and wasender_msg_id:
+                    logger.info(f"🔍 Message not found by message_id, trying wasender_msg_id: {wasender_msg_id}")
+                    messages = WASenderMessage.objects.filter(wasender_msg_id=wasender_msg_id).order_by('-created_at')
+                
                 if not messages.exists():
-                    logger.warning(f"⚠️ Message not found in database: {message_id}")
+                    logger.warning(f"⚠️ Message not found in database | message_id: {message_id} | wasender_msg_id: {wasender_msg_id}")
                     return False
                 
                 # Update all matching messages (in case of duplicates)
@@ -2047,15 +2299,15 @@ class WASenderService:
                     old_status = message.status
                     message.status = status
                     
-                    # Update timestamps based on status
+                    # Update timestamps based on status - use actual webhook timestamp
                     if status == 'sent' and not message.sent_at:
-                        message.sent_at = timezone.now()
+                        message.sent_at = event_time
                         message.save(update_fields=['status', 'sent_at'])
                     elif status == 'delivered' and not message.delivered_at:
-                        message.delivered_at = timezone.now()
+                        message.delivered_at = event_time
                         message.save(update_fields=['status', 'delivered_at'])
                     elif status == 'read' and not message.read_at:
-                        message.read_at = timezone.now()
+                        message.read_at = event_time
                         message.save(update_fields=['status', 'read_at'])
                     else:
                         message.save(update_fields=['status'])
@@ -2096,20 +2348,31 @@ class WASenderService:
             logger.info(f"🔌 SESSION STATUS UPDATE | Session: {session_id} | Status: {status} | Phone: {phone_number}")
             
             # Try to find session by session_id first, then by matching decrypted api_token
+            # IMPORTANT: Filter by user_id from webhook URL to ensure session isolation
             session = None
+            user_id = getattr(self, '_webhook_user_id', None)
+            
             try:
-                # First try by numeric session_id
-                if session_id and session_id.isdigit():
-                    session = WASenderSession.objects.get(session_id=session_id)
+                # Build base queryset - filter by user if user_id provided
+                if user_id:
+                    base_queryset = WASenderSession.objects.filter(user_id=user_id)
+                    logger.info(f"🔒 Session lookup filtered by user_id: {user_id}")
                 else:
+                    base_queryset = WASenderSession.objects.all()
+                    logger.warning(f"⚠️ No user_id provided - searching all sessions (less secure)")
+                
+                # First try by numeric session_id
+                if session_id and str(session_id).isdigit():
+                    session = base_queryset.filter(session_id=session_id).first()
+                
+                if not session:
                     # sessionId is the API key hash - need to find by decrypting api_token
-                    # Get all sessions and check which one matches when decrypted
-                    all_sessions = WASenderSession.objects.all()
-                    for s in all_sessions:
+                    for s in base_queryset:
                         try:
                             decrypted_token = self._decrypt_token(s.api_token)
                             if decrypted_token == session_id:
                                 session = s
+                                logger.info(f"✅ Found session by API key match: {s.session_id} (User: {s.user_id})")
                                 break
                         except:
                             continue
@@ -2161,6 +2424,44 @@ class WASenderService:
                 
                 session.save()
                 logger.info(f"✅ Session status updated | {session_id} | {old_status} → {session.status} | User: {session.user.email}")
+                
+                # Send real-time WebSocket notification to user's dashboard
+                # This allows immediate UI update when session disconnects
+                try:
+                    from channels.layers import get_channel_layer
+                    from asgiref.sync import async_to_sync
+                    
+                    channel_layer = get_channel_layer()
+                    if channel_layer:
+                        user_group = f"updates_{session.user.id}"
+                        
+                        # Determine message based on status
+                        if session.status == 'disconnected':
+                            message = "Session disconnected! Click to reconnect and scan QR code."
+                        elif session.status == 'connected':
+                            message = "Session connected successfully!"
+                        elif session.status == 'need_scan':
+                            message = "Session needs QR scan. Please scan to reconnect."
+                        else:
+                            message = f"Session status changed to: {session.status}"
+                        
+                        async_to_sync(channel_layer.group_send)(
+                            user_group,
+                            {
+                                'type': 'session_status',
+                                'session_id': session.id,
+                                'session_name': session.session_name,
+                                'status': session.status,
+                                'phone_number': session.connected_phone_number or session.phone_number,
+                                'message': message,
+                                'timestamp': str(timezone.now()),
+                                'needs_reconnect': session.status in ['disconnected', 'need_scan']
+                            }
+                        )
+                        logger.info(f"📡 WebSocket notification sent to user {session.user.id} | Status: {session.status}")
+                except Exception as ws_error:
+                    logger.warning(f"⚠️ Could not send WebSocket notification: {ws_error}")
+                
                 return True
                 
             except WASenderSession.DoesNotExist:
@@ -2169,6 +2470,175 @@ class WASenderService:
                 
         except Exception as e:
             logger.error(f"❌ Error processing connection update: {e}", exc_info=True)
+            return False
+    
+    def _process_message_receipt_update(self, payload):
+        """
+        Process message receipt update webhook (delivery/read receipts)
+        This is the KEY event for tracking message delivery status!
+        
+        WASender payload structure:
+        {
+            "event": "message-receipt.update",
+            "sessionId": "your_api_key",
+            "data": {
+                "update": { "status": 2 },  # 2=delivered, 3=read, 4=played
+                "key": {
+                    "remoteJid": "1234567890@s.whatsapp.net",
+                    "id": "message_id_here",
+                    "fromMe": true
+                }
+            },
+            "timestamp": 1747775431467
+        }
+        
+        Status codes:
+        - 2: Delivered (double gray check)
+        - 3: Read (double blue check)
+        - 4: Played (for voice messages)
+        """
+        try:
+            data = payload.get('data', {})
+            update_data = data.get('update', {})
+            key_data = data.get('key', {})
+            
+            status_code = update_data.get('status', 0)
+            message_id = key_data.get('id', '')
+            remote_jid = key_data.get('remoteJid', '')
+            from_me = key_data.get('fromMe', False)
+            
+            # Map numeric status to string
+            status_map = {
+                1: 'sent',       # Single gray check (server received)
+                2: 'delivered',  # Double gray check (delivered to device)
+                3: 'read',       # Double blue check (read by recipient)
+                4: 'played',     # Played (for voice/video)
+                5: 'failed'      # Failed to send
+            }
+            status = status_map.get(status_code, f'unknown_{status_code}')
+            
+            # Extract phone number
+            phone_number = remote_jid.replace('@s.whatsapp.net', '').replace('@g.us', '')
+            
+            logger.info(f"📬 MESSAGE RECEIPT UPDATE | ID: {message_id} | Status: {status} ({status_code}) | To: {phone_number} | FromMe: {from_me}")
+            
+            # Only process outgoing messages (fromMe=True)
+            if not from_me:
+                logger.info(f"ℹ️ Skipping receipt update for incoming message")
+                return True
+            
+            # Skip if message_id is empty
+            if not message_id or message_id.strip() == '':
+                logger.warning(f"⚠️ Skipping receipt update - empty message_id")
+                return False
+            
+            # Find and update the message in database
+            try:
+                messages = WASenderMessage.objects.filter(message_id=message_id).order_by('-created_at')
+                
+                if not messages.exists():
+                    logger.warning(f"⚠️ Message not found for receipt update: {message_id}")
+                    return False
+                
+                updated_count = 0
+                for message in messages:
+                    old_status = message.status
+                    message.status = status
+                    
+                    # Update timestamps based on status
+                    if status == 'delivered' and not message.delivered_at:
+                        message.delivered_at = timezone.now()
+                        message.save(update_fields=['status', 'delivered_at'])
+                    elif status == 'read' and not message.read_at:
+                        message.read_at = timezone.now()
+                        message.save(update_fields=['status', 'read_at'])
+                    elif status == 'played':
+                        message.read_at = timezone.now()  # Treat played as read
+                        message.save(update_fields=['status', 'read_at'])
+                    else:
+                        message.save(update_fields=['status'])
+                    
+                    updated_count += 1
+                    logger.info(f"✅ Updated message receipt | ID: {message.id} | {old_status} → {status}")
+                
+                return True
+                
+            except Exception as e:
+                logger.error(f"❌ Error updating message receipt: {e}", exc_info=True)
+                return False
+                
+        except Exception as e:
+            logger.error(f"❌ Error processing message receipt update: {e}", exc_info=True)
+            return False
+    
+    def _process_message_sent(self, payload):
+        """
+        Process message.sent webhook event
+        Triggered when a message is successfully sent from the session
+        """
+        try:
+            data = payload.get('data', {})
+            message_id = data.get('id', '')
+            recipient = data.get('to', '')
+            status = data.get('status', 'sent')
+            msg_type = data.get('type', 'text')
+            
+            logger.info(f"📤 MESSAGE SENT | ID: {message_id} | To: {recipient} | Type: {msg_type}")
+            
+            # Update message in database if exists
+            if message_id:
+                try:
+                    messages = WASenderMessage.objects.filter(message_id=message_id)
+                    for message in messages:
+                        if not message.sent_at:
+                            message.sent_at = timezone.now()
+                            message.status = 'sent'
+                            message.save(update_fields=['status', 'sent_at'])
+                            logger.info(f"✅ Updated message sent status | ID: {message.id}")
+                except Exception as e:
+                    logger.warning(f"⚠️ Could not update message sent status: {e}")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"❌ Error processing message sent event: {e}", exc_info=True)
+            return False
+    
+    
+    def _process_qrcode_update(self, payload):
+        """
+        Process qrcode.updated webhook event
+        Triggered when a new QR code is generated for session connection
+        """
+        try:
+            data = payload.get('data', {})
+            session_id = payload.get('sessionId') or payload.get('session_id', '')
+            qr_code = data.get('qr', data.get('qrcode', ''))
+            
+            logger.info(f"📱 QR CODE UPDATED | Session: {session_id[:20] if session_id else 'unknown'}...")
+            
+            # Update session status to need_scan
+            if session_id:
+                try:
+                    # Find session by API token
+                    sessions = WASenderSession.objects.all()
+                    for s in sessions:
+                        try:
+                            decrypted = self._decrypt_token(s.api_token)
+                            if decrypted == session_id:
+                                s.status = 'need_scan'
+                                s.save(update_fields=['status'])
+                                logger.info(f"✅ Session status updated to need_scan | {s.session_name}")
+                                break
+                        except:
+                            continue
+                except Exception as e:
+                    logger.warning(f"⚠️ Could not update session for QR code: {e}")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"❌ Error processing QR code update: {e}", exc_info=True)
             return False
     
     # ==================== Contact Management ====================

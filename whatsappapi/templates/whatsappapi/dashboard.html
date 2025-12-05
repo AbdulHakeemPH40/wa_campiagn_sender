@@ -1319,5 +1319,89 @@ document.getElementById('refreshStatusBtn')?.addEventListener('click', function(
         btn.disabled = false;
     });
 });
+
+// ==================== SESSION STATUS POLLING ====================
+// Polls session status every 30 seconds to detect disconnects (no WebSocket needed)
+(function() {
+    let pollingInterval = null;
+    let lastKnownStatus = '{{ session.status|default:"unknown" }}';
+    const sessionId = {{ session.id|default:"null" }};
+    
+    function startPolling() {
+        if (pollingInterval || !sessionId) return;
+        
+        console.log('🔄 Session status polling active (every 30s)');
+        pollingInterval = setInterval(checkSessionStatus, 30000);
+    }
+    
+    function checkSessionStatus() {
+        if (!sessionId) return;
+        
+        fetch(`/whatsappapi/session/${sessionId}/status/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status && data.status !== lastKnownStatus) {
+                console.log(`📊 Session status changed: ${lastKnownStatus} → ${data.status}`);
+                const needsReconnect = ['disconnected', 'need_scan', 'logged_out'].includes(data.status);
+                handleStatusChange(data.status, needsReconnect);
+                lastKnownStatus = data.status;
+            }
+        })
+        .catch(err => console.error('Polling error:', err));
+    }
+    
+    function handleStatusChange(status, needsReconnect) {
+        // Show toast notification
+        if (window.showToast) {
+            if (needsReconnect) {
+                window.showToast('error', 'Session disconnected!');
+            } else if (status === 'connected') {
+                window.showToast('success', 'Session connected!');
+            }
+        }
+        
+        // If session disconnected, show reconnect banner
+        if (needsReconnect) {
+            const reconnectUrl = `/whatsappapi/connect/${sessionId}/`;
+            
+            const banner = document.createElement('div');
+            banner.id = 'session-disconnect-banner';
+            banner.className = 'fixed top-0 left-0 right-0 bg-red-600 text-white p-4 z-50 flex items-center justify-center gap-4 shadow-lg';
+            banner.innerHTML = `
+                <i class="ri-error-warning-line text-2xl"></i>
+                <span class="font-semibold">Session disconnected! Please scan QR to reconnect.</span>
+                <a href="${reconnectUrl}" class="px-4 py-2 bg-white text-red-600 rounded-lg font-semibold hover:bg-red-50 transition">
+                    <i class="ri-qr-code-line mr-1"></i> Scan QR to Reconnect
+                </a>
+                <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-red-200">
+                    <i class="ri-close-line text-xl"></i>
+                </button>
+            `;
+            
+            const existingBanner = document.getElementById('session-disconnect-banner');
+            if (existingBanner) existingBanner.remove();
+            
+            document.body.prepend(banner);
+            
+            // Reload page after short delay
+            setTimeout(() => location.reload(), 3000);
+        } else if (status === 'connected' && lastKnownStatus !== 'connected') {
+            setTimeout(() => location.reload(), 1500);
+        }
+    }
+    
+    // Start polling on page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startPolling);
+    } else {
+        startPolling();
+    }
+})();
 </script>
 {% endblock %}

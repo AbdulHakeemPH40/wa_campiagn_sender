@@ -44,6 +44,7 @@ urlpatterns = [
     
     # Webhook
     path('webhook/<int:user_id>/', views.wasender_webhook, name='wasender_webhook'),
+    path('update-webhooks/', views.update_all_webhooks, name='update_all_webhooks'),
     
     # Draft Templates
     path('drafts/', views.drafts_list, name='drafts'),

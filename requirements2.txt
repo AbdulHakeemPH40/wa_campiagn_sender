@@ -1,3 +1,2 @@
 mysqlclient>=2.1.0
-daphne>=4.0.0
 pip install dj-database-url

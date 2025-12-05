@@ -258,7 +258,8 @@ class WASenderMessage(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wasender_messages', db_index=True)
     
     # Message details
-    message_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)  # WASender message ID
+    message_id = models.CharField(max_length=100, blank=True, null=True, db_index=True)  # WhatsApp message ID (e.g., 3EB066459EDB831154B8B6)
+    wasender_msg_id = models.BigIntegerField(blank=True, null=True, db_index=True)  # WASender internal message ID (e.g., 14785483)
     recipient = models.CharField(max_length=50)  # Phone number
     message_type = models.CharField(max_length=20, choices=MESSAGE_TYPE_CHOICES, default='text')
     content = models.TextField()  # Message text or media URL

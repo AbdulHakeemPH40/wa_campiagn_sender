@@ -14,6 +14,11 @@ logger = logging.getLogger(__name__)
 
 # Helper function to generate PDF (adapted from view_order_invoice)
 def generate_invoice_pdf_for_email(order):
+    # Skip PDF generation in DEBUG mode (WeasyPrint requires GTK on Windows)
+    if settings.DEBUG:
+        logger.info(f"DEBUG mode: Skipping PDF generation for order {order.id} (WeasyPrint requires GTK)")
+        return None
+    
     try:
         start_date = order.created_at
         expiry_date = None
