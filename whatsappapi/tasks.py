@@ -2,6 +2,7 @@
 """
 import logging
 import os
+import re
 import time
 import random
 from datetime import timedelta
@@ -94,8 +95,19 @@ def send_campaign_async(campaign_id):
                     
                     # Get clean filename without extension for public_id
                     clean_filename = os.path.splitext(original_filename)[0]
-                    # Remove any special characters that might cause issues
+                    # Remove any special characters that might cause issues with Cloudinary
+                    # Cloudinary public_id only allows: alphanumeric, underscores, hyphens, forward slashes, periods
+                    # Replace spaces with underscores first
                     clean_filename = clean_filename.replace(' ', '_')
+                    # Remove any character that's not alphanumeric, underscore, hyphen, or period
+                    clean_filename = re.sub(r'[^a-zA-Z0-9_\-.]', '', clean_filename)
+                    # Remove consecutive underscores
+                    clean_filename = re.sub(r'_+', '_', clean_filename)
+                    # Remove leading/trailing underscores
+                    clean_filename = clean_filename.strip('_')
+                    # Ensure filename is not empty
+                    if not clean_filename:
+                        clean_filename = f"attachment_{campaign.id}"
                     
                     # Upload to Cloudinary from file path with original filename
                     with open(temp_file_path, 'rb') as f:

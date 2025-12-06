@@ -1,2 +1,2 @@
-mysqlclient>=2.1.0
 pip install dj-database-url
+mysqlclient>=2.1.0

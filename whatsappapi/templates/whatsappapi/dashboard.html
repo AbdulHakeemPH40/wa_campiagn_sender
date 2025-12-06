@@ -739,6 +739,11 @@ function renderCountryList(){
     row.addEventListener('click', () => selectCountryFromModal(c));
     list.appendChild(row);
   });
+  
+  // Parse emojis with Twemoji for cross-platform flag support (Windows doesn't support flag emojis)
+  if (typeof twemoji !== 'undefined') {
+    twemoji.parse(list, { folder: 'svg', ext: '.svg' });
+  }
 }
 
 // Function to select a country from modal
@@ -780,6 +785,11 @@ function selectCountryFromModal(country) {
     selected.innerHTML = `<span class="text-xl mr-2">${country.flag}</span><span class="text-sm font-medium">${country.code}</span>`;
     selected.classList.remove('text-neutral-500');
     selected.classList.add('text-neutral-800');
+    
+    // Parse emojis with Twemoji for cross-platform flag support
+    if (typeof twemoji !== 'undefined') {
+      twemoji.parse(selected, { folder: 'svg', ext: '.svg' });
+    }
   }
   closeCountryOverlay();
 }

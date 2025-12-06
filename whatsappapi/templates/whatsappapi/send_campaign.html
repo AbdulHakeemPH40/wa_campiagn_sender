@@ -2647,6 +2647,11 @@ function renderTestCountries(filter = '') {
             selectTestCountry(this.dataset.code, this.dataset.flag, this.dataset.name);
         });
     });
+    
+    // Parse emojis with Twemoji for cross-platform flag support (Windows doesn't support flag emojis)
+    if (typeof twemoji !== 'undefined') {
+        twemoji.parse(list, { folder: 'svg', ext: '.svg' });
+    }
 }
 
 // Highlight test country item at index
@@ -2708,6 +2713,11 @@ function selectTestCountry(code, flag, name) {
     // Remove the text-neutral-500 class and add text-neutral-800 for selected state
     selectedEl.classList.remove('text-neutral-500');
     selectedEl.classList.add('text-neutral-800');
+    
+    // Parse emojis with Twemoji for cross-platform flag support
+    if (typeof twemoji !== 'undefined') {
+        twemoji.parse(selectedEl, { folder: 'svg', ext: '.svg' });
+    }
     
     document.getElementById('testCountryDropdown').classList.add('hidden');
     document.getElementById('testPhoneInput').focus();

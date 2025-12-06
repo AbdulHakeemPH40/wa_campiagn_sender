@@ -1502,19 +1502,30 @@ def campaign_list(request):
         sent_count = messages_qs.filter(status__in=['sent', 'delivered', 'read']).count()
         failed_count = messages_qs.filter(status='failed').count()
         delivered_count = messages_qs.filter(status__in=['delivered', 'read']).count()
+        read_count = messages_qs.filter(status='read').count()
+        
+        # Check if stats changed before updating
+        stats_changed = (
+            campaign.messages_sent != sent_count or 
+            campaign.messages_failed != failed_count or
+            campaign.messages_delivered != delivered_count or
+            getattr(campaign, 'messages_read', 0) != read_count
+        )
         
         # Update campaign object with current stats (for display)
         campaign.messages_sent = sent_count
         campaign.messages_failed = failed_count
         campaign.messages_delivered = delivered_count
+        campaign.messages_read = read_count
         
         # Also save to database if stats changed (for persistence)
-        if campaign.messages_sent != sent_count or campaign.messages_failed != failed_count:
+        if stats_changed:
             try:
                 WASenderCampaign.objects.filter(id=campaign.id).update(
                     messages_sent=sent_count,
                     messages_failed=failed_count,
-                    messages_delivered=delivered_count
+                    messages_delivered=delivered_count,
+                    messages_read=read_count
                 )
             except Exception:
                 pass
@@ -1563,7 +1574,8 @@ def campaign_detail(request, campaign_id):
         WASenderCampaign.objects.filter(id=campaign.id).update(
             messages_sent=campaign.messages_sent,
             messages_failed=campaign.messages_failed,
-            messages_delivered=campaign.messages_delivered
+            messages_delivered=campaign.messages_delivered,
+            messages_read=campaign.messages_read
         )
     except Exception:
         pass

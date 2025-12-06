@@ -168,7 +168,7 @@
                         class="w-full px-4 py-3 bg-white border border-neutral-300 rounded-xl text-neutral-800 placeholder-neutral-400 focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         autocomplete="off"
                         onclick="toggleCountryDropdown()"
-                        onkeyup="filterCountries()"
+                        oninput="filterCountries()"
                     >
                     <i class="ri-search-line absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400"></i>
                     
@@ -695,19 +695,32 @@ const countries = [
 ];
 
 let allCountries = [...countries];
+let filteredCountriesList = [...countries]; // Track filtered countries for keyboard navigation
+let selectedCountryIndex = -1; // Track selected index for keyboard navigation
 
 // Initialize country list on page load
 document.addEventListener('DOMContentLoaded', function() {
     renderCountries(allCountries);
+    
+    // Attach keyboard navigation to country search
+    const countrySearch = document.getElementById('countrySearch');
+    if (countrySearch) {
+        countrySearch.addEventListener('keydown', handleCountryKeyboard);
+    }
 });
 
 function renderCountries(countryList) {
     const countryListDiv = document.getElementById('countryList');
     countryListDiv.innerHTML = '';
     
-    countryList.forEach(country => {
+    // Update filtered list for keyboard navigation
+    filteredCountriesList = countryList;
+    selectedCountryIndex = -1; // Reset selection when list changes
+    
+    countryList.forEach((country, index) => {
         const div = document.createElement('div');
-        div.className = 'px-4 py-2.5 hover:bg-green-50 cursor-pointer flex items-center space-x-3 transition-colors';
+        div.className = 'country-item px-4 py-2.5 hover:bg-green-50 cursor-pointer flex items-center space-x-3 transition-colors';
+        div.setAttribute('data-index', index);
         div.innerHTML = `
             <span class="text-2xl">${country.flag}</span>
             <div class="flex-1">
@@ -718,6 +731,11 @@ function renderCountries(countryList) {
         div.onclick = () => selectCountry(country);
         countryListDiv.appendChild(div);
     });
+    
+    // Parse emojis with Twemoji for cross-platform flag support (Windows doesn't support flag emojis)
+    if (typeof twemoji !== 'undefined') {
+        twemoji.parse(countryListDiv, { folder: 'svg', ext: '.svg' });
+    }
 }
 
 function toggleCountryDropdown() {
@@ -733,12 +751,21 @@ function filterCountries() {
     );
     renderCountries(filtered);
     document.getElementById('countryDropdown').classList.remove('hidden');
+    
+    // Reset selection when filtering
+    selectedCountryIndex = -1;
 }
 
 function selectCountry(country) {
-    document.getElementById('countrySearch').value = `${country.flag} ${country.name} (+${country.code})`;
+    const searchInput = document.getElementById('countrySearch');
+    searchInput.value = `${country.flag} ${country.name} (+${country.code})`;
     document.getElementById('selectedCountryCode').value = country.code;
     document.getElementById('countryDropdown').classList.add('hidden');
+    
+    // Parse the input field for Twemoji (for the selected value display)
+    if (typeof twemoji !== 'undefined') {
+        twemoji.parse(searchInput.parentElement, { folder: 'svg', ext: '.svg' });
+    }
 }
 
 function toggleCountryField() {
@@ -750,6 +777,61 @@ function toggleCountryField() {
     } else {
         countrySection.classList.add('hidden');
     }
+}
+
+// Keyboard navigation for country search
+function handleCountryKeyboard(e) {
+    const dropdown = document.getElementById('countryDropdown');
+    if (!dropdown) return;
+    
+    // Open dropdown on arrow keys if closed
+    if (dropdown.classList.contains('hidden') && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+        dropdown.classList.remove('hidden');
+        renderCountries(allCountries);
+    }
+    
+    if (filteredCountriesList.length === 0) return;
+    
+    switch(e.key) {
+        case 'ArrowDown':
+            e.preventDefault();
+            selectedCountryIndex = Math.min(selectedCountryIndex + 1, filteredCountriesList.length - 1);
+            highlightCountryItem(selectedCountryIndex);
+            break;
+        
+        case 'ArrowUp':
+            e.preventDefault();
+            selectedCountryIndex = Math.max(selectedCountryIndex - 1, 0);
+            highlightCountryItem(selectedCountryIndex);
+            break;
+        
+        case 'Enter':
+            e.preventDefault();
+            if (selectedCountryIndex >= 0 && selectedCountryIndex < filteredCountriesList.length) {
+                selectCountry(filteredCountriesList[selectedCountryIndex]);
+            }
+            break;
+        
+        case 'Escape':
+            e.preventDefault();
+            dropdown.classList.add('hidden');
+            break;
+    }
+}
+
+// Highlight country item at index
+function highlightCountryItem(index) {
+    const items = document.querySelectorAll('.country-item');
+    items.forEach((item, i) => {
+        if (i === index) {
+            item.classList.add('bg-green-100');
+            item.classList.remove('bg-green-50');
+            // Scroll into view if needed
+            item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+            item.classList.remove('bg-green-100');
+        }
+    });
 }
 
 // Close dropdown when clicking outside

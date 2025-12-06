@@ -24,14 +24,20 @@ def generate_invoice_pdf_for_email(order):
         expiry_date = None
         subscription_period = None
         for item in order.items.all():
-            if "1 Month" in item.product_name:
-                expiry_date = start_date + timezone.timedelta(days=30)
-                subscription_period = "1 Month"
-                break
-            elif "6 Months" in item.product_name:
+            product_name = item.product_name.lower()
+            if "6 month" in product_name:
                 expiry_date = start_date + timezone.timedelta(days=30*6)
                 subscription_period = "6 Months"
                 break
+            elif "1 month" in product_name or "base" in product_name or "api" in product_name:
+                expiry_date = start_date + timezone.timedelta(days=30)
+                subscription_period = "1 Month"
+                break
+        
+        # Default to 1 month if no match found
+        if not subscription_period:
+            expiry_date = start_date + timezone.timedelta(days=30)
+            subscription_period = "1 Month"
 
         # Embed logo image as base64 data URI so WeasyPrint can render it without external file access
         logo_data_uri = ''

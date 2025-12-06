@@ -5,272 +5,415 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice #{{ order.order_id }} - Focus Web Solutions</title>
     <style>
+        @page {
+            size: A4 portrait;
+            margin: 15mm;
+        }
+        * {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            line-height: 1.6;
+            line-height: 1.4;
             color: #333;
             margin: 0;
-            padding: 20px;
-            font-size: 12px;
+            padding: 0;
+            font-size: 11px;
+            background: #fff;
         }
-        .container {
-            max-width: 800px;
+        .invoice-container {
+            width: 100%;
+            max-width: 210mm;
             margin: 0 auto;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            background-color: #fff;
+            padding: 0;
         }
+        
+        /* Professional Header with Gradient */
         .header {
+            background: linear-gradient(135deg, #1a5f2a 0%, #25d366 100%);
+            color: #fff;
+            padding: 20px 25px;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+        }
+        .header-content {
             display: flex;
             justify-content: space-between;
-            padding: 20px;
-            border-bottom: 1px solid #f0f0f0;
-            background-color: #f9f9f9;
+            align-items: flex-start;
         }
-        .logo-section {
+        .brand-section {
             display: flex;
             align-items: center;
         }
-        .logo {
+        .brand-logo {
             width: 50px;
             height: 50px;
             margin-right: 15px;
+            border-radius: 8px;
+            background: #fff;
+            padding: 5px;
         }
-        .company-details h2 {
+        .brand-info h1 {
             margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .brand-info .tagline {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 3px;
+        }
+        .invoice-title-section {
+            text-align: right;
+        }
+        .invoice-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
             font-size: 18px;
-            color: #333;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            display: inline-block;
         }
-        .invoice-details {
-            text-align: right;
+        .invoice-number {
+            font-size: 13px;
+            opacity: 0.95;
         }
-        .invoice-details div {
-            margin-bottom: 5px;
-        }
-        .invoice-label {
-            color: #666;
-            font-size: 11px;
-        }
-        .invoice-value {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .content {
-            padding: 20px;
-        }
-        .customer-info {
+        
+        /* Info Bar */
+        .info-bar {
+            background: #f8f9fa;
+            padding: 12px 25px;
             display: flex;
-            margin-bottom: 25px;
+            justify-content: space-between;
+            border-left: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
         }
-        .customer-info > div {
-            flex: 1;
-        }
-        .section-title {
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 7px;
-            color: #333;
-        }
-        .payment-method {
-            margin-bottom: 25px;
-        }
-        .subscription-details {
-            margin-bottom: 25px;
-            display: flex;
-        }
-        .subscription-details > div {
-            flex: 1;
-            padding-right: 15px;
-        }
-        .subscription-label {
-            color: #666;
-            font-size: 11px;
-        }
-        .subscription-value {
-            font-weight: 500;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 25px;
-        }
-        th {
-            background-color: #f5f5f5;
-            text-align: left;
-            font-weight: 600;
-            padding: 10px;
-            font-size: 11px;
-        }
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .text-center {
+        .info-item {
             text-align: center;
         }
-        .totals {
+        .info-label {
+            font-size: 9px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 2px;
+        }
+        .status-paid {
+            color: #25d366;
+        }
+        
+        /* Main Content */
+        .content {
+            padding: 20px 25px;
+            border-left: 1px solid #e0e0e0;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        /* Two Column Layout */
+        .two-col {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        .col {
+            flex: 1;
+        }
+        .section-label {
+            font-size: 9px;
+            color: #25d366;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #25d366;
+            display: inline-block;
+        }
+        .customer-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+        .customer-detail {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        /* Subscription Info */
+        .subscription-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .sub-item {
+            text-align: center;
+            flex: 1;
+        }
+        .sub-label {
+            font-size: 9px;
+            color: #166534;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .sub-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #166534;
+            margin-top: 2px;
+        }
+        
+        /* Items Table */
+        .items-table {
             width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .items-table th {
+            background: #1a5f2a;
+            color: #fff;
+            text-align: left;
+            padding: 10px 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .items-table th:first-child {
+            border-radius: 4px 0 0 4px;
+        }
+        .items-table th:last-child {
+            border-radius: 0 4px 4px 0;
+        }
+        .items-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 11px;
+        }
+        .items-table .text-right {
+            text-align: right;
+        }
+        .items-table .text-center {
+            text-align: center;
+        }
+        .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .item-desc {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        /* Totals Section */
+        .totals-section {
             display: flex;
             justify-content: flex-end;
         }
-        .totals-table {
-            width: 40%;
+        .totals-box {
+            width: 220px;
         }
         .totals-row {
             display: flex;
             justify-content: space-between;
-            padding: 5px 0;
+            padding: 6px 0;
+            font-size: 11px;
         }
-        .totals-label {
+        .totals-row .label {
             color: #666;
         }
-        .totals-value {
+        .totals-row .value {
             font-weight: 500;
         }
-        .total-final {
-            font-weight: 700;
+        .totals-row.total {
+            border-top: 2px solid #1a5f2a;
+            margin-top: 8px;
+            padding-top: 10px;
             font-size: 14px;
-            padding-top: 5px;
-            margin-top: 5px;
-            border-top: 1px solid #e0e0e0;
+            font-weight: 700;
         }
+        .totals-row.total .label,
+        .totals-row.total .value {
+            color: #1a5f2a;
+        }
+        
+        /* Footer */
         .footer {
-            padding: 20px;
-            border-top: 1px solid #f0f0f0;
-            background-color: #f9f9f9;
+            background: #f8f9fa;
+            padding: 15px 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 0 0 8px 8px;
             text-align: center;
+        }
+        .footer-thanks {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a5f2a;
+            margin-bottom: 5px;
+        }
+        .footer-contact {
+            font-size: 10px;
             color: #666;
-            font-size: 11px;
+        }
+        .footer-contact a {
+            color: #25d366;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="invoice-container">
+        <!-- Professional Header -->
         <div class="header">
-            <div class="company-details">
-                <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <div class="header-content">
+                <div class="brand-section">
                     {% if logo_data_uri %}
-                        <img src="{{ logo_data_uri }}" alt="Company Logo" style="width:40px;height:40px;margin-right:10px;" />
+                    <img src="{{ logo_data_uri }}" alt="Logo" class="brand-logo" />
                     {% endif %}
-                    <div style="line-height: 1.2;">
-                        <h2 style="margin: 0; font-size: 18px; color: #333; font-weight: 600;">{{ company_name }}</h2>
-                        <div style="font-size: 12px; color: #555; margin-top: 2px;">Invoice</div>
+                    <div class="brand-info">
+                        <h1>{{ company_name }}</h1>
+                        <div class="tagline">WA Campaign Sender</div>
                     </div>
                 </div>
-                <div>{{ company_address }}</div>
-                <div>Support: {{ company_support_email }}</div>
-            </div>
-            <div class="invoice-details">
-                <div>
-                    <div class="invoice-label">Invoice Date</div>
-                    <div class="invoice-value">{{ order.created_at|date:"F d, Y" }}</div>
-                </div>
-                <div>
-                    <div class="invoice-label">Order Number</div>
-                    <div class="invoice-value">{{ order.order_id }}</div>
+                <div class="invoice-title-section">
+                    <div class="invoice-badge">INVOICE</div>
+                    <div class="invoice-number">{{ order.order_id }}</div>
                 </div>
             </div>
         </div>
-
+        
+        <!-- Info Bar -->
+        <div class="info-bar">
+            <div class="info-item">
+                <div class="info-label">Invoice Date</div>
+                <div class="info-value">{{ order.created_at|date:"M d, Y" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Payment Method</div>
+                <div class="info-value">{{ order.payment_method|default:"PayPal" }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Status</div>
+                <div class="info-value status-paid">PAID</div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
         <div class="content">
-            <div class="customer-info">
-                <div>
-                    <div class="section-title">Bill To</div>
-                    <div>{{ order.user.full_name }}</div>
-                    <div>{{ order.user.email }}</div>
-                </div>
-                <div>
-                    <div class="section-title">Ship To</div>
-                    <div>{{ order.shipping_name|default:order.user.full_name }}</div>
-                    <div>{{ order.shipping_address|default:"Digital Product - No Shipping Address Required" }}</div>
-                    {% if order.shipping_city or order.shipping_state or order.shipping_postal_code %}
-                    <div>
-                        {% if order.shipping_city %}{{ order.shipping_city }}{% endif %}
-                        {% if order.shipping_city and order.shipping_state %}, {% endif %}
-                        {% if order.shipping_state %}{{ order.shipping_state }}{% endif %}
-                        {% if order.shipping_postal_code %} {{ order.shipping_postal_code }}{% endif %}
-                    </div>
-                    {% endif %}
-                    {% if order.shipping_country %}
-                    <div>{{ order.shipping_country }}</div>
+            <!-- Bill To / Company Info -->
+            <div class="two-col">
+                <div class="col">
+                    <div class="section-label">Bill To</div>
+                    <div class="customer-name">{{ order.user.full_name }}</div>
+                    <div class="customer-detail">{{ order.user.email }}</div>
+                    {% if order.shipping_address %}
+                    <div class="customer-detail">{{ order.shipping_address }}</div>
                     {% endif %}
                 </div>
+                <div class="col">
+                    <div class="section-label">From</div>
+                    <div class="customer-name">{{ company_name }}</div>
+                    <div class="customer-detail">{{ company_address }}</div>
+                    <div class="customer-detail">{{ company_support_email }}</div>
+                </div>
             </div>
-
-            <div class="payment-method">
-                <div class="section-title">Payment Method</div>
-                <div>PayPal</div>
-            </div>
-
+            
+            <!-- Subscription Details -->
             {% if subscription_period %}
-            <div class="subscription-details">
-                <div>
-                    <div class="subscription-label">Period</div>
-                    <div class="subscription-value">{{ subscription_period }}</div>
+            <div class="subscription-box">
+                <div class="sub-item">
+                    <div class="sub-label">Subscription</div>
+                    <div class="sub-value">{{ subscription_period }}</div>
                 </div>
-                <div>
-                    <div class="subscription-label">Start Date</div>
-                    <div class="subscription-value">{{ subscription_start_date|date:"F d, Y" }}</div>
+                <div class="sub-item">
+                    <div class="sub-label">Start Date</div>
+                    <div class="sub-value">{{ subscription_start_date|date:"M d, Y" }}</div>
                 </div>
-                <div>
-                    <div class="subscription-label">End Date</div>
-                    <div class="subscription-value">{{ subscription_end_date|date:"F d, Y" }}</div>
+                <div class="sub-item">
+                    <div class="sub-label">Expiry Date</div>
+                    <div class="sub-value">{{ subscription_end_date|date:"M d, Y" }}</div>
                 </div>
             </div>
             {% endif %}
-
-            <table>
+            
+            <!-- Items Table -->
+            <table class="items-table">
                 <thead>
                     <tr>
-                        <th>Item</th>
-                        <th>Description</th>
-                        <th class="text-center">Quantity</th>
-                        <th class="text-right">Price</th>
-                        <th class="text-right">Amount</th>
+                        <th style="width: 45%;">Description</th>
+                        <th class="text-center" style="width: 15%;">Qty</th>
+                        <th class="text-right" style="width: 20%;">Unit Price</th>
+                        <th class="text-right" style="width: 20%;">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in order_items %}
                     <tr>
-                        <td>{{ item.product_name }}</td>
-                        <td>{{ item.product_description|default:"WA Campaign Sender subscription service" }}</td>
+                        <td>
+                            <div class="item-name">{{ item.product_name }}</div>
+                            <div class="item-desc">{{ item.product_description|default:"WhatsApp Campaign Service" }}</div>
+                        </td>
                         <td class="text-center">{{ item.quantity }}</td>
-                        <td class="text-right">${{ item.unit_price|floatformat:2 }}</td>
-                        <td class="text-right">${{ item.total_price|floatformat:2 }}</td>
+                        <td class="text-right">{% if order.payment_method == 'Razorpay' %}₹{{ item.unit_price|floatformat:0 }}{% else %}${{ item.unit_price|floatformat:2 }}{% endif %}</td>
+                        <td class="text-right">{% if order.payment_method == 'Razorpay' %}₹{{ item.total_price|floatformat:0 }}{% else %}${{ item.total_price|floatformat:2 }}{% endif %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-
-            <div class="totals">
-                <div class="totals-table">
+            
+            <!-- Totals -->
+            <div class="totals-section">
+                <div class="totals-box">
                     <div class="totals-row">
-                        <div class="totals-label">Subtotal</div>
-                        <div class="totals-value">${{ order.subtotal|floatformat:2 }}</div>
+                        <span class="label">Subtotal</span>
+                        <span class="value">{% if order.payment_method == 'Razorpay' %}₹{{ order.subtotal|floatformat:0 }}{% else %}${{ order.subtotal|floatformat:2 }}{% endif %}</span>
                     </div>
+                    {% if order.payment_method == 'Razorpay' %}
                     <div class="totals-row">
-                        <div class="totals-label">Discount</div>
-                        <div class="totals-value">-${{ order.discount|floatformat:2 }}</div>
+                        <span class="label">GST (18%)</span>
+                        <span class="value">Included</span>
                     </div>
+                    {% endif %}
+                    {% if order.discount and order.discount > 0 %}
                     <div class="totals-row">
-                        <div class="totals-label">{{ vat_note }}</div>
-                        <div class="totals-value">$0.00</div>
+                        <span class="label">Discount</span>
+                        <span class="value">-{% if order.payment_method == 'Razorpay' %}₹{{ order.discount|floatformat:0 }}{% else %}${{ order.discount|floatformat:2 }}{% endif %}</span>
                     </div>
-                    <div class="totals-row total-final">
-                        <div>Total</div>
-                        <div>${{ order.total|floatformat:2 }}</div>
+                    {% endif %}
+                    {% if order.payment_method != 'Razorpay' %}
+                    <div class="totals-row">
+                        <span class="label">{{ vat_note|default:"Tax" }}</span>
+                        <span class="value">$0.00</span>
+                    </div>
+                    {% endif %}
+                    <div class="totals-row total">
+                        <span class="label">Total Paid</span>
+                        <span class="value">{% if order.payment_method == 'Razorpay' %}₹{{ order.total|floatformat:0 }}{% else %}${{ order.total|floatformat:2 }}{% endif %}</span>
                     </div>
                 </div>
             </div>
         </div>
-
+        
+        <!-- Footer -->
         <div class="footer">
-            <div>Thank you for your business!</div>
-            <div>For support, please contact {{ company_support_email }}</div>
+            <div class="footer-thanks">Thank you for your business!</div>
+            <div class="footer-contact">
+                Questions? Contact us at <a href="mailto:{{ company_support_email }}">{{ company_support_email }}</a>
+            </div>
         </div>
     </div>
 </body>

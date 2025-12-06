@@ -318,8 +318,8 @@ class WASenderCampaign(models.Model):
     
     # Message template
     # Use utf8mb4_unicode_ci collation only for MySQL (production), not SQLite (local)
-    message_template = models.TextField()  # Can include variables like {name}, {phone} - supports emojis
-    # message_template = models.TextField(db_collation='utf8mb4_unicode_ci') # #this is for mysql only#
+    # message_template = models.TextField()  # Can include variables like {name}, {phone} - supports emojis
+    message_template = models.TextField(db_collation='utf8mb4_unicode_ci') # #this is for mysql only#
     message_type = models.CharField(max_length=20, default='text')
     media_url = models.URLField(max_length=500, blank=True, null=True)  # For media campaigns
     
@@ -347,6 +347,7 @@ class WASenderCampaign(models.Model):
     total_recipients = models.IntegerField(default=0)
     messages_sent = models.IntegerField(default=0)
     messages_delivered = models.IntegerField(default=0)
+    messages_read = models.IntegerField(default=0)
     messages_failed = models.IntegerField(default=0)
     
     # Scheduling
@@ -387,15 +388,22 @@ class WASenderCampaign(models.Model):
         return f"{self.name} - {self.status}"
     
     def update_stats(self):
-        """Update campaign statistics from messages"""
-        messages = WASenderMessage.objects.filter(
-            session=self.session,
-            created_at__gte=self.created_at
-        )
+        """Update campaign statistics from messages using metadata-based query"""
+        # Use metadata-based query (accurate for campaigns with tagged messages)
+        messages = WASenderMessage.objects.filter(metadata__campaign_id=self.id)
+        
+        # Fallback to time-based if no metadata-tagged messages exist
+        if not messages.exists():
+            messages = WASenderMessage.objects.filter(
+                session=self.session,
+                created_at__gte=self.created_at
+            )
+        
         self.messages_sent = messages.filter(status__in=['sent', 'delivered', 'read']).count()
         self.messages_delivered = messages.filter(status__in=['delivered', 'read']).count()
+        self.messages_read = messages.filter(status='read').count()
         self.messages_failed = messages.filter(status='failed').count()
-        self.save(update_fields=['messages_sent', 'messages_delivered', 'messages_failed'])
+        self.save(update_fields=['messages_sent', 'messages_delivered', 'messages_read', 'messages_failed'])
 
 
 class WASenderIncomingMessage(models.Model):

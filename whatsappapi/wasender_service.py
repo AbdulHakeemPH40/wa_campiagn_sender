@@ -1790,6 +1790,10 @@ class WASenderService:
                 except Exception:
                     data = {}
                 msg_data = data.get('data', data or {})
+                
+                # Debug logging to see actual API response structure
+                logger.info(f"WASender media response for {recipient}: status_code={response.status_code}, full_data={data}")
+                logger.info(f"DEBUG media - msg_data keys: {msg_data.keys() if isinstance(msg_data, dict) else 'NOT A DICT'}, msg_data={msg_data}")
 
                 # Check success based on response body indicators
                 # Priority: explicit 'success' flag > 'status' field > error message hints > message ID
@@ -1859,10 +1863,15 @@ class WASenderService:
                             logger.warning(f"WASender response missing success indicator (media) - marking as failed. Response: {data}")
 
                 if success:
+                    # Extract both WhatsApp message ID and WASender internal msgId
+                    whatsapp_msg_id = msg_data.get('id') or str(msg_data.get('key', {}).get('id', '')) or data.get('id', '')
+                    wasender_internal_id = msg_data.get('msgId') or data.get('msgId')
+                    
                     msg = WASenderMessage.objects.create(
                         session=session,
                         user=session.user,
-                        message_id=msg_data.get('id', str(msg_data.get('key', {}).get('id', ''))),
+                        message_id=whatsapp_msg_id,
+                        wasender_msg_id=wasender_internal_id,  # Store WASender's internal ID for webhook lookups
                         recipient=recipient,
                         message_type=message_type,
                         content=media_url,
@@ -1871,7 +1880,7 @@ class WASenderService:
                         sent_at=timezone.now()
                     )
                     session.increment_message_count()
-                    logger.info(f"Media message sent successfully: {msg.message_id}")
+                    logger.info(f"Media message sent successfully: {msg.message_id} (wasender_msg_id: {wasender_internal_id})")
                     return msg
                 else:
                     error_msg = data.get('message') or response.text or 'No success indicator in WASender response (possible invalid number)'
@@ -2319,6 +2328,15 @@ class WASenderService:
                     if hasattr(message, 'metadata') and message.metadata.get('campaign_id'):
                         campaign_id = message.metadata['campaign_id']
                         logger.info(f"📈 Updating campaign #{campaign_id} stats after status change")
+                        try:
+                            from userpanel.models import WASenderCampaign
+                            campaign = WASenderCampaign.objects.get(id=campaign_id)
+                            campaign.update_stats()
+                            logger.info(f"✅ Campaign #{campaign_id} stats updated: sent={campaign.messages_sent}, delivered={campaign.messages_delivered}, read={campaign.messages_read}, failed={campaign.messages_failed}")
+                        except WASenderCampaign.DoesNotExist:
+                            logger.warning(f"⚠️ Campaign #{campaign_id} not found for stats update")
+                        except Exception as stats_err:
+                            logger.error(f"❌ Failed to update campaign #{campaign_id} stats: {stats_err}")
                 
                 if updated_count > 1:
                     logger.warning(f"⚠️ Updated {updated_count} duplicate messages with ID: {message_id}")

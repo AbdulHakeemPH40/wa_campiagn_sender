@@ -24,6 +24,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Emoji Picker CDN -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <!-- Twemoji for cross-platform flag emoji support (Windows doesn't support flag emojis natively) -->
+    <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
     <style>
         body {
             font-family: 'Inter', system-ui, sans-serif;
@@ -77,6 +79,19 @@
         }
         .animate-loading-bar {
             animation: loading-bar 1.5s ease-in-out infinite;
+        }
+        
+        /* Twemoji flag emoji styling */
+        img.emoji {
+            height: 1.2em;
+            width: 1.2em;
+            margin: 0 0.05em 0 0.1em;
+            vertical-align: -0.15em;
+            display: inline-block;
+        }
+        .text-xl img.emoji, .text-2xl img.emoji {
+            height: 1.5em;
+            width: 1.5em;
         }
     </style>
     {% block extra_styles %}{% endblock %}
