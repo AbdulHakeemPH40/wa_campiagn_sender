@@ -31,8 +31,22 @@ def send_campaign_async(campaign_id):
         from django.db import close_old_connections
         close_old_connections()
         
-        # Get campaign
-        campaign = WASenderCampaign.objects.get(id=campaign_id)
+        # Get campaign with retry (handles race condition where task starts before DB commit)
+        campaign = None
+        for attempt in range(5):  # Try up to 5 times
+            try:
+                campaign = WASenderCampaign.objects.get(id=campaign_id)
+                break
+            except WASenderCampaign.DoesNotExist:
+                if attempt < 4:
+                    logger.warning(f"Campaign {campaign_id} not found on attempt {attempt + 1}, retrying in 1s...")
+                    time.sleep(1)
+                    close_old_connections()  # Refresh connection
+                else:
+                    raise  # Re-raise on final attempt
+        
+        if not campaign:
+            raise WASenderCampaign.DoesNotExist(f"Campaign {campaign_id} not found after 5 attempts")
         
         # Prevent duplicate execution - check if already running
         if campaign.status == 'running':
