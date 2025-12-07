@@ -36,7 +36,7 @@ def dashboard(request):
     Shows sessions, stats, and recent messages
     Supports multiple sessions per user with session switching
     OPTIMIZED: Async session status checks to prevent navigation lag
-    REQUIRES: Active subscription to access
+    FREE ACCESS: All users can access dashboard (subscription only required for full campaigns)
     ENFORCES: Content moderation restrictions
     """
     from whatsappapi.models import UserModerationProfile
@@ -61,7 +61,7 @@ def dashboard(request):
     except UserModerationProfile.DoesNotExist:
         pass  # No moderation profile = clean user
     
-    # Check if user has an active subscription
+    # Check if user has an active subscription (for UI display, not access control)
     subscription = Subscription.objects.filter(
         user=request.user,
         status='active',
@@ -70,10 +70,8 @@ def dashboard(request):
     
     subscription_is_active = subscription is not None
     
-    # If no active subscription, redirect to pricing page
-    if not subscription_is_active:
-        messages.warning(request, "You need an active subscription to access the WhatsApp API Dashboard. Please purchase a plan to continue.")
-        return redirect('userpanel:pricing')
+    # FREE ACCESS: All users can access dashboard
+    # Subscription status is passed to template for UI hints only
     
     # Get all user's sessions (support multiple sessions)
     all_sessions = WASenderSession.objects.filter(user=request.user).order_by('-created_at')
@@ -237,18 +235,9 @@ def create_session(request):
     """
     Create new WhatsApp session - Get phone number from user
     Supports multiple sessions per user
-    REQUIRES: Active subscription
+    FREE ACCESS: All users can create sessions (subscription only required for full campaigns)
     """
-    # Check if user has an active subscription
-    subscription = Subscription.objects.filter(
-        user=request.user,
-        status='active',
-        end_date__gt=timezone.now()
-    ).first()
-    
-    if not subscription:
-        messages.error(request, "You need an active subscription to create WhatsApp sessions. Please purchase a plan first.")
-        return redirect('userpanel:pricing')
+    # FREE ACCESS: No subscription check - all users can create sessions
     
     if request.method == 'POST':
         phone_number = request.POST.get('phone_number', '').strip()
@@ -527,20 +516,23 @@ def send_campaign(request):
     """
     Send WhatsApp campaign view with draft templates and contact list support
     Supports multiple sessions - respects session selection from dashboard
-    REQUIRES: Active subscription
+    FREE ACCESS: All users can access send_campaign page
+    RESTRICTION: Free users can only send TEST campaigns (limited contacts)
+    PAID USERS: Can send full campaigns to all contacts
     """
     from .models import ContactList, CampaignTemplate
     
-    # Check if user has an active subscription
+    # Check if user has an active subscription (for feature gating, not page access)
     subscription = Subscription.objects.filter(
         user=request.user,
         status='active',
         end_date__gt=timezone.now()
     ).first()
     
-    if not subscription:
-        messages.error(request, "You need an active subscription to send campaigns. Please purchase a plan first.")
-        return redirect('userpanel:pricing')
+    subscription_is_active = subscription is not None
+    
+    # FREE ACCESS: All users can access this page
+    # Subscription status determines if they can send full campaigns or only test campaigns
     
     # Check if user selected a specific session from dashboard
     session_id_param = request.GET.get('session')
@@ -667,6 +659,35 @@ def send_campaign(request):
         if not contacts.exists():
             messages.error(request, "Contact list is empty")
             return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+        
+        # ============================================================================
+        # FREE USER RESTRICTION: Test campaigns only (max 5 contacts)
+        # Paid users can send to unlimited contacts
+        # ============================================================================
+        TEST_CAMPAIGN_MAX_CONTACTS = 5  # Maximum contacts for free users
+        is_test_campaign = False
+        
+        if not subscription_is_active:
+            # Free user - restrict to test campaign
+            total_contacts = contacts.count()
+            if total_contacts > TEST_CAMPAIGN_MAX_CONTACTS:
+                # Limit contacts to test campaign size
+                contacts = contacts[:TEST_CAMPAIGN_MAX_CONTACTS]
+                is_test_campaign = True
+                messages.warning(
+                    request, 
+                    f"🆓 FREE PLAN: Your campaign will be sent as a TEST to only {TEST_CAMPAIGN_MAX_CONTACTS} contacts. "
+                    f"Upgrade to a paid plan to send to all {total_contacts} contacts."
+                )
+                logger.info(f"Free user {request.user.email} sending test campaign (limited to {TEST_CAMPAIGN_MAX_CONTACTS} contacts)")
+            else:
+                is_test_campaign = True
+                messages.info(
+                    request, 
+                    f"🆓 FREE PLAN: Sending test campaign to {total_contacts} contact(s). "
+                    f"Upgrade to unlock unlimited campaigns."
+                )
+                logger.info(f"Free user {request.user.email} sending test campaign to {total_contacts} contacts")
 
         # Content moderation gate: evaluate message before uploading attachments or queuing
         moderation = evaluate_content(message, attachment_type=None)
@@ -911,14 +932,18 @@ def send_campaign(request):
             logger.info(f"   - Protection OFF: {settings.MESSAGE_DELAY_WITHOUT_PROTECTION}s")
             logger.info(f"   No batching, no cooldowns")
         
+        # For free users, use the limited contacts count
+        actual_recipients_count = len(list(contacts)) if is_test_campaign else contacts.count()
+        
         campaign = WASenderCampaign.objects.create(
             user=request.user,
             session=session,
-            name=campaign_name,
+            name=campaign_name if not is_test_campaign else f"TEST_{campaign_name}",
+            description=f"Test campaign (FREE PLAN - max {TEST_CAMPAIGN_MAX_CONTACTS} contacts)" if is_test_campaign else None,
             message_template=message,
             contact_list=contact_list,
             recipients=[],
-            total_recipients=contacts.count(),
+            total_recipients=actual_recipients_count,
             status='pending',
             attachment_url=attachment_file_path,  # Store temp path temporarily
             attachment_type=attachment_type,
@@ -931,7 +956,9 @@ def send_campaign(request):
             batch_size_min=batch_size_min,
             batch_size_max=batch_size_max,
             batch_cooldown_min=batch_cooldown_min,
-            batch_cooldown_max=batch_cooldown_max
+            batch_cooldown_max=batch_cooldown_max,
+            # Store test campaign flag in metadata
+            metadata={'is_test_campaign': is_test_campaign, 'subscription_active': subscription_is_active}
         )
         
         # Small delay to ensure DB write is complete before worker picks it up
@@ -1031,12 +1058,19 @@ def send_campaign(request):
         available_fields = selected_draft.contact_list.available_fields if selected_draft.contact_list.available_fields else []
     
     # Use the helper function to get optimized context
+    # Include subscription info for UI display (free vs paid features)
+    TEST_CAMPAIGN_MAX_CONTACTS = 5  # Must match the value used in POST handling
+    
     context = _get_send_campaign_context(
         request.user, session,
         selected_draft=selected_draft,
         available_fields=available_fields,
         selected_contact_list=selected_contact_list,
-        selected_contact_list_id=selected_contact_list.id if selected_contact_list else None
+        selected_contact_list_id=selected_contact_list.id if selected_contact_list else None,
+        # Subscription info for UI
+        subscription_is_active=subscription_is_active,
+        subscription=subscription,
+        test_campaign_max_contacts=TEST_CAMPAIGN_MAX_CONTACTS,
     )
     
     return render(request, 'whatsappapi/send_campaign.html', context)

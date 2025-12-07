@@ -1,15 +1,15 @@
 {% extends 'sitevisitor/base.html' %}
 {% load static %}
 
-{% block title %}FAQs - WA Campaign Sender WhatsApp Marketing Questions{% endblock %}
-{% block description %}Get answers to common questions about WA Campaign Sender. Learn about features, safety, pricing, and how to use our WhatsApp marketing extension effectively.{% endblock %}
+{% block title %}FAQs - WA Campaign Sender WhatsApp API Marketing Platform{% endblock %}
+{% block description %}Get answers to common questions about WA Campaign Sender. Learn about our low-cost WhatsApp API, dashboard features, campaign sending, pricing, and account safety.{% endblock %}
 
 {% block content %}
 <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-6">
         <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h1>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Have questions? We've got answers. If you can't find what you're looking for, feel free to contact us.</p>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Have questions about our WhatsApp API platform? We've got answers. If you can't find what you're looking for, feel free to contact us.</p>
         </div>
 
         <div class="max-w-4xl mx-auto space-y-4">
@@ -20,7 +20,7 @@
                     <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
                 </button>
                 <div class="px-5 pb-5 text-gray-600 hidden">
-                    <p>WA Campaign Sender is a browser extension for Chrome and Edge that enhances your WhatsApp Web experience. It allows you to send personalized bulk messages, manage contact lists, and track campaign progress directly within your browser, eliminating the need for complex APIs or external tools.</p>
+                    <p>WA Campaign Sender is a <strong>cloud-based WhatsApp API platform</strong> that allows you to send bulk WhatsApp campaigns from our web dashboard. Simply connect your WhatsApp by scanning a QR code, upload your contact list, compose your message with personalization, and send campaigns - all from any device (mobile, tablet, or laptop). No extensions or software installation required!</p>
                 </div>
             </div>
 
@@ -31,40 +31,59 @@
                     <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
                 </button>
                 <div class="px-5 pb-5 text-gray-600 hidden">
-                    <p>From the extension's main menu, click on "Message Sender." You can then choose your target audience (from saved lists, group members, or by uploading a CSV), compose your message with personalization variables, attach media if needed, and start the campaign. You can monitor the progress in real-time.</p>
+                    <p>Sending a campaign is easy:</p>
+                    <ol class="list-decimal list-inside mt-2 space-y-1">
+                        <li><strong>Connect WhatsApp:</strong> Scan the QR code from our dashboard to link your WhatsApp</li>
+                        <li><strong>Upload Contacts:</strong> Import your contact list via CSV or Excel file</li>
+                        <li><strong>Compose Message:</strong> Write your message with personalization variables like {first_name}</li>
+                        <li><strong>Add Attachments:</strong> Optionally attach images, videos, PDFs, or audio</li>
+                        <li><strong>Send Campaign:</strong> Click send and monitor progress in real-time</li>
+                    </ol>
+                    <p class="mt-2">Campaigns run in the background on our servers - you can close your browser and check back anytime!</p>
                 </div>
             </div>
 
             <!-- FAQ Item 3 -->
             <div class="bg-white rounded-lg shadow-sm">
                 <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
-                    <span>What is the Contact Extractor?</span>
+                    <span>How do I upload contacts?</span>
                     <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
                 </button>
                 <div class="px-5 pb-5 text-gray-600 hidden">
-                    <p>The Contact Extractor is a powerful feature that allows you to build contact lists directly from WhatsApp. You can extract phone numbers from groups you are a member of, from your existing chat list, or even from saved contact cards. This is a quick way to build targeted lists for your campaigns.</p>
+                    <p>You can upload contacts via <strong>CSV or Excel (XLSX)</strong> files. Your file should include phone numbers (with country code) and can include additional fields like name, email, etc. for personalization. Our system automatically detects columns and lets you map them to variables you can use in your messages like {first_name}, {company}, etc.</p>
                 </div>
             </div>
 
             <!-- FAQ Item 4 -->
             <div class="bg-white rounded-lg shadow-sm">
                 <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
-                    <span>Is using this extension safe for my WhatsApp account?</span>
+                    <span>Is using this platform safe for my WhatsApp account?</span>
                     <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
                 </button>
                 <div class="px-5 pb-5 text-gray-600 hidden">
-                    <p>We prioritize your account's safety. Our extension uses intelligent, randomized delays between messages to simulate human behavior and reduce the risk of being flagged by WhatsApp. However, we always recommend following best practices, such as sending messages only to users who expect to hear from you and avoiding spammy content.</p>
+                    <p>We prioritize your account's safety with built-in protection features:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li><strong>Smart Delays:</strong> Randomized delays between messages to simulate human behavior</li>
+                        <li><strong>Batch Sending:</strong> Send in batches with cooldown periods</li>
+                        <li><strong>Account Protection Mode:</strong> Extra safety settings for new accounts</li>
+                    </ul>
+                    <p class="mt-2 text-amber-700"><strong>⚠️ Important:</strong> We are not responsible for any WhatsApp account bans. Please use the platform respectfully, follow WhatsApp's terms of service, and avoid sending spam or unsolicited messages.</p>
                 </div>
             </div>
 
             <!-- FAQ Item 5 -->
             <div class="bg-white rounded-lg shadow-sm">
                 <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
-                    <span>What are the limitations of the Free Plan?</span>
+                    <span>What are the pricing plans?</span>
                     <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
                 </button>
                 <div class="px-5 pb-5 text-gray-600 hidden">
-                    <p>The Free Plan is a great way to get started. It allows you to connect one WhatsApp account and send unlimited messages. However, it does not include premium features like 12/7 WhatsApp support. For more advanced features and support, please consider upgrading to one of our paid plans.</p>
+                    <p>We offer <strong>low-cost WhatsApp API</strong> plans designed for businesses of all sizes:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li><strong>Free Plan:</strong> Explore the platform with test campaigns</li>
+                        <li><strong>PRO Plan:</strong> Unlimited campaigns, priority support, and all features</li>
+                    </ul>
+                    <p class="mt-2">Visit our <a href="{% url 'userpanel:pricing' %}" class="text-green-600 hover:underline font-semibold">Pricing Page</a> for current rates and features.</p>
                 </div>
             </div>
 
@@ -75,18 +94,79 @@
                     <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
                 </button>
                 <div class="px-5 pb-5 text-gray-600 hidden">
-                    <p>Yes, you can use the extension with any personal or business WhatsApp account that is active on WhatsApp Web. There is no need for a separate business API account.</p>
+                    <p>Yes, you can use any WhatsApp number - personal or business. Simply scan the QR code from our dashboard to connect. However, we <strong>recommend using a dedicated WhatsApp Business number</strong> for campaigns rather than your personal number for better safety and organization.</p>
                 </div>
             </div>
 
             <!-- FAQ Item 7 -->
             <div class="bg-white rounded-lg shadow-sm">
                 <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
-                    <span>How do I get help or provide feedback?</span>
+                    <span>Can I access the dashboard from mobile?</span>
                     <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
                 </button>
                 <div class="px-5 pb-5 text-gray-600 hidden">
-                    <p>In the footer of the extension popup, you will find links for "Help" and "Feedback." You can also visit our <a href="{% url 'sitevisitor:contact' %}" class="text-primary hover:underline">Contact Page</a> to send us a message directly. We appreciate your input!</p>
+                    <p>Yes! Our platform is <strong>fully responsive</strong> and works on any device. Once you connect your WhatsApp session, you can:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li>Monitor campaigns from your mobile phone</li>
+                        <li>Create and send campaigns from any device</li>
+                        <li>Track real-time analytics on tablet or laptop</li>
+                    </ul>
+                    <p class="mt-2">Your campaigns run on our cloud servers, so you don't need to keep your browser open!</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 8 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>How many messages can I send per day?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>The number of messages depends on your WhatsApp account's age and warmup status:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li><strong>New accounts (0-7 days):</strong> Start with 50-100 messages</li>
+                        <li><strong>Warming up (1-4 weeks):</strong> 100-300 messages</li>
+                        <li><strong>Established (1+ month):</strong> 300-500 messages</li>
+                        <li><strong>Well-aged (3+ months):</strong> Up to 2000-3000 messages after proper warmup</li>
+                    </ul>
+                    <p class="mt-2">Always start low and gradually increase to keep your account safe.</p>
+                </div>
+            </div>
+
+            <!-- FAQ Item 9 -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-gray-800 focus:outline-none">
+                    <span>How do I get help or contact support?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-gray-600 hidden">
+                    <p>We're here to help! You can reach us through:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li><strong>Email:</strong> support@wacampaignsender.com</li>
+                        <li><strong>Contact Page:</strong> <a href="{% url 'sitevisitor:contact' %}" class="text-green-600 hover:underline">Send us a message</a></li>
+                        <li><strong>User Guide:</strong> Check our detailed <a href="{% url 'userpanel:user_guide' %}" class="text-green-600 hover:underline">User Guide</a> for tutorials</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- FAQ Item 10 - Extension Discontinued -->
+            <div class="bg-amber-50 rounded-lg shadow-sm border border-amber-200">
+                <button class="w-full flex justify-between items-center p-5 text-left font-semibold text-amber-800 focus:outline-none">
+                    <span>Is the WA Campaign Sender browser extension still available?</span>
+                    <i class="ri-arrow-down-s-line text-xl transition-transform duration-300"></i>
+                </button>
+                <div class="px-5 pb-5 text-amber-700 hidden">
+                    <p><strong>⚠️ Official Support Ended:</strong> The WA Campaign Sender browser extension has been <strong>officially discontinued</strong>. We no longer provide support, updates, or maintenance for the extension.</p>
+                    <p class="mt-3"><strong>✅ What we support now:</strong> We now exclusively support our <strong>cloud-based WhatsApp API dashboard</strong> - a more reliable, feature-rich, and low-cost solution for WhatsApp marketing campaigns.</p>
+                    <p class="mt-3">The dashboard offers:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li>No installation required - works in any browser</li>
+                        <li>Access from any device (mobile, tablet, laptop)</li>
+                        <li>Campaigns run in the cloud - no need to keep browser open</li>
+                        <li>Real-time analytics and tracking</li>
+                        <li>Better reliability and performance</li>
+                    </ul>
+                    <p class="mt-3"><a href="{% url 'userpanel:pricing' %}" class="text-amber-800 font-bold hover:underline">→ Get started with our WhatsApp API Dashboard</a></p>
                 </div>
             </div>
         </div>
@@ -98,7 +178,8 @@
 {{ block.super }}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const faqButtons = document.querySelectorAll('.max-w-4xl .bg-white button');
+        // Select all FAQ buttons (both bg-white and bg-amber-50 items)
+        const faqButtons = document.querySelectorAll('.max-w-4xl > div > button');
 
         faqButtons.forEach(button => {
             button.addEventListener('click', () => {

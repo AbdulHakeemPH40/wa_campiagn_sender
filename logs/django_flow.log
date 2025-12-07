@@ -1,0 +1,559 @@
+[INFO] 2025-12-07 23:03:15 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-07 23:04:15 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-07 23:04:28 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14452
+[INFO] 2025-12-07 23:04:29 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 304 0
+[INFO] 2025-12-07 23:04:35 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 200 8528
+[INFO] 2025-12-07 23:04:40 django.server log.log_message:249 - "GET /social-auth/login/google-oauth2/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:04:49 django.server log.log_message:249 - "GET /social-auth/complete/google-oauth2/?state=vcSvz5IR0rIYCX2P3e4g1bhUS8PL5KmR&code=4%2F0ATX87lMLqOdAaR5F84JRC96xkIwMDPopu2UUrLrcams0yMxNkGhMWIWv2AHu_BsmhL0_hw&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:04:49 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 4242
+[INFO] 2025-12-07 23:04:51 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:04:52 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 4233
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 14967
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3928
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 14937
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 5498
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 5964
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6741
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/create-session/ HTTP/1.1" 200 15489
+[INFO] 2025-12-07 23:04:55 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14873
+[INFO] 2025-12-07 23:05:00 django.server log.log_message:249 - "GET /userpanel/logout/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:05:00 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14507
+[INFO] 2025-12-07 23:05:04 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 200 8586
+[INFO] 2025-12-07 23:05:06 django.server log.log_message:249 - "GET /social-auth/login/google-oauth2/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:05:16 django.server log.log_message:249 - "GET /social-auth/complete/google-oauth2/?state=nvdbPRHCzUdLQxaLp5eEqfoIkPTdrEFg&code=4%2F0ATX87lPC593cQc6-HrLYCC23rocslq-xmbdR-0dQoaKYsJJauhHN8vCDR-M7reePVPO2FA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=2&hd=pasonsgrp.com&prompt=consent HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:05:16 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 4212
+[INFO] 2025-12-07 23:05:26 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15975
+[INFO] 2025-12-07 23:05:27 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6785
+[INFO] 2025-12-07 23:05:27 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3906
+[INFO] 2025-12-07 23:05:27 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6388
+[INFO] 2025-12-07 23:05:27 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37567
+[INFO] 2025-12-07 23:05:27 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15951
+[INFO] 2025-12-07 23:05:27 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15083
+[INFO] 2025-12-07 23:05:27 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 7585
+[INFO] 2025-12-07 23:05:30 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 15085
+[INFO] 2025-12-07 23:05:32 django.server log.log_message:249 - "GET /userpanel/logout/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:05:34 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 200 8535
+[INFO] 2025-12-07 23:05:36 django.server log.log_message:249 - "GET /social-auth/login/google-oauth2/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:05:59 django.server log.log_message:249 - "GET /social-auth/complete/google-oauth2/?state=VnKzKWNhUAanXsik1ZDYKvQPDOciSAk6&code=4%2F0ATX87lO123bJJh1-lvbtlbI28y0HkDWJ4acxO7EUAQWWYXEaOZcNIGm04AktM-7ht76uyg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=3&prompt=consent HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:05:59 django.server log.log_message:249 - "GET /complete-social-signup/ HTTP/1.1" 200 7795
+[INFO] 2025-12-07 23:06:01 django.server log.log_message:249 - "POST /complete-social-signup/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:06:01 django.server log.log_message:249 - "GET /social-auth/complete/google-oauth2/?token=4f9b80f3103a481ca22102a68eac8139 HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:06:01 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 4032
+[INFO] 2025-12-07 23:06:08 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5340
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15269
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6010
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6775
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14843
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 5492
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15228
+[INFO] 2025-12-07 23:06:11 django.server log.log_message:249 - "GET /whatsappapi/create-session/ HTTP/1.1" 200 15443
+[INFO] 2025-12-07 23:06:14 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5334
+[INFO] 2025-12-07 23:06:14 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5279
+[INFO] 2025-12-07 23:06:15 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5295
+[INFO] 2025-12-07 23:06:17 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15287
+[INFO] 2025-12-07 23:06:17 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:06:17 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14828
+[INFO] 2025-12-07 23:06:17 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15279
+[INFO] 2025-12-07 23:06:17 django.server log.log_message:249 - "GET /whatsappapi/create-session/ HTTP/1.1" 200 15495
+[INFO] 2025-12-07 23:07:43 whatsappapi.views views.create_session:288 - 🔗 Auto-generated webhook URL for user 5: http://127.0.0.1:8000/whatsappapi/webhook/5/
+[INFO] 2025-12-07 23:07:45 django.server log.log_message:249 - "POST /whatsappapi/create-session/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:07:45 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15495
+[INFO] 2025-12-07 23:07:45 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:07:45 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15228
+[INFO] 2025-12-07 23:07:45 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14822
+[INFO] 2025-12-07 23:07:45 django.server log.log_message:249 - "GET /whatsappapi/create-session/ HTTP/1.1" 200 15421
+[INFO] 2025-12-07 23:08:09 whatsappapi.views views.create_session:288 - 🔗 Auto-generated webhook URL for user 5: http://127.0.0.1:8000/whatsappapi/webhook/5/
+[INFO] 2025-12-07 23:08:12 django.server log.log_message:249 - "POST /whatsappapi/create-session/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:08:13 whatsappapi.views views.connect_session:346 - QR code fetched for session 39272: Success
+[INFO] 2025-12-07 23:08:13 django.server log.log_message:249 - "GET /whatsappapi/connect/4/ HTTP/1.1" 200 9846
+[INFO] 2025-12-07 23:08:14 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14808
+[INFO] 2025-12-07 23:08:14 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:08:14 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16219
+[INFO] 2025-12-07 23:08:14 django.server log.log_message:249 - "GET /whatsappapi/create-session/ HTTP/1.1" 200 15455
+[INFO] 2025-12-07 23:08:15 django.server log.log_message:249 - "POST /whatsappapi/session/4/status/ HTTP/1.1" 200 515
+[INFO] 2025-12-07 23:08:19 django.server log.log_message:249 - "POST /whatsappapi/session/4/status/ HTTP/1.1" 200 559
+[INFO] 2025-12-07 23:08:25 django.server log.log_message:249 - "POST /whatsappapi/session/4/status/ HTTP/1.1" 200 533
+[INFO] 2025-12-07 23:08:29 django.server log.log_message:249 - "POST /whatsappapi/session/4/status/ HTTP/1.1" 200 507
+[INFO] 2025-12-07 23:08:36 django.server log.log_message:249 - "POST /whatsappapi/session/4/status/ HTTP/1.1" 200 522
+[INFO] 2025-12-07 23:08:38 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16325
+[INFO] 2025-12-07 23:08:38 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14808
+[INFO] 2025-12-07 23:08:38 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37766
+[INFO] 2025-12-07 23:08:38 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16292
+[INFO] 2025-12-07 23:08:42 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=4 HTTP/1.1" 200 37776
+[INFO] 2025-12-07 23:08:44 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14865
+[INFO] 2025-12-07 23:08:44 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16281
+[INFO] 2025-12-07 23:09:00 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14867
+[INFO] 2025-12-07 23:09:00 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 14873
+[INFO] 2025-12-07 23:09:00 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 14818
+[INFO] 2025-12-07 23:09:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14892
+[INFO] 2025-12-07 23:09:03 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 14835
+[INFO] 2025-12-07 23:09:03 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 14880
+[INFO] 2025-12-07 23:09:03 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16278
+[INFO] 2025-12-07 23:09:03 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14836
+[WARNING] 2025-12-07 23:09:03 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1996
+[INFO] 2025-12-07 23:09:19 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 126
+[INFO] 2025-12-07 23:09:21 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?list=4 HTTP/1.1" 200 37925
+[INFO] 2025-12-07 23:09:21 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15063
+[INFO] 2025-12-07 23:09:21 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16260
+[INFO] 2025-12-07 23:09:21 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/4/ HTTP/1.1" 200 90
+[INFO] 2025-12-07 23:10:08 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16262
+[INFO] 2025-12-07 23:10:23 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
+[INFO] 2025-12-07 23:10:25 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:10:29 whatsappapi.ai_draft ai_draft._generate_with_openai:121 - RAW AI OUTPUT:
+📣 *Exciting News, {first_name}!*
+
+We're thrilled to connect with you! 🎉 
+
+Join us in our latest marketing campaign designed just for you. Don’t miss out on exclusive insights and opportunities to elevate your business!
+
+👉 *Stay tuned for more updates!*
+
+Looking forward to seeing you thrive! 🌟
+==================================================
+[INFO] 2025-12-07 23:10:29 whatsappapi.ai_draft ai_draft.clean_and_structure_draft:399 - Draft cleanup complete. Length: 293 chars, Emojis: 3
+[INFO] 2025-12-07 23:10:29 whatsappapi.ai_draft ai_draft._generate_with_openai:127 - CLEANED OUTPUT:
+📣 *📢 *Exciting News*, {first_name}!*
+
+We're thrilled to connect with you! 🎉 
+
+Join us in our latest marketing campaign designed just for you. Don’t miss out on exclusive insights and opportunities to elevate your business!
+
+👉 *Stay tuned for more updates!*
+
+Looking forward to seeing you thrive! 🌟
+==================================================
+[INFO] 2025-12-07 23:10:29 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=297
+[INFO] 2025-12-07 23:10:31 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:10:33 django.server log.log_message:249 - "POST /whatsappapi/ai-draft/ HTTP/1.1" 200 792
+[INFO] 2025-12-07 23:10:51 django.server log.log_message:249 - "POST /whatsappapi/api/check-moderation/ HTTP/1.1" 200 168
+[INFO] 2025-12-07 23:10:53 whatsappapi.views views.send_campaign:588 - Using session 4 (+919008715802) from form submission
+[INFO] 2025-12-07 23:10:53 whatsappapi.views views.send_campaign:682 - Free user aphfamily40@gmail.com sending test campaign (limited to 5 contacts)
+[INFO] 2025-12-07 23:10:53 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=304
+[INFO] 2025-12-07 23:10:54 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:821 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\cfa356e5-93a0-488d-b6f6-648b3af4495d_PASONS 26 & WEEKEND DEAL.pdf
+[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:929 - ℹ️ STANDARD MODE for campaign 'test_campign'
+[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:930 -    Will use fixed delays based on session protection setting:
+[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:931 -    - Protection ON: 5s
+[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:932 -    - Protection OFF: 3s
+[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:933 -    No batching, no cooldowns
+[INFO] 2025-12-07 23:10:56 whatsappapi.views views.send_campaign:1026 - Campaign 'test_campign' queued for background processing (Task ID: 3da367891c36448ab572a26c0184898e)
+[INFO] 2025-12-07 23:10:56 django.server log.log_message:249 - "POST /whatsappapi/send-campaign/ HTTP/1.1" 200 38464
+[INFO] 2025-12-07 23:10:56 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37783
+[INFO] 2025-12-07 23:10:56 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15098
+[INFO] 2025-12-07 23:10:56 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16251
+[INFO] 2025-12-07 23:10:58 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15100
+[INFO] 2025-12-07 23:10:58 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16246
+[INFO] 2025-12-07 23:10:58 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134658560 HTTP/1.1" 200 6607
+[INFO] 2025-12-07 23:11:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16251
+[INFO] 2025-12-07 23:11:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15112
+[INFO] 2025-12-07 23:11:01 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134661175 HTTP/1.1" 200 6522
+[INFO] 2025-12-07 23:11:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16300
+[INFO] 2025-12-07 23:11:02 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6541
+[INFO] 2025-12-07 23:11:02 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15105
+[INFO] 2025-12-07 23:11:02 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16296
+[INFO] 2025-12-07 23:11:02 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 304 0
+[INFO] 2025-12-07 23:11:02 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134662603 HTTP/1.1" 200 6538
+[INFO] 2025-12-07 23:11:04 django.server log.log_message:249 - "GET /whatsappapi/campaigns/10/ HTTP/1.1" 200 9645
+[INFO] 2025-12-07 23:11:07 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134667435 HTTP/1.1" 200 6555
+[INFO] 2025-12-07 23:11:11 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134671432 HTTP/1.1" 200 6569
+[INFO] 2025-12-07 23:11:15 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134675438 HTTP/1.1" 200 6557
+[INFO] 2025-12-07 23:11:19 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134679436 HTTP/1.1" 200 6510
+[INFO] 2025-12-07 23:11:23 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134683434 HTTP/1.1" 200 6607
+[INFO] 2025-12-07 23:11:28 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134688614 HTTP/1.1" 200 6550
+[INFO] 2025-12-07 23:11:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6570
+[INFO] 2025-12-07 23:11:30 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15029
+[INFO] 2025-12-07 23:11:30 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16331
+[INFO] 2025-12-07 23:11:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134690236 HTTP/1.1" 200 6588
+[INFO] 2025-12-07 23:11:33 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16249
+[INFO] 2025-12-07 23:11:33 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15057
+[INFO] 2025-12-07 23:11:34 django.server log.log_message:249 - "GET /whatsappapi/campaigns/10/stats/ HTTP/1.1" 200 240
+[INFO] 2025-12-07 23:11:36 django.server log.log_message:249 - "POST /whatsappapi/campaigns/10/stop/ HTTP/1.1" 200 37
+[INFO] 2025-12-07 23:11:36 django.server log.log_message:249 - "GET /whatsappapi/campaigns/10/stats/ HTTP/1.1" 200 231
+[INFO] 2025-12-07 23:11:36 django.server log.log_message:249 - "GET /whatsappapi/campaigns/10/ HTTP/1.1" 200 9865
+[INFO] 2025-12-07 23:11:37 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15091
+[INFO] 2025-12-07 23:11:37 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16295
+[INFO] 2025-12-07 23:11:37 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16332
+[INFO] 2025-12-07 23:11:37 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16273
+[INFO] 2025-12-07 23:11:38 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15069
+[INFO] 2025-12-07 23:11:38 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16327
+[INFO] 2025-12-07 23:11:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15096
+[INFO] 2025-12-07 23:11:50 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15044
+[INFO] 2025-12-07 23:12:02 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
+[INFO] 2025-12-07 23:12:03 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:12:04 django.server log.log_message:249 - "POST /whatsappapi/api/check-moderation/ HTTP/1.1" 200 168
+[INFO] 2025-12-07 23:12:07 whatsappapi.views views.send_campaign:588 - Using session 4 (+919008715802) from form submission
+[INFO] 2025-12-07 23:12:07 whatsappapi.views views.send_campaign:682 - Free user aphfamily40@gmail.com sending test campaign (limited to 5 contacts)
+[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:821 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\cd63d093-e557-4733-8002-a41ad32a6c37_PASONS 26 WEEKEND DEAL.pdf
+[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:929 - ℹ️ STANDARD MODE for campaign 'test_campign'
+[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:930 -    Will use fixed delays based on session protection setting:
+[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:931 -    - Protection ON: 5s
+[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:932 -    - Protection OFF: 3s
+[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:933 -    No batching, no cooldowns
+[INFO] 2025-12-07 23:12:09 whatsappapi.views views.send_campaign:1026 - Campaign 'test_campign' queued for background processing (Task ID: e562a8d1c72541b3b00bc6777ce68580)
+[INFO] 2025-12-07 23:12:09 django.server log.log_message:249 - "POST /whatsappapi/send-campaign/ HTTP/1.1" 200 38519
+[INFO] 2025-12-07 23:12:09 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37806
+[INFO] 2025-12-07 23:12:09 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15097
+[INFO] 2025-12-07 23:12:09 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16278
+[INFO] 2025-12-07 23:12:10 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15061
+[INFO] 2025-12-07 23:12:10 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16247
+[INFO] 2025-12-07 23:12:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134730690 HTTP/1.1" 200 6666
+[INFO] 2025-12-07 23:12:12 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6684
+[INFO] 2025-12-07 23:12:12 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15066
+[INFO] 2025-12-07 23:12:12 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16255
+[INFO] 2025-12-07 23:12:12 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134732809 HTTP/1.1" 200 6670
+[INFO] 2025-12-07 23:12:16 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134736819 HTTP/1.1" 200 6737
+[INFO] 2025-12-07 23:12:20 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6674
+[INFO] 2025-12-07 23:12:20 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15016
+[INFO] 2025-12-07 23:12:20 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16315
+[INFO] 2025-12-07 23:12:20 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134740928 HTTP/1.1" 200 6662
+[INFO] 2025-12-07 23:12:22 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/ HTTP/1.1" 200 10262
+[INFO] 2025-12-07 23:12:23 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15109
+[INFO] 2025-12-07 23:12:23 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16266
+[INFO] 2025-12-07 23:12:23 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/stats/ HTTP/1.1" 200 174
+[INFO] 2025-12-07 23:12:45 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/ HTTP/1.1" 200 10418
+[INFO] 2025-12-07 23:12:45 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16257
+[INFO] 2025-12-07 23:12:45 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15067
+[INFO] 2025-12-07 23:12:46 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16268
+[INFO] 2025-12-07 23:12:49 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16250
+[INFO] 2025-12-07 23:12:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/ HTTP/1.1" 200 10396
+[INFO] 2025-12-07 23:12:50 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15026
+[INFO] 2025-12-07 23:12:50 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16260
+[INFO] 2025-12-07 23:12:52 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/ HTTP/1.1" 200 10443
+[INFO] 2025-12-07 23:12:52 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15056
+[INFO] 2025-12-07 23:12:52 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16300
+[INFO] 2025-12-07 23:12:53 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/ HTTP/1.1" 200 10488
+[INFO] 2025-12-07 23:12:53 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15042
+[INFO] 2025-12-07 23:12:53 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16243
+[INFO] 2025-12-07 23:13:00 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6738
+[INFO] 2025-12-07 23:13:00 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15026
+[INFO] 2025-12-07 23:13:00 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16310
+[INFO] 2025-12-07 23:13:00 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134780286 HTTP/1.1" 200 6670
+[INFO] 2025-12-07 23:13:01 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6751
+[INFO] 2025-12-07 23:13:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15078
+[INFO] 2025-12-07 23:13:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16312
+[INFO] 2025-12-07 23:13:01 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134781657 HTTP/1.1" 200 6750
+[INFO] 2025-12-07 23:13:04 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6720
+[INFO] 2025-12-07 23:13:04 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15085
+[INFO] 2025-12-07 23:13:04 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16327
+[INFO] 2025-12-07 23:13:04 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134784212 HTTP/1.1" 200 6750
+[INFO] 2025-12-07 23:13:04 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6747
+[INFO] 2025-12-07 23:13:04 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15033
+[INFO] 2025-12-07 23:13:04 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16323
+[INFO] 2025-12-07 23:13:05 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134785090 HTTP/1.1" 200 6704
+[INFO] 2025-12-07 23:13:06 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15051
+[INFO] 2025-12-07 23:13:06 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16336
+[INFO] 2025-12-07 23:13:17 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/ HTTP/1.1" 200 10585
+[INFO] 2025-12-07 23:13:17 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15037
+[INFO] 2025-12-07 23:13:17 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16277
+[INFO] 2025-12-07 23:13:28 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15045
+[INFO] 2025-12-07 23:13:28 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16298
+[INFO] 2025-12-07 23:13:32 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/ HTTP/1.1" 200 10690
+[INFO] 2025-12-07 23:13:32 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-07 23:13:32 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3767
+[INFO] 2025-12-07 23:13:32 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16272
+[INFO] 2025-12-07 23:13:32 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37796
+[INFO] 2025-12-07 23:13:32 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6741
+[INFO] 2025-12-07 23:13:32 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15069
+[INFO] 2025-12-07 23:13:33 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6390
+[INFO] 2025-12-07 23:13:33 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6681
+[INFO] 2025-12-07 23:13:33 django.server log.log_message:249 - "GET /whatsappapi/campaigns/11/stats/ HTTP/1.1" 200 267
+[INFO] 2025-12-07 23:13:33 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-07 23:13:36 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16285
+[INFO] 2025-12-07 23:13:37 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15030
+[INFO] 2025-12-07 23:13:37 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16332
+[INFO] 2025-12-07 23:13:51 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 15051
+[INFO] 2025-12-07 23:13:52 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5371
+[INFO] 2025-12-07 23:13:57 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16314
+[INFO] 2025-12-07 23:13:57 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16252
+[INFO] 2025-12-07 23:13:58 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15046
+[INFO] 2025-12-07 23:13:58 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16341
+[INFO] 2025-12-07 23:13:58 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134838218 HTTP/1.1" 200 6659
+[INFO] 2025-12-07 23:13:58 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16326
+[INFO] 2025-12-07 23:13:59 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6732
+[INFO] 2025-12-07 23:13:59 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15065
+[INFO] 2025-12-07 23:13:59 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16326
+[INFO] 2025-12-07 23:13:59 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134839291 HTTP/1.1" 200 6711
+[INFO] 2025-12-07 23:14:01 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6698
+[INFO] 2025-12-07 23:14:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15025
+[INFO] 2025-12-07 23:14:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16302
+[INFO] 2025-12-07 23:14:02 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134841877 HTTP/1.1" 200 6733
+[INFO] 2025-12-07 23:14:03 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6649
+[INFO] 2025-12-07 23:14:03 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15040
+[INFO] 2025-12-07 23:14:03 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16318
+[INFO] 2025-12-07 23:14:03 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134843854 HTTP/1.1" 200 6675
+[INFO] 2025-12-07 23:14:04 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6692
+[INFO] 2025-12-07 23:14:04 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16307
+[INFO] 2025-12-07 23:14:04 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15066
+[INFO] 2025-12-07 23:14:04 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134844909 HTTP/1.1" 200 6714
+[INFO] 2025-12-07 23:14:06 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6709
+[INFO] 2025-12-07 23:14:06 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16323
+[INFO] 2025-12-07 23:14:06 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15014
+[INFO] 2025-12-07 23:14:06 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134846241 HTTP/1.1" 200 6698
+[INFO] 2025-12-07 23:14:10 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16261
+[INFO] 2025-12-07 23:14:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134850242 HTTP/1.1" 200 6676
+[INFO] 2025-12-07 23:14:14 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134854433 HTTP/1.1" 200 6715
+[INFO] 2025-12-07 23:14:18 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134858443 HTTP/1.1" 200 6742
+[INFO] 2025-12-07 23:14:22 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134862431 HTTP/1.1" 200 6724
+[INFO] 2025-12-07 23:14:26 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134866433 HTTP/1.1" 200 6695
+[INFO] 2025-12-07 23:14:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134870435 HTTP/1.1" 200 6686
+[INFO] 2025-12-07 23:14:34 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134874433 HTTP/1.1" 200 6739
+[INFO] 2025-12-07 23:14:38 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134878440 HTTP/1.1" 200 6698
+[INFO] 2025-12-07 23:14:42 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134882438 HTTP/1.1" 200 6723
+[INFO] 2025-12-07 23:14:46 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134886440 HTTP/1.1" 200 6730
+[INFO] 2025-12-07 23:14:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134890439 HTTP/1.1" 200 6664
+[INFO] 2025-12-07 23:14:54 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134894445 HTTP/1.1" 200 6705
+[INFO] 2025-12-07 23:14:58 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134898432 HTTP/1.1" 200 6708
+[INFO] 2025-12-07 23:15:02 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134902440 HTTP/1.1" 200 6682
+[INFO] 2025-12-07 23:15:06 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134906438 HTTP/1.1" 200 6648
+[INFO] 2025-12-07 23:15:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134910430 HTTP/1.1" 200 6720
+[INFO] 2025-12-07 23:15:19 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765134919453 HTTP/1.1" 200 6664
+[INFO] 2025-12-07 23:15:20 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15082
+[INFO] 2025-12-07 23:15:20 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16315
+[INFO] 2025-12-07 23:15:20 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5304
+[INFO] 2025-12-07 23:15:22 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5305
+[INFO] 2025-12-07 23:16:25 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5356
+[INFO] 2025-12-07 23:16:25 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5313
+[INFO] 2025-12-07 23:20:30 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-07 23:20:33 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14524
+[INFO] 2025-12-07 23:20:38 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:20:38 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3693
+[INFO] 2025-12-07 23:20:40 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16300
+[INFO] 2025-12-07 23:20:41 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6790
+[INFO] 2025-12-07 23:20:41 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37853
+[INFO] 2025-12-07 23:20:41 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16269
+[INFO] 2025-12-07 23:20:41 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15110
+[INFO] 2025-12-07 23:20:41 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6743
+[INFO] 2025-12-07 23:20:41 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6329
+[INFO] 2025-12-07 23:20:43 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15084
+[INFO] 2025-12-07 23:20:43 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16269
+[INFO] 2025-12-07 23:21:01 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/4/ HTTP/1.1" 200 90
+[INFO] 2025-12-07 23:21:34 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
+[INFO] 2025-12-07 23:21:36 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:21:41 whatsappapi.ai_draft ai_draft._generate_with_openai:121 - RAW AI OUTPUT:
+📣 *Exciting News, {first_name}!*
+
+We're thrilled to share something special with you! 🎉 
+
+Join our vibrant community and discover amazing opportunities that await you. 
+
+✅ Exclusive insights and tips  
+✅ Networking with like-minded individuals  
+✅ Special offers just for you  
+
+Don't miss out on the fun! Let’s embark on this journey together! 
+
+👉 *Join now:*
+https://example.com
+
+Looking forward to seeing you! 🌟
+==================================================
+[INFO] 2025-12-07 23:21:41 whatsappapi.ai_draft ai_draft.clean_and_structure_draft:399 - Draft cleanup complete. Length: 414 chars, Emojis: 3
+[INFO] 2025-12-07 23:21:41 whatsappapi.ai_draft ai_draft._generate_with_openai:127 - CLEANED OUTPUT:
+📣 *📢 *Exciting News*, {first_name}!*
+
+We're thrilled to share something special with you! 🎉 
+
+Join our vibrant community and discover amazing opportunities that await you. 
+
+✅ Exclusive insights and tips
+✅ Networking with like-minded individuals
+✅ Special offers just for you
+
+Don't miss out on the fun! Let’s embark on this journey together! 
+
+👉 *Join now:*
+https://example.com
+
+Looking forward to seeing you! 🌟
+==================================================
+[INFO] 2025-12-07 23:21:41 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=412
+[INFO] 2025-12-07 23:21:42 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:21:44 django.server log.log_message:249 - "POST /whatsappapi/ai-draft/ HTTP/1.1" 200 900
+[INFO] 2025-12-07 23:22:05 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=426
+[INFO] 2025-12-07 23:22:07 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:22:15 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
+[INFO] 2025-12-07 23:22:19 django.server log.log_message:249 - "POST /whatsappapi/send-test-message/ HTTP/1.1" 200 84
+[INFO] 2025-12-07 23:22:59 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
+[INFO] 2025-12-07 23:23:02 django.server log.log_message:249 - "POST /whatsappapi/send-test-message/ HTTP/1.1" 200 84
+[INFO] 2025-12-07 23:23:23 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
+[INFO] 2025-12-07 23:23:26 django.server log.log_message:249 - "POST /whatsappapi/send-test-message/ HTTP/1.1" 200 84
+[INFO] 2025-12-07 23:23:44 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
+[INFO] 2025-12-07 23:23:47 django.server log.log_message:249 - "POST /whatsappapi/send-test-message/ HTTP/1.1" 200 84
+[INFO] 2025-12-07 23:24:42 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
+[INFO] 2025-12-07 23:24:46 django.server log.log_message:249 - "POST /whatsappapi/send-test-message/ HTTP/1.1" 200 84
+[INFO] 2025-12-07 23:24:48 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 15086
+[INFO] 2025-12-07 23:24:49 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16315
+[INFO] 2025-12-07 23:24:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15110
+[INFO] 2025-12-07 23:24:49 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765135489511 HTTP/1.1" 200 6671
+[INFO] 2025-12-07 23:24:52 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6697
+[INFO] 2025-12-07 23:24:52 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16288
+[INFO] 2025-12-07 23:24:52 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15054
+[INFO] 2025-12-07 23:24:52 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765135492286 HTTP/1.1" 200 6688
+[INFO] 2025-12-07 23:24:53 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6695
+[INFO] 2025-12-07 23:24:53 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15032
+[INFO] 2025-12-07 23:24:53 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16245
+[INFO] 2025-12-07 23:24:53 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765135493477 HTTP/1.1" 200 6746
+[INFO] 2025-12-07 23:24:55 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 15048
+[INFO] 2025-12-07 23:24:55 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16327
+[INFO] 2025-12-07 23:24:55 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16265
+[INFO] 2025-12-07 23:24:56 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15097
+[INFO] 2025-12-07 23:24:56 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16321
+[INFO] 2025-12-07 23:25:31 django.server log.log_message:249 - "GET /userpanel/pricing/ HTTP/1.1" 200 5305
+[INFO] 2025-12-07 23:25:51 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16273
+[INFO] 2025-12-07 23:27:28 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37716
+[INFO] 2025-12-07 23:27:28 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16312
+[INFO] 2025-12-07 23:27:28 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15039
+[INFO] 2025-12-07 23:34:05 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16249
+[INFO] 2025-12-07 23:34:06 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3708
+[INFO] 2025-12-07 23:34:08 django.server log.log_message:249 - "GET /userpanel/logout/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:34:08 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14476
+[INFO] 2025-12-07 23:34:10 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 200 8548
+[INFO] 2025-12-07 23:34:13 django.server log.log_message:249 - "GET /social-auth/login/google-oauth2/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:34:22 django.server log.log_message:249 - "GET /social-auth/complete/google-oauth2/?state=YzvZFh7ZbYf4jjcyVPOO7Adgu1vR5Gjs&code=4%2F0ATX87lP7xXr6GMbwxKseBlN2zflP27y46Ho-x2B0iUUc15p6dZubQk8ccuUBp3Kf-rQWbA&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:34:22 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 4200
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 14928
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3872
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 5967
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 14924
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6742
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14888
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 5483
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/create-session/ HTTP/1.1" 200 15397
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15160
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14801
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 14911
+[INFO] 2025-12-07 23:34:25 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:35:00 whatsappapi.views views.create_session:288 - 🔗 Auto-generated webhook URL for user 2: http://127.0.0.1:8000/whatsappapi/webhook/2/
+[INFO] 2025-12-07 23:35:03 django.server log.log_message:249 - "POST /whatsappapi/create-session/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:35:04 whatsappapi.views views.connect_session:346 - QR code fetched for session 39275: Success
+[INFO] 2025-12-07 23:35:05 django.server log.log_message:249 - "GET /whatsappapi/connect/5/ HTTP/1.1" 200 9945
+[INFO] 2025-12-07 23:35:05 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14805
+[INFO] 2025-12-07 23:35:05 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:35:05 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15916
+[INFO] 2025-12-07 23:35:05 django.server log.log_message:249 - "GET /whatsappapi/create-session/ HTTP/1.1" 200 15394
+[INFO] 2025-12-07 23:35:06 django.server log.log_message:249 - "POST /whatsappapi/session/5/status/ HTTP/1.1" 200 540
+[INFO] 2025-12-07 23:35:10 django.server log.log_message:249 - "POST /whatsappapi/session/5/status/ HTTP/1.1" 200 489
+[INFO] 2025-12-07 23:35:15 django.server log.log_message:249 - "POST /whatsappapi/session/5/status/ HTTP/1.1" 200 516
+[INFO] 2025-12-07 23:35:20 django.server log.log_message:249 - "POST /whatsappapi/session/5/status/ HTTP/1.1" 200 491
+[INFO] 2025-12-07 23:35:26 django.server log.log_message:249 - "POST /whatsappapi/session/5/status/ HTTP/1.1" 200 480
+[INFO] 2025-12-07 23:35:32 django.server log.log_message:249 - "POST /whatsappapi/session/5/status/ HTTP/1.1" 200 580
+[INFO] 2025-12-07 23:35:34 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15991
+[INFO] 2025-12-07 23:35:34 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14811
+[INFO] 2025-12-07 23:35:34 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37520
+[INFO] 2025-12-07 23:35:34 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16030
+[INFO] 2025-12-07 23:35:37 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14843
+[INFO] 2025-12-07 23:35:37 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15934
+[INFO] 2025-12-07 23:35:47 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 14858
+[INFO] 2025-12-07 23:35:47 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 14886
+[INFO] 2025-12-07 23:35:47 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 14826
+[INFO] 2025-12-07 23:35:47 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15985
+[WARNING] 2025-12-07 23:35:48 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2055
+[INFO] 2025-12-07 23:35:48 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 14847
+[INFO] 2025-12-07 23:36:11 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 126
+[INFO] 2025-12-07 23:36:12 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?list=5 HTTP/1.1" 200 37672
+[INFO] 2025-12-07 23:36:12 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15074
+[INFO] 2025-12-07 23:36:12 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15983
+[INFO] 2025-12-07 23:36:12 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/5/ HTTP/1.1" 200 166
+[INFO] 2025-12-07 23:36:30 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
+[INFO] 2025-12-07 23:36:32 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-07 23:36:33 django.server log.log_message:249 - "POST /whatsappapi/api/check-moderation/ HTTP/1.1" 200 168
+[INFO] 2025-12-07 23:36:37 whatsappapi.views views.send_campaign:588 - Using session 5 (+919008715802) from form submission
+[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:821 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\8d74e529-69f8-4d68-99bc-8ad904f6f629_PASONS 26 & WEEKEND DEAL.pdf
+[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:929 - ℹ️ STANDARD MODE for campaign 'test_campign'
+[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:930 -    Will use fixed delays based on session protection setting:
+[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:931 -    - Protection ON: 5s
+[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:932 -    - Protection OFF: 3s
+[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:933 -    No batching, no cooldowns
+[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:1026 - Campaign 'test_campign' queued for background processing (Task ID: 852137b70a804b6fab8788640c4a4f43)
+[INFO] 2025-12-07 23:36:39 django.server log.log_message:249 - "POST /whatsappapi/send-campaign/ HTTP/1.1" 200 38272
+[INFO] 2025-12-07 23:36:39 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37559
+[INFO] 2025-12-07 23:36:39 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15028
+[INFO] 2025-12-07 23:36:39 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15929
+[INFO] 2025-12-07 23:36:41 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15035
+[INFO] 2025-12-07 23:36:41 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16021
+[INFO] 2025-12-07 23:36:41 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136201754 HTTP/1.1" 200 6282
+[INFO] 2025-12-07 23:36:43 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16003
+[INFO] 2025-12-07 23:36:43 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15046
+[INFO] 2025-12-07 23:36:43 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136203629 HTTP/1.1" 200 6324
+[INFO] 2025-12-07 23:36:45 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6329
+[INFO] 2025-12-07 23:36:45 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15075
+[INFO] 2025-12-07 23:36:45 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15993
+[INFO] 2025-12-07 23:36:45 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136205507 HTTP/1.1" 200 6372
+[INFO] 2025-12-07 23:36:49 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136209515 HTTP/1.1" 200 6351
+[INFO] 2025-12-07 23:36:53 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136213508 HTTP/1.1" 200 6365
+[INFO] 2025-12-07 23:36:53 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6292
+[INFO] 2025-12-07 23:36:53 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-07 23:36:53 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3936
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15940
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37535
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6759
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15016
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6311
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6280
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-07 23:36:54 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136214243 HTTP/1.1" 200 6287
+[INFO] 2025-12-07 23:36:58 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136218244 HTTP/1.1" 200 6358
+[INFO] 2025-12-07 23:37:02 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136222250 HTTP/1.1" 200 6280
+[INFO] 2025-12-07 23:37:06 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136226252 HTTP/1.1" 200 6290
+[INFO] 2025-12-07 23:37:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136230249 HTTP/1.1" 200 6332
+[INFO] 2025-12-07 23:37:14 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136234249 HTTP/1.1" 200 6315
+[INFO] 2025-12-07 23:37:18 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136238248 HTTP/1.1" 200 6350
+[INFO] 2025-12-07 23:37:22 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136242251 HTTP/1.1" 200 6308
+[INFO] 2025-12-07 23:37:26 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136246252 HTTP/1.1" 200 6367
+[INFO] 2025-12-07 23:37:29 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6321
+[INFO] 2025-12-07 23:37:29 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-07 23:37:29 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3921
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15992
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37533
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6302
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15023
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6817
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6363
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136250286 HTTP/1.1" 200 6319
+[INFO] 2025-12-07 23:37:30 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-07 23:37:34 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136254291 HTTP/1.1" 200 6370
+[INFO] 2025-12-07 23:37:38 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136258290 HTTP/1.1" 200 6297
+[INFO] 2025-12-07 23:37:42 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136262288 HTTP/1.1" 200 6303
+[INFO] 2025-12-07 23:37:46 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136266290 HTTP/1.1" 200 6371
+[INFO] 2025-12-07 23:37:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136270291 HTTP/1.1" 200 6336
+[INFO] 2025-12-07 23:37:54 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136274287 HTTP/1.1" 200 6341
+[INFO] 2025-12-07 23:37:58 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136278287 HTTP/1.1" 200 6378
+[INFO] 2025-12-07 23:38:02 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136282291 HTTP/1.1" 200 6372
+[INFO] 2025-12-07 23:38:06 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136286292 HTTP/1.1" 200 6361
+[INFO] 2025-12-07 23:38:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136290292 HTTP/1.1" 200 6307
+[INFO] 2025-12-07 23:38:13 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6285
+[INFO] 2025-12-07 23:38:13 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3952
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 15967
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 37529
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 6801
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15109
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6351
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 6375
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136294268 HTTP/1.1" 200 6306
+[INFO] 2025-12-07 23:38:14 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-07 23:38:18 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136298279 HTTP/1.1" 200 6288
+[INFO] 2025-12-07 23:38:22 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136302283 HTTP/1.1" 200 6359
+[INFO] 2025-12-07 23:38:26 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136306272 HTTP/1.1" 200 6332
+[INFO] 2025-12-07 23:38:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765136310272 HTTP/1.1" 200 6311
+[INFO] 2025-12-07 23:38:31 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 15080
+[INFO] 2025-12-07 23:38:31 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 15056
+[INFO] 2025-12-07 23:38:34 django.server log.log_message:249 - "GET /userpanel/user-guide/ HTTP/1.1" 200 8534
+[INFO] 2025-12-07 23:42:52 django.server log.log_message:249 - "GET /userpanel/user-guide/ HTTP/1.1" 200 8815
+[INFO] 2025-12-07 23:42:52 django.server log.log_message:249 - "GET /static/css/loading-animations.css HTTP/1.1" 200 7903
+[INFO] 2025-12-07 23:42:52 django.server log.log_message:249 - "GET /static/css/userpanel.css HTTP/1.1" 200 7116
+[INFO] 2025-12-07 23:42:52 django.server log.log_message:249 - "GET /static/js/timezone_detector.js HTTP/1.1" 200 601
+[INFO] 2025-12-07 23:42:52 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-07 23:42:52 django.server log.log_message:249 - "GET /static/js/loading-manager.js HTTP/1.1" 200 19806
+[INFO] 2025-12-07 23:42:52 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-07 23:45:58 django.server log.log_message:249 - "GET /userpanel/user-guide/ HTTP/1.1" 200 9601
+[INFO] 2025-12-07 23:46:45 django.server log.log_message:249 - "GET /userpanel/logout/ HTTP/1.1" 302 0
+[INFO] 2025-12-07 23:46:45 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14499
+[INFO] 2025-12-07 23:46:55 django.server log.log_message:249 - "GET /faqs/ HTTP/1.1" 200 9118
+[INFO] 2025-12-07 23:50:56 django.server log.log_message:249 - "GET /faqs/ HTTP/1.1" 200 10278
+[WARNING] 2025-12-07 23:52:09 django.server log.log_message:249 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 2034
+[INFO] 2025-12-07 23:53:15 django.server log.log_message:249 - "GET /faqs/ HTTP/1.1" 200 10281
+[INFO] 2025-12-07 23:54:03 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14462
