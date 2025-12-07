@@ -998,7 +998,9 @@ def send_campaign(request):
                     request.user, session,
                     queue_success_modal=True,
                     queue_success_message=f"Campaign '{campaign_name}' has been started in the background (local fallback).",
-                    queued_campaign=campaign
+                    queued_campaign=campaign,
+                    subscription_is_active=subscription_is_active,
+                    subscription=subscription
                 ))
             except Exception as e2:
                 logger.error(
@@ -1017,7 +1019,7 @@ def send_campaign(request):
                     campaign.save(update_fields=['status'])
                 except Exception:
                     pass
-                return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session))
+                return render(request, 'whatsappapi/send_campaign.html', _get_send_campaign_context(request.user, session, subscription_is_active=subscription_is_active, subscription=subscription))
         
         # Save task ID to campaign
         campaign.task_id = task_id
@@ -1030,7 +1032,9 @@ def send_campaign(request):
             request.user, session,
             queue_success_modal=True,
             queue_success_message=f"Campaign '{campaign_name}' has been queued! It will be sent in the background.",
-            queued_campaign=campaign
+            queued_campaign=campaign,
+            subscription_is_active=subscription_is_active,
+            subscription=subscription
         ))
     
     # GET request - show form
