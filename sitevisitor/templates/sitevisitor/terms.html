@@ -1,79 +1,214 @@
 {% extends 'sitevisitor/base.html' %}
-{% block title %}Terms of Service - WA Campaign Sender WhatsApp Extension{% endblock %}
-{% block description %}Review our terms of service for WhatsApp marketing extension. User responsibilities, acceptable use policy, privacy commitment, and service guidelines.{% endblock %}
+{% block title %}Terms of Service - WA Campaign Sender{% endblock %}
+{% block description %}Terms of Service for WA Campaign Sender. User responsibilities, acceptable use policy, and service guidelines.{% endblock %}
 
 {% block content %}
-<!-- ===== Terms of Service Page (Readable, Centered Headings, Gray Body Text) ===== -->
-<div class="bg-gray-50 font-sans leading-relaxed tracking-normal py-10">
+<!-- ===== Terms of Service Page ===== -->
+<div class="bg-gray-50 min-h-screen py-16 mt-16">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="max-w-3xl mx-auto rounded-2xl bg-white/90 border border-gray-200 shadow-lg backdrop-blur-sm p-8 sm:p-10 lg:p-12">
+    <div class="max-w-3xl mx-auto">
+      
       <!-- Header -->
-      <header class="text-center mb-10">
-        <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl">Terms of Service</h1>
-        <p class="mt-3 text-sm text-gray-500 italic">
-          Last updated:
-          <time datetime="2025-07-22">July 22, 2025</time>
-        </p>
-      </header>
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">TERMS OF SERVICE</h1>
+        <p class="text-gray-500 text-sm">Effective Date: December 8, 2025</p>
+      </div>
 
-      <!-- Body -->
-      <article class="prose prose-gray lg:prose-lg max-w-none mx-auto text-gray-700">
-        <h2 class="!text-center">1. Agreement to Terms</h2>
-        <p class="text-justify">By accessing or using <strong>WA&nbsp;Campaign&nbsp;Sender</strong> (the "<strong>Service</strong>"), you agree to be bound by these Terms of Service ("<strong>Terms</strong>"). If you do not agree to these Terms, you may not use the Service. These Terms constitute a legally binding agreement between you and us.</p>
-
-        <h2 class="!text-center">2. The Service</h2>
-        <p class="text-justify">WA&nbsp;Campaign&nbsp;Sender provides a browser extension and web platform designed to facilitate the sending of personalized messages via WhatsApp. The Service is an unofficial tool and is not affiliated with, endorsed by, or in any way officially connected with WhatsApp LLC or any of its affiliates.</p>
+      <!-- Main Content -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 sm:p-10">
         
-        <h2 class="!text-center">3. Data Privacy Commitment</h2>
-        <p class="text-justify">We are committed to protecting your privacy with minimal data collection:</p>
-        <ul class="list-disc pl-6 space-y-2">
-          <li><strong>Limited Data Collection</strong>: We collect only your name, email address, and mobile number for authentication purposes.</li>
-          <li><strong>Local Data Storage</strong>: All your campaign data, contacts, and message templates are stored exclusively on your device and never transmitted to our servers.</li>
-          <li><strong>No Tracking</strong>: We do not track your device information, location, or browsing habits.</li>
-          <li><strong>No Data Sharing</strong>: We do not sell, rent, or share your personal information with any third parties.</li>
-        </ul>
+        <!-- Section 1 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">1. AGREEMENT TO TERMS</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            By accessing or using WA Campaign Sender ("Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use the Service.
+          </p>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            These Terms constitute a legally binding agreement between you ("User," "you," or "your") and WA Campaign Sender ("Company," "we," "us," or "our").
+          </p>
+        </section>
 
-        <h2 class="!text-center">4. User Responsibilities & Acceptable Use</h2>
-        <p class="text-justify">You are solely responsible for your use of the Service and the content you send. By using the Service, you agree to:</p>
-        <ul class="list-disc pl-6 space-y-2">
-          <li><strong>Comply with WhatsApp's Terms of Service:</strong> Your use of our Service must not violate the <a href="https://www.whatsapp.com/legal/terms-of-service" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:underline">official WhatsApp Terms of Service</a>. Violating their terms may result in your WhatsApp account being restricted or permanently banned.</li>
-          <li><strong>Anti-Spam Policy:</strong> Strictly refrain from sending spam, unsolicited promotional messages, or any form of communication that could be considered harassment. You must have prior consent from recipients before contacting them via the Service.</li>
-          <li><strong>Lawful Use:</strong> Use the Service only for lawful purposes and in compliance with all applicable local, state, national, and international laws and regulations.</li>
-          <li><strong>Account Security:</strong> Safeguard your account credentials and be fully responsible for all activities that occur under your account.</li>
-        </ul>
+        <!-- Section 2 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">2. DESCRIPTION OF SERVICE</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            WA Campaign Sender is a cloud-based WhatsApp marketing platform that enables users to send bulk messages and campaigns through the WhatsApp API.
+          </p>
+          <p class="text-gray-500 text-xs mt-4 italic">
+            Note: WA Campaign Sender is an independent third-party service. WhatsApp and Meta are trademarks of their respective owners.
+          </p>
+        </section>
 
-        <h2 class="!text-center">5. Prohibited Activities</h2>
-        <p class="text-justify">You are expressly prohibited from:</p>
-        <ul class="list-disc pl-6 space-y-2">
-          <li>Using the Service for any illegal, fraudulent, or malicious activities.</li>
-          <li>Sending messages that are defamatory, obscene, threatening, or otherwise objectionable.</li>
-          <li>Reverse-engineering, decompiling, or attempting to discover the source code of the Service.</li>
-          <li>Distributing or reselling the Service without our express written permission.</li>
-        </ul>
+        <!-- Section 3 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">3. ELIGIBILITY</h2>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            You must be at least 18 years of age to use this Service. By using the Service, you represent and warrant that you have the legal capacity to enter into this agreement and that you will use the Service in compliance with all applicable laws.
+          </p>
+        </section>
 
-        <h2 class="!text-center">6. Disclaimer of Warranties & Limitation of Liability</h2>
-        <p class="text-justify">The Service is provided on an "AS IS" and "AS AVAILABLE" basis. We make no warranties, express or implied, regarding its reliability, security, or performance.</p>
-        <p class="text-justify"><strong>WA&nbsp;Campaign&nbsp;Sender is not responsible for any consequences resulting from your use of the Service, including but not limited to the temporary or permanent blocking of your WhatsApp account. You use the Service at your own risk.</strong></p>
-        <p class="text-justify">In no event shall we be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the Service.</p>
+        <!-- Section 4 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">4. USER RESPONSIBILITIES</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">You are solely responsible for:</p>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-2">
+            <li>• <span class="font-medium">Compliance with WhatsApp Terms</span> — Your use must not violate WhatsApp's Terms of Service. Violations may result in your WhatsApp account being restricted or permanently banned.</li>
+            <li>• <span class="font-medium">Consent-Based Messaging</span> — You must have prior consent from recipients before sending messages. Unsolicited messages are strictly prohibited.</li>
+            <li>• <span class="font-medium">Message Content</span> — All content you send through the Service, including text, images, and attachments.</li>
+            <li>• <span class="font-medium">Account Security</span> — Maintaining the confidentiality of your account credentials and all activities under your account.</li>
+            <li>• <span class="font-medium">Legal Compliance</span> — Using the Service in accordance with all applicable local, national, and international laws.</li>
+          </ul>
+        </section>
 
-        <h2 class="!text-center">7. Payments</h2>
-        <p class="text-justify">Certain features of the Service require payment. By purchasing, you agree to pay all applicable fees. All payments are one-time transactions processed through PayPal. We do not store your payment information, and there is no automatic renewal system. When your purchased period expires, you will need to manually renew if you wish to continue using the service.</p>
-        
-        <h2 class="!text-center">8. No Refund Policy</h2>
-        <p class="text-justify">All sales are final, and we do not offer refunds once payment has been processed. Please carefully review our service features and pricing before making a purchase decision. In extremely rare cases of accidental purchase (reported within 24 hours and before any service usage), we may consider a refund at our sole discretion.</p>
+        <!-- Section 5 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">5. PROHIBITED ACTIVITIES</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">You are expressly prohibited from:</p>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-2">
+            <li>• Sending spam, unsolicited promotional messages, or bulk messages without recipient consent</li>
+            <li>• Sending content that is illegal, fraudulent, defamatory, obscene, threatening, or harassing</li>
+            <li>• Using the Service for phishing, scams, or any deceptive practices</li>
+            <li>• Distributing malware, viruses, or harmful code through messages</li>
+            <li>• Impersonating any person or entity</li>
+            <li>• Reverse-engineering, decompiling, or attempting to extract the source code</li>
+            <li>• Reselling, sublicensing, or redistributing the Service without written permission</li>
+            <li>• Circumventing any security measures or access controls</li>
+          </ul>
+        </section>
 
-        <h2 class="!text-center">9. Termination</h2>
-        <p class="text-justify">We reserve the right to suspend or terminate your access to the Service at any time, without notice, for any reason, including for a breach of these Terms. Upon termination, your right to use the Service will immediately cease.</p>
+        <!-- Section 6 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">6. CONTENT MODERATION</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            To maintain platform integrity and comply with applicable laws, we reserve the right to:
+          </p>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-1">
+            <li>• Monitor and review message content using automated systems</li>
+            <li>• Block or flag content that violates these Terms or applicable laws</li>
+            <li>• Suspend or terminate accounts that engage in prohibited activities</li>
+            <li>• Report illegal activities to appropriate authorities</li>
+          </ul>
+        </section>
 
-        <h2 class="!text-center">10. Changes to Terms</h2>
-        <p class="text-justify">We may modify these Terms at any time. We will notify you of significant changes by posting the new Terms on our website or through the Service. Your continued use of the Service after such changes constitutes your acceptance of the new Terms.</p>
+        <!-- Section 7 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">7. SUBSCRIPTION AND PAYMENTS</h2>
+          
+          <h3 class="text-sm font-semibold text-gray-800 uppercase mb-3">7.1 Fees</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            Certain features require a paid subscription. By subscribing, you agree to pay all applicable fees as displayed at the time of purchase.
+          </p>
 
-        <h2 class="!text-center">11. Data Security</h2>
-        <p class="text-justify">We implement industry-standard security measures to protect your limited authentication data (name, email, mobile number). Since your campaign data and contacts remain exclusively on your device, they are never exposed to security risks on our servers. You are responsible for maintaining the security of your device and browser to protect your locally stored data.</p>
-        
-        <h2 id="contact" class="!text-center">12. Contact Us</h2>
-        <p class="text-center">If you have any questions about these Terms, please email us at <a href="mailto:hi@wacampaignsender.com" class="text-primary-600 hover:underline">hi@wacampaignsender.com</a>.</p>
-      </article>
+          <h3 class="text-sm font-semibold text-gray-800 uppercase mb-3">7.2 Payment Processing</h3>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            Payments are processed through third-party providers (PayPal, Razorpay). We do not store your payment card information. Subscription periods and pricing are as specified at checkout.
+          </p>
+
+          <h3 class="text-sm font-semibold text-gray-800 uppercase mb-3">7.3 Refund Policy</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            <strong>All sales are final.</strong> We do not offer refunds once payment has been processed. Please review our features and pricing carefully before purchase. In exceptional circumstances (accidental purchase reported within 24 hours with no service usage), refunds may be considered at our sole discretion.
+          </p>
+        </section>
+
+        <!-- Section 8 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">8. DISCLAIMER OF WARRANTIES</h2>
+          <div class="bg-gray-100 border border-gray-300 rounded-lg p-4">
+            <p class="text-gray-700 text-sm leading-relaxed">
+              THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+            </p>
+          </div>
+          <p class="text-gray-600 text-sm leading-relaxed mt-4">
+            We do not warrant that the Service will be uninterrupted, error-free, or secure. We make no guarantees regarding message delivery rates or WhatsApp account safety.
+          </p>
+        </section>
+
+        <!-- Section 9 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">9. LIMITATION OF LIABILITY</h2>
+          <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+            <p class="text-red-800 text-sm leading-relaxed">
+              <strong>WA CAMPAIGN SENDER IS NOT RESPONSIBLE FOR ANY CONSEQUENCES RESULTING FROM YOUR USE OF THE SERVICE, INCLUDING BUT NOT LIMITED TO THE TEMPORARY OR PERMANENT BLOCKING, RESTRICTION, OR BANNING OF YOUR WHATSAPP ACCOUNT. YOU USE THE SERVICE AT YOUR OWN RISK.</strong>
+            </p>
+          </div>
+          <p class="text-gray-600 text-sm leading-relaxed mt-4">
+            In no event shall we be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or business opportunities, arising from your use of the Service.
+          </p>
+        </section>
+
+        <!-- Section 10 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">10. INDEMNIFICATION</h2>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            You agree to indemnify, defend, and hold harmless WA Campaign Sender and its officers, directors, employees, and agents from any claims, damages, losses, or expenses (including legal fees) arising from your use of the Service, violation of these Terms, or infringement of any third-party rights.
+          </p>
+        </section>
+
+        <!-- Section 11 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">11. TERMINATION</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            We reserve the right to suspend or terminate your access to the Service at any time, with or without notice, for any reason, including:
+          </p>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-1">
+            <li>• Violation of these Terms</li>
+            <li>• Suspected fraudulent or illegal activity</li>
+            <li>• Non-payment of fees</li>
+            <li>• At our sole discretion for any other reason</li>
+          </ul>
+          <p class="text-gray-600 text-sm leading-relaxed mt-4">
+            Upon termination, your right to use the Service ceases immediately. We are not liable for any loss of data or access resulting from termination.
+          </p>
+        </section>
+
+        <!-- Section 12 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">12. INTELLECTUAL PROPERTY</h2>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            All content, features, and functionality of the Service, including but not limited to text, graphics, logos, and software, are the exclusive property of WA Campaign Sender and are protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, or create derivative works without our prior written consent.
+          </p>
+        </section>
+
+        <!-- Section 13 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">13. GOVERNING LAW</h2>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles. Any disputes arising from these Terms or your use of the Service shall be resolved through binding arbitration or in the courts of competent jurisdiction.
+          </p>
+        </section>
+
+        <!-- Section 14 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">14. CHANGES TO TERMS</h2>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            We reserve the right to modify these Terms at any time. Changes will be posted on this page with an updated effective date. For material changes, we will provide notice via email or through the Service. Your continued use of the Service after changes constitutes acceptance of the modified Terms.
+          </p>
+        </section>
+
+        <!-- Section 15 -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">15. SEVERABILITY</h2>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            If any provision of these Terms is found to be unenforceable or invalid, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall remain in full force and effect.
+          </p>
+        </section>
+
+        <!-- Section 16 -->
+        <section>
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">16. CONTACT US</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            If you have questions or concerns about these Terms of Service, please contact us:
+          </p>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <p class="text-gray-700 text-sm">
+              <strong>WA Campaign Sender</strong><br>
+              Email: <a href="mailto:hi@wacampaignsender.com" class="text-blue-600 hover:underline">hi@wacampaignsender.com</a>
+            </p>
+          </div>
+        </section>
+
+      </div>
+
     </div>
   </div>
 </div>

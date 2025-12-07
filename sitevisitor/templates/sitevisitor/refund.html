@@ -1,224 +1,177 @@
 {% extends 'sitevisitor/base.html' %}
 {% load static %}
 
-{% block title %}30 Days Money Back Guarantee - WA Campaign Sender{% endblock %}
-{% block description %}WA Campaign Sender offers a 30 days money back guarantee. If you're not satisfied, we'll refund your money, no questions asked.{% endblock %}
+{% block title %}Refund Policy - WA Campaign Sender{% endblock %}
+{% block description %}WA Campaign Sender refund policy. We believe in fair treatment and will consider refunds for genuine cases.{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-12">
-    <div class="max-w-4xl mx-auto px-6">
-        <!-- Header with Money Back Guarantee -->
-        <div class="text-center mb-12">
-            <div class="inline-block mb-6">
-                <div class="bg-gradient-to-r from-green-100 to-emerald-100 rounded-full p-4">
-                    <i class="ri-money-dollar-circle-line text-5xl text-green-600"></i>
-                </div>
+<div class="bg-gray-50 min-h-screen py-16 mt-16">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      
+      <!-- Header -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2">REFUND POLICY</h1>
+        <p class="text-gray-500 text-sm">Effective Date: December 8, 2025</p>
+      </div>
+
+      <!-- Main Content -->
+      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 sm:p-10">
+        
+        <!-- Our Approach -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">OUR COMMITMENT</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            At WA Campaign Sender, we believe in building trust through fair and transparent policies. We understand that sometimes things don't work out as expected, and we're committed to treating every customer with respect and understanding.
+          </p>
+          <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p class="text-green-800 text-sm font-medium">
+              <strong>Our Promise:</strong> For genuine cases, we will process your refund — no unnecessary questions, no hassle.
+            </p>
+          </div>
+        </section>
+
+        <!-- Eligibility -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">REFUND ELIGIBILITY</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            We consider refund requests on a case-by-case basis. The following situations are generally eligible for a refund:
+          </p>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-2">
+            <li>• <span class="font-medium">Technical Issues</span> — Service not functioning as described and our team is unable to resolve the issue</li>
+            <li>• <span class="font-medium">Accidental Purchase</span> — Duplicate payment or unintended subscription (reported within 48 hours)</li>
+            <li>• <span class="font-medium">Service Unavailability</span> — Extended downtime preventing you from using the platform</li>
+            <li>• <span class="font-medium">Billing Errors</span> — Incorrect charges or payment processing issues</li>
+          </ul>
+        </section>
+
+        <!-- Refund Window -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">REFUND WINDOW</h2>
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <p class="text-blue-800 text-sm">
+              <strong>7-Day Window:</strong> Refund requests should be submitted within 7 days of purchase for fastest processing.
+            </p>
+          </div>
+          <p class="text-gray-600 text-sm leading-relaxed">
+            Requests made after 7 days will still be reviewed, but approval depends on the specific circumstances and usage of the service.
+          </p>
+        </section>
+
+        <!-- How to Request -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">HOW TO REQUEST A REFUND</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            To request a refund, please follow these simple steps:
+          </p>
+          <ol class="text-gray-600 text-sm leading-relaxed ml-4 space-y-3">
+            <li class="flex items-start">
+              <span class="bg-gray-800 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold mr-3 mt-0.5 flex-shrink-0">1</span>
+              <span>Email us at <a href="mailto:hi@wacampaignsender.com" class="text-blue-600 hover:underline font-medium">hi@wacampaignsender.com</a> with subject line "Refund Request"</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-gray-800 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold mr-3 mt-0.5 flex-shrink-0">2</span>
+              <span>Include your registered email address and date of purchase</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-gray-800 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold mr-3 mt-0.5 flex-shrink-0">3</span>
+              <span>Briefly describe the reason for your request</span>
+            </li>
+            <li class="flex items-start">
+              <span class="bg-gray-800 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-semibold mr-3 mt-0.5 flex-shrink-0">4</span>
+              <span>Our team will review and respond within 24-48 hours</span>
+            </li>
+          </ol>
+        </section>
+
+        <!-- Processing Time -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">PROCESSING TIME</h2>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-1">
+            <li>• <span class="font-medium">Review Time</span> — 24-48 hours from request submission</li>
+            <li>• <span class="font-medium">Refund Processing</span> — 5-7 business days after approval</li>
+            <li>• <span class="font-medium">Payment Method</span> — Refunds are issued to the original payment method (PayPal or Razorpay)</li>
+          </ul>
+        </section>
+
+        <!-- Non-Refundable -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">NON-REFUNDABLE SITUATIONS</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            While we strive to be fair, the following situations are generally not eligible for refunds:
+          </p>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-1">
+            <li>• WhatsApp account restrictions or bans (not within our control)</li>
+            <li>• Change of mind after extensive use of the service</li>
+            <li>• Failure to read service features before purchase</li>
+            <li>• Violation of our Terms of Service leading to account suspension</li>
+          </ul>
+        </section>
+
+        <!-- Our Promise -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">OUR PROMISE TO YOU</h2>
+          <div class="space-y-3">
+            <div class="flex items-start">
+              <i class="ri-check-line text-green-600 mr-3 mt-0.5 text-lg"></i>
+              <p class="text-gray-600 text-sm"><strong class="text-gray-800">Fair Treatment</strong> — Every request is reviewed individually with understanding</p>
             </div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">30 Days Money Back Guarantee</h1>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">We're so confident in our service that we offer a <span class="font-bold text-green-600">100% money back guarantee</span> for the first 30 days. If you're not completely satisfied, we'll refund your entire payment, no questions asked.</p>
+            <div class="flex items-start">
+              <i class="ri-check-line text-green-600 mr-3 mt-0.5 text-lg"></i>
+              <p class="text-gray-600 text-sm"><strong class="text-gray-800">Quick Response</strong> — We respond to all refund requests within 24-48 hours</p>
+            </div>
+            <div class="flex items-start">
+              <i class="ri-check-line text-green-600 mr-3 mt-0.5 text-lg"></i>
+              <p class="text-gray-600 text-sm"><strong class="text-gray-800">No Hidden Fees</strong> — Approved refunds are processed in full, no deductions</p>
+            </div>
+            <div class="flex items-start">
+              <i class="ri-check-line text-green-600 mr-3 mt-0.5 text-lg"></i>
+              <p class="text-gray-600 text-sm"><strong class="text-gray-800">Genuine Support</strong> — We'd rather solve your problem than lose you as a customer</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Alternative Solutions -->
+        <section class="mb-10">
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">BEFORE REQUESTING A REFUND</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            If you're experiencing issues with our service, please reach out to our support team first. Many problems can be resolved quickly:
+          </p>
+          <ul class="text-gray-600 text-sm leading-relaxed ml-4 space-y-1">
+            <li>• Technical issues can often be fixed within hours</li>
+            <li>• Our team can guide you through features you may have missed</li>
+            <li>• We may be able to offer alternative solutions that work better for you</li>
+          </ul>
+        </section>
+
+        <!-- Contact -->
+        <section>
+          <h2 class="text-lg font-bold text-gray-900 uppercase tracking-wide mb-4">CONTACT US</h2>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            For refund requests or any questions about this policy:
+          </p>
+          <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <p class="text-gray-700 text-sm">
+              <strong>WA Campaign Sender</strong><br>
+              Email: <a href="mailto:hi@wacampaignsender.com" class="text-blue-600 hover:underline">hi@wacampaignsender.com</a><br>
+              <span class="text-gray-500 text-xs">We typically respond within 24 hours</span>
+            </p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Related Links -->
+      <div class="text-center mt-8">
+        <p class="text-gray-500 text-sm mb-3">Related Policies:</p>
+        <div class="space-x-4 text-sm">
+          <a href="{% url 'sitevisitor:terms' %}" class="text-blue-600 hover:underline">Terms of Service</a>
+          <span class="text-gray-300">|</span>
+          <a href="{% url 'sitevisitor:privacy' %}" class="text-blue-600 hover:underline">Privacy Policy</a>
         </div>
+      </div>
 
-        <!-- Main Content -->
-        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
-            <!-- 30 Days Money Back Guarantee -->
-            <div class="mb-8 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-8 border-2 border-green-300">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
-                        <i class="ri-check-double-line text-2xl text-white"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900">Money Back Guarantee</h2>
-                </div>
-                <p class="text-gray-700 leading-relaxed mb-4">
-                    <span class="font-bold text-lg text-green-600">We offer a full 30-day money back guarantee</span> on all WhatsApp API subscription plans. If you purchase a plan and are not completely satisfied with our service within the first 30 days, we will refund your entire payment without asking any questions.
-                </p>
-                <div class="bg-white rounded-lg p-4 mt-4 border border-green-200">
-                    <p class="text-gray-800 font-semibold mb-2">Why we offer this guarantee:</p>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-center"><i class="ri-check-line text-green-600 mr-2"></i>We're confident in the quality of our service</li>
-                        <li class="flex items-center"><i class="ri-check-line text-green-600 mr-2"></i>We want you to feel secure in your purchase</li>
-                        <li class="flex items-center"><i class="ri-check-line text-green-600 mr-2"></i>Your satisfaction is our priority</li>
-                        <li class="flex items-center"><i class="ri-check-line text-green-600 mr-2"></i>Zero risk to try our platform</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- How to Get Your Refund -->
-            <div class="mb-8">
-                <h3 class="text-xl font-semibold text-gray-900 mb-4">How to Request Your 30-Day Refund</h3>
-                <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
-                    <p class="text-gray-700 mb-4">To request your refund within 30 days of purchase:</p>
-                    <ol class="space-y-3">
-                        <li class="flex items-start">
-                            <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5">1</span>
-                            <div>
-                                <strong>Email Our Support Team:</strong> Send an email to <a href="mailto:hi@wacampaignsender.com" class="text-blue-600 hover:underline">hi@wacampaignsender.com</a> with your request
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5">2</span>
-                            <div>
-                                <strong>Include Required Information:</strong> Provide your account email and the date of your original purchase
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5">3</span>
-                            <div>
-                                <strong>Quick Processing:</strong> We will process your refund within 5-7 business days
-                            </div>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold mr-3 mt-0.5">4</span>
-                            <div>
-                                <strong>Refund Confirmation:</strong> You'll receive confirmation and tracking details via email
-                            </div>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-
-            <!-- Terms & Conditions of Guarantee -->
-            <div class="mb-8">
-                <h3 class="text-xl font-semibold text-gray-900 mb-4">30-Day Guarantee Terms</h3>
-                <div class="space-y-4">
-                    <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                        <i class="ri-checkbox-circle-line text-primary mr-3 mt-1 text-xl"></i>
-                        <div>
-                            <p class="font-semibold text-gray-900">30-Day Window</p>
-                            <p class="text-gray-700 text-sm">Refund requests must be made within 30 days of your original purchase date</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                        <i class="ri-checkbox-circle-line text-primary mr-3 mt-1 text-xl"></i>
-                        <div>
-                            <p class="font-semibold text-gray-900">No Questions Asked</p>
-                            <p class="text-gray-700 text-sm">We don't ask why you want a refund - if you're not satisfied, we refund your payment</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                        <i class="ri-checkbox-circle-line text-primary mr-3 mt-1 text-xl"></i>
-                        <div>
-                            <p class="font-semibold text-gray-900">Full Refund</p>
-                            <p class="text-gray-700 text-sm">100% of your subscription payment will be refunded to your original payment method</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start p-4 bg-gray-50 rounded-lg">
-                        <i class="ri-checkbox-circle-line text-primary mr-3 mt-1 text-xl"></i>
-                        <div>
-                            <p class="font-semibold text-gray-900">No Hidden Charges</p>
-                            <p class="text-gray-700 text-sm">There are no cancellation fees, processing fees, or Meta charges - just a full refund</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Why Choose Us -->
-            <div class="mb-8 bg-yellow-50 rounded-lg p-6 border border-yellow-200">
-                <h3 class="text-xl font-semibold text-gray-900 mb-4">Why You'll Love Our Service</h3>
-                <p class="text-gray-700 mb-4">We're so confident you'll love WA Campaign Sender that we back it with our money back guarantee. Here's what you get:</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="flex items-start">
-                        <i class="ri-star-line text-yellow-600 mr-3 mt-1 text-xl"></i>
-                        <span class="text-gray-700"><strong>Unlimited Messages</strong> - Send as many campaigns as you want</span>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="ri-star-line text-yellow-600 mr-3 mt-1 text-xl"></i>
-                        <span class="text-gray-700"><strong>24/7 Support</strong> - Expert help whenever you need it</span>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="ri-star-line text-yellow-600 mr-3 mt-1 text-xl"></i>
-                        <span class="text-gray-700"><strong>AI Content Draft</strong> - Generate messages instantly</span>
-                    </div>
-                    <div class="flex items-start">
-                        <i class="ri-star-line text-yellow-600 mr-3 mt-1 text-xl"></i>
-                        <span class="text-gray-700"><strong>No Meta Charges</strong> - Flat rate, nothing more</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Frequently Asked Questions -->
-            <div class="mb-8">
-                <h3 class="text-xl font-semibold text-gray-900 mb-4">Frequently Asked Questions</h3>
-                <div class="space-y-4">
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <p class="font-semibold text-gray-900 mb-2">Q: Do I really get a full refund?</p>
-                        <p class="text-gray-700">A: Yes, 100% refund within 30 days of purchase. No deductions, no questions asked.</p>
-                    </div>
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <p class="font-semibold text-gray-900 mb-2">Q: How long does the refund take?</p>
-                        <p class="text-gray-700">A: Refunds are processed within 5-7 business days to your original payment method.</p>
-                    </div>
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <p class="font-semibold text-gray-900 mb-2">Q: What if I've used the service?</p>
-                        <p class="text-gray-700">A: It doesn't matter! Our guarantee is risk-free. You can use the platform fully and still get your refund within 30 days.</p>
-                    </div>
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <p class="font-semibold text-gray-900 mb-2">Q: Are there any hidden fees for refunds?</p>
-                        <p class="text-gray-700">A: No. There are no processing fees, cancellation fees, or any other charges. It's a full refund.</p>
-                    </div>
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <p class="font-semibold text-gray-900 mb-2">Q: What about Meta or platform charges?</p>
-                        <p class="text-gray-700">A: Refunds include all charges. There are no hidden Meta charges or per-campaign fees to deduct.</p>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- Important Notes -->
-            <div class="mb-8 bg-emerald-50 border border-emerald-200 rounded-lg p-6">
-                <h3 class="text-xl font-semibold text-gray-900 mb-4">Our Commitment to You</h3>
-                <ul class="space-y-3 text-gray-700">
-                    <li class="flex items-start">
-                        <i class="ri-checkbox-circle-line text-emerald-600 mr-2 mt-1 text-lg"></i>
-                        <span><strong>Risk-Free Purchase:</strong> Our 30-day money back guarantee means zero risk when you sign up</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="ri-checkbox-circle-line text-emerald-600 mr-2 mt-1 text-lg"></i>
-                        <span><strong>No Strings Attached:</strong> No reason required for refunds - if you're not happy, we refund you</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="ri-checkbox-circle-line text-emerald-600 mr-2 mt-1 text-lg"></i>
-                        <span><strong>Full Access During Trial:</strong> Use all features during your 30 days - no limitations</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="ri-checkbox-circle-line text-emerald-600 mr-2 mt-1 text-lg"></i>
-                        <span><strong>Transparent Pricing:</strong> What you see is what you pay - no hidden fees or Meta charges</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="ri-checkbox-circle-line text-emerald-600 mr-2 mt-1 text-lg"></i>
-                        <span><strong>24/7 Support:</strong> Our team is available to help you get the most out of the platform</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Contact Section -->
-            <div class="bg-primary rounded-lg p-6 text-center">
-                <h3 class="text-xl font-semibold text-white mb-2">Need Help?</h3>
-                <p class="text-white opacity-90 mb-4">Have questions about our policy or need technical assistance? We're here to help!</p>
-                <div class="space-x-4">
-                    <a href="mailto:hi@wacampaignsender.com" class="inline-flex items-center px-6 py-2 bg-white text-primary rounded-lg hover:bg-gray-100 transition-colors font-semibold">
-                        <i class="ri-mail-line mr-2"></i>
-                        Email Support
-                    </a>
-                    <a href="{% url 'sitevisitor:contact' %}" class="inline-flex items-center px-6 py-2 border-2 border-white text-white rounded-lg hover:bg-white hover:text-primary transition-colors font-semibold">
-                        <i class="ri-customer-service-line mr-2"></i>
-                        Contact Form
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Related Links -->
-        <div class="text-center">
-            <p class="text-gray-600 mb-4">Learn more about our policies:</p>
-            <div class="space-x-4">
-                <a href="{% url 'sitevisitor:terms' %}" class="text-primary hover:underline">Terms of Service</a>
-                <span class="text-gray-400">|</span>
-                <a href="{% url 'sitevisitor:privacy' %}" class="text-primary hover:underline">Privacy Policy</a>
-                <span class="text-gray-400">|</span>
-                <a href="{% url 'sitevisitor:pricing' %}" class="text-primary hover:underline">Pricing Plans</a>
-            </div>
-        </div>
     </div>
+  </div>
 </div>
 {% endblock %}
