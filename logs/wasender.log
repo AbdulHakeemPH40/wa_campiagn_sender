@@ -1,348 +1,730 @@
-[INFO] 2025-12-07 23:07:43 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:07:43 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:07:43 whatsappapi.views views.create_session:288 - 🔗 Auto-generated webhook URL for user 5: http://127.0.0.1:8000/whatsappapi/webhook/5/
-[INFO] 2025-12-07 23:07:43 whatsappapi.wasender_service wasender_service.create_session:304 - Creating session with URL: https://wasenderapi.com/api/whatsapp-sessions
-[INFO] 2025-12-07 23:07:43 whatsappapi.wasender_service wasender_service.create_session:305 - Token (first 30 chars): 1750|w36D2rUXeKtuwJRPcmSmOAW3d...
-[INFO] 2025-12-07 23:07:43 whatsappapi.wasender_service wasender_service.create_session:306 - Headers: {'Authorization': 'Bearer 1750|w36D2rUXeKtuwJRPcmSmOAW3dhAbPHqLmkKFMcv4ca880632', 'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': 'WA-Campaign-Sender/1.0 (+https://wasenderapi.com)', 'X-Requested-With': 'XMLHttpRequest', 'Referer': 'https://wasenderapi.com'}
-[INFO] 2025-12-07 23:07:43 whatsappapi.wasender_service wasender_service.create_session:307 - Payload: {'name': 'user_5_1765134463', 'phone_number': '+91564669930', 'account_protection': True, 'log_messages': True}
-[INFO] 2025-12-07 23:07:45 whatsappapi.wasender_service wasender_service.create_session:316 - Response status: 422
-[INFO] 2025-12-07 23:07:45 whatsappapi.wasender_service wasender_service.create_session:317 - Response body: The phone number field must be a valid number.
-[ERROR] 2025-12-07 23:07:45 whatsappapi.wasender_service wasender_service.create_session:348 - Failed to create session: 422 - The phone number field must be a valid number.
-[ERROR] 2025-12-07 23:07:45 whatsappapi.wasender_service wasender_service.create_session:362 - Error creating session: Validation error: The phone number field must be a valid number.
-[INFO] 2025-12-07 23:08:09 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:08:09 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:08:09 whatsappapi.views views.create_session:288 - 🔗 Auto-generated webhook URL for user 5: http://127.0.0.1:8000/whatsappapi/webhook/5/
-[INFO] 2025-12-07 23:08:09 whatsappapi.wasender_service wasender_service.create_session:304 - Creating session with URL: https://wasenderapi.com/api/whatsapp-sessions
-[INFO] 2025-12-07 23:08:09 whatsappapi.wasender_service wasender_service.create_session:305 - Token (first 30 chars): 1750|w36D2rUXeKtuwJRPcmSmOAW3d...
-[INFO] 2025-12-07 23:08:09 whatsappapi.wasender_service wasender_service.create_session:306 - Headers: {'Authorization': 'Bearer 1750|w36D2rUXeKtuwJRPcmSmOAW3dhAbPHqLmkKFMcv4ca880632', 'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': 'WA-Campaign-Sender/1.0 (+https://wasenderapi.com)', 'X-Requested-With': 'XMLHttpRequest', 'Referer': 'https://wasenderapi.com'}
-[INFO] 2025-12-07 23:08:09 whatsappapi.wasender_service wasender_service.create_session:307 - Payload: {'name': 'user_5_1765134489', 'phone_number': '+919008715802', 'account_protection': True, 'log_messages': True}
-[INFO] 2025-12-07 23:08:10 whatsappapi.wasender_service wasender_service.create_session:316 - Response status: 201
-[INFO] 2025-12-07 23:08:10 whatsappapi.wasender_service wasender_service.create_session:317 - Response body: {"success":true,"data":{"id":39272,"user_id":13543,"name":"user_5_1765134489","phone_number":"+919008715802","status":"disconnected","api_key":"61d09a268355e2aeb2d78f82b822648e92ec20543790ab6471e25b0b09d4eee5","session_data":null,"last_active_at":null,"created_at":"2025-12-07T19:08:10.000000Z","upda…
-[INFO] 2025-12-07 23:08:10 whatsappapi.wasender_service wasender_service.create_session:338 - Session created: 39272 for user aphfamily40@gmail.com
-[INFO] 2025-12-07 23:08:10 whatsappapi.wasender_service wasender_service.connect_session:438 - Connecting session at: https://wasenderapi.com/api/whatsapp-sessions/39272/connect
-[INFO] 2025-12-07 23:08:12 whatsappapi.wasender_service wasender_service.connect_session:446 - Connect response status: 200
-[INFO] 2025-12-07 23:08:12 whatsappapi.wasender_service wasender_service.connect_session:447 - Connect response: {"success":true,"data":{"status":"NEED_SCAN","qrCode":"2@GzSWOkcJdKF0Qwl6nVq\/\/SDkxBgK72\/dMdBDFimCkRHOReFaVBR5v89sRJ31bfNCmWaSBzkON4yzSoDi60rDYYj7elPkLQiXXd0=,\/LlG3965umnBZJptML7rqqEgLGXiD2FY6gZhOFTQl0s=,tyBQVn+Asf6\/jbbTGi7syKiIHU\/ilcM6nJ2rsJb6KTo=,gQuJDTZi8BS4KOYTEMMtDQCXpDTtPbd3iIC023mFmFU="}…
-[INFO] 2025-12-07 23:08:12 whatsappapi.wasender_service wasender_service.connect_session:453 - Connection initiated for session 39272, status set to pending
-[INFO] 2025-12-07 23:08:12 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:08:12 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:08:12 whatsappapi.wasender_service wasender_service.get_qr_code:476 - Fetching QR code from: https://wasenderapi.com/api/whatsapp-sessions/39272/qrcode
-[INFO] 2025-12-07 23:08:13 whatsappapi.wasender_service wasender_service.get_qr_code:484 - QR code response status: 200
-[INFO] 2025-12-07 23:08:13 whatsappapi.wasender_service wasender_service.get_qr_code:485 - QR code response: {"success":true,"data":{"qrCode":"2@GzSWOkcJdKF0Qwl6nVq\/\/SDkxBgK72\/dMdBDFimCkRHOReFaVBR5v89sRJ31bfNCmWaSBzkON4yzSoDi60rDYYj7elPkLQiXXd0=,\/LlG3965umnBZJptML7rqqEgLGXiD2FY6gZhOFTQl0s=,tyBQVn+Asf6\/jbbTGi7syKiIHU\/ilcM6nJ2rsJb6KTo=,gQuJDTZi8BS4KOYTEMMtDQCXpDTtPbd3iIC023mFmFU="}}
-[INFO] 2025-12-07 23:08:13 whatsappapi.wasender_service wasender_service.get_qr_code:489 - QR data keys: dict_keys(['success', 'data'])
-[INFO] 2025-12-07 23:08:13 whatsappapi.wasender_service wasender_service.get_qr_code:493 - QR text extracted: 2@GzSWOkcJdKF0Qwl6nVq//SDkxBgK72/dMdBDFimCkRHOReFaVBR5v89sRJ31bfNCmWaSBzkON4yzSoDi60rDYYj7elPkLQiXXd
-[INFO] 2025-12-07 23:08:13 whatsappapi.wasender_service wasender_service.get_qr_code:516 - QR code image generated successfully
-[INFO] 2025-12-07 23:08:13 whatsappapi.views views.connect_session:346 - QR code fetched for session 39272: Success
-[INFO] 2025-12-07 23:08:14 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:08:14 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:08:15 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:08:15 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39272, 'user_id': 13543, 'name': 'user_5_1765134489', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '61d09a268355e2aeb2d78f82b822648e92ec20543790ab6471e25b0b09d4eee5', 'session_data': {'status_updated_at': '2025-12-07T19:08:12+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765134491988}}, 'last_active_at': '2025-12-07T19:08:12.000000Z', 'created_at': '2025-12-07T19:08:10.000000Z', 'updated_at': '2025-12-07T19:08:12.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': 'b52265cdd3e2afa65d430865f706a42e', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:08:15 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:08:12+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765134491988}}
-[INFO] 2025-12-07 23:08:15 whatsappapi.wasender_service wasender_service.get_session_status:662 - Using phone_number from session_data (may be original): +919008715802
-[INFO] 2025-12-07 23:08:15 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39272 status: pending
-[INFO] 2025-12-07 23:08:19 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:08:19 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:08:19 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:08:19 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39272, 'user_id': 13543, 'name': 'user_5_1765134489', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '61d09a268355e2aeb2d78f82b822648e92ec20543790ab6471e25b0b09d4eee5', 'session_data': {'status_updated_at': '2025-12-07T19:08:12+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765134491988}}, 'last_active_at': '2025-12-07T19:08:12.000000Z', 'created_at': '2025-12-07T19:08:10.000000Z', 'updated_at': '2025-12-07T19:08:12.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': 'b52265cdd3e2afa65d430865f706a42e', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:08:19 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:08:12+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765134491988}}
-[INFO] 2025-12-07 23:08:19 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39272 status: pending
-[INFO] 2025-12-07 23:08:24 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:08:24 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:08:24 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:08:24 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39272, 'user_id': 13543, 'name': 'user_5_1765134489', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '61d09a268355e2aeb2d78f82b822648e92ec20543790ab6471e25b0b09d4eee5', 'session_data': {'status_updated_at': '2025-12-07T19:08:12+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765134491988}}, 'last_active_at': '2025-12-07T19:08:12.000000Z', 'created_at': '2025-12-07T19:08:10.000000Z', 'updated_at': '2025-12-07T19:08:12.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': 'b52265cdd3e2afa65d430865f706a42e', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:08:24 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:08:12+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765134491988}}
-[INFO] 2025-12-07 23:08:25 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39272 status: pending
-[INFO] 2025-12-07 23:08:29 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:08:29 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:08:29 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:08:29 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39272, 'user_id': 13543, 'name': 'user_5_1765134489', 'phone_number': '+919008715802', 'status': 'connecting', 'api_key': '61d09a268355e2aeb2d78f82b822648e92ec20543790ab6471e25b0b09d4eee5', 'session_data': {'status_updated_at': '2025-12-07T19:08:28+00:00', 'status_info': {'status': 'connecting', 'timestamp': 1765134508600}}, 'last_active_at': '2025-12-07T19:08:28.000000Z', 'created_at': '2025-12-07T19:08:10.000000Z', 'updated_at': '2025-12-07T19:08:28.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': 'b52265cdd3e2afa65d430865f706a42e', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:08:29 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:08:28+00:00', 'status_info': {'status': 'connecting', 'timestamp': 1765134508600}}
-[INFO] 2025-12-07 23:08:29 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39272 status: connecting
-[INFO] 2025-12-07 23:08:34 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:08:34 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:08:34 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:08:34 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39272, 'user_id': 13543, 'name': 'user_5_1765134489', 'phone_number': '+919008715802', 'status': 'connected', 'api_key': '61d09a268355e2aeb2d78f82b822648e92ec20543790ab6471e25b0b09d4eee5', 'session_data': {'status_updated_at': '2025-12-07T19:08:29+00:00', 'status_info': {'status': 'connected', 'timestamp': 1765134509775}}, 'last_active_at': '2025-12-07T19:08:29.000000Z', 'created_at': '2025-12-07T19:08:10.000000Z', 'updated_at': '2025-12-07T19:08:29.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': 'b52265cdd3e2afa65d430865f706a42e', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:08:34 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:08:29+00:00', 'status_info': {'status': 'connected', 'timestamp': 1765134509775}}
-[INFO] 2025-12-07 23:08:36 whatsappapi.wasender_service wasender_service._fetch_whatsapp_user_info:740 - WhatsApp user data: {'id': '919008715802:15@s.whatsapp.net', 'lid': '150637874524363:15@lid'}
-[INFO] 2025-12-07 23:08:36 whatsappapi.wasender_service wasender_service._fetch_whatsapp_user_info:754 - Updated connected_phone_number: +919008715802
-[INFO] 2025-12-07 23:08:36 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39272 status: connected
-[INFO] 2025-12-07 23:10:23 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
-[INFO] 2025-12-07 23:10:25 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:10:29 whatsappapi.ai_draft ai_draft._generate_with_openai:121 - RAW AI OUTPUT:
-📣 *Exciting News, {first_name}!*
-
-We're thrilled to connect with you! 🎉 
-
-Join us in our latest marketing campaign designed just for you. Don’t miss out on exclusive insights and opportunities to elevate your business!
-
-👉 *Stay tuned for more updates!*
-
-Looking forward to seeing you thrive! 🌟
-==================================================
-[INFO] 2025-12-07 23:10:29 whatsappapi.ai_draft ai_draft.clean_and_structure_draft:399 - Draft cleanup complete. Length: 293 chars, Emojis: 3
-[INFO] 2025-12-07 23:10:29 whatsappapi.ai_draft ai_draft._generate_with_openai:127 - CLEANED OUTPUT:
-📣 *📢 *Exciting News*, {first_name}!*
-
-We're thrilled to connect with you! 🎉 
-
-Join us in our latest marketing campaign designed just for you. Don’t miss out on exclusive insights and opportunities to elevate your business!
-
-👉 *Stay tuned for more updates!*
-
-Looking forward to seeing you thrive! 🌟
-==================================================
-[INFO] 2025-12-07 23:10:29 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=297
-[INFO] 2025-12-07 23:10:31 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:10:53 whatsappapi.views views.send_campaign:588 - Using session 4 (+919008715802) from form submission
-[INFO] 2025-12-07 23:10:53 whatsappapi.views views.send_campaign:682 - Free user aphfamily40@gmail.com sending test campaign (limited to 5 contacts)
-[INFO] 2025-12-07 23:10:53 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=304
-[INFO] 2025-12-07 23:10:54 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:821 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\cfa356e5-93a0-488d-b6f6-648b3af4495d_PASONS 26 & WEEKEND DEAL.pdf
-[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:929 - ℹ️ STANDARD MODE for campaign 'test_campign'
-[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:930 -    Will use fixed delays based on session protection setting:
-[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:931 -    - Protection ON: 5s
-[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:932 -    - Protection OFF: 3s
-[INFO] 2025-12-07 23:10:55 whatsappapi.views views.send_campaign:933 -    No batching, no cooldowns
-[INFO] 2025-12-07 23:10:56 whatsappapi.views views.send_campaign:1026 - Campaign 'test_campign' queued for background processing (Task ID: 3da367891c36448ab572a26c0184898e)
-[INFO] 2025-12-07 23:11:41 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:11:41 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:12:02 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
-[INFO] 2025-12-07 23:12:03 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:12:07 whatsappapi.views views.send_campaign:588 - Using session 4 (+919008715802) from form submission
-[INFO] 2025-12-07 23:12:07 whatsappapi.views views.send_campaign:682 - Free user aphfamily40@gmail.com sending test campaign (limited to 5 contacts)
-[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:821 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\cd63d093-e557-4733-8002-a41ad32a6c37_PASONS 26 WEEKEND DEAL.pdf
-[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:929 - ℹ️ STANDARD MODE for campaign 'test_campign'
-[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:930 -    Will use fixed delays based on session protection setting:
-[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:931 -    - Protection ON: 5s
-[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:932 -    - Protection OFF: 3s
-[INFO] 2025-12-07 23:12:08 whatsappapi.views views.send_campaign:933 -    No batching, no cooldowns
-[INFO] 2025-12-07 23:12:09 whatsappapi.views views.send_campaign:1026 - Campaign 'test_campign' queued for background processing (Task ID: e562a8d1c72541b3b00bc6777ce68580)
-[INFO] 2025-12-07 23:12:17 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:12:17 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:12:20 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +917510867832: {'to': '917510867832@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:12:22 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +917510867832: status_code=200, full_data={'success': True, 'data': {'msgId': 15058166, 'jid': '917510867832@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:12:22 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058166, 'jid': '917510867832@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:12:22 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058166)
-[INFO] 2025-12-07 23:12:28 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +91900871580: {'to': '91900871580@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[ERROR] 2025-12-07 23:12:30 whatsappapi.wasender_service wasender_service.send_media_message:1914 - Failed to send media: 422 - JID does not exist on WhatsApp
-[INFO] 2025-12-07 23:12:36 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919008715802: {'to': '919008715802@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:12:37 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919008715802: status_code=200, full_data={'success': True, 'data': {'msgId': 15058183, 'jid': '919008715802@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:12:37 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058183, 'jid': '919008715802@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:12:37 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058183)
-[INFO] 2025-12-07 23:12:43 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919102222222222: {'to': '919102222222222@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[ERROR] 2025-12-07 23:12:45 whatsappapi.wasender_service wasender_service.send_media_message:1914 - Failed to send media: 422 - JID does not exist on WhatsApp
-[INFO] 2025-12-07 23:12:51 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919744359433: {'to': '919744359433@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:12:52 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919744359433: status_code=200, full_data={'success': True, 'data': {'msgId': 15058202, 'jid': '919744359433@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:12:52 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058202, 'jid': '919744359433@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:12:52 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058202)
-[INFO] 2025-12-07 23:12:59 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919961557713: {'to': '919961557713@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:13:00 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919961557713: status_code=200, full_data={'success': True, 'data': {'msgId': 15058209, 'jid': '919961557713@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:13:00 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058209, 'jid': '919961557713@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:13:00 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058209)
-[INFO] 2025-12-07 23:13:07 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971501464078: {'to': '971501464078@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:13:08 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971501464078: status_code=200, full_data={'success': True, 'data': {'msgId': 15058224, 'jid': '971501464078@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:13:08 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058224, 'jid': '971501464078@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:13:08 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058224)
-[INFO] 2025-12-07 23:13:15 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971564669930: {'to': '971564669930@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:13:16 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971564669930: status_code=200, full_data={'success': True, 'data': {'msgId': 15058233, 'jid': '971564669930@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:13:16 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058233, 'jid': '971564669930@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:13:16 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058233)
-[INFO] 2025-12-07 23:13:30 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971569683136: {'to': '971569683136@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:13:31 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971569683136: status_code=200, full_data={'success': True, 'data': {'msgId': 15058264, 'jid': '971569683136@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:13:31 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058264, 'jid': '971569683136@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:13:31 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058264)
-[INFO] 2025-12-07 23:13:38 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971589704800: {'to': '971589704800@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:13:39 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971589704800: status_code=200, full_data={'success': True, 'data': {'msgId': 15058278, 'jid': '971589704800@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:13:39 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058278, 'jid': '971589704800@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:13:39 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058278)
-[INFO] 2025-12-07 23:13:45 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +97455460961: {'to': '97455460961@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765134699/wa_campaigns/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:13:47 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +97455460961: status_code=200, full_data={'success': True, 'data': {'msgId': 15058292, 'jid': '97455460961@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:13:47 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15058292, 'jid': '97455460961@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:13:47 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15058292)
-[INFO] 2025-12-07 23:21:34 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
-[INFO] 2025-12-07 23:21:36 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:21:41 whatsappapi.ai_draft ai_draft._generate_with_openai:121 - RAW AI OUTPUT:
-📣 *Exciting News, {first_name}!*
-
-We're thrilled to share something special with you! 🎉 
-
-Join our vibrant community and discover amazing opportunities that await you. 
-
-✅ Exclusive insights and tips  
-✅ Networking with like-minded individuals  
-✅ Special offers just for you  
-
-Don't miss out on the fun! Let’s embark on this journey together! 
-
-👉 *Join now:*
-https://example.com
-
-Looking forward to seeing you! 🌟
-==================================================
-[INFO] 2025-12-07 23:21:41 whatsappapi.ai_draft ai_draft.clean_and_structure_draft:399 - Draft cleanup complete. Length: 414 chars, Emojis: 3
-[INFO] 2025-12-07 23:21:41 whatsappapi.ai_draft ai_draft._generate_with_openai:127 - CLEANED OUTPUT:
-📣 *📢 *Exciting News*, {first_name}!*
-
-We're thrilled to share something special with you! 🎉 
-
-Join our vibrant community and discover amazing opportunities that await you. 
-
-✅ Exclusive insights and tips
-✅ Networking with like-minded individuals
-✅ Special offers just for you
-
-Don't miss out on the fun! Let’s embark on this journey together! 
-
-👉 *Join now:*
-https://example.com
-
-Looking forward to seeing you! 🌟
-==================================================
-[INFO] 2025-12-07 23:21:41 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=412
-[INFO] 2025-12-07 23:21:42 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:22:05 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=426
-[INFO] 2025-12-07 23:22:07 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:22:08 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:22:08 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:22:15 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
-[INFO] 2025-12-07 23:22:18 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971564669930: {'to': '971564669930@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': "📣 *📢*Exciting News*, {first_name}!*\r\n\r\nWe're thrilled to share something special with you! 🎉 \r\n\r\nJoin our vibrant community and discover amazing opportunities that await you. \r\n\r\n✅ Exclusive insights and tips\r\n✅ Networking with like-minded individuals\r\n✅ Special offers just for you\r\n\r\nDon't miss out on the fun! Let's embark on this journey together! \r\n\r\n👉 *Join now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you! 🌟", 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:22:19 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971564669930: status_code=200, full_data={'success': True, 'data': {'msgId': 15059108, 'jid': '971564669930@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:22:19 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15059108, 'jid': '971564669930@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:22:19 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15059108)
-[INFO] 2025-12-07 23:22:53 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:22:53 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:22:59 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
-[INFO] 2025-12-07 23:23:01 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919008715802: {'to': '919008715802@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': "📣 *📢*Exciting News*, {first_name}!*\r\n\r\nWe're thrilled to share something special with you! 🎉 \r\n\r\nJoin our vibrant community and discover amazing opportunities that await you. \r\n\r\n✅ Exclusive insights and tips\r\n✅ Networking with like-minded individuals\r\n✅ Special offers just for you\r\n\r\nDon't miss out on the fun! Let's embark on this journey together! \r\n\r\n👉 *Join now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you! 🌟", 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:23:02 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919008715802: status_code=200, full_data={'success': True, 'data': {'msgId': 15059181, 'jid': '919008715802@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:23:02 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15059181, 'jid': '919008715802@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:23:02 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15059181)
-[INFO] 2025-12-07 23:23:17 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:23:17 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:23:23 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
-[INFO] 2025-12-07 23:23:25 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919562785641: {'to': '919562785641@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': "📣 *📢*Exciting News*, {first_name}!*\r\n\r\nWe're thrilled to share something special with you! 🎉 \r\n\r\nJoin our vibrant community and discover amazing opportunities that await you. \r\n\r\n✅ Exclusive insights and tips\r\n✅ Networking with like-minded individuals\r\n✅ Special offers just for you\r\n\r\nDon't miss out on the fun! Let's embark on this journey together! \r\n\r\n👉 *Join now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you! 🌟", 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:23:26 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919562785641: status_code=200, full_data={'success': True, 'data': {'msgId': 15059223, 'jid': '919562785641@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:23:26 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15059223, 'jid': '919562785641@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:23:26 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15059223)
-[INFO] 2025-12-07 23:23:38 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:23:38 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:23:44 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
-[INFO] 2025-12-07 23:23:45 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919744359433: {'to': '919744359433@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': "📣 *📢*Exciting News*, {first_name}!*\r\n\r\nWe're thrilled to share something special with you! 🎉 \r\n\r\nJoin our vibrant community and discover amazing opportunities that await you. \r\n\r\n✅ Exclusive insights and tips\r\n✅ Networking with like-minded individuals\r\n✅ Special offers just for you\r\n\r\nDon't miss out on the fun! Let's embark on this journey together! \r\n\r\n👉 *Join now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you! 🌟", 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:23:47 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919744359433: status_code=200, full_data={'success': True, 'data': {'msgId': 15059258, 'jid': '919744359433@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:23:47 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15059258, 'jid': '919744359433@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:23:47 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15059258)
-[INFO] 2025-12-07 23:24:35 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:24:35 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:24:42 whatsappapi.views views.send_test_message:1362 - Test attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf
-[INFO] 2025-12-07 23:24:45 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919961557713: {'to': '919961557713@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1765135335/wa_test/5/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': "📣 *📢*Exciting News*, {first_name}!*\r\n\r\nWe're thrilled to share something special with you! 🎉 \r\n\r\nJoin our vibrant community and discover amazing opportunities that await you. \r\n\r\n✅ Exclusive insights and tips\r\n✅ Networking with like-minded individuals\r\n✅ Special offers just for you\r\n\r\nDon't miss out on the fun! Let's embark on this journey together! \r\n\r\n👉 *Join now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you! 🌟", 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:24:46 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919961557713: status_code=200, full_data={'success': True, 'data': {'msgId': 15059319, 'jid': '919961557713@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:24:46 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15059319, 'jid': '919961557713@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:24:46 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15059319)
-[INFO] 2025-12-07 23:35:00 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:00 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:00 whatsappapi.views views.create_session:288 - 🔗 Auto-generated webhook URL for user 2: http://127.0.0.1:8000/whatsappapi/webhook/2/
-[INFO] 2025-12-07 23:35:00 whatsappapi.wasender_service wasender_service.create_session:304 - Creating session with URL: https://wasenderapi.com/api/whatsapp-sessions
-[INFO] 2025-12-07 23:35:00 whatsappapi.wasender_service wasender_service.create_session:305 - Token (first 30 chars): 1750|w36D2rUXeKtuwJRPcmSmOAW3d...
-[INFO] 2025-12-07 23:35:00 whatsappapi.wasender_service wasender_service.create_session:306 - Headers: {'Authorization': 'Bearer 1750|w36D2rUXeKtuwJRPcmSmOAW3dhAbPHqLmkKFMcv4ca880632', 'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': 'WA-Campaign-Sender/1.0 (+https://wasenderapi.com)', 'X-Requested-With': 'XMLHttpRequest', 'Referer': 'https://wasenderapi.com'}
-[INFO] 2025-12-07 23:35:00 whatsappapi.wasender_service wasender_service.create_session:307 - Payload: {'name': 'user_2_1765136100', 'phone_number': '+919008715802', 'account_protection': True, 'log_messages': True}
-[INFO] 2025-12-07 23:35:01 whatsappapi.wasender_service wasender_service.create_session:316 - Response status: 201
-[INFO] 2025-12-07 23:35:01 whatsappapi.wasender_service wasender_service.create_session:317 - Response body: {"success":true,"data":{"id":39275,"user_id":13543,"name":"user_2_1765136100","phone_number":"+919008715802","status":"disconnected","api_key":"6bac0b2d1e339412827d88bee14c72339c4cbde7dfc7bb937dd0d6938917f830","session_data":null,"last_active_at":null,"created_at":"2025-12-07T19:35:01.000000Z","upda…
-[INFO] 2025-12-07 23:35:01 whatsappapi.wasender_service wasender_service.create_session:338 - Session created: 39275 for user abdulhakeemph@gmail.com
-[INFO] 2025-12-07 23:35:01 whatsappapi.wasender_service wasender_service.connect_session:438 - Connecting session at: https://wasenderapi.com/api/whatsapp-sessions/39275/connect
-[INFO] 2025-12-07 23:35:03 whatsappapi.wasender_service wasender_service.connect_session:446 - Connect response status: 200
-[INFO] 2025-12-07 23:35:03 whatsappapi.wasender_service wasender_service.connect_session:447 - Connect response: {"success":true,"data":{"status":"NEED_SCAN","qrCode":"2@sAR8TAEdWrYMFxDMRo2hN9tBTPAnxi2EqX8nGGKn2JpwuDAovjwUkmoy6VwEzdIDuW+L6aax3w3fHQ3OHGVecSriZ5Sgj9Ndq6E=,ddvb41bILpsM6C593NhRgJQUNPADrZQrCbAsvTAPyCc=,zDLPVMiDM7Drmj\/zy0xagwRIhzcSmpuE377hkKokKAg=,RqDzeISrMiavZtiSR62qQSyiJVUh8zv6whxR57KLBg8="}}
-[INFO] 2025-12-07 23:35:03 whatsappapi.wasender_service wasender_service.connect_session:453 - Connection initiated for session 39275, status set to pending
-[INFO] 2025-12-07 23:35:03 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:03 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:03 whatsappapi.wasender_service wasender_service.get_qr_code:476 - Fetching QR code from: https://wasenderapi.com/api/whatsapp-sessions/39275/qrcode
-[INFO] 2025-12-07 23:35:04 whatsappapi.wasender_service wasender_service.get_qr_code:484 - QR code response status: 200
-[INFO] 2025-12-07 23:35:04 whatsappapi.wasender_service wasender_service.get_qr_code:485 - QR code response: {"success":true,"data":{"qrCode":"2@sAR8TAEdWrYMFxDMRo2hN9tBTPAnxi2EqX8nGGKn2JpwuDAovjwUkmoy6VwEzdIDuW+L6aax3w3fHQ3OHGVecSriZ5Sgj9Ndq6E=,ddvb41bILpsM6C593NhRgJQUNPADrZQrCbAsvTAPyCc=,zDLPVMiDM7Drmj\/zy0xagwRIhzcSmpuE377hkKokKAg=,RqDzeISrMiavZtiSR62qQSyiJVUh8zv6whxR57KLBg8="}}
-[INFO] 2025-12-07 23:35:04 whatsappapi.wasender_service wasender_service.get_qr_code:489 - QR data keys: dict_keys(['success', 'data'])
-[INFO] 2025-12-07 23:35:04 whatsappapi.wasender_service wasender_service.get_qr_code:493 - QR text extracted: 2@sAR8TAEdWrYMFxDMRo2hN9tBTPAnxi2EqX8nGGKn2JpwuDAovjwUkmoy6VwEzdIDuW+L6aax3w3fHQ3OHGVecSriZ5Sgj9Ndq6
-[INFO] 2025-12-07 23:35:04 whatsappapi.wasender_service wasender_service.get_qr_code:516 - QR code image generated successfully
-[INFO] 2025-12-07 23:35:04 whatsappapi.views views.connect_session:346 - QR code fetched for session 39275: Success
-[INFO] 2025-12-07 23:35:05 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:05 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:06 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:35:06 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39275, 'user_id': 13543, 'name': 'user_2_1765136100', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '6bac0b2d1e339412827d88bee14c72339c4cbde7dfc7bb937dd0d6938917f830', 'session_data': {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}, 'last_active_at': '2025-12-07T19:35:03.000000Z', 'created_at': '2025-12-07T19:35:01.000000Z', 'updated_at': '2025-12-07T19:35:03.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': '97400054de7e2166e5cd824dd9167c17', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:35:06 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}
-[INFO] 2025-12-07 23:35:06 whatsappapi.wasender_service wasender_service.get_session_status:662 - Using phone_number from session_data (may be original): +919008715802
-[INFO] 2025-12-07 23:35:06 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39275 status: pending
-[INFO] 2025-12-07 23:35:10 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:10 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:10 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:35:10 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39275, 'user_id': 13543, 'name': 'user_2_1765136100', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '6bac0b2d1e339412827d88bee14c72339c4cbde7dfc7bb937dd0d6938917f830', 'session_data': {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}, 'last_active_at': '2025-12-07T19:35:03.000000Z', 'created_at': '2025-12-07T19:35:01.000000Z', 'updated_at': '2025-12-07T19:35:03.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': '97400054de7e2166e5cd824dd9167c17', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:35:10 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}
-[INFO] 2025-12-07 23:35:10 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39275 status: pending
-[INFO] 2025-12-07 23:35:15 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:15 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:15 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:35:15 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39275, 'user_id': 13543, 'name': 'user_2_1765136100', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '6bac0b2d1e339412827d88bee14c72339c4cbde7dfc7bb937dd0d6938917f830', 'session_data': {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}, 'last_active_at': '2025-12-07T19:35:03.000000Z', 'created_at': '2025-12-07T19:35:01.000000Z', 'updated_at': '2025-12-07T19:35:03.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': '97400054de7e2166e5cd824dd9167c17', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:35:15 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}
-[INFO] 2025-12-07 23:35:15 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39275 status: pending
-[INFO] 2025-12-07 23:35:20 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:20 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:20 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:35:20 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39275, 'user_id': 13543, 'name': 'user_2_1765136100', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '6bac0b2d1e339412827d88bee14c72339c4cbde7dfc7bb937dd0d6938917f830', 'session_data': {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}, 'last_active_at': '2025-12-07T19:35:03.000000Z', 'created_at': '2025-12-07T19:35:01.000000Z', 'updated_at': '2025-12-07T19:35:03.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': '97400054de7e2166e5cd824dd9167c17', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:35:20 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}
-[INFO] 2025-12-07 23:35:20 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39275 status: pending
-[INFO] 2025-12-07 23:35:25 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:25 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:26 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:35:26 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39275, 'user_id': 13543, 'name': 'user_2_1765136100', 'phone_number': '+919008715802', 'status': 'need_scan', 'api_key': '6bac0b2d1e339412827d88bee14c72339c4cbde7dfc7bb937dd0d6938917f830', 'session_data': {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}, 'last_active_at': '2025-12-07T19:35:03.000000Z', 'created_at': '2025-12-07T19:35:01.000000Z', 'updated_at': '2025-12-07T19:35:03.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': '97400054de7e2166e5cd824dd9167c17', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:35:26 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:35:03+00:00', 'status_info': {'status': 'need_scan', 'timestamp': 1765136103358}}
-[INFO] 2025-12-07 23:35:26 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39275 status: pending
-[INFO] 2025-12-07 23:35:30 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:35:30 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:35:30 whatsappapi.wasender_service wasender_service.get_session_status:635 - Session data keys: dict_keys(['id', 'user_id', 'name', 'phone_number', 'status', 'api_key', 'session_data', 'last_active_at', 'created_at', 'updated_at', 'account_protection', 'log_messages', 'webhook_url', 'webhook_events', 'webhook_enabled', 'webhook_secret', 'read_incoming_messages', 'always_online', 'auto_reject_calls', 'whatsapp_message_count', 'ignore_broadcasts', 'ignore_groups', 'ignore_channels'])
-[INFO] 2025-12-07 23:35:30 whatsappapi.wasender_service wasender_service.get_session_status:636 - Full session data: {'id': 39275, 'user_id': 13543, 'name': 'user_2_1765136100', 'phone_number': '+919008715802', 'status': 'connected', 'api_key': '6bac0b2d1e339412827d88bee14c72339c4cbde7dfc7bb937dd0d6938917f830', 'session_data': {'status_updated_at': '2025-12-07T19:35:29+00:00', 'status_info': {'status': 'connected', 'timestamp': 1765136128994}}, 'last_active_at': '2025-12-07T19:35:29.000000Z', 'created_at': '2025-12-07T19:35:01.000000Z', 'updated_at': '2025-12-07T19:35:29.000000Z', 'account_protection': True, 'log_messages': True, 'webhook_url': None, 'webhook_events': None, 'webhook_enabled': False, 'webhook_secret': '97400054de7e2166e5cd824dd9167c17', 'read_incoming_messages': False, 'always_online': True, 'auto_reject_calls': False, 'whatsapp_message_count': 0, 'ignore_broadcasts': True, 'ignore_groups': True, 'ignore_channels': True}
-[INFO] 2025-12-07 23:35:30 whatsappapi.wasender_service wasender_service.get_session_status:641 - Nested session_data: {'status_updated_at': '2025-12-07T19:35:29+00:00', 'status_info': {'status': 'connected', 'timestamp': 1765136128994}}
-[INFO] 2025-12-07 23:35:32 whatsappapi.wasender_service wasender_service._fetch_whatsapp_user_info:740 - WhatsApp user data: {'id': '919008715802:16@s.whatsapp.net', 'lid': '150637874524363:16@lid'}
-[INFO] 2025-12-07 23:35:32 whatsappapi.wasender_service wasender_service._fetch_whatsapp_user_info:754 - Updated connected_phone_number: +919008715802
-[INFO] 2025-12-07 23:35:32 whatsappapi.wasender_service wasender_service.get_session_status:676 - Session 39275 status: connected
-[INFO] 2025-12-07 23:36:30 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=8
-[INFO] 2025-12-07 23:36:32 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
-[INFO] 2025-12-07 23:36:37 whatsappapi.views views.send_campaign:588 - Using session 5 (+919008715802) from form submission
-[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:821 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\8d74e529-69f8-4d68-99bc-8ad904f6f629_PASONS 26 & WEEKEND DEAL.pdf
-[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:929 - ℹ️ STANDARD MODE for campaign 'test_campign'
-[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:930 -    Will use fixed delays based on session protection setting:
-[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:931 -    - Protection ON: 5s
-[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:932 -    - Protection OFF: 3s
-[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:933 -    No batching, no cooldowns
-[INFO] 2025-12-07 23:36:39 whatsappapi.views views.send_campaign:1026 - Campaign 'test_campign' queued for background processing (Task ID: 852137b70a804b6fab8788640c4a4f43)
-[INFO] 2025-12-07 23:36:48 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
-[INFO] 2025-12-07 23:36:48 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
-[INFO] 2025-12-07 23:36:51 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +91900871580: {'to': '91900871580@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[ERROR] 2025-12-07 23:36:53 whatsappapi.wasender_service wasender_service.send_media_message:1914 - Failed to send media: 422 - JID does not exist on WhatsApp
-[INFO] 2025-12-07 23:36:59 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919008715802: {'to': '919008715802@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:37:00 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919008715802: status_code=200, full_data={'success': True, 'data': {'msgId': 15060285, 'jid': '919008715802@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:37:00 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060285, 'jid': '919008715802@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:37:00 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060285)
-[INFO] 2025-12-07 23:37:07 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919102222222222: {'to': '919102222222222@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[ERROR] 2025-12-07 23:37:08 whatsappapi.wasender_service wasender_service.send_media_message:1914 - Failed to send media: 422 - JID does not exist on WhatsApp
-[INFO] 2025-12-07 23:37:14 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919744359433: {'to': '919744359433@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:37:15 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919744359433: status_code=200, full_data={'success': True, 'data': {'msgId': 15060301, 'jid': '919744359433@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:37:15 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060301, 'jid': '919744359433@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:37:16 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060301)
-[INFO] 2025-12-07 23:37:24 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +919961557713: {'to': '919961557713@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:37:26 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +919961557713: status_code=200, full_data={'success': True, 'data': {'msgId': 15060315, 'jid': '919961557713@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:37:26 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060315, 'jid': '919961557713@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:37:26 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060315)
-[INFO] 2025-12-07 23:37:32 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971501464078: {'to': '971501464078@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:37:33 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971501464078: status_code=200, full_data={'success': True, 'data': {'msgId': 15060326, 'jid': '971501464078@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:37:33 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060326, 'jid': '971501464078@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:37:33 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060326)
-[INFO] 2025-12-07 23:37:40 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971564669930: {'to': '971564669930@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:37:41 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971564669930: status_code=200, full_data={'success': True, 'data': {'msgId': 15060337, 'jid': '971564669930@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:37:41 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060337, 'jid': '971564669930@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:37:41 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060337)
-[INFO] 2025-12-07 23:37:48 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971569683136: {'to': '971569683136@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:37:49 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971569683136: status_code=200, full_data={'success': True, 'data': {'msgId': 15060348, 'jid': '971569683136@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:37:49 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060348, 'jid': '971569683136@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:37:49 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060348)
-[INFO] 2025-12-07 23:37:56 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +971589704800: {'to': '971589704800@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:37:57 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +971589704800: status_code=200, full_data={'success': True, 'data': {'msgId': 15060360, 'jid': '971589704800@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:37:57 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060360, 'jid': '971589704800@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:37:57 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060360)
-[INFO] 2025-12-07 23:38:04 whatsappapi.wasender_service wasender_service.send_media_message:1707 - Sending document to +97455460961: {'to': '97455460961@s.whatsapp.net', 'documentUrl': 'https://res.cloudinary.com/dfucqg40q/raw/upload/v1764604756/wa_campaigns/2/PASONS_26_WEEKEND_DEAL.pdf', 'type': 'document', 'text': 'HI Dears', 'fileName': 'PASONS_26_WEEKEND_DEAL.pdf', 'mimeType': 'application/pdf'}
-[INFO] 2025-12-07 23:38:05 whatsappapi.wasender_service wasender_service.send_media_message:1795 - WASender media response for +97455460961: status_code=200, full_data={'success': True, 'data': {'msgId': 15060380, 'jid': '97455460961@s.whatsapp.net', 'status': 'in_progress'}}
-[INFO] 2025-12-07 23:38:05 whatsappapi.wasender_service wasender_service.send_media_message:1796 - DEBUG media - msg_data keys: dict_keys(['msgId', 'jid', 'status']), msg_data={'msgId': 15060380, 'jid': '97455460961@s.whatsapp.net', 'status': 'in_progress'}
-[INFO] 2025-12-07 23:38:05 whatsappapi.wasender_service wasender_service.send_media_message:1883 - Media message sent successfully:  (wasender_msg_id: 15060380)
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
+  "data": {
+    "key": {
+      "id": "3EB0105D3D3433C7040D9C",
+      "fromMe": true,
+      "remoteJid": "16595921449079@lid",
+      "senderLid": "16595921449079@lid"
+    },
+    "status": 4
+  },
+  "timestamp": 1765196024980
+}
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB0105D3D3433C7040D9C | Status: read | Recipient: 16595921449079 | Timestamp: 2025-12-08 12:13:44+00:00
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
+  "data": {
+    "remoteJid": "919961557713@s.whatsapp.net",
+    "id": "3EB019845AC5CEB7F49854",
+    "msgId": 15131853,
+    "key": {
+      "id": "3EB019845AC5CEB7F49854",
+      "fromMe": true,
+      "remoteJid": "919961557713@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/595637754_1233748988665865_448052359555674101_n.enc?ccb=11-4&oh=01_Q5Aa3QExJKndsWWQwBGoibqI1e7XygnMziGigjYSVhTv_rHb6w&oe=695E150F&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce2 *Exciting News, Shabana!*\r\n\r\nAre you ready to elevate your marketing game? \ud83d\ude80 Our latest campaign is designed just for you!\r\n\r\n\u2705 Tailored strategies to boost your brand visibility\r\n\u2705 Expert insights to drive customer engagement\r\n\u2705 Exclusive tips to maximize your ROI\r\n\r\nJoin us and transform your marketing approach today! \r\n\r\n\ud83d\udc49 *Learn more now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you succeed! \ud83c\udf89",
+        "fileName": "Pasons_Al_nahda.pdf",
+        "mediaKey": {
+          "data": [
+            104,
+            40,
+            14,
+            153,
+            187,
+            150,
+            11,
+            32,
+            63,
+            146,
+            228,
+            169,
+            42,
+            14,
+            234,
+            40,
+            40,
+            190,
+            75,
+            155,
+            14,
+            68,
+            94,
+            158,
+            239,
+            29,
+            45,
+            250,
+            66,
+            1,
+            209,
+            237
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/595637754_1233748988665865_448052359555674101_n.enc?ccb=11-4&oh=01_Q5Aa3QExJKndsWWQwBGoibqI1e7XygnMziGigjYSVhTv_rHb6w&oe=695E150F&_nc_sid=5e03e0",
+        "fileLength": 778221,
+        "fileSha256": {
+          "data": [
+            21,
+            167,
+            183,
+            163,
+            172,
+            129,
+            130,
+            4,
+            15,
+            148,
+            157,
+            36,
+            90,
+            223,
+            32,
+            95,
+            194,
+            11,
+            94,
+            105,
+            117,
+            169,
+            149,
+            241,
+            203,
+            197,
+            18,
+            15,
+            66,
+            247,
+            253,
+            202
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            6,
+            10,
+            195,
+            8,
+            106,
+            208,
+            187,
+            108,
+            192,
+            217,
+            185,
+            46,
+            126,
+            255,
+            16,
+            164,
+            92,
+            72,
+            190,
+            104,
+            116,
+            211,
+            29,
+            162,
+            122,
+            50,
+            17,
+            167,
+            62,
+            54,
+            73,
+            65
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765195747
+      }
+    },
+    "messageTimestamp": "1765195747",
+    "status": 4
+  },
+  "timestamp": 1765196024984
+}
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB019845AC5CEB7F49854 | Status: read | Recipient: 919961557713 | Timestamp: 2025-12-08 12:09:07+00:00
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2403 - 🔍 Message not found by message_id, trying wasender_msg_id: 15131853
+[WARNING] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2407 - ⚠️ Message not found in database | message_id: 3EB0105D3D3433C7040D9C | wasender_msg_id: None
+[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2430 - ✅ Updated message status | ID: 207 | delivered → read
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2435 - 📈 Updating campaign #22 stats after status change
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2440 - ✅ Campaign #22 stats updated: sent=8, delivered=5, read=1, failed=2
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 21.64ms
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
+  "data": {
+    "key": {
+      "id": "3EB01FA700B55E08EB0456",
+      "fromMe": true,
+      "remoteJid": "16595921449079@lid",
+      "senderLid": "16595921449079@lid"
+    },
+    "status": 4
+  },
+  "timestamp": 1765196024982
+}
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB01FA700B55E08EB0456 | Status: read | Recipient: 16595921449079 | Timestamp: 2025-12-08 12:13:44+00:00
+[WARNING] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2407 - ⚠️ Message not found in database | message_id: 3EB01FA700B55E08EB0456 | wasender_msg_id: None
+[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
+  "data": {
+    "key": {
+      "id": "3EB0DFA3D368FC1D509CBA",
+      "fromMe": true,
+      "remoteJid": "16595921449079@lid",
+      "senderLid": "16595921449079@lid"
+    },
+    "status": 4
+  },
+  "timestamp": 1765196024981
+}
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB0DFA3D368FC1D509CBA | Status: read | Recipient: 16595921449079 | Timestamp: 2025-12-08 12:13:44+00:00
+[WARNING] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2407 - ⚠️ Message not found in database | message_id: 3EB0DFA3D368FC1D509CBA | wasender_msg_id: None
+[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
+[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
+  "data": {
+    "key": {
+      "id": "3EB0F7CED9B9FC5AD75461",
+      "fromMe": true,
+      "remoteJid": "16595921449079@lid",
+      "senderLid": "16595921449079@lid"
+    },
+    "status": 4
+  },
+  "timestamp": 1765196024982
+}
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: fd7e33ce833f7a83c659...
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB0F7CED9B9FC5AD75461 | Status: read | Recipient: 16595921449079 | Timestamp: 2025-12-08 12:13:44+00:00
+[WARNING] 2025-12-08 16:13:45 whatsappapi.wasender_service wasender_service._process_message_status_update:2407 - ⚠️ Message not found in database | message_id: 3EB0F7CED9B9FC5AD75461 | wasender_msg_id: None
+[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
+  "data": {
+    "remoteJid": "919961557713@s.whatsapp.net",
+    "id": "3EB0A72B691109055ED02A",
+    "msgId": 15128294,
+    "key": {
+      "id": "3EB0A72B691109055ED02A",
+      "fromMe": true,
+      "remoteJid": "919961557713@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/597672943_880068377693347_4759513307553281442_n.enc?ccb=11-4&oh=01_Q5Aa3QEt7TRH21DsWpuxbGJ4mKMtPTRxjlwbgL9Hi0DvGbdEig&oe=695E3EDD&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce2 *Hello, Shabana!*\r\n\r\nWe have some exciting news just for you! \ud83c\udf89 \r\n\r\nOur latest marketing campaign is here to help you boost your business and connect with your audience like never before. \r\n\r\n\u2705 Tailored strategies for your brand\r\n\u2705 Expert insights and support\r\n\u2705 Increased engagement and conversions\r\n\r\nDon't miss out on this opportunity to elevate your marketing game! \r\n\r\n\ud83d\udc49 *Join us now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you thrive! \ud83c\udf1f",
+        "fileName": "PASONS_26_WEEKEND_DEAL.pdf",
+        "mediaKey": {
+          "data": [
+            179,
+            124,
+            246,
+            105,
+            39,
+            39,
+            67,
+            43,
+            10,
+            226,
+            59,
+            165,
+            20,
+            223,
+            159,
+            20,
+            214,
+            1,
+            8,
+            79,
+            125,
+            169,
+            227,
+            110,
+            56,
+            14,
+            87,
+            54,
+            200,
+            86,
+            72,
+            176
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/597672943_880068377693347_4759513307553281442_n.enc?ccb=11-4&oh=01_Q5Aa3QEt7TRH21DsWpuxbGJ4mKMtPTRxjlwbgL9Hi0DvGbdEig&oe=695E3EDD&_nc_sid=5e03e0",
+        "fileLength": 1707172,
+        "fileSha256": {
+          "data": [
+            91,
+            190,
+            43,
+            100,
+            215,
+            25,
+            112,
+            239,
+            14,
+            233,
+            131,
+            151,
+            70,
+            236,
+            6,
+            255,
+            169,
+            230,
+            115,
+            203,
+            62,
+            169,
+            234,
+            117,
+            116,
+            243,
+            70,
+            126,
+            104,
+            22,
+            175,
+            135
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            125,
+            92,
+            163,
+            217,
+            43,
+            81,
+            185,
+            1,
+            80,
+            163,
+            32,
+            220,
+            130,
+            67,
+            74,
+            99,
+            154,
+            25,
+            143,
+            153,
+            86,
+            237,
+            136,
+            20,
+            180,
+            126,
+            228,
+            253,
+            85,
+            110,
+            74,
+            122
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765194436
+      }
+    },
+    "messageTimestamp": "1765194436",
+    "status": 4
+  },
+  "timestamp": 1765196026819
+}
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB0A72B691109055ED02A | Status: read | Recipient: 919961557713 | Timestamp: 2025-12-08 11:47:16+00:00
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
+  "data": {
+    "remoteJid": "919961557713@s.whatsapp.net",
+    "id": "3EB0B2598AF1E67647B58F",
+    "msgId": 15125866,
+    "key": {
+      "id": "3EB0B2598AF1E67647B58F",
+      "fromMe": true,
+      "remoteJid": "919961557713@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/597921574_1183735853899942_5364554952300808517_n.enc?ccb=11-4&oh=01_Q5Aa3QEfm2R8aJzvBt8o383jG7z4wbDd-nkbF9Ouzu7FOXf-aw&oe=695E2E19&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83c\udf1f *\ud83d\udce2*Exciting News*, Shabana!*\r\n\r\nGet ready to elevate your experience with our latest offerings! We have something special just for you that you won't want to miss.\r\n\r\n\u2705 Exclusive insights into our innovative services\r\n\u2705 Personalized support tailored to your needs\r\n\u2705 A warm community to connect and grow with\r\n\r\nJoin us and discover how we can help you thrive! \r\n\r\n\ud83d\udc49 *Connect with us now:*\r\n\r\nLooking forward to seeing you! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "PASONS_26_WEEKEND_DEAL.pdf",
+        "mediaKey": {
+          "data": [
+            77,
+            153,
+            30,
+            201,
+            91,
+            192,
+            159,
+            234,
+            214,
+            233,
+            184,
+            127,
+            146,
+            22,
+            90,
+            55,
+            9,
+            2,
+            31,
+            132,
+            22,
+            164,
+            77,
+            78,
+            195,
+            132,
+            202,
+            105,
+            4,
+            80,
+            37,
+            238
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/597921574_1183735853899942_5364554952300808517_n.enc?ccb=11-4&oh=01_Q5Aa3QEfm2R8aJzvBt8o383jG7z4wbDd-nkbF9Ouzu7FOXf-aw&oe=695E2E19&_nc_sid=5e03e0",
+        "fileLength": 1707172,
+        "fileSha256": {
+          "data": [
+            91,
+            190,
+            43,
+            100,
+            215,
+            25,
+            112,
+            239,
+            14,
+            233,
+            131,
+            151,
+            70,
+            236,
+            6,
+            255,
+            169,
+            230,
+            115,
+            203,
+            62,
+            169,
+            234,
+            117,
+            116,
+            243,
+            70,
+            126,
+            104,
+            22,
+            175,
+            135
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            39,
+            117,
+            124,
+            45,
+            161,
+            242,
+            109,
+            115,
+            62,
+            108,
+            80,
+            16,
+            45,
+            131,
+            47,
+            212,
+            177,
+            130,
+            61,
+            186,
+            174,
+            133,
+            199,
+            14,
+            208,
+            104,
+            68,
+            223,
+            249,
+            244,
+            66,
+            84
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765193302
+      }
+    },
+    "messageTimestamp": "1765193302",
+    "status": 4
+  },
+  "timestamp": 1765196026816
+}
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB0B2598AF1E67647B58F | Status: read | Recipient: 919961557713 | Timestamp: 2025-12-08 11:28:22+00:00
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2403 - 🔍 Message not found by message_id, trying wasender_msg_id: 15128294
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
+  "data": {
+    "remoteJid": "919961557713@s.whatsapp.net",
+    "id": "3EB0ED6641C7214AC78196",
+    "msgId": 15131893,
+    "key": {
+      "id": "3EB0ED6641C7214AC78196",
+      "fromMe": true,
+      "remoteJid": "919961557713@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/597675326_858582199905247_2245808091545927224_n.enc?ccb=11-4&oh=01_Q5Aa3QFENPZPmHzkrM2rqsQFSna2rdIH9-oIOuhacon3yHCYwA&oe=695E196D&_nc_sid=5e03e0&mms3=true",
+        "caption": "Hi Dears\r\nWeekend Deals \r\nTest Campaign\n\n---\nReply *STOP* to opt-out",
+        "fileName": "PASONS_26_WEEKEND_DEAL.pdf",
+        "mediaKey": {
+          "data": [
+            228,
+            94,
+            78,
+            233,
+            242,
+            30,
+            54,
+            205,
+            178,
+            206,
+            41,
+            181,
+            21,
+            243,
+            149,
+            156,
+            53,
+            58,
+            94,
+            141,
+            80,
+            12,
+            134,
+            113,
+            4,
+            136,
+            43,
+            235,
+            55,
+            189,
+            25,
+            162
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/597675326_858582199905247_2245808091545927224_n.enc?ccb=11-4&oh=01_Q5Aa3QFENPZPmHzkrM2rqsQFSna2rdIH9-oIOuhacon3yHCYwA&oe=695E196D&_nc_sid=5e03e0",
+        "fileLength": 1707172,
+        "fileSha256": {
+          "data": [
+            91,
+            190,
+            43,
+            100,
+            215,
+            25,
+            112,
+            239,
+            14,
+            233,
+            131,
+            151,
+            70,
+            236,
+            6,
+            255,
+            169,
+            230,
+            115,
+            203,
+            62,
+            169,
+            234,
+            117,
+            116,
+            243,
+            70,
+            126,
+            104,
+            22,
+            175,
+            135
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            211,
+            104,
+            150,
+            201,
+            108,
+            62,
+            238,
+            187,
+            9,
+            163,
+            134,
+            113,
+            91,
+            47,
+            176,
+            80,
+            54,
+            131,
+            107,
+            146,
+            133,
+            226,
+            106,
+            34,
+            89,
+            43,
+            12,
+            44,
+            172,
+            67,
+            185,
+            31
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765195767
+      }
+    },
+    "messageTimestamp": "1765195767",
+    "status": 4
+  },
+  "timestamp": 1765196026817
+}
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB0ED6641C7214AC78196 | Status: read | Recipient: 919961557713 | Timestamp: 2025-12-08 12:09:27+00:00
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2430 - ✅ Updated message status | ID: 186 | sent → read
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2435 - 📈 Updating campaign #20 stats after status change
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2403 - 🔍 Message not found by message_id, trying wasender_msg_id: 15131893
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2430 - ✅ Updated message status | ID: 208 | sent → read
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2435 - 📈 Updating campaign #23 stats after status change
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2440 - ✅ Campaign #20 stats updated: sent=7, delivered=2, read=2, failed=2
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 23.49ms
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2403 - 🔍 Message not found by message_id, trying wasender_msg_id: 15125866
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2440 - ✅ Campaign #23 stats updated: sent=6, delivered=1, read=1, failed=2
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 19.89ms
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2430 - ✅ Updated message status | ID: 176 | sent → read
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2435 - 📈 Updating campaign #18 stats after status change
+[INFO] 2025-12-08 16:13:46 whatsappapi.wasender_service wasender_service._process_message_status_update:2440 - ✅ Campaign #18 stats updated: sent=8, delivered=1, read=1, failed=2
+[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 42.09ms
+[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
+[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
+  "data": {
+    "remoteJid": "919961557713@s.whatsapp.net",
+    "id": "3EB034C0DDF0BD71BD9482",
+    "msgId": 15128681,
+    "key": {
+      "id": "3EB034C0DDF0BD71BD9482",
+      "fromMe": true,
+      "remoteJid": "919961557713@s.whatsapp.net"
+    },
+    "message": {
+      "extendedTextMessage": {
+        "text": "HI Dear"
+      }
+    },
+    "messageTimestamp": "1765194631",
+    "status": 4
+  },
+  "timestamp": 1765196026818
+}
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service.__init__:81 - WASender API token loaded: 1750|w36D2rUXeKtuwJR...
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service.__init__:85 - WASender BASE_URL: https://wasenderapi.com/api
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service.process_webhook:1994 - 🔄 Processing webhook | Event: messages.update | Session: d7d26550f17fc0ae996f...
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service.process_webhook:2005 - 📊 Message status update event detected
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service._process_message_status_update:2388 - 📊 MESSAGE STATUS UPDATE | Message ID: 3EB034C0DDF0BD71BD9482 | Status: read | Recipient: 919961557713 | Timestamp: 2025-12-08 11:50:31+00:00
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service._process_message_status_update:2403 - 🔍 Message not found by message_id, trying wasender_msg_id: 15128681
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service._process_message_status_update:2430 - ✅ Updated message status | ID: 195 | sent → read
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service._process_message_status_update:2435 - 📈 Updating campaign #21 stats after status change
+[INFO] 2025-12-08 16:13:47 whatsappapi.wasender_service wasender_service._process_message_status_update:2440 - ✅ Campaign #21 stats updated: sent=6, delivered=2, read=1, failed=2
+[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 20.60ms

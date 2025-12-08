@@ -29,6 +29,11 @@ urlpatterns = [
     path('contacts/sample-csv/', views.download_sample_csv, name='download_sample_csv'),
     path('contacts/sample-excel/', views.download_sample_excel, name='download_sample_excel'),
     
+    # Opt-Out Management
+    path('optout/<int:optout_id>/remove/', views.remove_optout, name='remove_optout'),
+    path('optout/export/csv/', views.export_optout_csv, name='export_optout_csv'),
+    path('optout/export/excel/', views.export_optout_excel, name='export_optout_excel'),
+    
     # API Endpoints
     path('api/contact-list-fields/<int:list_id>/', views.get_contact_list_fields, name='get_contact_list_fields'),
     path('api/check-moderation/', views.check_moderation, name='check_moderation'),

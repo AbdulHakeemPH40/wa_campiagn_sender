@@ -1,80 +1,8 @@
 # robots.txt for wacampaignsender.com
+# Allow all crawlers (search engines, AI bots, social preview bots)
 
-# Allow all crawlers by default
 User-agent: *
 Disallow:
 
-# ============================================
-# AI Bots - Explicitly Allow All
-# ============================================
-
-# OpenAI (ChatGPT, GPT)
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-# Google (Gemini, Bard)
-User-agent: Google-Extended
-Allow: /
-
-# Anthropic (Claude)
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-# xAI (Grok)
-User-agent: Grok
-Allow: /
-
-# Meta AI
-User-agent: Meta-ExternalAgent
-Allow: /
-
-User-agent: FacebookBot
-Allow: /
-
-# DeepSeek
-User-agent: DeepSeek
-Allow: /
-
-# Perplexity AI
-User-agent: PerplexityBot
-Allow: /
-
-# Cohere AI
-User-agent: cohere-ai
-Allow: /
-
-# Microsoft Copilot / Bing AI
-User-agent: Bingbot
-Allow: /
-
-# Common Crawl (used by many AI models)
-User-agent: CCBot
-Allow: /
-
-# Apple AI (Applebot)
-User-agent: Applebot
-Allow: /
-
-# ============================================
-# Search Engine Crawlers
-# ============================================
-
-# Yandex-specific: consolidate duplicate URLs with tracking params
-User-agent: Yandex
-Clean-param: utm_source /
-Clean-param: utm_medium /
-Clean-param: utm_campaign /
-Clean-param: utm_term /
-Clean-param: utm_content /
-Clean-param: gclid /
-Clean-param: fbclid /
-Clean-param: yclid /
-
-# Primary sitemaps
+# Sitemap
 Sitemap: https://wacampaignsender.com/sitemap.xml

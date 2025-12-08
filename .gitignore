@@ -6,9 +6,9 @@ ngrok.yml
 ngrok_urls.txt
 # wa_campiagn_sender/pythonanywhere_settings.py
 
-# Django Migrations (keep only __init__.py)
-*/migrations/*.py
-!*/migrations/__init__.py
+# Django Migrations - now tracked
+# */migrations/*.py
+# !*/migrations/__init__.py
 .env
 .env.local
 .env.*.local

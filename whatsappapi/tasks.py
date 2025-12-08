@@ -8,7 +8,7 @@ import random
 from datetime import timedelta
 from django.utils import timezone
 from django.conf import settings
-from userpanel.models import WASenderCampaign, WASenderSession, WASenderMessage
+from userpanel.models import WASenderCampaign, WASenderSession, WASenderMessage, OptOutContact
 from whatsappapi.models import Contact
 from django.db.models import Q
 from whatsappapi.wasender_service import WASenderService
@@ -283,6 +283,22 @@ def send_campaign_async(campaign_id):
                 seen_phones.add(phone_norm)
         
         logger.info(f"Processing {len(unique_contacts)} unique contacts out of {len(contacts)} total contacts")
+        
+        # Filter out opted-out contacts
+        opted_out_count = 0
+        filtered_contacts = []
+        for contact in unique_contacts:
+            phone_norm = service._format_phone_number(contact.phone_number or '')
+            if phone_norm and OptOutContact.is_opted_out(campaign.user, phone_norm):
+                opted_out_count += 1
+                logger.info(f"⏭️ Skipping opted-out contact: {phone_norm}")
+            else:
+                filtered_contacts.append(contact)
+        
+        if opted_out_count > 0:
+            logger.info(f"🚫 Filtered out {opted_out_count} opted-out contacts, {len(filtered_contacts)} remaining")
+        
+        unique_contacts = filtered_contacts
         
         # Initialize processed_phones tracking BEFORE batch or standard processing
         processed_phones = set()  # Track normalized phones we've already processed in this run

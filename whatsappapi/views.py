@@ -317,7 +317,20 @@ def create_session(request):
             
             return redirect('whatsappapi:dashboard')
     
-    return render(request, 'whatsappapi/dashboard.html')
+    # Check subscription status for UI display
+    subscription = Subscription.objects.filter(
+        user=request.user,
+        status='active',
+        end_date__gt=timezone.now()
+    ).first()
+    subscription_is_active = subscription is not None
+    
+    context = {
+        'subscription': subscription,
+        'subscription_is_active': subscription_is_active,
+    }
+    
+    return render(request, 'whatsappapi/dashboard.html', context)
 
 
 @login_required
@@ -334,7 +347,20 @@ def connect_session(request, session_id):
     status_lower = (session.status or '').lower()
     if status_lower in ['disconnected', 'logged_out']:
         logger.info(f"Session {session.session_id} is {session.status}, calling connect...")
-        service.connect_session(session)
+        connect_result = service.connect_session(session)
+        
+        # Check if session was deleted externally (404 from WASender)
+        if connect_result == 'deleted_externally':
+            logger.warning(f"Session {session.session_id} was deleted externally - deleting local session and redirecting to create new")
+            phone_number = session.phone_number
+            session.delete()
+            messages.warning(
+                request, 
+                f"Your WhatsApp session was disconnected or unlinked from the phone. "
+                f"Please create a new session and scan the QR code to reconnect."
+            )
+            return redirect('whatsappapi:create_session')
+        
         session.refresh_from_db()  # Reload to get updated status
         status_lower = (session.status or '').lower()
     
@@ -362,6 +388,7 @@ def check_session_status(request, session_id):
     """
     AJAX endpoint to check session connection status
     Polls WASender API to detect when QR code is scanned and session connects
+    Also detects if session was deleted externally (404)
     """
     session = get_object_or_404(WASenderSession, id=session_id, user=request.user)
     
@@ -369,6 +396,18 @@ def check_session_status(request, session_id):
     try:
         # Get latest status from WASender API
         status_data = service.get_session_status(session)
+        
+        # Check if session was deleted externally (404 from WASender)
+        if status_data and status_data.get('should_delete'):
+            logger.warning(f"Session {session.session_id} was deleted externally during status check - deleting local session")
+            session.delete()
+            return JsonResponse({
+                'status': 'deleted_externally',
+                'deleted': True,
+                'message': 'Session was unlinked from WhatsApp or deleted from WASender. Please create a new session.',
+                'redirect_url': '/whatsappapi/create-session/'
+            })
+        
         session.refresh_from_db()  # Reload to get updated status
         
         # Build response with complete session data
@@ -397,14 +436,30 @@ def refresh_all_sessions(request):
     """
     AJAX endpoint to refresh status of all user sessions
     Detects external disconnections from WASender API
+    Also detects and deletes sessions that were deleted externally (404)
     """
     service = WASenderService()
     all_sessions = WASenderSession.objects.filter(user=request.user).order_by('-created_at')[:10]
     
     updated_sessions = []
+    deleted_sessions = []
+    
     for session in all_sessions:
         try:
-            service.get_session_status(session)
+            status_data = service.get_session_status(session)
+            
+            # Check if session was deleted externally (404 from WASender)
+            if status_data and status_data.get('should_delete'):
+                logger.warning(f"Session {session.session_id} was deleted externally - deleting local session")
+                deleted_sessions.append({
+                    'id': session.id,
+                    'session_id': session.session_id,
+                    'phone_number': session.phone_number or '',
+                    'reason': 'Session was unlinked from WhatsApp or deleted from WASender'
+                })
+                session.delete()
+                continue
+            
             # session object is already updated by get_session_status() - no refresh needed
             updated_sessions.append({
                 'id': session.id,
@@ -424,7 +479,9 @@ def refresh_all_sessions(request):
     return JsonResponse({
         'success': True,
         'sessions': updated_sessions,
-        'count': len(updated_sessions)
+        'deleted_sessions': deleted_sessions,
+        'count': len(updated_sessions),
+        'deleted_count': len(deleted_sessions)
     })
 
 
@@ -493,8 +550,18 @@ def _get_send_campaign_context(user, session, **extra):
     """
     from .models import ContactList, CampaignTemplate
     
+    # Check subscription status for UI display
+    subscription = Subscription.objects.filter(
+        user=user,
+        status='active',
+        end_date__gt=timezone.now()
+    ).first()
+    subscription_is_active = subscription is not None
+    
     context = {
         'session': session,
+        'subscription': subscription,
+        'subscription_is_active': subscription_is_active,
         'contact_lists': ContactList.objects.filter(user=user).select_related('user').only(
             'id', 'name', 'total_contacts', 'available_fields', 'created_at', 'user'
         ),
@@ -563,8 +630,13 @@ def send_campaign(request):
         return redirect('whatsappapi:create_session')
     
     # Check for phone number mismatch (quick database-only check)
+    # Normalize phone numbers by removing all non-digit characters for comparison
     if session.phone_number and session.connected_phone_number:
-        if session.phone_number != session.connected_phone_number:
+        import re
+        registered_digits = re.sub(r'\D', '', session.phone_number)
+        connected_digits = re.sub(r'\D', '', session.connected_phone_number)
+        # Compare last 10 digits to handle country code variations
+        if registered_digits[-10:] != connected_digits[-10:]:
             messages.error(
                 request, 
                 f"Phone number mismatch! You registered with {session.phone_number} but scanned with {session.connected_phone_number}. "
@@ -604,6 +676,13 @@ def send_campaign(request):
         contact_list_id = request.POST.get('contact_list_id')
         attachment = request.FILES.get('attachment')
         compliance_confirmed = request.POST.get('compliance_confirmed') == 'true'
+        include_optout_footer = request.POST.get('include_optout_footer') == 'on'
+        
+        # Append opt-out footer if checkbox is checked
+        if include_optout_footer:
+            # Simple footer with clear line break
+            optout_footer = "\n\n---\nReply *STOP* to opt-out"
+            message = message.rstrip() + optout_footer
 
         # Admin enforcement: check user moderation profile (warnings / block)
         try:
@@ -938,6 +1017,7 @@ def send_campaign(request):
         campaign = WASenderCampaign.objects.create(
             user=request.user,
             session=session,
+            session_phone=session.phone_number if session else None,  # Preserve phone number for display after session deletion
             name=campaign_name if not is_test_campaign else f"TEST_{campaign_name}",
             description=f"Test campaign (FREE PLAN - max {TEST_CAMPAIGN_MAX_CONTACTS} contacts)" if is_test_campaign else None,
             message_template=message,
@@ -1286,6 +1366,13 @@ def send_test_message(request):
         test_phone = request.POST.get('test_phone', '').strip()
         test_message = request.POST.get('test_message', '').strip()
         test_attachment = request.FILES.get('test_attachment')
+        include_optout_footer = request.POST.get('include_optout_footer') == 'on'
+        
+        # Append opt-out footer if checkbox is checked
+        if include_optout_footer:
+            # Simple footer with clear line break
+            optout_footer = "\n\n---\nReply *STOP* to opt-out"
+            test_message = test_message.rstrip() + optout_footer
         
         if not test_phone:
             return JsonResponse({'error': 'Phone number required'}, status=400)
@@ -1346,8 +1433,12 @@ def send_test_message(request):
             
             # Get clean filename without extension for public_id
             clean_filename = os.path.splitext(test_attachment.name)[0]
-            # Remove spaces and special characters
-            clean_filename = clean_filename.replace(' ', '_')
+            # Remove spaces and special characters that are invalid for Cloudinary public_id
+            # Only allow alphanumeric, underscore, hyphen, and dot
+            import re
+            clean_filename = re.sub(r'[^a-zA-Z0-9_\-.]', '_', clean_filename)
+            # Remove consecutive underscores
+            clean_filename = re.sub(r'_+', '_', clean_filename).strip('_')
             
             # Upload to Cloudinary with original filename
             upload_result = cloudinary.uploader.upload(
@@ -1519,13 +1610,13 @@ def campaign_list(request):
     # Calculate real-time stats from messages for each campaign
     from django.db.models import Q, Count
     for campaign in campaigns:
-        # Get messages by metadata campaign_id first (newer method)
+        # Get messages by metadata campaign_id first (newer method - works even after session deletion)
         messages_qs = WASenderMessage.objects.filter(
             metadata__campaign_id=campaign.id
         )
         
-        # Fallback to time-based if no metadata
-        if not messages_qs.exists():
+        # Fallback to time-based if no metadata AND session exists
+        if not messages_qs.exists() and campaign.session:
             messages_qs = WASenderMessage.objects.filter(
                 session=campaign.session,
                 created_at__gte=campaign.created_at
@@ -1586,20 +1677,27 @@ def campaign_detail(request, campaign_id):
     campaign = get_object_or_404(WASenderCampaign, id=campaign_id, user=request.user)
     
     # Calculate real-time stats from messages
-    # Try metadata-based query first (most accurate for new campaigns)
+    # Try metadata-based query first (most accurate - works even after session deletion)
     messages_qs_metadata = WASenderMessage.objects.filter(
         metadata__campaign_id=campaign.id
     )
     
-    # Always also get time-based query (fallback for old campaigns)
-    messages_qs_time = WASenderMessage.objects.filter(
-        session=campaign.session,
-        created_at__gte=campaign.created_at
-    )
+    # Time-based fallback only if session exists
+    messages_qs_time = None
+    if campaign.session:
+        messages_qs_time = WASenderMessage.objects.filter(
+            session=campaign.session,
+            created_at__gte=campaign.created_at
+        )
     
-    # Use metadata query if it has messages, otherwise use time-based
+    # Use metadata query if it has messages, otherwise use time-based (if available)
     # This ensures we always get stats even for old campaigns
-    messages_qs = messages_qs_metadata if messages_qs_metadata.exists() else messages_qs_time
+    if messages_qs_metadata.exists():
+        messages_qs = messages_qs_metadata
+    elif messages_qs_time is not None:
+        messages_qs = messages_qs_time
+    else:
+        messages_qs = messages_qs_metadata  # Empty queryset if no session and no metadata
     
     # Update campaign object with real-time stats
     campaign.messages_sent = messages_qs.filter(status__in=['sent', 'delivered', 'read']).count()
@@ -1618,40 +1716,30 @@ def campaign_detail(request, campaign_id):
     except Exception:
         pass
     
-    # Base queryset: messages for this session
-    messages_queryset = WASenderMessage.objects.filter(
-        session=campaign.session
+    # Get messages for this campaign - prefer metadata linkage (works after session deletion)
+    # First try metadata-based query
+    linked_qs = WASenderMessage.objects.filter(
+        metadata__campaign_id=campaign.id
     ).order_by('-created_at')
     
-    # Prefer metadata linkage if available (newer messages tagged with campaign_id)
-    # Use JSON key transform for compatibility with SQLite (avoid __contains)
-    linked_qs = messages_queryset.filter(metadata__campaign_id=campaign.id)
     if linked_qs.exists():
         messages_queryset = linked_qs
-    else:
-        # Fallback to time window starting at campaign.created_at
-        messages_queryset = messages_queryset.filter(created_at__gte=campaign.created_at)
-    
-    # Further filter by campaign recipients if available and not using metadata-linkage
-    if not linked_qs.exists():
+    elif campaign.session:
+        # Fallback to session-based query only if session exists
+        messages_queryset = WASenderMessage.objects.filter(
+            session=campaign.session,
+            created_at__gte=campaign.created_at
+        ).order_by('-created_at')
+        
+        # Further filter by campaign recipients if available
         if campaign.recipients:
             phone_numbers = [recipient.get('phone') for recipient in campaign.recipients if recipient.get('phone')]
             if phone_numbers:
                 unique_phone_numbers = list(set(phone_numbers))
                 messages_queryset = messages_queryset.filter(recipient__in=unique_phone_numbers)
-        else:
-            # SQLite does not support DISTINCT ON; emulate latest-per-recipient via Subquery
-            try:
-                from django.db.models import OuterRef, Subquery
-                latest_ids = WASenderMessage.objects.filter(
-                    session=campaign.session,
-                    recipient=OuterRef('recipient'),
-                    created_at__gte=campaign.created_at
-                ).order_by('-created_at').values('id')[:1]
-                messages_queryset = messages_queryset.filter(id=Subquery(latest_ids)).order_by('-created_at')
-            except Exception:
-                # As a safe fallback, just order by newest
-                messages_queryset = messages_queryset.order_by('-created_at')
+    else:
+        # No session and no metadata - use empty queryset
+        messages_queryset = linked_qs  # Empty queryset
     
     # Paginate messages (10 per page)
     paginator = Paginator(messages_queryset, 10)
@@ -1677,19 +1765,26 @@ def campaign_stats_api(request, campaign_id):
     campaign = get_object_or_404(WASenderCampaign, id=campaign_id, user=request.user)
     
     # Calculate real-time stats from messages
-    # Try metadata-based query first (most accurate for new campaigns)
+    # Try metadata-based query first (most accurate - works even after session deletion)
     messages_qs_metadata = WASenderMessage.objects.filter(
         metadata__campaign_id=campaign.id
     )
     
-    # Always also get time-based query (fallback for old campaigns)
-    messages_qs_time = WASenderMessage.objects.filter(
-        session=campaign.session,
-        created_at__gte=campaign.created_at
-    )
+    # Time-based fallback only if session exists
+    messages_qs_time = None
+    if campaign.session:
+        messages_qs_time = WASenderMessage.objects.filter(
+            session=campaign.session,
+            created_at__gte=campaign.created_at
+        )
     
-    # Use metadata query if it has messages, otherwise use time-based
-    messages_qs = messages_qs_metadata if messages_qs_metadata.exists() else messages_qs_time
+    # Use metadata query if it has messages, otherwise use time-based (if available)
+    if messages_qs_metadata.exists():
+        messages_qs = messages_qs_metadata
+    elif messages_qs_time is not None:
+        messages_qs = messages_qs_time
+    else:
+        messages_qs = messages_qs_metadata  # Empty queryset if no session and no metadata
     
     # Calculate counts by status
     messages_sent = messages_qs.filter(status__in=['sent', 'delivered', 'read']).count()
@@ -1892,17 +1987,158 @@ def retry_single_recipient(request, campaign_id):
 def contacts(request):
     """
     Contacts management page
-    List all uploaded contact lists
+    List all uploaded contact lists and opt-out users
     """
     from .models import ContactList
+    from userpanel.models import OptOutContact
+    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
     
     # Get all contact lists for current user
     contact_lists = ContactList.objects.filter(user=request.user).order_by('-created_at')
     
+    # Get opt-out contacts with pagination
+    optout_list = OptOutContact.objects.filter(user=request.user, is_active=True).order_by('-opted_out_at')
+    optout_page = request.GET.get('optout_page', 1)
+    paginator = Paginator(optout_list, 24)  # 24 per page
+    
+    try:
+        optout_contacts = paginator.page(optout_page)
+    except PageNotAnInteger:
+        optout_contacts = paginator.page(1)
+    except EmptyPage:
+        optout_contacts = paginator.page(paginator.num_pages)
+    
+    # Active tab
+    active_tab = request.GET.get('tab', 'contacts')
+    
     context = {
         'contact_lists': contact_lists,
+        'optout_contacts': optout_contacts,
+        'optout_total': optout_list.count(),
+        'active_tab': active_tab,
     }
     return render(request, 'whatsappapi/contacts.html', context)
+
+
+# ==================== Opt-Out Management ====================
+
+@login_required
+def remove_optout(request, optout_id):
+    """
+    Remove a contact from opt-out list (re-enable sending)
+    """
+    from userpanel.models import OptOutContact
+    
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
+    
+    try:
+        optout = OptOutContact.objects.get(id=optout_id, user=request.user)
+        phone = optout.phone_number
+        optout.delete()
+        return JsonResponse({
+            'success': True,
+            'message': f'Contact {phone} removed from opt-out list'
+        })
+    except OptOutContact.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Opt-out contact not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+@login_required
+def export_optout_csv(request):
+    """
+    Export opt-out contacts as CSV
+    """
+    from userpanel.models import OptOutContact
+    from django.utils import timezone as dj_timezone
+    import csv
+    from django.http import HttpResponse
+    
+    optout_contacts = OptOutContact.objects.filter(user=request.user, is_active=True).order_by('-opted_out_at')
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="optout_contacts.csv"'
+    
+    writer = csv.writer(response)
+    writer.writerow(['Phone Number', 'Keyword Used', 'Original Message', 'Opted Out At'])
+    
+    for contact in optout_contacts:
+        # Convert to local timezone before formatting
+        local_time = dj_timezone.localtime(contact.opted_out_at) if contact.opted_out_at else None
+        writer.writerow([
+            contact.phone_number,
+            contact.keyword_used,
+            contact.original_message or '',
+            local_time.strftime('%d/%m/%Y, %H:%M') if local_time else ''
+        ])
+    
+    return response
+
+
+@login_required
+def export_optout_excel(request):
+    """
+    Export opt-out contacts as Excel
+    """
+    from userpanel.models import OptOutContact
+    from django.http import HttpResponse
+    from django.utils import timezone as dj_timezone
+    import io
+    
+    try:
+        import openpyxl
+        from openpyxl.styles import Font, PatternFill, Alignment
+    except ImportError:
+        return JsonResponse({'error': 'openpyxl not installed'}, status=500)
+    
+    optout_contacts = OptOutContact.objects.filter(user=request.user, is_active=True).order_by('-opted_out_at')
+    
+    # Create workbook
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Opt-Out Contacts"
+    
+    # Header styling
+    header_font = Font(bold=True, color="FFFFFF")
+    header_fill = PatternFill(start_color="10B981", end_color="10B981", fill_type="solid")
+    
+    # Headers
+    headers = ['Phone Number', 'Keyword Used', 'Original Message', 'Opted Out At']
+    for col, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col, value=header)
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = Alignment(horizontal='center')
+    
+    # Data rows
+    for row, contact in enumerate(optout_contacts, 2):
+        ws.cell(row=row, column=1, value=contact.phone_number)
+        ws.cell(row=row, column=2, value=contact.keyword_used)
+        ws.cell(row=row, column=3, value=contact.original_message or '')
+        # Convert to local timezone before formatting
+        local_time = dj_timezone.localtime(contact.opted_out_at) if contact.opted_out_at else None
+        ws.cell(row=row, column=4, value=local_time.strftime('%d/%m/%Y, %H:%M') if local_time else '')
+    
+    # Adjust column widths
+    ws.column_dimensions['A'].width = 20
+    ws.column_dimensions['B'].width = 15
+    ws.column_dimensions['C'].width = 40
+    ws.column_dimensions['D'].width = 20
+    
+    # Save to response
+    output = io.BytesIO()
+    wb.save(output)
+    output.seek(0)
+    
+    response = HttpResponse(
+        output.read(),
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response['Content-Disposition'] = 'attachment; filename="optout_contacts.xlsx"'
+    
+    return response
 
 
 @login_required

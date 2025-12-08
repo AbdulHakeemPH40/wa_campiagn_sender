@@ -254,7 +254,7 @@ class WASenderMessage(models.Model):
         ('failed', 'Failed'),
     )
     
-    session = models.ForeignKey(WASenderSession, on_delete=models.CASCADE, related_name='messages', db_index=True)
+    session = models.ForeignKey(WASenderSession, on_delete=models.SET_NULL, null=True, blank=True, related_name='messages', db_index=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wasender_messages', db_index=True)
     
     # Message details
@@ -309,7 +309,10 @@ class WASenderCampaign(models.Model):
     )
     
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='wasender_campaigns', db_index=True)
-    session = models.ForeignKey(WASenderSession, on_delete=models.CASCADE, related_name='campaigns', db_index=True)
+    session = models.ForeignKey(WASenderSession, on_delete=models.SET_NULL, null=True, blank=True, related_name='campaigns', db_index=True)
+    
+    # Store session phone number for display after session is deleted
+    session_phone = models.CharField(max_length=50, blank=True, null=True, help_text="Phone number used for this campaign (preserved after session deletion)")
     
     # Campaign details
     name = models.CharField(max_length=255)
@@ -392,8 +395,8 @@ class WASenderCampaign(models.Model):
         # Use metadata-based query (accurate for campaigns with tagged messages)
         messages = WASenderMessage.objects.filter(metadata__campaign_id=self.id)
         
-        # Fallback to time-based if no metadata-tagged messages exist
-        if not messages.exists():
+        # Fallback to time-based if no metadata-tagged messages exist AND session exists
+        if not messages.exists() and self.session:
             messages = WASenderMessage.objects.filter(
                 session=self.session,
                 created_at__gte=self.created_at
@@ -458,3 +461,97 @@ class WASenderIncomingMessage(models.Model):
     
     def __str__(self):
         return f"From {self.sender} ({self.sender_name}) - {self.message_type} at {self.received_at}"
+
+
+class OptOutContact(models.Model):
+    """
+    Stores contacts who have opted out of receiving messages.
+    When a contact sends opt-out keywords (STOP, unsubscribe, etc.),
+    their number is stored here to prevent future campaign messages.
+    """
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='optout_contacts',
+        db_index=True
+    )
+    phone_number = models.CharField(max_length=50, db_index=True)  # Normalized phone number
+    
+    # Opt-out details
+    keyword_used = models.CharField(max_length=50)  # The keyword they used (STOP, unsubscribe, etc.)
+    original_message = models.TextField(blank=True, null=True)  # Full message they sent
+    session = models.ForeignKey(
+        WASenderSession, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        related_name='optout_contacts'
+    )
+    
+    # Status
+    is_active = models.BooleanField(default=True)  # Can be reactivated if they opt back in
+    
+    # Timestamps
+    opted_out_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', 'phone_number']),
+            models.Index(fields=['phone_number', 'is_active']),
+            models.Index(fields=['user', 'is_active', 'opted_out_at']),
+        ]
+        # Ensure unique opt-out per user per phone number
+        unique_together = ['user', 'phone_number']
+        ordering = ['-opted_out_at']
+        verbose_name = 'Opt-Out Contact'
+        verbose_name_plural = 'Opt-Out Contacts'
+    
+    def __str__(self):
+        status = "Active" if self.is_active else "Reactivated"
+        return f"{self.phone_number} - {status} (keyword: {self.keyword_used})"
+    
+    @classmethod
+    def is_opted_out(cls, user, phone_number):
+        """
+        Check if a phone number has opted out for a specific user.
+        Normalizes phone number for comparison.
+        """
+        import re
+        # Normalize: remove all non-digits
+        normalized = re.sub(r'\D', '', phone_number)
+        # Check last 10 digits to handle country code variations
+        if len(normalized) >= 10:
+            last_10 = normalized[-10:]
+            return cls.objects.filter(
+                user=user,
+                is_active=True,
+                phone_number__endswith=last_10
+            ).exists()
+        return cls.objects.filter(
+            user=user,
+            is_active=True,
+            phone_number=normalized
+        ).exists()
+    
+    @classmethod
+    def add_optout(cls, user, phone_number, keyword, message=None, session=None):
+        """
+        Add a phone number to opt-out list or update existing.
+        Returns (optout_obj, created) tuple.
+        """
+        import re
+        # Normalize phone number
+        normalized = re.sub(r'\D', '', phone_number)
+        
+        optout, created = cls.objects.update_or_create(
+            user=user,
+            phone_number=normalized,
+            defaults={
+                'keyword_used': keyword,
+                'original_message': message,
+                'session': session,
+                'is_active': True
+            }
+        )
+        return optout, created

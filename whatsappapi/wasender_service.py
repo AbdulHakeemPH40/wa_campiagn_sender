@@ -14,7 +14,7 @@ from django.utils import timezone
 from cryptography.fernet import Fernet
 import qrcode
 from PIL import Image
-from userpanel.models import WASenderSession, WASenderMessage, WASenderIncomingMessage
+from userpanel.models import WASenderSession, WASenderMessage, WASenderIncomingMessage, OptOutContact
 
 logger = logging.getLogger(__name__)
 
@@ -452,6 +452,10 @@ class WASenderService:
                 session.save()
                 logger.info(f"Connection initiated for session {session.session_id}, status set to pending")
                 return True
+            elif response.status_code == 404:
+                # Session not found on WASender - was deleted externally
+                logger.warning(f"Session {session.session_id} not found on WASender (404) during connect - session deleted externally")
+                return 'deleted_externally'  # Special return value to indicate deletion
             else:
                 logger.error(f"Failed to connect session: {response.status_code} - {_brief_response_text(response)}")
                 return False
@@ -676,12 +680,18 @@ class WASenderService:
                 logger.info(f"Session {session.session_id} status: {session.status}")
                 return session_data
             elif response.status_code == 404:
-                # Session not found on WASender - mark as disconnected
-                logger.warning(f"Session {session.session_id} not found on WASender (404) - marking as disconnected")
+                # Session not found on WASender - this means it was deleted externally
+                # (e.g., user unlinked from WhatsApp phone, or deleted from WASender dashboard)
+                logger.warning(f"Session {session.session_id} not found on WASender (404) - session deleted externally")
                 session.status = 'disconnected'
                 session.disconnected_at = timezone.now()
                 session.save()
-                return {'status': 'disconnected', 'reason': 'Session not found on WASender'}
+                # Return special flag to indicate session should be deleted locally
+                return {
+                    'status': 'deleted_externally', 
+                    'reason': 'Session not found on WASender - was deleted or unlinked from WhatsApp',
+                    'should_delete': True
+                }
             else:
                 # Sanitize noisy HTML error pages (e.g., Cloudflare 5xx) and prefer concise messages
                 try:
@@ -2101,8 +2111,25 @@ class WASenderService:
                 push_name = msg_data.get('pushName', 'Unknown')
                 timestamp = msg_data.get('messageTimestamp', 0)
                 
-                # Extract phone number (remove @s.whatsapp.net)
-                phone_number = remote_jid.replace('@s.whatsapp.net', '')
+                # Extract phone number - handle multiple formats:
+                # 1. cleanedSenderPn (preferred - already clean number)
+                # 2. senderPn (format: 971564669930@s.whatsapp.net)
+                # 3. remoteJid with @s.whatsapp.net
+                # 4. remoteJid with @lid (fallback to senderPn)
+                phone_number = key.get('cleanedSenderPn', '')
+                if not phone_number:
+                    sender_pn = key.get('senderPn', '')
+                    if sender_pn:
+                        phone_number = sender_pn.replace('@s.whatsapp.net', '')
+                if not phone_number:
+                    # Fallback to remoteJid (may be @lid format which isn't a phone)
+                    if '@s.whatsapp.net' in remote_jid:
+                        phone_number = remote_jid.replace('@s.whatsapp.net', '')
+                    elif '@lid' not in remote_jid:
+                        phone_number = remote_jid.split('@')[0] if '@' in remote_jid else remote_jid
+                
+                # Also check messageBody for text content (WASender convenience field)
+                message_body = msg_data.get('messageBody', '')
                 
                 # Skip messages sent by us
                 if from_me:
@@ -2113,8 +2140,13 @@ class WASenderService:
                 media_type = None
                 media_url = None
                 
-                # Check for text
-                if 'conversation' in message_obj:
+                # Check for text - multiple sources
+                # 1. messageBody (WASender convenience field - already extracted above)
+                # 2. message.conversation
+                # 3. message.extendedTextMessage.text
+                if message_body:
+                    message_text = message_body
+                elif 'conversation' in message_obj:
                     message_text = message_obj['conversation']
                 elif 'extendedTextMessage' in message_obj:
                     message_text = message_obj['extendedTextMessage'].get('text', '')
@@ -2169,20 +2201,21 @@ class WASenderService:
                     except WASenderSession.DoesNotExist:
                         logger.warning(f"Session not found: {session_id}")
                 
-                # Fallback: Try to find session by connected phone number (still filtered by user)
-                if not session:
-                    logger.warning("No session_id match in webhook payload, searching by phone")
-                    # Extract sender phone and try to match with session's connected phone
-                    sender_phone_clean = phone_number.replace('+', '').replace(' ', '').replace('-', '')
+                # Fallback: Get the first active session for this user
+                if not session and user_id:
+                    logger.warning("No session_id match in webhook payload, using first active session for user")
                     try:
-                        # Try to find a session where the connected phone matches
+                        # Get the first active/connected session for this user
                         session = base_queryset.filter(
-                            connected_phone_number__icontains=sender_phone_clean[-10:]  # Last 10 digits
+                            status__in=['connected', 'active', 'ready']
                         ).first()
+                        if not session:
+                            # If no active session, just get any session for this user
+                            session = base_queryset.first()
                         if session:
-                            logger.info(f"Found session by phone match: {session.session_id} (User: {session.user_id})")
+                            logger.info(f"Found session for user: {session.session_id} (User: {session.user_id})")
                     except Exception as e:
-                        logger.warning(f"Error searching session by phone: {e}")
+                        logger.warning(f"Error searching session for user: {e}")
                 
                 if session:
                     # Store incoming message in database
@@ -2201,6 +2234,23 @@ class WASenderService:
                             raw_data=msg_data
                         )
                         logger.info(f"✅ Saved incoming message | ID: {incoming_msg.id} | Session: {session.session_name}")
+                        
+                        # Check for opt-out keywords in the message
+                        if message_text:
+                            optout_keyword = self._detect_optout_keyword(message_text)
+                            if optout_keyword:
+                                try:
+                                    optout, created = OptOutContact.add_optout(
+                                        user=session.user,
+                                        phone_number=phone_number,
+                                        keyword=optout_keyword,
+                                        message=message_text,
+                                        session=session
+                                    )
+                                    action = "Added" if created else "Updated"
+                                    logger.info(f"🚫 OPT-OUT DETECTED | {action} | Phone: {phone_number} | Keyword: '{optout_keyword}' | User: {session.user.email}")
+                                except Exception as optout_err:
+                                    logger.error(f"❌ Error saving opt-out: {optout_err}", exc_info=True)
                     except Exception as e:
                         logger.error(f"❌ Error saving incoming message: {e}", exc_info=True)
                 else:
@@ -2212,6 +2262,61 @@ class WASenderService:
         except Exception as e:
             logger.error(f"❌ Error processing incoming message: {e}", exc_info=True)
             return False
+    
+    def _detect_optout_keyword(self, message_text):
+        """
+        Detect opt-out keywords in incoming message.
+        Returns the matched keyword if found, None otherwise.
+        
+        Supported keywords (case-insensitive):
+        - STOP, stop, Stop
+        - UNSUBSCRIBE, unsubscribe, Unsubscribe
+        - OPT-OUT, opt-out, optout, OPTOUT, Opt-Out
+        - NO, no, No (only if it's the entire message)
+        - REMOVE, remove, Remove
+        - CANCEL, cancel, Cancel
+        - END, end, End
+        - QUIT, quit, Quit
+        """
+        if not message_text:
+            return None
+        
+        # Normalize: strip whitespace and get lowercase version
+        text = message_text.strip()
+        text_lower = text.lower()
+        
+        # Exact match keywords (message is just the keyword)
+        # Note: "NO" removed - too common in normal conversation
+        exact_keywords = ['stop', 'unsubscribe', 'remove', 'cancel', 'end', 'quit']
+        if text_lower in exact_keywords:
+            return text_lower.upper()
+        
+        # Partial match keywords (keyword appears in message)
+        # These are checked with word boundaries to avoid false positives
+        import re
+        partial_keywords = [
+            r'\bstop\b',
+            r'\bunsubscribe\b',
+            r'\bopt[-\s]?out\b',
+            r'\bremove\s*me\b',
+            r'\bcancel\b',
+            r'\bno\s+more\b',
+            r'\bno\s+thanks\b',
+            r'\bnot\s+interested\b',
+            r'\bno\s+send\b',        # "no send"
+            r'\bno\s+sent\b',        # "no sent"
+            r'\bdont\s+send\b',      # "dont send"
+            r"\bdon'?t\s+send\b",    # "don't send"
+        ]
+        
+        for pattern in partial_keywords:
+            match = re.search(pattern, text_lower)
+            if match:
+                # Return the matched keyword in uppercase
+                matched = match.group(0).replace(' ', '_').upper()
+                return matched
+        
+        return None
     
     def _process_message_status_update(self, payload):
         """
@@ -2413,8 +2518,31 @@ class WASenderService:
                         session.connected_phone_number = phone_number
                     logger.info(f"✅ Session connected | {session.session_name} | Phone: {phone_number}")
                     
-                elif status_lower in ['disconnected', 'logged_out', 'close']:
-                    # Treat 'disconnected', 'logged_out', and 'close' as disconnected
+                elif status_lower in ['disconnected', 'logged_out', 'close', 'deleted', 'removed', 'unlinked']:
+                    # Treat these as session being removed/disconnected
+                    # If status indicates session was deleted/removed, we should delete local session
+                    if status_lower in ['deleted', 'removed', 'unlinked']:
+                        logger.warning(f"🗑️ SESSION DELETED/UNLINKED | User: {session.user.email} | Session: {session.session_name}")
+                        logger.warning(f"⚠️ Session was unlinked from WhatsApp or deleted from WASender - deleting local session")
+                        
+                        # Check for active campaigns before deleting
+                        from userpanel.models import WASenderCampaign
+                        active_campaigns = WASenderCampaign.objects.filter(
+                            session=session,
+                            status__in=['pending', 'running']
+                        )
+                        if active_campaigns.exists():
+                            logger.error(f"🚨 CRITICAL: {active_campaigns.count()} active campaigns affected by session deletion!")
+                            for camp in active_campaigns:
+                                camp.status = 'failed'
+                                camp.save()
+                                logger.error(f"   - Campaign #{camp.id}: {camp.name} marked as failed")
+                        
+                        # Delete the local session
+                        session.delete()
+                        logger.info(f"✅ Local session deleted after external deletion")
+                        return True
+                    
                     session.status = 'disconnected'
                     session.disconnected_at = timezone.now()
                     logger.warning(f"🚨 SESSION DISCONNECTED | User: {session.user.email} | Session: {session.session_name} | Phone: {session.connected_phone_number or session.phone_number}")
@@ -2844,3 +2972,4 @@ class WASenderService:
         except Exception as e:
             logger.error(f"Error getting profile picture: {e}")
             return ''
+

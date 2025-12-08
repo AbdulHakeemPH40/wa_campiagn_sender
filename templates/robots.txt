@@ -1,28 +1,184 @@
-# Allow major search engines
+# robots.txt for wacampaignsender.com
+# Last updated: 2025-12-08
+# Policy: Allow ALL crawlers including search engines and AI bots
+
+# ============================================
+# GLOBAL RULE - Allow Everything
+# ============================================
+User-agent: *
+Allow: /
+Disallow:
+
+# ============================================
+# Major Search Engines - Explicitly Allow
+# ============================================
+
+# Google
 User-agent: Googlebot
 Allow: /
 
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+# Bing / Microsoft
 User-agent: Bingbot
 Allow: /
 
-User-agent: Yahoo! Slurp
+User-agent: msnbot
 Allow: /
 
+# Yahoo
+User-agent: Slurp
+Allow: /
+
+# DuckDuckGo
 User-agent: DuckDuckBot
 Allow: /
 
+# Baidu (China)
 User-agent: Baiduspider
 Allow: /
 
+# Yandex (Russia)
 User-agent: Yandex
 Allow: /
+Clean-param: utm_source /
+Clean-param: utm_medium /
+Clean-param: utm_campaign /
+Clean-param: utm_term /
+Clean-param: utm_content /
+Clean-param: gclid /
+Clean-param: fbclid /
+Clean-param: yclid /
 
-# Allow social media preview bots
+# Sogou (China)
+User-agent: Sogou
+Allow: /
+
+# Naver (Korea)
+User-agent: Yeti
+Allow: /
+
+# Seznam (Czech)
+User-agent: SeznamBot
+Allow: /
+
+# ============================================
+# AI Bots - Explicitly Allow All
+# ============================================
+
+# OpenAI (ChatGPT, GPT-4, GPT-5)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Google AI (Gemini, Bard)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Gemini
+Allow: /
+
+# Anthropic (Claude)
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# xAI (Grok)
+User-agent: Grok
+Allow: /
+
+# Meta AI (Llama, Facebook)
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: Facebot
+# DeepSeek
+User-agent: DeepSeek
 Allow: /
+
+User-agent: Deepseek-Bot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
+# Microsoft Copilot
+User-agent: CopilotBot
+Allow: /
+
+# Common Crawl (used by many AI models for training)
+User-agent: CCBot
+Allow: /
+
+# Apple AI (Applebot, Siri)
+User-agent: Applebot
+Allow: /
+
+# Amazon Alexa
+User-agent: ia_archiver
+Allow: /
+
+# Hugging Face
+User-agent: HuggingFaceBot
+Allow: /
+
+# Mistral AI
+User-agent: MistralBot
+Allow: /
+
+# ByteDance / TikTok AI
+User-agent: Bytespider
+Allow: /
+
+# You.com AI
+User-agent: YouBot
+Allow: /
+
+# Neeva AI
+User-agent: NeevaBot
+Allow: /
+
+# AI2 (Allen Institute)
+User-agent: AI2Bot
+Allow: /
+
+# Diffbot (AI data extraction)
+User-agent: Diffbot
+Allow: /
+
+# ============================================
+# Social Media Crawlers - Allow for Previews
+# ============================================
 
 User-agent: Twitterbot
 Allow: /
@@ -30,7 +186,7 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-User-agent: Pinterestbot
+User-agent: Pinterest
 Allow: /
 
 User-agent: WhatsApp
@@ -39,51 +195,37 @@ Allow: /
 User-agent: TelegramBot
 Allow: /
 
-# Allow trusted AI bots
-User-agent: OpenAI-SearchBot
+User-agent: Slackbot
 Allow: /
 
-User-agent: GrokAI
+User-agent: Discordbot
 Allow: /
 
-# Default for all other bots
-User-agent: *
+# ============================================
+# SEO & Analytics Tools - Allow
+# ============================================
+
+User-agent: AhrefsBot
 Allow: /
-Allow: /static/
-Allow: /media/
 
-# Block admin and user panels
-Disallow: /adminpanel/
-Disallow: /userpanel/
-Disallow: /admin/
+User-agent: SemrushBot
+Allow: /
 
-# Block authentication pages
-Disallow: /login/
-Disallow: /signup/
-Disallow: /logout/
-Disallow: /password-reset/
-Disallow: /verify-email/
-Disallow: /resend-verification/
+User-agent: MJ12bot
+Allow: /
 
-# Block API endpoints
-Disallow: /api/
+User-agent: DotBot
+Allow: /
 
-# Block error pages
-Disallow: /error/
+User-agent: rogerbot
+Allow: /
 
-# Allow important pages
-Allow: /about/
-Allow: /contact/
-Allow: /privacy-policy/
-Allow: /terms-of-service/
-Allow: /refund/
-Allow: /faqs/
-Allow: /blogs/
-Allow: /blog/
-
-
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
-
-# Sitemap location
+# ============================================
+# Sitemaps
+# ============================================
 Sitemap: https://wacampaignsender.com/sitemap.xml
+
+# ============================================
+# Host directive (for Yandex)
+# ============================================
+Host: https://wacampaignsender.com

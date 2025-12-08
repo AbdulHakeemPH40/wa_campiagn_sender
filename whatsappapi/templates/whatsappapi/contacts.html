@@ -21,14 +21,20 @@
         <!-- Tabs -->
         <div class="bg-white rounded-t-2xl border border-neutral-200 border-b-0">
             <div class="flex space-x-8 px-6 pt-4">
-                <button class="tab-btn active pb-4 px-2 text-sm font-semibold text-green-600 border-b-2 border-green-600">
+                <button id="contactsTabBtn" onclick="switchTab('contacts')" class="tab-btn pb-4 px-2 text-sm font-semibold {% if active_tab == 'contacts' %}text-green-600 border-b-2 border-green-600{% else %}text-neutral-500 hover:text-neutral-700{% endif %} transition-colors">
                     Contact List
+                </button>
+                <button id="optoutTabBtn" onclick="switchTab('optout')" class="tab-btn pb-4 px-2 text-sm font-semibold {% if active_tab == 'optout' %}text-green-600 border-b-2 border-green-600{% else %}text-neutral-500 hover:text-neutral-700{% endif %} transition-colors">
+                    Opt-Out Users
+                    {% if optout_total > 0 %}
+                    <span class="ml-2 px-2 py-0.5 text-xs bg-red-100 text-red-700 rounded-full">{{ optout_total }}</span>
+                    {% endif %}
                 </button>
             </div>
         </div>
 
         <!-- Contact List Table -->
-        <div class="bg-white rounded-b-2xl shadow-lg border border-neutral-200 overflow-visible">
+        <div id="contactsTab" class="{% if active_tab != 'contacts' %}hidden{% endif %} bg-white rounded-b-2xl shadow-lg border border-neutral-200 overflow-visible">
             <table class="min-w-full divide-y divide-neutral-200">
                 <thead class="bg-neutral-50">
                     <tr>
@@ -114,6 +120,150 @@
                     {% endif %}
                 </tbody>
             </table>
+        </div>
+
+        <!-- Opt-Out Users Table -->
+        <div id="optoutTab" class="{% if active_tab != 'optout' %}hidden{% endif %} bg-white rounded-b-2xl shadow-lg border border-neutral-200 overflow-visible">
+            <!-- Export Buttons -->
+            {% if optout_total > 0 %}
+            <div class="px-6 py-4 border-b border-neutral-200 flex flex-wrap gap-3 items-center justify-between">
+                <div class="text-sm text-neutral-600">
+                    <span class="font-semibold text-neutral-800">{{ optout_total }}</span> opted-out contact{% if optout_total != 1 %}s{% endif %}
+                </div>
+                <div class="flex gap-2">
+                    <a href="{% url 'whatsappapi:export_optout_csv' %}" class="px-4 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 text-sm font-medium inline-flex items-center">
+                        <i class="ri-file-text-line mr-2"></i>
+                        Export CSV
+                    </a>
+                    <a href="{% url 'whatsappapi:export_optout_excel' %}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium inline-flex items-center">
+                        <i class="ri-file-excel-line mr-2"></i>
+                        Export Excel
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            
+            <table class="min-w-full divide-y divide-neutral-200">
+                <thead class="bg-neutral-50">
+                    <tr>
+                        <th class="px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Phone Number
+                        </th>
+                        <th class="hidden md:table-cell px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Keyword
+                        </th>
+                        <th class="hidden lg:table-cell px-4 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Opted Out At
+                        </th>
+                        <th class="px-4 sm:px-6 py-3 sm:py-4 text-right text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-neutral-200">
+                    {% if optout_contacts %}
+                        {% for optout in optout_contacts %}
+                        <tr class="hover:bg-red-50 transition-colors">
+                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="h-8 w-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
+                                        <i class="ri-user-unfollow-line text-red-600"></i>
+                                    </div>
+                                    <div class="text-sm font-semibold text-neutral-900">{{ optout.phone_number }}</div>
+                                </div>
+                            </td>
+                            <td class="hidden md:table-cell px-4 sm:px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                                    {{ optout.keyword_used }}
+                                </span>
+                            </td>
+                            <td class="hidden lg:table-cell px-4 sm:px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-neutral-600">{{ optout.opted_out_at|date:"d/m/Y, H:i" }}</div>
+                            </td>
+                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-right">
+                                <div class="relative inline-block">
+                                    <button onclick="toggleOptoutDropdown(event, '{{ optout.id }}')" class="p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+                                        <i class="ri-more-2-fill text-xl text-neutral-600"></i>
+                                    </button>
+                                    <!-- Dropdown Menu -->
+                                    <div id="optout-dropdown-{{ optout.id }}" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl border border-neutral-200 z-50">
+                                        <div class="py-2">
+                                            <button onclick="removeOptout('{{ optout.id }}', '{{ optout.phone_number }}')" class="w-full text-left px-4 py-2.5 text-sm text-neutral-700 hover:bg-green-50 hover:text-green-700 flex items-center transition-colors">
+                                                <i class="ri-user-follow-line mr-3 text-base"></i>
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-12">
+                            <div class="text-center">
+                                <div class="h-20 w-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="ri-user-heart-line text-4xl text-green-600"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-neutral-900 mb-2">No Opt-Out Users</h3>
+                                <p class="text-neutral-600 max-w-md mx-auto">
+                                    When contacts reply with "STOP" or similar keywords, they will appear here.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            
+            <!-- Pagination -->
+            {% if optout_contacts.has_other_pages %}
+            <div class="px-6 py-4 border-t border-neutral-200 flex flex-wrap items-center justify-between gap-4">
+                <div class="text-sm text-neutral-600">
+                    Showing {{ optout_contacts.start_index }} - {{ optout_contacts.end_index }} of {{ optout_contacts.paginator.count }}
+                </div>
+                <div class="flex items-center gap-2">
+                    <!-- First Page -->
+                    {% if optout_contacts.has_previous %}
+                    <a href="?tab=optout&optout_page=1" class="px-3 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 text-sm font-medium">
+                        <i class="ri-skip-back-line"></i>
+                    </a>
+                    <a href="?tab=optout&optout_page={{ optout_contacts.previous_page_number }}" class="px-3 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 text-sm font-medium">
+                        <i class="ri-arrow-left-s-line"></i>
+                    </a>
+                    {% else %}
+                    <span class="px-3 py-2 bg-neutral-100 border border-neutral-200 text-neutral-400 rounded-lg text-sm font-medium cursor-not-allowed">
+                        <i class="ri-skip-back-line"></i>
+                    </span>
+                    <span class="px-3 py-2 bg-neutral-100 border border-neutral-200 text-neutral-400 rounded-lg text-sm font-medium cursor-not-allowed">
+                        <i class="ri-arrow-left-s-line"></i>
+                    </span>
+                    {% endif %}
+                    
+                    <!-- Page Numbers -->
+                    <span class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium">
+                        {{ optout_contacts.number }} / {{ optout_contacts.paginator.num_pages }}
+                    </span>
+                    
+                    <!-- Next Page -->
+                    {% if optout_contacts.has_next %}
+                    <a href="?tab=optout&optout_page={{ optout_contacts.next_page_number }}" class="px-3 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 text-sm font-medium">
+                        <i class="ri-arrow-right-s-line"></i>
+                    </a>
+                    <a href="?tab=optout&optout_page={{ optout_contacts.paginator.num_pages }}" class="px-3 py-2 bg-white border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 text-sm font-medium">
+                        <i class="ri-skip-forward-line"></i>
+                    </a>
+                    {% else %}
+                    <span class="px-3 py-2 bg-neutral-100 border border-neutral-200 text-neutral-400 rounded-lg text-sm font-medium cursor-not-allowed">
+                        <i class="ri-arrow-right-s-line"></i>
+                    </span>
+                    <span class="px-3 py-2 bg-neutral-100 border border-neutral-200 text-neutral-400 rounded-lg text-sm font-medium cursor-not-allowed">
+                        <i class="ri-skip-forward-line"></i>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -471,7 +621,100 @@ window.addEventListener('scroll', function() {
     document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
         d.classList.add('hidden');
     });
+    document.querySelectorAll('[id^="optout-dropdown-"]').forEach(d => {
+        d.classList.add('hidden');
+    });
 }, true);
+
+// Tab Switching
+function switchTab(tab) {
+    const contactsTab = document.getElementById('contactsTab');
+    const optoutTab = document.getElementById('optoutTab');
+    const contactsTabBtn = document.getElementById('contactsTabBtn');
+    const optoutTabBtn = document.getElementById('optoutTabBtn');
+    
+    if (tab === 'contacts') {
+        contactsTab.classList.remove('hidden');
+        optoutTab.classList.add('hidden');
+        contactsTabBtn.classList.add('text-green-600', 'border-b-2', 'border-green-600');
+        contactsTabBtn.classList.remove('text-neutral-500');
+        optoutTabBtn.classList.remove('text-green-600', 'border-b-2', 'border-green-600');
+        optoutTabBtn.classList.add('text-neutral-500');
+    } else {
+        contactsTab.classList.add('hidden');
+        optoutTab.classList.remove('hidden');
+        optoutTabBtn.classList.add('text-green-600', 'border-b-2', 'border-green-600');
+        optoutTabBtn.classList.remove('text-neutral-500');
+        contactsTabBtn.classList.remove('text-green-600', 'border-b-2', 'border-green-600');
+        contactsTabBtn.classList.add('text-neutral-500');
+    }
+    
+    // Update URL without reload
+    const url = new URL(window.location);
+    url.searchParams.set('tab', tab);
+    window.history.replaceState({}, '', url);
+}
+
+// Opt-out Dropdown Toggle
+function toggleOptoutDropdown(event, id) {
+    event.stopPropagation();
+    const dropdown = document.getElementById(`optout-dropdown-${id}`);
+    
+    // Close all other dropdowns
+    document.querySelectorAll('[id^="optout-dropdown-"]').forEach(d => {
+        if (d.id !== `optout-dropdown-${id}`) {
+            d.classList.add('hidden');
+        }
+    });
+    document.querySelectorAll('[id^="dropdown-"]').forEach(d => {
+        d.classList.add('hidden');
+    });
+    
+    // Toggle current dropdown
+    dropdown.classList.toggle('hidden');
+}
+
+// Remove from Opt-Out
+function removeOptout(optoutId, phoneNumber) {
+    if (!confirm(`Remove ${phoneNumber} from opt-out list?\n\nThis will allow sending campaigns to this contact again.`)) {
+        return;
+    }
+    
+    fetch(`/whatsappapi/optout/${optoutId}/remove/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Success', data.message);
+            // Remove the row from table
+            const row = document.querySelector(`button[onclick*="removeOptout('${optoutId}'"]`).closest('tr');
+            if (row) {
+                row.remove();
+            }
+            // Update count badge
+            const badge = document.querySelector('#optoutTabBtn span');
+            if (badge) {
+                const count = parseInt(badge.textContent) - 1;
+                if (count > 0) {
+                    badge.textContent = count;
+                } else {
+                    badge.remove();
+                }
+            }
+        } else {
+            showError(data.error || 'Failed to remove from opt-out');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showError('An error occurred');
+    });
+}
 
 // Modal Functions
 function openImportModal() {

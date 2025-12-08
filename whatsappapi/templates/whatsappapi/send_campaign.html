@@ -307,7 +307,7 @@
                             <!-- Emoji Picker -->
                             <div id="emojiPicker" class="hidden mt-3 bg-white rounded-lg border border-neutral-300 p-1 shadow-lg"></div>
                         </div>
-                        
+                        <!-- message composer -->
                         <textarea id="message" name="message" rows="10" required
                             class="w-full px-5 py-4 border-2 border-neutral-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 resize-none transition-all text-neutral-800 font-medium bg-neutral-50 hover:bg-white"
                             placeholder="Hello {first_name},&#10;&#10;We have exciting news for you!&#10;&#10;Visit our store for amazing offers."></textarea>
@@ -407,6 +407,30 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Opt-Out Footer Option -->
+                        <div class="mt-4 bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" name="include_optout_footer" id="include_optout_footer" 
+                                    class="w-5 h-5 text-orange-500 border-gray-300 rounded focus:ring-orange-500"
+                                    onchange="toggleOptoutFooter(this)">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-8 w-8 bg-gradient-to-br from-orange-400 to-amber-500 rounded-lg flex items-center justify-center">
+                                        <i class="ri-shield-user-line text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-gray-800">Add Opt-Out Footer</p>
+                                        <p class="text-xs text-gray-500">Include unsubscribe option at the end of your message</p>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <!-- Preview of footer text (shown when checked) -->
+                            <div id="optoutPreview" class="hidden mt-3 p-3 bg-white rounded-lg border border-dashed border-orange-300">
+                                <p class="text-xs text-gray-500 mb-1">Footer that will be added:</p>
+                                <p class="text-sm text-gray-700">---<br>Reply <strong>STOP</strong> to opt-out</p>
                             </div>
                         </div>
 
@@ -1501,6 +1525,15 @@ function updatePreview() {
     
     // Normalize then apply WhatsApp formatting in preview
     preview = formatWhatsAppText(normalizeMessageText(preview));
+    
+    // Add opt-out footer if checkbox is checked
+    const optoutCheckbox = document.getElementById('include_optout_footer');
+    if (optoutCheckbox && optoutCheckbox.checked) {
+        // Simple footer with clear line break
+        const optoutFooter = '\n\n---\nReply *STOP* to opt-out';
+        // Trim trailing whitespace from preview before adding footer
+        preview = preview.replace(/\s+$/, '') + formatWhatsAppText(optoutFooter);
+    }
     
     document.getElementById('previewMessage').innerHTML = preview || 'Your message will appear here...';
 }
@@ -2827,6 +2860,7 @@ function sendTestMessage() {
     
     const fullNumber = testSelectedCountry.code + phoneNumber;
     const attachment = document.getElementById('attachment').files[0];
+    const optoutCheckbox = document.getElementById('include_optout_footer');
     
     // Create FormData for AJAX
     const formData = new FormData();
@@ -2834,6 +2868,10 @@ function sendTestMessage() {
     formData.append('test_message', normalizedMessage);
     if (attachment) {
         formData.append('test_attachment', attachment);
+    }
+    // Include opt-out footer checkbox state
+    if (optoutCheckbox && optoutCheckbox.checked) {
+        formData.append('include_optout_footer', 'on');
     }
     
     // Get button and show immediate loading state with animation
@@ -3252,6 +3290,18 @@ document.getElementById('aiDraftDemoModal')?.addEventListener('click', function(
         closeAiDraftDemo();
     }
 });
+
+// Opt-Out Footer Toggle
+function toggleOptoutFooter(checkbox) {
+    const preview = document.getElementById('optoutPreview');
+    if (checkbox.checked) {
+        preview.classList.remove('hidden');
+    } else {
+        preview.classList.add('hidden');
+    }
+    // Update the live preview to show/hide the opt-out footer
+    updatePreview();
+}
 </script>
 
 <!-- AI Draft Demo Modal -->

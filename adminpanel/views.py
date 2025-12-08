@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.core.paginator import Paginator
 from django.db.models import Q, Count, Sum, OuterRef, Subquery
-from django.db.models.functions import TruncDay, TruncMonth
+from django.db.models.functions import TruncDay, TruncMonth, ExtractYear, ExtractMonth, ExtractDay
 from django.utils import timezone
 from django.conf import settings
 from datetime import datetime, timedelta
@@ -87,12 +87,17 @@ def admin_dashboard_view(request):
             created_at__gte=start_date,
             created_at__lte=end_date
         ).annotate(
-            month=TruncMonth('created_at')
-        ).values('month').annotate(
+            year=ExtractYear('created_at'),
+            month_num=ExtractMonth('created_at')
+        ).values('year', 'month_num').annotate(
             count=Count('id')
-        ).order_by('month')
+        ).order_by('year', 'month_num')
         
-        subscription_counts = {item['month'].strftime('%b %Y'): item['count'] for item in subscriptions_by_month}
+        subscription_counts = {}
+        for item in subscriptions_by_month:
+            if item['year'] and item['month_num']:
+                dt = datetime(item['year'], item['month_num'], 1)
+                subscription_counts[dt.strftime('%b %Y')] = item['count']
         dataset = {
             'label': f"{plan.name} Plan",
             'data': [subscription_counts.get(month, 0) for month in months],
@@ -327,26 +332,32 @@ def admin_subscriptions_view(request):
         end_date = timezone.now()
         start_date = end_date - timedelta(days=30)
         
+        # Use Extract functions instead of TruncDay to avoid MySQL timezone issues
         subscriptions_by_day = Subscription.objects.filter(
             created_at__gte=start_date,
             created_at__lte=end_date
         ).annotate(
-            day=TruncDay('created_at')
-        ).values('day').annotate(
+            year=ExtractYear('created_at'),
+            month=ExtractMonth('created_at'),
+            day_num=ExtractDay('created_at')
+        ).values('year', 'month', 'day_num').annotate(
             count=Count('id')
-        ).order_by('day')
+        ).order_by('year', 'month', 'day_num')
+        
+        # Build a lookup dict for quick access
+        day_lookup = {}
+        for item in subscriptions_by_day:
+            if item['year'] and item['month'] and item['day_num']:
+                key = f"{item['year']}-{item['month']:02d}-{item['day_num']:02d}"
+                day_lookup[key] = item['count']
         
         days = []
         day_counts = []
         current_date = start_date
         while current_date <= end_date:
-            days.append(current_date.strftime('%Y-%m-%d'))
-            count = 0
-            for item in subscriptions_by_day:
-                if item['day'].strftime('%Y-%m-%d') == current_date.strftime('%Y-%m-%d'):
-                    count = item['count']
-                    break
-            day_counts.append(count)
+            date_key = current_date.strftime('%Y-%m-%d')
+            days.append(date_key)
+            day_counts.append(day_lookup.get(date_key, 0))
             current_date += timedelta(days=1)
         
         return {
@@ -469,27 +480,33 @@ def admin_payments_view(request):
         end_date = timezone.now()
         start_date = end_date - timedelta(days=30)
         
+        # Use Extract functions instead of TruncDay to avoid MySQL timezone issues
         payments_by_day = Payment.objects.filter(
             payment_date__gte=start_date,
             payment_date__lte=end_date,
             status='completed'
         ).annotate(
-            day=TruncDay('payment_date')
-        ).values('day').annotate(
+            year=ExtractYear('payment_date'),
+            month=ExtractMonth('payment_date'),
+            day_num=ExtractDay('payment_date')
+        ).values('year', 'month', 'day_num').annotate(
             total_amount=Sum('amount')
-        ).order_by('day')
+        ).order_by('year', 'month', 'day_num')
+        
+        # Build a lookup dict for quick access
+        day_lookup = {}
+        for item in payments_by_day:
+            if item['year'] and item['month'] and item['day_num']:
+                key = f"{item['year']}-{item['month']:02d}-{item['day_num']:02d}"
+                day_lookup[key] = float(item['total_amount'] or 0)
         
         days = []
         day_amounts = []
         current_date = start_date
         while current_date <= end_date:
-            days.append(current_date.strftime('%Y-%m-%d'))
-            amount = 0
-            for item in payments_by_day:
-                if item['day'].strftime('%Y-%m-%d') == current_date.strftime('%Y-%m-%d'):
-                    amount = float(item['total_amount'])
-                    break
-            day_amounts.append(amount)
+            date_key = current_date.strftime('%Y-%m-%d')
+            days.append(date_key)
+            day_amounts.append(day_lookup.get(date_key, 0))
             current_date += timedelta(days=1)
         
         return {

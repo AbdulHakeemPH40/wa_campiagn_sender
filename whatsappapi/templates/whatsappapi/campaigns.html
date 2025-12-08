@@ -113,7 +113,7 @@
                     <!-- Actions -->
                     <div class="flex items-center justify-between pt-2 border-t border-neutral-200">
                         <div class="text-xs text-neutral-500 truncate">
-                            <i class="ri-user-line mr-0.5 text-xs"></i>{{ campaign.session.phone_number|default:"N/A" }}
+                            <i class="ri-user-line mr-0.5 text-xs"></i>{% if campaign.session %}{{ campaign.session.phone_number }}{% elif campaign.session_phone %}{{ campaign.session_phone }}{% else %}N/A{% endif %}
                         </div>
                         <a href="{% url 'whatsappapi:campaign_detail' campaign.id %}" 
                            class="px-2 py-1 bg-blue-600 text-white rounded text-xs font-semibold hover:bg-blue-700 transition-colors">

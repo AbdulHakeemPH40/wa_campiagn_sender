@@ -1,8 +1,8 @@
 {% extends 'sitevisitor/base.html' %}
 {% load static %}
 
-{% block title %}About WA Campaign Sender - WhatsApp Marketing Experts{% endblock %}
-{% block description %}Learn about WA Campaign Sender, the leading WhatsApp marketing platform. Safe, secure bulk messaging tools with 12/7 support. Trusted by 500+ businesses.{% endblock %}
+{% block title %}About WA Campaign Sender - WhatsApp Marketing Platform with API Integration{% endblock %}
+{% block description %}Learn about WA Campaign Sender, the leading WhatsApp marketing platform with powerful API integration. AI-powered drafts, campaign analytics, opt-out management & 12/7 support.{% endblock %}
 
 {% block content %}
 <section class="py-16 bg-gray-50">
@@ -10,23 +10,85 @@
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">About WA Campaign Sender</h1>
-                <p class="text-xl text-gray-600">Your trusted WhatsApp marketing solution</p>
+                <p class="text-xl text-gray-600">Your trusted WhatsApp marketing solution with powerful API integration</p>
             </div>
 
             <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Who We Are</h2>
                 <p class="text-gray-700 mb-4">
-                    WA Campaign Sender is a leading WhatsApp marketing platform designed to help businesses engage with their customers through personalized messaging and automation. We provide safe, secure, and easy-to-use tools for bulk WhatsApp messaging.
+                    WA Campaign Sender is a comprehensive WhatsApp marketing platform that combines powerful API integration with an intuitive dashboard. We help businesses engage with their customers through personalized messaging, AI-powered content generation, and advanced campaign management.
                 </p>
                 <p class="text-gray-700 mb-4">
-                    Our dashboard provides an intuitive interface to send personalized bulk WhatsApp messages, schedule campaigns, and track results without the need for complex APIs or external software.
+                    Our platform connects seamlessly with WhatsApp through secure API integration, enabling you to send personalized bulk messages, manage contacts, track campaign performance in real-time, and maintain compliance with automated opt-out handling.
                 </p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Platform Features</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="flex items-start">
+                        <i class="ri-api-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">WhatsApp API Integration</h3>
+                            <p class="text-gray-600 text-sm">Secure connection to WhatsApp with QR code session management and real-time status updates.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="ri-robot-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">AI-Powered Drafts</h3>
+                            <p class="text-gray-600 text-sm">Generate professional marketing messages with OpenAI integration and content moderation.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="ri-contacts-book-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Contact Management</h3>
+                            <p class="text-gray-600 text-sm">Import contacts via Excel/CSV, organize with custom lists, and manage personalization fields.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="ri-bar-chart-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Campaign Analytics</h3>
+                            <p class="text-gray-600 text-sm">Real-time tracking of sent, delivered, read, and failed messages with detailed reports.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="ri-user-unfollow-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Opt-Out Management</h3>
+                            <p class="text-gray-600 text-sm">Automatic STOP keyword detection and opt-out list management for compliance.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="ri-attachment-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Media Attachments</h3>
+                            <p class="text-gray-600 text-sm">Send images, PDFs, and documents with your campaigns via Cloudinary integration.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="ri-shield-check-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Session Protection</h3>
+                            <p class="text-gray-600 text-sm">Built-in rate limiting and smart delays to protect your WhatsApp account from bans.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="ri-file-list-3-line text-2xl text-primary mr-3 mt-1"></i>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Draft Templates</h3>
+                            <p class="text-gray-600 text-sm">Save and reuse message templates with personalization variables like {first_name}.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Our Mission</h2>
                 <p class="text-gray-700 mb-4">
-                    To empower businesses of all sizes with effective WhatsApp marketing tools that are both powerful and user-friendly. We believe in making WhatsApp marketing accessible to everyone while maintaining the highest standards of safety and compliance.
+                    To empower businesses of all sizes with effective WhatsApp marketing tools that are both powerful and user-friendly. We believe in making WhatsApp marketing accessible to everyone while maintaining the highest standards of safety, compliance, and deliverability.
                 </p>
             </div>
 
@@ -41,16 +103,36 @@
                                 <span class="text-gray-700">+971553884741</span>
                             </div>
                             <div class="flex items-center">
+                                <i class="ri-whatsapp-line text-primary mr-3"></i>
+                                <a href="https://wa.me/971553884741" target="_blank" class="text-primary hover:underline">WhatsApp Support</a>
+                            </div>
+                            <div class="flex items-center">
                                 <i class="ri-mail-line text-primary mr-3"></i>
                                 <a href="mailto:hi@wacampaignsender.com" class="text-primary hover:underline">hi@wacampaignsender.com</a>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Business Hours</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Business Address</h3>
                         <div class="space-y-2 text-gray-700">
+                            <div class="flex items-start">
+                                <i class="ri-map-pin-line text-primary mr-3 mt-1"></i>
+                                <div>
+                                    <p><strong>Focus Web Solutions</strong></p>
+                                    <p>Grand Hamad Bank Street</p>
+                                    <p>Doha, Qatar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Business Hours</h3>
+                    <div class="flex items-center text-gray-700">
+                        <i class="ri-time-line text-primary mr-3"></i>
+                        <div>
                             <p>12/7 Support Available</p>
-                            <p>Daily: 10:00 AM - 10:00 PM (Qatar Time)</p>
+                            <p class="text-sm text-gray-500">Daily: 10:00 AM - 10:00 PM (Gulf Standard Time)</p>
                         </div>
                     </div>
                 </div>
@@ -61,19 +143,19 @@
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-lg font-semibold text-primary mb-3">Safe & Secure</h3>
-                        <p class="text-gray-700">We prioritize your account safety with built-in rate limiting and best practices to prevent WhatsApp bans.</p>
+                        <p class="text-gray-700">We prioritize your account safety with built-in rate limiting, session protection, and best practices to prevent WhatsApp bans.</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-primary mb-3">Easy to Use</h3>
-                        <p class="text-gray-700">No technical knowledge required. Access your campaigns from your intuitive dashboard anytime, anywhere.</p>
+                        <p class="text-gray-700">No technical knowledge required. Connect via QR code and access your campaigns from your intuitive dashboard anytime, anywhere.</p>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-primary mb-3">Personalization</h3>
-                        <p class="text-gray-700">Send personalized messages with custom variables to increase engagement and response rates.</p>
+                        <h3 class="text-lg font-semibold text-primary mb-3">AI-Powered</h3>
+                        <p class="text-gray-700">Generate professional marketing messages instantly with our AI draft feature powered by OpenAI with content moderation.</p>
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-primary mb-3">12/7 Support</h3>
-                        <p class="text-gray-700">Our dedicated support team is here to help you succeed with your WhatsApp marketing campaigns.</p>
+                        <p class="text-gray-700">Our dedicated support team is here to help you succeed with your WhatsApp marketing campaigns via WhatsApp, email, or phone.</p>
                     </div>
                 </div>
             </div>

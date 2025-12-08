@@ -20,7 +20,7 @@
                         <span class="px-2 py-0.5 bg-blue-200 text-blue-800 rounded text-xs font-bold">FREE PLAN</span>
                         <span class="text-sm font-semibold text-blue-800">Explore all features!</span>
                     </div>
-                    <p class="text-xs text-blue-600 mt-1">Create sessions, manage contacts, and send test campaigns (max 5 contacts per campaign)</p>
+                    <p class="text-xs text-blue-600 mt-1">Create sessions, manage contacts, and send test campaigns</p>
                 </div>
             </div>
             <a href="{% url 'userpanel:pricing' %}" 
@@ -337,7 +337,7 @@
                         </button>
                         {% else %}
                         <!-- Send Campaign Button - Green -->
-                        <a href="{% url 'whatsappapi:send_campaign' %}" 
+                        <a href="{% url 'whatsappapi:send_campaign' %}?session={{ active_session.id }}" 
                            class="w-full lg:w-auto px-4 py-3.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl hover:from-green-600 hover:to-green-700 inline-flex items-center justify-center text-sm font-semibold shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
                             <i class="ri-send-plane-fill mr-2 text-lg"></i>
                             <span>Send Campaign</span>
@@ -1329,6 +1329,20 @@ document.getElementById('refreshStatusBtn')?.addEventListener('click', function(
     .then(data => {
         if (data.success) {
             console.log('Session status refreshed:', data);
+            
+            // Check if any sessions were deleted externally
+            if (data.deleted_count > 0) {
+                console.log('Sessions deleted externally:', data.deleted_sessions);
+                if (window.showToast) {
+                    window.showToast('warning', 'Session was unlinked from WhatsApp. Please create a new session.');
+                }
+                // Redirect to create session page
+                setTimeout(() => {
+                    window.location.href = '{% url "whatsappapi:create_session" %}';
+                }, 1500);
+                return;
+            }
+            
             // Show toast notification
             if (window.showToast) {
                 window.showToast('success', 'Session status refreshed');
@@ -1382,6 +1396,13 @@ document.getElementById('refreshStatusBtn')?.addEventListener('click', function(
         })
         .then(response => response.json())
         .then(data => {
+            // Check if session was deleted externally
+            if (data.deleted || data.status === 'deleted_externally') {
+                console.log('🗑️ Session was deleted externally');
+                handleSessionDeleted(data.message || 'Session was unlinked from WhatsApp');
+                return;
+            }
+            
             if (data.status && data.status !== lastKnownStatus) {
                 console.log(`📊 Session status changed: ${lastKnownStatus} → ${data.status}`);
                 const needsReconnect = ['disconnected', 'need_scan', 'logged_out'].includes(data.status);
@@ -1390,6 +1411,43 @@ document.getElementById('refreshStatusBtn')?.addEventListener('click', function(
             }
         })
         .catch(err => console.error('Polling error:', err));
+    }
+    
+    function handleSessionDeleted(message) {
+        // Stop polling
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
+        
+        // Show warning toast
+        if (window.showToast) {
+            window.showToast('warning', message);
+        }
+        
+        // Show banner with create new session button
+        const banner = document.createElement('div');
+        banner.id = 'session-deleted-banner';
+        banner.className = 'fixed top-0 left-0 right-0 bg-orange-600 text-white p-4 z-50 flex items-center justify-center gap-4 shadow-lg';
+        banner.innerHTML = `
+            <i class="ri-error-warning-line text-2xl"></i>
+            <span class="font-semibold">${message}</span>
+            <a href="{% url 'whatsappapi:create_session' %}" class="px-4 py-2 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition">
+                <i class="ri-add-line mr-1"></i> Create New Session
+            </a>
+        `;
+        
+        const existingBanner = document.getElementById('session-deleted-banner');
+        if (existingBanner) existingBanner.remove();
+        const existingDisconnectBanner = document.getElementById('session-disconnect-banner');
+        if (existingDisconnectBanner) existingDisconnectBanner.remove();
+        
+        document.body.prepend(banner);
+        
+        // Redirect to create session after delay
+        setTimeout(() => {
+            window.location.href = '{% url "whatsappapi:create_session" %}';
+        }, 3000);
     }
     
     function handleStatusChange(status, needsReconnect) {
