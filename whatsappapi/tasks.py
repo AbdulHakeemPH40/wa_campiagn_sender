@@ -303,6 +303,27 @@ def send_campaign_async(campaign_id):
         # Initialize processed_phones tracking BEFORE batch or standard processing
         processed_phones = set()  # Track normalized phones we've already processed in this run
         
+        # RESUME OPTIMIZATION: Filter out contacts that already have messages for this campaign
+        # This makes resume efficient - we don't loop through already-sent contacts
+        already_sent_phones = set(
+            WASenderMessage.objects.filter(
+                metadata__campaign_id=campaign.id,
+                status__in=['sent', 'delivered', 'read']
+            ).values_list('recipient', flat=True)
+        )
+        
+        if already_sent_phones:
+            original_count = len(unique_contacts)
+            unique_contacts = [
+                c for c in unique_contacts 
+                if service._format_phone_number(c.phone_number or '') not in already_sent_phones
+            ]
+            skipped_count = original_count - len(unique_contacts)
+            logger.info(f"🔄 RESUME MODE: Skipping {skipped_count} already-sent contacts, {len(unique_contacts)} remaining")
+            
+            # Also add to processed_phones to prevent any duplicate attempts
+            processed_phones.update(already_sent_phones)
+        
         # Batch processing logic - only if Advanced Controls enabled with batching
         if campaign.use_advanced_controls and campaign.batch_size_max > 0:
             logger.info(f"🎯 ADVANCED MODE: Random delays + Batching enabled")

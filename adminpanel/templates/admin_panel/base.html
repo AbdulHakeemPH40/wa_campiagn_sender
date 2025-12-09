@@ -159,35 +159,49 @@
         </div>
     </div>
     <!-- Header for Admin Panel -->
-    <header class="bg-white border-b border-neutral-200">
-        <div class="px-6 py-4 flex items-center justify-between">
+    <header class="bg-white border-b border-neutral-200 sticky top-0 z-30">
+        <div class="px-3 md:px-6 py-3 md:py-4 flex items-center justify-between">
             <!-- Mobile sidebar toggle -->
-            <button id="sidebarToggle" class="md:hidden mr-4 text-neutral-600 focus:outline-none">
+            <button id="sidebarToggle" class="md:hidden mr-2 md:mr-4 text-neutral-600 focus:outline-none p-1">
                 <i class="ri-menu-line text-xl"></i>
             </button>
             <button id="desktopSidebarToggle" class="hidden md:block mr-4 text-neutral-600 focus:outline-none">
                 <i class="ri-menu-line text-xl"></i>
             </button>
-            <a href="{% url 'admin_panel:dashboard' %}" class="flex items-center">
-                <div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-semibold text-sm">
+            <a href="{% url 'admin_panel:dashboard' %}" class="flex items-center flex-1 md:flex-none">
+                <div class="w-7 h-7 md:w-8 md:h-8 rounded bg-primary flex items-center justify-center text-white font-semibold text-xs md:text-sm">
                     W
                 </div>
-                <span class="ml-3 text-lg font-semibold text-neutral-900">Admin Panel</span>
+                <span class="ml-2 md:ml-3 text-base md:text-lg font-semibold text-neutral-900 truncate">Admin Panel</span>
             </a>
-            <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <!-- Mobile Logout Button (visible only on mobile) -->
+                <a href="{% url 'admin_panel:logout' %}" class="md:hidden flex items-center justify-center w-9 h-9 rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors" title="Sign out">
+                    <i class="ri-logout-box-r-line text-lg"></i>
+                </a>
+                
                 <div class="relative">
                     <button id="userMenuButton" class="flex items-center space-x-2 text-neutral-700 hover:text-primary transition-colors">
                         <div class="w-8 h-8 rounded-full bg-neutral-200 flex items-center justify-center text-neutral-700 text-sm font-medium">
                             {{ request.user.first_name|default:request.user.email|first|upper }}
                         </div>
                         <span class="hidden md:inline text-sm font-medium">{{ request.user.full_name|default:request.user.get_full_name|default:request.user.username }}</span>
-                        <i class="ri-arrow-down-s-line text-sm"></i>
+                        <i class="ri-arrow-down-s-line text-sm hidden md:inline"></i>
                     </button>
-                    <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg py-1 z-10 hidden border border-neutral-200">
-                        <a href="{% url 'admin_panel:settings' %}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Profile</a>
-                        <a href="{% url 'admin_panel:settings' %}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Settings</a>
-                        <div class="border-t border-neutral-100 my-1"></div>
-                        <a href="{% url 'admin_panel:logout' %}" class="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50">Sign out</a>
+                    <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-[60] hidden border border-neutral-200">
+                        <a href="{% url 'admin_panel:settings' %}" class="flex items-center px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors">
+                            <i class="ri-user-line mr-3 text-neutral-500"></i>
+                            Profile
+                        </a>
+                        <a href="{% url 'admin_panel:settings' %}" class="flex items-center px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-100 transition-colors">
+                            <i class="ri-settings-3-line mr-3 text-neutral-500"></i>
+                            Settings
+                        </a>
+                        <div class="border-t border-neutral-200 my-2"></div>
+                        <a href="{% url 'admin_panel:logout' %}" class="flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                            <i class="ri-logout-box-r-line mr-3"></i>
+                            Sign out
+                        </a>
                     </div>
                 </div>
             </div>
@@ -199,9 +213,22 @@
     <!-- Main Content with Sidebar -->
     <main class="flex-grow flex">
         <!-- Sidebar -->
-        <div id="sidebar" class="transform transition-transform duration-200 ease-in-out fixed md:relative inset-y-0 left-0 w-64 bg-white border-r border-neutral-200 -translate-x-full md:translate-x-0 z-50 md:z-auto flex-shrink-0">
-            <div class="px-6 py-8">
-                <div class="flex items-center mb-8">
+        <div id="sidebar" class="transform transition-transform duration-200 ease-in-out fixed md:relative inset-y-0 left-0 w-64 bg-white border-r border-neutral-200 -translate-x-full md:translate-x-0 z-50 md:z-auto flex-shrink-0 overflow-y-auto h-screen md:h-auto pb-20 md:pb-0">
+            <!-- Mobile Header with Logo and Close Button -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-neutral-200 md:hidden">
+                <a href="{% url 'admin_panel:dashboard' %}" class="flex items-center">
+                    <div class="w-8 h-8 rounded bg-primary flex items-center justify-center text-white font-semibold text-sm">
+                        W
+                    </div>
+                    <span class="ml-2 text-lg font-semibold text-neutral-900">Admin Panel</span>
+                </a>
+                <button id="closeSidebarBtn" class="text-neutral-600 hover:text-neutral-900 focus:outline-none p-2">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="px-6 py-6 md:py-8">
+                <div class="flex items-center mb-6 md:mb-8">
                     <div class="w-10 h-10 rounded bg-primary text-white flex items-center justify-center text-sm font-semibold">
                         {{ request.user.first_name|default:request.user.email|first|upper }}
                     </div>
@@ -269,7 +296,7 @@
         </div>
                 
         <!-- Main Content Area -->
-        <div id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-neutral-50 p-6">
+        <div id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-neutral-50 p-3 md:p-6">
             <div class="max-w-7xl mx-auto">
                 {% block admin_content %}{% endblock %}
             </div>
@@ -394,6 +421,12 @@
 
             // Close when clicking on overlay
             sidebarOverlay.addEventListener('click', closeSidebar);
+
+            // Close sidebar button (mobile)
+            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+            }
 
             // Keep sidebar state in sync on window resize
             window.addEventListener('resize', () => {

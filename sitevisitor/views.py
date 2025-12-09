@@ -75,9 +75,7 @@ def contact(request):
                     fail_silently=False,
                 )
             except SMTPException as e:
-                # Handle SMTP errors
-                from django.shortcuts import redirect
-                from django.urls import reverse
+                # Handle SMTP errors (redirect already imported at top)
                 if 'authentication failed' in str(e).lower():
                     return redirect(reverse('sitevisitor:error_email') + '?type=invalid_api_key')
                 elif 'quota' in str(e).lower() or 'limit' in str(e).lower():
@@ -594,74 +592,20 @@ def best_practices_view(request):
     return render(request, 'sitevisitor/best_practices.html')
 
 def robots_txt_view(request):
-    """
-    Returns robots.txt for search engine crawling instructions.
-    Comprehensive rules for all major search engines with Yandex optimization.
-    """
     from django.http import HttpResponse
-    
+
     content = "\n".join([
-        "# Canonical robots.txt for wacampaignsender.com",
-        "# Last updated: 2025-08-11",
+        "# robots.txt for wacampaignsender.com",
+        "# Allow all crawlers (search engines, AI bots, social preview bots)",
         "",
-        "# Major search engines",
-        "User-agent: Googlebot",
-        "Disallow:",
-        "",
-        "User-agent: Bingbot",
-        "Disallow:",
-        "",
-        "User-agent: Yandex",
-        "Disallow:",
-        "# Consolidate duplicate URLs caused by common tracking params (Yandex-only)",
-        "Clean-param: utm_source /",
-        "Clean-param: utm_medium /",
-        "Clean-param: utm_campaign /",
-        "Clean-param: utm_term /",
-        "Clean-param: utm_content /",
-        "Clean-param: gclid /",
-        "Clean-param: fbclid /",
-        "Clean-param: yclid /",
-        "",
-        "# Social preview bots (link unfurlers)",
-        "User-agent: facebookexternalhit",
-        "Disallow:",
-        "User-agent: Facebot",
-        "Disallow:",
-        "User-agent: Twitterbot",
-        "Disallow:",
-        "User-agent: LinkedInBot",
-        "Disallow:",
-        "User-agent: Pinterestbot",
-        "Disallow:",
-        "User-agent: TelegramBot",
-        "Disallow:",
-        "User-agent: WhatsApp",
-        "Disallow:",
-        "",
-        "# Default rules for all other bots",
         "User-agent: *",
-        "# Block private/auth/admin areas and APIs",
-        "Disallow: /adminpanel/",
-        "Disallow: /userpanel/",
-        "Disallow: /admin/",
-        "Disallow: /login/",
-        "Disallow: /signup/",
-        "Disallow: /logout/",
-        "Disallow: /password-reset/",
-        "Disallow: /verify-email/",
-        "Disallow: /resend-verification/",
-        "Disallow: /api/",
-        "Disallow: /error/",
+        "Disallow:",
         "",
-        "# Allow static/media assets so previews render nicely",
-        "Allow: /static/",
-        "Allow: /media/",
-        "",
-        "# Sitemaps (no trailing dot!)",
+        "# Sitemap",
         "Sitemap: https://wacampaignsender.com/sitemap.xml"
     ])
     return HttpResponse(content, content_type="text/plain")
+
 
 def indexnow_key_view(request):
     """
