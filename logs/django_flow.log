@@ -1,676 +1,3453 @@
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+[INFO] 2025-12-09 16:49:22 django.server log.log_message:249 - "POST /whatsappapi/api/check-moderation/ HTTP/1.1" 200 168
+[INFO] 2025-12-09 16:49:25 whatsappapi.views views.send_campaign:660 - Using session 15 (+919008715802) from form submission
+[INFO] 2025-12-09 16:49:25 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=422
+[INFO] 2025-12-09 16:49:26 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-09 16:49:27 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16417
+[INFO] 2025-12-09 16:49:28 whatsappapi.views views.send_campaign:900 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\4dab38f6-fa7c-4f14-bde5-094abdd2b25c_Pasons 14 weekend promo 05& to 07 2025 dec.pdf
+[INFO] 2025-12-09 16:49:28 whatsappapi.views views.send_campaign:1008 - ℹ️ STANDARD MODE for campaign 'pasons_colony_weekend_promo_05_to_07_2025'
+[INFO] 2025-12-09 16:49:28 whatsappapi.views views.send_campaign:1009 -    Will use fixed delays based on session protection setting:
+[INFO] 2025-12-09 16:49:28 whatsappapi.views views.send_campaign:1010 -    - Protection ON: 5s
+[INFO] 2025-12-09 16:49:28 whatsappapi.views views.send_campaign:1011 -    - Protection OFF: 3s
+[INFO] 2025-12-09 16:49:28 whatsappapi.views views.send_campaign:1012 -    No batching, no cooldowns
+[INFO] 2025-12-09 16:49:29 whatsappapi.views views.send_campaign:1108 - Campaign 'pasons_colony_weekend_promo_05_to_07_2025' queued for background processing (Task ID: 5fa9846181f54c6fa1f134eaef2bdd49)
+[INFO] 2025-12-09 16:49:29 django.server log.log_message:249 - "POST /whatsappapi/send-campaign/ HTTP/1.1" 200 38954
+[INFO] 2025-12-09 16:49:29 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38220
+[INFO] 2025-12-09 16:49:29 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16346
+[INFO] 2025-12-09 16:49:29 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16002
+[INFO] 2025-12-09 16:49:31 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16072
+[INFO] 2025-12-09 16:49:31 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16402
+[INFO] 2025-12-09 16:49:31 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284571172 HTTP/1.1" 200 8035
+[INFO] 2025-12-09 16:49:32 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8028
+[INFO] 2025-12-09 16:49:33 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16003
+[INFO] 2025-12-09 16:49:33 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16425
+[INFO] 2025-12-09 16:49:33 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284573152 HTTP/1.1" 200 8024
+[INFO] 2025-12-09 16:49:37 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284577652 HTTP/1.1" 200 8070
+[INFO] 2025-12-09 16:49:41 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284581656 HTTP/1.1" 200 7998
+[INFO] 2025-12-09 16:49:45 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284585649 HTTP/1.1" 200 8046
+[INFO] 2025-12-09 16:49:49 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:49 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284589664 HTTP/1.1" 200 8011
+[INFO] 2025-12-09 16:49:50 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:53 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:53 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284593654 HTTP/1.1" 200 8082
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:49:57 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284597661 HTTP/1.1" 200 8026
+[INFO] 2025-12-09 16:49:59 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:00 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:01 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284601652 HTTP/1.1" 200 8027
+[INFO] 2025-12-09 16:50:03 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284605648 HTTP/1.1" 200 8033
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:06 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:50:09 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284609660 HTTP/1.1" 200 8040
+[INFO] 2025-12-09 16:50:13 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284613655 HTTP/1.1" 200 8082
+[INFO] 2025-12-09 16:50:17 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284617649 HTTP/1.1" 200 7990
+[INFO] 2025-12-09 16:50:21 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284621651 HTTP/1.1" 200 8083
+[INFO] 2025-12-09 16:50:25 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284625154 HTTP/1.1" 200 8070
+[INFO] 2025-12-09 16:50:26 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8065
+[INFO] 2025-12-09 16:50:26 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16026
+[INFO] 2025-12-09 16:50:26 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16374
+[INFO] 2025-12-09 16:50:27 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284626908 HTTP/1.1" 200 8003
+[INFO] 2025-12-09 16:50:31 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284631653 HTTP/1.1" 200 8088
+[INFO] 2025-12-09 16:50:35 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284635657 HTTP/1.1" 200 7992
+[INFO] 2025-12-09 16:50:39 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284639651 HTTP/1.1" 200 8007
+[INFO] 2025-12-09 16:50:43 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284643652 HTTP/1.1" 200 8015
+[INFO] 2025-12-09 16:50:47 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284647663 HTTP/1.1" 200 8001
+[INFO] 2025-12-09 16:50:51 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284651650 HTTP/1.1" 200 8055
+[INFO] 2025-12-09 16:50:55 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284655650 HTTP/1.1" 200 8001
+[INFO] 2025-12-09 16:50:59 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284659660 HTTP/1.1" 200 8073
+[INFO] 2025-12-09 16:51:03 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284663660 HTTP/1.1" 200 7997
+[INFO] 2025-12-09 16:51:07 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284667656 HTTP/1.1" 200 8088
+[INFO] 2025-12-09 16:51:11 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284671650 HTTP/1.1" 200 7998
+[INFO] 2025-12-09 16:51:15 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284675650 HTTP/1.1" 200 8022
+[INFO] 2025-12-09 16:51:19 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284679655 HTTP/1.1" 200 8031
+[INFO] 2025-12-09 16:51:23 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284683651 HTTP/1.1" 200 8076
+[INFO] 2025-12-09 16:51:27 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284687649 HTTP/1.1" 200 8076
+[INFO] 2025-12-09 16:51:31 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284691659 HTTP/1.1" 200 8009
+[INFO] 2025-12-09 16:51:49 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284708679 HTTP/1.1" 200 8032
+[INFO] 2025-12-09 16:51:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8079
+[INFO] 2025-12-09 16:51:50 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16383
+[INFO] 2025-12-09 16:51:50 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16015
+[INFO] 2025-12-09 16:51:51 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284711078 HTTP/1.1" 200 8076
+[INFO] 2025-12-09 16:51:55 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284715084 HTTP/1.1" 200 8053
+[INFO] 2025-12-09 16:51:59 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284719651 HTTP/1.1" 200 8076
+[INFO] 2025-12-09 16:52:03 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284723651 HTTP/1.1" 200 8038
+[INFO] 2025-12-09 16:52:07 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284727650 HTTP/1.1" 200 7993
+[INFO] 2025-12-09 16:52:11 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284731649 HTTP/1.1" 200 8025
+[INFO] 2025-12-09 16:52:15 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284735649 HTTP/1.1" 200 8082
+[INFO] 2025-12-09 16:52:19 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284739650 HTTP/1.1" 200 8007
+[INFO] 2025-12-09 16:52:23 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284743661 HTTP/1.1" 200 8012
+[INFO] 2025-12-09 16:52:27 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284747662 HTTP/1.1" 200 8042
+[INFO] 2025-12-09 16:52:31 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284751657 HTTP/1.1" 200 8087
+[INFO] 2025-12-09 16:52:35 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284755659 HTTP/1.1" 200 8076
+[INFO] 2025-12-09 16:52:39 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284759659 HTTP/1.1" 200 8014
+[INFO] 2025-12-09 16:52:43 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284763658 HTTP/1.1" 200 7996
+[INFO] 2025-12-09 16:52:47 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284767651 HTTP/1.1" 200 8080
+[INFO] 2025-12-09 16:52:51 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284771651 HTTP/1.1" 200 8008
+[INFO] 2025-12-09 16:52:55 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284775649 HTTP/1.1" 200 8043
+[INFO] 2025-12-09 16:53:03 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284783243 HTTP/1.1" 200 8072
+[INFO] 2025-12-09 16:53:05 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8068
+[INFO] 2025-12-09 16:53:05 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16061
+[INFO] 2025-12-09 16:53:05 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16392
+[INFO] 2025-12-09 16:53:05 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284785714 HTTP/1.1" 200 8016
+[INFO] 2025-12-09 16:53:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284790655 HTTP/1.1" 200 8012
+[INFO] 2025-12-09 16:53:14 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284794652 HTTP/1.1" 200 8059
+[INFO] 2025-12-09 16:53:18 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284798662 HTTP/1.1" 200 8008
+[INFO] 2025-12-09 16:53:22 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284802649 HTTP/1.1" 200 8069
+[INFO] 2025-12-09 16:53:26 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284806654 HTTP/1.1" 200 7997
+[INFO] 2025-12-09 16:53:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284810657 HTTP/1.1" 200 8043
+[INFO] 2025-12-09 16:53:34 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284814650 HTTP/1.1" 200 8067
+[INFO] 2025-12-09 16:53:38 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284818650 HTTP/1.1" 200 8051
+[INFO] 2025-12-09 16:53:42 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284822650 HTTP/1.1" 200 8027
+[INFO] 2025-12-09 16:53:46 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284826651 HTTP/1.1" 200 8046
+[INFO] 2025-12-09 16:53:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284830663 HTTP/1.1" 200 8021
+[INFO] 2025-12-09 16:53:53 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:54 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284834655 HTTP/1.1" 200 7997
+[INFO] 2025-12-09 16:53:55 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:58 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:58 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284838651 HTTP/1.1" 200 8004
+[INFO] 2025-12-09 16:53:58 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:53:59 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:54:02 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284842649 HTTP/1.1" 200 8033
+[INFO] 2025-12-09 16:54:03 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:05 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:06 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284846660 HTTP/1.1" 200 8062
+[INFO] 2025-12-09 16:54:08 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:08 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:09 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 16:54:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284850650 HTTP/1.1" 200 8067
+[INFO] 2025-12-09 16:54:29 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284869275 HTTP/1.1" 200 8056
+[INFO] 2025-12-09 16:54:29 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284869715 HTTP/1.1" 200 8077
+[INFO] 2025-12-09 16:54:35 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284874662 HTTP/1.1" 200 8018
+[INFO] 2025-12-09 16:54:38 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284878652 HTTP/1.1" 200 7997
+[INFO] 2025-12-09 16:54:40 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:54:42 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284882651 HTTP/1.1" 200 8059
+[INFO] 2025-12-09 16:54:46 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284886667 HTTP/1.1" 200 8039
+[INFO] 2025-12-09 16:54:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284890656 HTTP/1.1" 200 8085
+[INFO] 2025-12-09 16:54:54 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284894664 HTTP/1.1" 200 8001
+[INFO] 2025-12-09 16:54:58 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284898186 HTTP/1.1" 200 8018
+[INFO] 2025-12-09 16:54:59 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8011
+[INFO] 2025-12-09 16:55:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16394
+[INFO] 2025-12-09 16:55:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16073
+[INFO] 2025-12-09 16:55:01 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284901211 HTTP/1.1" 200 8081
+[INFO] 2025-12-09 16:55:05 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284905218 HTTP/1.1" 200 8081
+[INFO] 2025-12-09 16:55:09 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284909220 HTTP/1.1" 200 7999
+[INFO] 2025-12-09 16:55:13 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284913663 HTTP/1.1" 200 8003
+[INFO] 2025-12-09 16:55:17 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284917661 HTTP/1.1" 200 8080
+[INFO] 2025-12-09 16:55:21 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284921218 HTTP/1.1" 200 8035
+[INFO] 2025-12-09 16:55:26 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14488
+[INFO] 2025-12-09 16:55:28 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 302 0
+[INFO] 2025-12-09 16:55:28 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3912
+[INFO] 2025-12-09 16:55:29 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16412
+[INFO] 2025-12-09 16:55:30 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16387
+[INFO] 2025-12-09 16:55:30 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16000
+[INFO] 2025-12-09 16:55:30 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8000
+[INFO] 2025-12-09 16:55:30 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6320
+[INFO] 2025-12-09 16:55:30 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38269
+[INFO] 2025-12-09 16:55:30 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8050
+[INFO] 2025-12-09 16:55:31 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38297
+[INFO] 2025-12-09 16:55:31 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16052
+[INFO] 2025-12-09 16:55:31 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16401
+[INFO] 2025-12-09 16:55:32 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16061
+[INFO] 2025-12-09 16:55:32 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16400
+[INFO] 2025-12-09 16:55:33 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284932901 HTTP/1.1" 200 7999
+[INFO] 2025-12-09 16:55:33 django.server log.log_message:249 - "GET /whatsappapi/campaigns/24/ HTTP/1.1" 200 9765
+[INFO] 2025-12-09 16:55:34 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16047
+[INFO] 2025-12-09 16:55:34 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16367
+[INFO] 2025-12-09 16:55:34 django.server log.log_message:249 - "GET /whatsappapi/campaigns/24/stats/ HTTP/1.1" 200 267
+[INFO] 2025-12-09 16:55:36 django.server log.log_message:249 - "POST /whatsappapi/campaigns/24/stop/ HTTP/1.1" 200 37
+[INFO] 2025-12-09 16:55:36 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8298
+[INFO] 2025-12-09 16:55:37 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16368
+[INFO] 2025-12-09 16:55:37 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16024
+[INFO] 2025-12-09 16:55:39 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16043
+[INFO] 2025-12-09 16:55:39 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 15990
+[INFO] 2025-12-09 16:55:39 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8024
+[INFO] 2025-12-09 16:55:39 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16389
+[INFO] 2025-12-09 16:55:40 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16049
+[INFO] 2025-12-09 16:55:40 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16426
+[INFO] 2025-12-09 16:55:41 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?draft=2 HTTP/1.1" 200 38676
+[INFO] 2025-12-09 16:55:41 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16082
+[INFO] 2025-12-09 16:55:41 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16405
+[INFO] 2025-12-09 16:55:41 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/5/ HTTP/1.1" 200 166
+[INFO] 2025-12-09 16:55:54 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=350
+[INFO] 2025-12-09 16:55:56 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-09 16:55:58 django.server log.log_message:249 - "POST /whatsappapi/api/check-moderation/ HTTP/1.1" 200 168
+[INFO] 2025-12-09 16:56:02 whatsappapi.views views.send_campaign:660 - Using session 15 (+919008715802) from form submission
+[INFO] 2025-12-09 16:56:02 whatsappapi.moderation moderation._ai_evaluate_openai:476 - OpenAI moderation call attempt 1/3 model=omni-moderation-latest timeout=10.0 project_header=no len=391
+[INFO] 2025-12-09 16:56:04 whatsappapi.moderation moderation._ai_evaluate_openai:499 - OpenAI moderation ok flagged=False risk=0 reasons=
+[INFO] 2025-12-09 16:56:05 whatsappapi.views views.send_campaign:900 - Attachment saved to temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\ca1fe5a2-aa95-46f5-a342-94957a3a60c4_Pasons 14 weekend promo 05& to 07 2025 dec.pdf
+[INFO] 2025-12-09 16:56:05 whatsappapi.views views.send_campaign:1008 - ℹ️ STANDARD MODE for campaign 'test_campign'
+[INFO] 2025-12-09 16:56:05 whatsappapi.views views.send_campaign:1009 -    Will use fixed delays based on session protection setting:
+[INFO] 2025-12-09 16:56:05 whatsappapi.views views.send_campaign:1010 -    - Protection ON: 5s
+[INFO] 2025-12-09 16:56:05 whatsappapi.views views.send_campaign:1011 -    - Protection OFF: 3s
+[INFO] 2025-12-09 16:56:05 whatsappapi.views views.send_campaign:1012 -    No batching, no cooldowns
+[INFO] 2025-12-09 16:56:06 whatsappapi.views views.send_campaign:1108 - Campaign 'test_campign' queued for background processing (Task ID: 21b7ce088b0c4572aec951f1d2bcb5e3)
+[INFO] 2025-12-09 16:56:06 django.server log.log_message:249 - "POST /whatsappapi/send-campaign/ HTTP/1.1" 200 38892
+[INFO] 2025-12-09 16:56:06 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16370
+[INFO] 2025-12-09 16:56:06 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16067
+[INFO] 2025-12-09 16:56:06 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38223
+[INFO] 2025-12-09 16:56:07 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16003
+[INFO] 2025-12-09 16:56:07 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16432
+[INFO] 2025-12-09 16:56:08 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284967848 HTTP/1.1" 200 8241
+[INFO] 2025-12-09 16:56:09 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8174
+[INFO] 2025-12-09 16:56:09 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16011
+[INFO] 2025-12-09 16:56:09 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16422
+[INFO] 2025-12-09 16:56:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284969880 HTTP/1.1" 200 8165
+[INFO] 2025-12-09 16:56:14 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284973880 HTTP/1.1" 200 8196
+[INFO] 2025-12-09 16:56:18 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284977883 HTTP/1.1" 200 8192
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8201
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3868
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16410
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16020
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8027
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6374
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38221
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8251
+[INFO] 2025-12-09 16:56:20 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284980592 HTTP/1.1" 200 8237
+[INFO] 2025-12-09 16:56:24 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284984649 HTTP/1.1" 200 8201
+[INFO] 2025-12-09 16:56:28 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284988664 HTTP/1.1" 200 8199
+[INFO] 2025-12-09 16:56:32 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284992660 HTTP/1.1" 200 8237
+[INFO] 2025-12-09 16:56:36 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765284996649 HTTP/1.1" 200 8204
+[INFO] 2025-12-09 16:56:40 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285000652 HTTP/1.1" 200 8236
+[INFO] 2025-12-09 16:56:44 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285004649 HTTP/1.1" 200 8186
+[INFO] 2025-12-09 16:56:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:56:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:56:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
   "event": "messages.update",
-  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
   "data": {
+    "remoteJid": "919744359433@s.whatsapp.net",
+    "id": "3EB063C99CB5F3A0B7C8FF",
+    "msgId": 15308807,
     "key": {
-      "id": "3EB0105D3D3433C7040D9C",
+      "id": "3EB063C99CB5F3A0B7C8FF",
       "fromMe": true,
-      "remoteJid": "16595921449079@lid",
-      "senderLid": "16595921449079@lid"
-    },
-    "status": 4
-  },
-  "timestamp": 1765196024980
-}
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
-  "event": "messages.update",
-  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
-  "data": {
-    "remoteJid": "919961557713@s.whatsapp.net",
-    "id": "3EB019845AC5CEB7F49854",
-    "msgId": 15131853,
-    "key": {
-      "id": "3EB019845AC5CEB7F49854",
-      "fromMe": true,
-      "remoteJid": "919961557713@s.whatsapp.net"
+      "remoteJid": "919744359433@s.whatsapp.net"
     },
     "message": {
       "documentMessage": {
-        "url": "https://mmg.whatsapp.net/v/t62.7119-24/595637754_1233748988665865_448052359555674101_n.enc?ccb=11-4&oh=01_Q5Aa3QExJKndsWWQwBGoibqI1e7XygnMziGigjYSVhTv_rHb6w&oe=695E150F&_nc_sid=5e03e0&mms3=true",
-        "caption": "\ud83d\udce2 *Exciting News, Shabana!*\r\n\r\nAre you ready to elevate your marketing game? \ud83d\ude80 Our latest campaign is designed just for you!\r\n\r\n\u2705 Tailored strategies to boost your brand visibility\r\n\u2705 Expert insights to drive customer engagement\r\n\u2705 Exclusive tips to maximize your ROI\r\n\r\nJoin us and transform your marketing approach today! \r\n\r\n\ud83d\udc49 *Learn more now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you succeed! \ud83c\udf89",
-        "fileName": "Pasons_Al_nahda.pdf",
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/596536623_1572308107127409_1527644543483272063_n.enc?ccb=11-4&oh=01_Q5Aa3QGAzdQDvSm6-vxFPM1NN3vuwrpacqjHj3R94qCINkz1YQ&oe=695F8403&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Uppa!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
         "mediaKey": {
           "data": [
-            104,
-            40,
-            14,
-            153,
-            187,
-            150,
-            11,
-            32,
-            63,
-            146,
-            228,
-            169,
-            42,
-            14,
-            234,
-            40,
-            40,
-            190,
-            75,
-            155,
-            14,
-            68,
-            94,
-            158,
-            239,
-            29,
-            45,
-            250,
-            66,
-            1,
-            209,
-            237
-          ],
-          "type": "Buffer"
-        },
-        "mimetype": "application/pdf",
-        "directPath": "/v/t62.7119-24/595637754_1233748988665865_448052359555674101_n.enc?ccb=11-4&oh=01_Q5Aa3QExJKndsWWQwBGoibqI1e7XygnMziGigjYSVhTv_rHb6w&oe=695E150F&_nc_sid=5e03e0",
-        "fileLength": 778221,
-        "fileSha256": {
-          "data": [
-            21,
-            167,
-            183,
-            163,
-            172,
-            129,
-            130,
-            4,
-            15,
-            148,
-            157,
-            36,
-            90,
-            223,
-            32,
-            95,
-            194,
-            11,
-            94,
-            105,
-            117,
-            169,
-            149,
-            241,
-            203,
-            197,
-            18,
-            15,
-            66,
-            247,
-            253,
-            202
-          ],
-          "type": "Buffer"
-        },
-        "fileEncSha256": {
-          "data": [
-            6,
-            10,
-            195,
-            8,
-            106,
-            208,
-            187,
-            108,
-            192,
-            217,
-            185,
-            46,
-            126,
-            255,
-            16,
-            164,
-            92,
-            72,
-            190,
-            104,
-            116,
-            211,
-            29,
-            162,
-            122,
-            50,
-            17,
-            167,
-            62,
-            54,
-            73,
-            65
-          ],
-          "type": "Buffer"
-        },
-        "mediaKeyTimestamp": 1765195747
-      }
-    },
-    "messageTimestamp": "1765195747",
-    "status": 4
-  },
-  "timestamp": 1765196024984
-}
-[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
-[INFO] 2025-12-08 16:13:45 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 21.64ms
-[INFO] 2025-12-08 16:13:45 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
-  "event": "messages.update",
-  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
-  "data": {
-    "key": {
-      "id": "3EB01FA700B55E08EB0456",
-      "fromMe": true,
-      "remoteJid": "16595921449079@lid",
-      "senderLid": "16595921449079@lid"
-    },
-    "status": 4
-  },
-  "timestamp": 1765196024982
-}
-[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
-[INFO] 2025-12-08 16:13:45 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
-  "event": "messages.update",
-  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
-  "data": {
-    "key": {
-      "id": "3EB0DFA3D368FC1D509CBA",
-      "fromMe": true,
-      "remoteJid": "16595921449079@lid",
-      "senderLid": "16595921449079@lid"
-    },
-    "status": 4
-  },
-  "timestamp": 1765196024981
-}
-[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
-[INFO] 2025-12-08 16:13:45 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: fd7e33ce833f7a83c659...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: 0f6aa70ccbd42c0c9ce1...
-[INFO] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
-  "event": "messages.update",
-  "sessionId": "fd7e33ce833f7a83c65964d61ba3f37939fd0d8c9845154b12a74802bd57f807",
-  "data": {
-    "key": {
-      "id": "3EB0F7CED9B9FC5AD75461",
-      "fromMe": true,
-      "remoteJid": "16595921449079@lid",
-      "senderLid": "16595921449079@lid"
-    },
-    "status": 4
-  },
-  "timestamp": 1765196024982
-}
-[WARNING] 2025-12-08 16:13:45 whatsappapi.views views.wasender_webhook:1574 - ⚠️ WEBHOOK PROCESSING FAILED | User: 2 | Event: messages.update
-[INFO] 2025-12-08 16:13:45 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
-  "event": "messages.update",
-  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
-  "data": {
-    "remoteJid": "919961557713@s.whatsapp.net",
-    "id": "3EB0A72B691109055ED02A",
-    "msgId": 15128294,
-    "key": {
-      "id": "3EB0A72B691109055ED02A",
-      "fromMe": true,
-      "remoteJid": "919961557713@s.whatsapp.net"
-    },
-    "message": {
-      "documentMessage": {
-        "url": "https://mmg.whatsapp.net/v/t62.7119-24/597672943_880068377693347_4759513307553281442_n.enc?ccb=11-4&oh=01_Q5Aa3QEt7TRH21DsWpuxbGJ4mKMtPTRxjlwbgL9Hi0DvGbdEig&oe=695E3EDD&_nc_sid=5e03e0&mms3=true",
-        "caption": "\ud83d\udce2 *Hello, Shabana!*\r\n\r\nWe have some exciting news just for you! \ud83c\udf89 \r\n\r\nOur latest marketing campaign is here to help you boost your business and connect with your audience like never before. \r\n\r\n\u2705 Tailored strategies for your brand\r\n\u2705 Expert insights and support\r\n\u2705 Increased engagement and conversions\r\n\r\nDon't miss out on this opportunity to elevate your marketing game! \r\n\r\n\ud83d\udc49 *Join us now:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you thrive! \ud83c\udf1f",
-        "fileName": "PASONS_26_WEEKEND_DEAL.pdf",
-        "mediaKey": {
-          "data": [
-            179,
-            124,
-            246,
-            105,
-            39,
-            39,
-            67,
-            43,
-            10,
-            226,
-            59,
-            165,
-            20,
-            223,
-            159,
-            20,
-            214,
-            1,
-            8,
-            79,
-            125,
-            169,
-            227,
-            110,
-            56,
-            14,
-            87,
-            54,
-            200,
-            86,
-            72,
-            176
-          ],
-          "type": "Buffer"
-        },
-        "mimetype": "application/pdf",
-        "directPath": "/v/t62.7119-24/597672943_880068377693347_4759513307553281442_n.enc?ccb=11-4&oh=01_Q5Aa3QEt7TRH21DsWpuxbGJ4mKMtPTRxjlwbgL9Hi0DvGbdEig&oe=695E3EDD&_nc_sid=5e03e0",
-        "fileLength": 1707172,
-        "fileSha256": {
-          "data": [
-            91,
-            190,
-            43,
-            100,
-            215,
-            25,
-            112,
-            239,
-            14,
-            233,
-            131,
-            151,
-            70,
-            236,
-            6,
-            255,
-            169,
-            230,
-            115,
-            203,
-            62,
-            169,
-            234,
-            117,
-            116,
-            243,
-            70,
-            126,
-            104,
-            22,
-            175,
-            135
-          ],
-          "type": "Buffer"
-        },
-        "fileEncSha256": {
-          "data": [
-            125,
-            92,
-            163,
-            217,
-            43,
-            81,
-            185,
-            1,
-            80,
-            163,
-            32,
-            220,
-            130,
-            67,
-            74,
-            99,
+            113,
             154,
-            25,
-            143,
-            153,
-            86,
-            237,
-            136,
-            20,
-            180,
-            126,
-            228,
-            253,
-            85,
-            110,
-            74,
-            122
-          ],
-          "type": "Buffer"
-        },
-        "mediaKeyTimestamp": 1765194436
-      }
-    },
-    "messageTimestamp": "1765194436",
-    "status": 4
-  },
-  "timestamp": 1765196026819
-}
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
-  "event": "messages.update",
-  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
-  "data": {
-    "remoteJid": "919961557713@s.whatsapp.net",
-    "id": "3EB0B2598AF1E67647B58F",
-    "msgId": 15125866,
-    "key": {
-      "id": "3EB0B2598AF1E67647B58F",
-      "fromMe": true,
-      "remoteJid": "919961557713@s.whatsapp.net"
-    },
-    "message": {
-      "documentMessage": {
-        "url": "https://mmg.whatsapp.net/v/t62.7119-24/597921574_1183735853899942_5364554952300808517_n.enc?ccb=11-4&oh=01_Q5Aa3QEfm2R8aJzvBt8o383jG7z4wbDd-nkbF9Ouzu7FOXf-aw&oe=695E2E19&_nc_sid=5e03e0&mms3=true",
-        "caption": "\ud83c\udf1f *\ud83d\udce2*Exciting News*, Shabana!*\r\n\r\nGet ready to elevate your experience with our latest offerings! We have something special just for you that you won't want to miss.\r\n\r\n\u2705 Exclusive insights into our innovative services\r\n\u2705 Personalized support tailored to your needs\r\n\u2705 A warm community to connect and grow with\r\n\r\nJoin us and discover how we can help you thrive! \r\n\r\n\ud83d\udc49 *Connect with us now:*\r\n\r\nLooking forward to seeing you! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
-        "fileName": "PASONS_26_WEEKEND_DEAL.pdf",
-        "mediaKey": {
-          "data": [
-            77,
-            153,
-            30,
-            201,
-            91,
-            192,
-            159,
-            234,
-            214,
-            233,
-            184,
-            127,
-            146,
-            22,
-            90,
-            55,
-            9,
-            2,
-            31,
-            132,
-            22,
-            164,
-            77,
-            78,
-            195,
-            132,
-            202,
-            105,
-            4,
-            80,
+            81,
+            27,
+            49,
+            175,
+            117,
+            240,
+            244,
+            44,
+            64,
+            121,
+            156,
+            222,
+            210,
             37,
-            238
+            40,
+            221,
+            14,
+            165,
+            245,
+            89,
+            81,
+            113,
+            197,
+            16,
+            139,
+            208,
+            54,
+            1,
+            85,
+            127
           ],
           "type": "Buffer"
         },
         "mimetype": "application/pdf",
-        "directPath": "/v/t62.7119-24/597921574_1183735853899942_5364554952300808517_n.enc?ccb=11-4&oh=01_Q5Aa3QEfm2R8aJzvBt8o383jG7z4wbDd-nkbF9Ouzu7FOXf-aw&oe=695E2E19&_nc_sid=5e03e0",
-        "fileLength": 1707172,
+        "directPath": "/v/t62.7119-24/596536623_1572308107127409_1527644543483272063_n.enc?ccb=11-4&oh=01_Q5Aa3QGAzdQDvSm6-vxFPM1NN3vuwrpacqjHj3R94qCINkz1YQ&oe=695F8403&_nc_sid=5e03e0",
+        "fileLength": 1913936,
         "fileSha256": {
           "data": [
-            91,
-            190,
-            43,
-            100,
             215,
-            25,
-            112,
-            239,
-            14,
-            233,
-            131,
-            151,
-            70,
-            236,
-            6,
-            255,
-            169,
-            230,
-            115,
-            203,
-            62,
-            169,
-            234,
-            117,
-            116,
+            240,
+            202,
             243,
-            70,
-            126,
-            104,
-            22,
-            175,
-            135
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
           ],
           "type": "Buffer"
         },
         "fileEncSha256": {
           "data": [
             39,
-            117,
-            124,
-            45,
-            161,
-            242,
-            109,
-            115,
-            62,
-            108,
-            80,
-            16,
-            45,
-            131,
-            47,
-            212,
-            177,
-            130,
-            61,
-            186,
-            174,
-            133,
-            199,
-            14,
             208,
-            104,
-            68,
+            138,
+            191,
+            29,
+            230,
+            112,
+            209,
+            154,
+            0,
+            175,
+            253,
+            246,
+            242,
+            77,
+            127,
+            107,
+            170,
+            221,
+            24,
+            22,
+            27,
+            231,
+            161,
+            180,
             223,
-            249,
-            244,
+            130,
+            241,
+            223,
+            65,
+            59,
+            200
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285002
+      }
+    },
+    "messageTimestamp": "1765285002",
+    "status": 3
+  },
+  "timestamp": 1765285004950
+}
+[INFO] 2025-12-09 16:56:45 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 46.58ms
+[INFO] 2025-12-09 16:56:45 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:56:48 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285008652 HTTP/1.1" 200 8208
+[INFO] 2025-12-09 16:56:51 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:56:51 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:56:51 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "919961557713@s.whatsapp.net",
+    "id": "3EB0A0A024C682C9AC9718",
+    "msgId": 15308839,
+    "key": {
+      "id": "3EB0A0A024C682C9AC9718",
+      "fromMe": true,
+      "remoteJid": "919961557713@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/596576629_1392488532256533_3332213449873643953_n.enc?ccb=11-4&oh=01_Q5Aa3QGWV1cjtezaPJmN0tBNXtGg2DVhDtJF07vSlTXQ0w7RWw&oe=695F9203&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Shabana!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            252,
+            203,
+            54,
+            31,
+            149,
+            84,
+            86,
+            241,
+            72,
+            0,
+            248,
+            247,
+            55,
+            4,
+            52,
+            218,
+            6,
+            202,
+            236,
+            149,
+            212,
+            93,
+            181,
+            147,
+            21,
             66,
+            90,
+            189,
+            81,
+            50,
+            196,
+            85
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/596576629_1392488532256533_3332213449873643953_n.enc?ccb=11-4&oh=01_Q5Aa3QGWV1cjtezaPJmN0tBNXtGg2DVhDtJF07vSlTXQ0w7RWw&oe=695F9203&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            209,
+            204,
+            191,
+            9,
+            252,
+            56,
+            177,
+            129,
+            8,
+            129,
+            174,
+            205,
+            9,
+            212,
+            214,
+            95,
+            23,
+            110,
+            175,
+            134,
+            164,
+            242,
+            8,
+            138,
+            190,
+            223,
+            147,
+            247,
+            30,
+            6,
+            172,
+            208
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285009
+      }
+    },
+    "messageTimestamp": "1765285009",
+    "status": 3
+  },
+  "timestamp": 1765285011711
+}
+[INFO] 2025-12-09 16:56:51 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 42.16ms
+[INFO] 2025-12-09 16:56:51 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:56:52 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285012653 HTTP/1.1" 200 8207
+[INFO] 2025-12-09 16:56:56 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285016651 HTTP/1.1" 200 8238
+[INFO] 2025-12-09 16:56:59 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:56:59 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:56:59 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971501464078@s.whatsapp.net",
+    "id": "3EB0C89A966C5DC3D2392D",
+    "msgId": 15308862,
+    "key": {
+      "id": "3EB0C89A966C5DC3D2392D",
+      "fromMe": true,
+      "remoteJid": "971501464078@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Ecommerce!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            36,
+            247,
+            0,
+            56,
+            110,
+            109,
+            152,
+            72,
+            220,
+            232,
+            155,
+            57,
+            57,
+            104,
+            173,
+            19,
+            239,
+            107,
+            133,
+            134,
+            176,
+            216,
+            41,
+            228,
+            164,
+            118,
+            150,
+            157,
+            64,
+            202,
+            104,
             84
           ],
           "type": "Buffer"
         },
-        "mediaKeyTimestamp": 1765193302
-      }
-    },
-    "messageTimestamp": "1765193302",
-    "status": 4
-  },
-  "timestamp": 1765196026816
-}
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
-  "event": "messages.update",
-  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
-  "data": {
-    "remoteJid": "919961557713@s.whatsapp.net",
-    "id": "3EB0ED6641C7214AC78196",
-    "msgId": 15131893,
-    "key": {
-      "id": "3EB0ED6641C7214AC78196",
-      "fromMe": true,
-      "remoteJid": "919961557713@s.whatsapp.net"
-    },
-    "message": {
-      "documentMessage": {
-        "url": "https://mmg.whatsapp.net/v/t62.7119-24/597675326_858582199905247_2245808091545927224_n.enc?ccb=11-4&oh=01_Q5Aa3QFENPZPmHzkrM2rqsQFSna2rdIH9-oIOuhacon3yHCYwA&oe=695E196D&_nc_sid=5e03e0&mms3=true",
-        "caption": "Hi Dears\r\nWeekend Deals \r\nTest Campaign\n\n---\nReply *STOP* to opt-out",
-        "fileName": "PASONS_26_WEEKEND_DEAL.pdf",
-        "mediaKey": {
-          "data": [
-            228,
-            94,
-            78,
-            233,
-            242,
-            30,
-            54,
-            205,
-            178,
-            206,
-            41,
-            181,
-            21,
-            243,
-            149,
-            156,
-            53,
-            58,
-            94,
-            141,
-            80,
-            12,
-            134,
-            113,
-            4,
-            136,
-            43,
-            235,
-            55,
-            189,
-            25,
-            162
-          ],
-          "type": "Buffer"
-        },
         "mimetype": "application/pdf",
-        "directPath": "/v/t62.7119-24/597675326_858582199905247_2245808091545927224_n.enc?ccb=11-4&oh=01_Q5Aa3QFENPZPmHzkrM2rqsQFSna2rdIH9-oIOuhacon3yHCYwA&oe=695E196D&_nc_sid=5e03e0",
-        "fileLength": 1707172,
+        "directPath": "/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0",
+        "fileLength": 1913936,
         "fileSha256": {
           "data": [
-            91,
-            190,
-            43,
-            100,
             215,
-            25,
-            112,
-            239,
-            14,
-            233,
-            131,
-            151,
-            70,
-            236,
-            6,
-            255,
-            169,
-            230,
-            115,
-            203,
-            62,
-            169,
-            234,
-            117,
-            116,
+            240,
+            202,
             243,
-            70,
-            126,
-            104,
-            22,
-            175,
-            135
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
           ],
           "type": "Buffer"
         },
         "fileEncSha256": {
           "data": [
-            211,
-            104,
-            150,
-            201,
-            108,
+            70,
+            119,
+            93,
+            71,
+            139,
             62,
-            238,
-            187,
+            18,
+            144,
             9,
-            163,
-            134,
-            113,
-            91,
-            47,
+            41,
+            136,
+            33,
+            212,
+            149,
+            160,
+            164,
+            99,
+            31,
+            242,
+            221,
+            211,
+            213,
+            24,
+            36,
+            48,
+            222,
+            188,
             176,
-            80,
-            54,
-            131,
-            107,
-            146,
-            133,
-            226,
-            106,
-            34,
-            89,
-            43,
-            12,
-            44,
-            172,
-            67,
-            185,
-            31
+            76,
+            108,
+            117,
+            247
           ],
           "type": "Buffer"
         },
-        "mediaKeyTimestamp": 1765195767
+        "mediaKeyTimestamp": 1765285016
       }
     },
-    "messageTimestamp": "1765195767",
+    "messageTimestamp": "1765285016",
+    "status": 3
+  },
+  "timestamp": 1765285019584
+}
+[INFO] 2025-12-09 16:56:59 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 24.00ms
+[INFO] 2025-12-09 16:56:59 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 109
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971501464078@s.whatsapp.net",
+    "id": "3EB0C89A966C5DC3D2392D",
+    "msgId": 15308862,
+    "key": {
+      "id": "3EB0C89A966C5DC3D2392D",
+      "fromMe": true,
+      "remoteJid": "971501464078@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Ecommerce!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            36,
+            247,
+            0,
+            56,
+            110,
+            109,
+            152,
+            72,
+            220,
+            232,
+            155,
+            57,
+            57,
+            104,
+            173,
+            19,
+            239,
+            107,
+            133,
+            134,
+            176,
+            216,
+            41,
+            228,
+            164,
+            118,
+            150,
+            157,
+            64,
+            202,
+            104,
+            84
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            70,
+            119,
+            93,
+            71,
+            139,
+            62,
+            18,
+            144,
+            9,
+            41,
+            136,
+            33,
+            212,
+            149,
+            160,
+            164,
+            99,
+            31,
+            242,
+            221,
+            211,
+            213,
+            24,
+            36,
+            48,
+            222,
+            188,
+            176,
+            76,
+            108,
+            117,
+            247
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285016
+      }
+    },
+    "messageTimestamp": "1765285016",
+    "status": 3
+  },
+  "timestamp": 1765285019824
+}
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971501464078@s.whatsapp.net",
+    "id": "3EB0C89A966C5DC3D2392D",
+    "msgId": 15308862,
+    "key": {
+      "id": "3EB0C89A966C5DC3D2392D",
+      "fromMe": true,
+      "remoteJid": "971501464078@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Ecommerce!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            36,
+            247,
+            0,
+            56,
+            110,
+            109,
+            152,
+            72,
+            220,
+            232,
+            155,
+            57,
+            57,
+            104,
+            173,
+            19,
+            239,
+            107,
+            133,
+            134,
+            176,
+            216,
+            41,
+            228,
+            164,
+            118,
+            150,
+            157,
+            64,
+            202,
+            104,
+            84
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            70,
+            119,
+            93,
+            71,
+            139,
+            62,
+            18,
+            144,
+            9,
+            41,
+            136,
+            33,
+            212,
+            149,
+            160,
+            164,
+            99,
+            31,
+            242,
+            221,
+            211,
+            213,
+            24,
+            36,
+            48,
+            222,
+            188,
+            176,
+            76,
+            108,
+            117,
+            247
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285016
+      }
+    },
+    "messageTimestamp": "1765285016",
+    "status": 3
+  },
+  "timestamp": 1765285019833
+}
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 27.83ms
+[INFO] 2025-12-09 16:57:00 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:00 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 15.60ms
+[INFO] 2025-12-09 16:57:00 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 109
+[INFO] 2025-12-09 16:57:00 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285020649 HTTP/1.1" 200 8207
+[INFO] 2025-12-09 16:57:01 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:01 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:01 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971501464078@s.whatsapp.net",
+    "id": "3EB0C89A966C5DC3D2392D",
+    "msgId": 15308862,
+    "key": {
+      "id": "3EB0C89A966C5DC3D2392D",
+      "fromMe": true,
+      "remoteJid": "971501464078@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Ecommerce!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            36,
+            247,
+            0,
+            56,
+            110,
+            109,
+            152,
+            72,
+            220,
+            232,
+            155,
+            57,
+            57,
+            104,
+            173,
+            19,
+            239,
+            107,
+            133,
+            134,
+            176,
+            216,
+            41,
+            228,
+            164,
+            118,
+            150,
+            157,
+            64,
+            202,
+            104,
+            84
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            70,
+            119,
+            93,
+            71,
+            139,
+            62,
+            18,
+            144,
+            9,
+            41,
+            136,
+            33,
+            212,
+            149,
+            160,
+            164,
+            99,
+            31,
+            242,
+            221,
+            211,
+            213,
+            24,
+            36,
+            48,
+            222,
+            188,
+            176,
+            76,
+            108,
+            117,
+            247
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285016
+      }
+    },
+    "messageTimestamp": "1765285016",
+    "status": 3
+  },
+  "timestamp": 1765285021271
+}
+[INFO] 2025-12-09 16:57:01 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 16.98ms
+[INFO] 2025-12-09 16:57:01 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:04 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285024652 HTTP/1.1" 200 8207
+[INFO] 2025-12-09 16:57:08 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285028594 HTTP/1.1" 200 8194
+[INFO] 2025-12-09 16:57:08 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:08 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:08 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971564669930@s.whatsapp.net",
+    "id": "3EB084C037CC3EFE36795A",
+    "msgId": 15308898,
+    "key": {
+      "id": "3EB084C037CC3EFE36795A",
+      "fromMe": true,
+      "remoteJid": "971564669930@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598035805_1921718568385430_5883155887010209535_n.enc?ccb=11-4&oh=01_Q5Aa3QGotCtnokey4FDrWIaY_x8DJcpuDCI34JY2YesPD49pVQ&oe=695F9857&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, My Number!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            46,
+            69,
+            223,
+            172,
+            39,
+            132,
+            182,
+            189,
+            144,
+            125,
+            70,
+            141,
+            14,
+            198,
+            147,
+            80,
+            16,
+            186,
+            90,
+            216,
+            66,
+            44,
+            230,
+            42,
+            109,
+            72,
+            212,
+            211,
+            125,
+            159,
+            30,
+            95
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598035805_1921718568385430_5883155887010209535_n.enc?ccb=11-4&oh=01_Q5Aa3QGotCtnokey4FDrWIaY_x8DJcpuDCI34JY2YesPD49pVQ&oe=695F9857&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            6,
+            92,
+            159,
+            188,
+            110,
+            23,
+            224,
+            178,
+            133,
+            253,
+            43,
+            39,
+            63,
+            27,
+            93,
+            209,
+            49,
+            15,
+            250,
+            72,
+            111,
+            184,
+            120,
+            89,
+            32,
+            171,
+            181,
+            95,
+            154,
+            232,
+            244,
+            217
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285025
+      }
+    },
+    "messageTimestamp": "1765285025",
+    "status": 3
+  },
+  "timestamp": 1765285028863
+}
+[INFO] 2025-12-09 16:57:08 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 34.45ms
+[INFO] 2025-12-09 16:57:08 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:12 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285032654 HTTP/1.1" 200 8247
+[INFO] 2025-12-09 16:57:16 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:16 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:16 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971569683136@s.whatsapp.net",
+    "id": "3EB040780AFB0C0167526D",
+    "msgId": 15308922,
+    "key": {
+      "id": "3EB040780AFB0C0167526D",
+      "fromMe": true,
+      "remoteJid": "971569683136@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598417870_1568131590989242_7518587562551805728_n.enc?ccb=11-4&oh=01_Q5Aa3QHpvF9aSbUy-Bdlo5GWPpDALXLVH6Sgsq9v13eIxkjpNw&oe=695F8960&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Saleek!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            60,
+            235,
+            236,
+            250,
+            228,
+            125,
+            214,
+            77,
+            76,
+            181,
+            216,
+            119,
+            154,
+            8,
+            222,
+            193,
+            140,
+            17,
+            148,
+            137,
+            144,
+            144,
+            119,
+            209,
+            2,
+            181,
+            18,
+            4,
+            145,
+            92,
+            57,
+            76
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598417870_1568131590989242_7518587562551805728_n.enc?ccb=11-4&oh=01_Q5Aa3QHpvF9aSbUy-Bdlo5GWPpDALXLVH6Sgsq9v13eIxkjpNw&oe=695F8960&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            227,
+            86,
+            150,
+            56,
+            41,
+            164,
+            186,
+            230,
+            162,
+            48,
+            233,
+            238,
+            111,
+            57,
+            14,
+            99,
+            207,
+            87,
+            126,
+            150,
+            54,
+            46,
+            133,
+            116,
+            165,
+            80,
+            106,
+            131,
+            53,
+            3,
+            1,
+            183
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285032
+      }
+    },
+    "messageTimestamp": "1765285032",
+    "status": 3
+  },
+  "timestamp": 1765285036199
+}
+[INFO] 2025-12-09 16:57:16 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 42.96ms
+[INFO] 2025-12-09 16:57:16 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:16 django.server log.log_message:249 - "GET /whatsappapi/campaigns/?_t=1765285036597 HTTP/1.1" 200 8245
+[INFO] 2025-12-09 16:57:17 django.server log.log_message:249 - "GET /whatsappapi/campaigns/25/ HTTP/1.1" 200 10918
+[INFO] 2025-12-09 16:57:17 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16378
+[INFO] 2025-12-09 16:57:17 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16002
+[INFO] 2025-12-09 16:57:17 django.server log.log_message:249 - "GET /whatsappapi/campaigns/25/stats/ HTTP/1.1" 200 210
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/campaigns/25/ HTTP/1.1" 200 10927
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3941
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16032
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16340
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6336
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8015
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38298
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/campaigns/25/stats/ HTTP/1.1" 200 187
+[INFO] 2025-12-09 16:57:19 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8205
+[INFO] 2025-12-09 16:57:28 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:28 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:28 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "97455460961@s.whatsapp.net",
+    "id": "3EB01E37067F586CE024D6",
+    "msgId": 15308967,
+    "key": {
+      "id": "3EB01E37067F586CE024D6",
+      "fromMe": true,
+      "remoteJid": "97455460961@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598198065_1593085591713836_8333962919923747062_n.enc?ccb=11-4&oh=01_Q5Aa3QEVc2AW_mRd7XylDb37PT2BzmolBSMXTDlHKfb0_Wr7Cg&oe=695F8588&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Abid Bro!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            254,
+            226,
+            47,
+            239,
+            40,
+            94,
+            25,
+            253,
+            78,
+            60,
+            3,
+            129,
+            225,
+            168,
+            19,
+            32,
+            25,
+            242,
+            208,
+            243,
+            159,
+            144,
+            59,
+            70,
+            138,
+            158,
+            28,
+            96,
+            98,
+            220,
+            124,
+            147
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598198065_1593085591713836_8333962919923747062_n.enc?ccb=11-4&oh=01_Q5Aa3QEVc2AW_mRd7XylDb37PT2BzmolBSMXTDlHKfb0_Wr7Cg&oe=695F8588&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            249,
+            28,
+            34,
+            142,
+            8,
+            52,
+            206,
+            70,
+            191,
+            99,
+            167,
+            68,
+            235,
+            49,
+            248,
+            54,
+            15,
+            195,
+            116,
+            77,
+            204,
+            220,
+            71,
+            86,
+            13,
+            128,
+            56,
+            78,
+            103,
+            7,
+            141,
+            12
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285046
+      }
+    },
+    "messageTimestamp": "1765285046",
+    "status": 3
+  },
+  "timestamp": 1765285048843
+}
+[INFO] 2025-12-09 16:57:28 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 48.97ms
+[INFO] 2025-12-09 16:57:28 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:39 django.server log.log_message:249 - "GET /whatsappapi/campaigns/25/ HTTP/1.1" 200 10550
+[INFO] 2025-12-09 16:57:39 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16400
+[INFO] 2025-12-09 16:57:39 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16023
+[INFO] 2025-12-09 16:57:46 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:46 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:46 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971501464078@s.whatsapp.net",
+    "id": "3EB0C89A966C5DC3D2392D",
+    "msgId": 15308862,
+    "key": {
+      "id": "3EB0C89A966C5DC3D2392D",
+      "fromMe": true,
+      "remoteJid": "971501464078@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Ecommerce!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            36,
+            247,
+            0,
+            56,
+            110,
+            109,
+            152,
+            72,
+            220,
+            232,
+            155,
+            57,
+            57,
+            104,
+            173,
+            19,
+            239,
+            107,
+            133,
+            134,
+            176,
+            216,
+            41,
+            228,
+            164,
+            118,
+            150,
+            157,
+            64,
+            202,
+            104,
+            84
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            70,
+            119,
+            93,
+            71,
+            139,
+            62,
+            18,
+            144,
+            9,
+            41,
+            136,
+            33,
+            212,
+            149,
+            160,
+            164,
+            99,
+            31,
+            242,
+            221,
+            211,
+            213,
+            24,
+            36,
+            48,
+            222,
+            188,
+            176,
+            76,
+            108,
+            117,
+            247
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285016
+      }
+    },
+    "messageTimestamp": "1765285016",
     "status": 4
   },
-  "timestamp": 1765196026817
+  "timestamp": 1765285066611
 }
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 23.49ms
-[INFO] 2025-12-08 16:13:46 django.server log.log_message:249 - "POST /whatsappapi/webhook/4/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 19.89ms
-[INFO] 2025-12-08 16:13:46 django.server log.log_message:249 - "POST /whatsappapi/webhook/4/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:46 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 42.09ms
-[INFO] 2025-12-08 16:13:46 django.server log.log_message:249 - "POST /whatsappapi/webhook/4/ HTTP/1.1" 200 110
-[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 4 | Event: messages.update | Session: d7d26550f17fc0ae996f...
-[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: dab9170e3594a894d100...
-[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+[INFO] 2025-12-09 16:57:46 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 43.02ms
+[INFO] 2025-12-09 16:57:46 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
   "event": "messages.update",
-  "sessionId": "d7d26550f17fc0ae996fcd1adfff41347f25b75a0ba70a53db8525f093eecc3e",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "919008715802@s.whatsapp.net",
+    "id": "3EB0E3763057024E9EB246",
+    "msgId": 15308737,
+    "key": {
+      "id": "3EB0E3763057024E9EB246",
+      "fromMe": true,
+      "remoteJid": "919008715802@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598212032_1190841895823479_4059260099514578252_n.enc?ccb=11-4&oh=01_Q5Aa3QHBJ7-yT5vlg_aojaom4dhsxYcA8S7-_RlMbBtT65qWhw&oe=695F771D&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Hakeem!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            117,
+            59,
+            211,
+            216,
+            78,
+            185,
+            161,
+            177,
+            106,
+            200,
+            92,
+            4,
+            254,
+            213,
+            157,
+            125,
+            137,
+            162,
+            164,
+            148,
+            112,
+            242,
+            239,
+            0,
+            199,
+            177,
+            235,
+            147,
+            118,
+            28,
+            52,
+            14
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598212032_1190841895823479_4059260099514578252_n.enc?ccb=11-4&oh=01_Q5Aa3QHBJ7-yT5vlg_aojaom4dhsxYcA8S7-_RlMbBtT65qWhw&oe=695F771D&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            32,
+            0,
+            111,
+            117,
+            227,
+            30,
+            218,
+            227,
+            223,
+            214,
+            68,
+            193,
+            192,
+            239,
+            169,
+            78,
+            193,
+            150,
+            38,
+            83,
+            105,
+            58,
+            181,
+            89,
+            64,
+            10,
+            217,
+            153,
+            239,
+            232,
+            35,
+            146
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765284994
+      }
+    },
+    "messageTimestamp": "1765284994",
+    "status": 2
+  },
+  "timestamp": 1765285076150
+}
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 27.58ms
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
   "data": {
     "remoteJid": "919961557713@s.whatsapp.net",
-    "id": "3EB034C0DDF0BD71BD9482",
-    "msgId": 15128681,
+    "id": "3EB0A0A024C682C9AC9718",
+    "msgId": 15308839,
     "key": {
-      "id": "3EB034C0DDF0BD71BD9482",
+      "id": "3EB0A0A024C682C9AC9718",
       "fromMe": true,
       "remoteJid": "919961557713@s.whatsapp.net"
     },
     "message": {
-      "extendedTextMessage": {
-        "text": "HI Dear"
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/596576629_1392488532256533_3332213449873643953_n.enc?ccb=11-4&oh=01_Q5Aa3QGWV1cjtezaPJmN0tBNXtGg2DVhDtJF07vSlTXQ0w7RWw&oe=695F9203&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Shabana!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            252,
+            203,
+            54,
+            31,
+            149,
+            84,
+            86,
+            241,
+            72,
+            0,
+            248,
+            247,
+            55,
+            4,
+            52,
+            218,
+            6,
+            202,
+            236,
+            149,
+            212,
+            93,
+            181,
+            147,
+            21,
+            66,
+            90,
+            189,
+            81,
+            50,
+            196,
+            85
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/596576629_1392488532256533_3332213449873643953_n.enc?ccb=11-4&oh=01_Q5Aa3QGWV1cjtezaPJmN0tBNXtGg2DVhDtJF07vSlTXQ0w7RWw&oe=695F9203&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            209,
+            204,
+            191,
+            9,
+            252,
+            56,
+            177,
+            129,
+            8,
+            129,
+            174,
+            205,
+            9,
+            212,
+            214,
+            95,
+            23,
+            110,
+            175,
+            134,
+            164,
+            242,
+            8,
+            138,
+            190,
+            223,
+            147,
+            247,
+            30,
+            6,
+            172,
+            208
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285009
       }
     },
-    "messageTimestamp": "1765194631",
-    "status": 4
+    "messageTimestamp": "1765285009",
+    "status": 2
   },
-  "timestamp": 1765196026818
+  "timestamp": 1765285076399
 }
-[INFO] 2025-12-08 16:13:47 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 4 | Event: messages.update | Time: 20.60ms
-[INFO] 2025-12-08 16:13:47 django.server log.log_message:249 - "POST /whatsappapi/webhook/4/ HTTP/1.1" 200 109
-[INFO] 2025-12-08 16:13:55 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 60589)
-[INFO] 2025-12-08 16:13:55 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 57239)
-[INFO] 2025-12-08 16:13:55 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 58423)
-[INFO] 2025-12-08 16:13:55 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 62197)
-[INFO] 2025-12-08 16:13:55 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 62191)
-[INFO] 2025-12-08 16:13:55 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 62194)
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "919744359433@s.whatsapp.net",
+    "id": "3EB063C99CB5F3A0B7C8FF",
+    "msgId": 15308807,
+    "key": {
+      "id": "3EB063C99CB5F3A0B7C8FF",
+      "fromMe": true,
+      "remoteJid": "919744359433@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/596536623_1572308107127409_1527644543483272063_n.enc?ccb=11-4&oh=01_Q5Aa3QGAzdQDvSm6-vxFPM1NN3vuwrpacqjHj3R94qCINkz1YQ&oe=695F8403&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Uppa!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            113,
+            154,
+            81,
+            27,
+            49,
+            175,
+            117,
+            240,
+            244,
+            44,
+            64,
+            121,
+            156,
+            222,
+            210,
+            37,
+            40,
+            221,
+            14,
+            165,
+            245,
+            89,
+            81,
+            113,
+            197,
+            16,
+            139,
+            208,
+            54,
+            1,
+            85,
+            127
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/596536623_1572308107127409_1527644543483272063_n.enc?ccb=11-4&oh=01_Q5Aa3QGAzdQDvSm6-vxFPM1NN3vuwrpacqjHj3R94qCINkz1YQ&oe=695F8403&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            39,
+            208,
+            138,
+            191,
+            29,
+            230,
+            112,
+            209,
+            154,
+            0,
+            175,
+            253,
+            246,
+            242,
+            77,
+            127,
+            107,
+            170,
+            221,
+            24,
+            22,
+            27,
+            231,
+            161,
+            180,
+            223,
+            130,
+            241,
+            223,
+            65,
+            59,
+            200
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285002
+      }
+    },
+    "messageTimestamp": "1765285002",
+    "status": 2
+  },
+  "timestamp": 1765285076398
+}
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 28.15ms
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 29.18ms
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971501464078@s.whatsapp.net",
+    "id": "3EB0C89A966C5DC3D2392D",
+    "msgId": 15308862,
+    "key": {
+      "id": "3EB0C89A966C5DC3D2392D",
+      "fromMe": true,
+      "remoteJid": "971501464078@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Ecommerce!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            36,
+            247,
+            0,
+            56,
+            110,
+            109,
+            152,
+            72,
+            220,
+            232,
+            155,
+            57,
+            57,
+            104,
+            173,
+            19,
+            239,
+            107,
+            133,
+            134,
+            176,
+            216,
+            41,
+            228,
+            164,
+            118,
+            150,
+            157,
+            64,
+            202,
+            104,
+            84
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598211894_865812835942114_3359847251678831405_n.enc?ccb=11-4&oh=01_Q5Aa3QFPk3v7V4OJely92MqjXFxOyxkmvU8CuBqJNRafaz-Pog&oe=695F87BA&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            70,
+            119,
+            93,
+            71,
+            139,
+            62,
+            18,
+            144,
+            9,
+            41,
+            136,
+            33,
+            212,
+            149,
+            160,
+            164,
+            99,
+            31,
+            242,
+            221,
+            211,
+            213,
+            24,
+            36,
+            48,
+            222,
+            188,
+            176,
+            76,
+            108,
+            117,
+            247
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285016
+      }
+    },
+    "messageTimestamp": "1765285016",
+    "status": 2
+  },
+  "timestamp": 1765285076400
+}
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971564669930@s.whatsapp.net",
+    "id": "3EB084C037CC3EFE36795A",
+    "msgId": 15308898,
+    "key": {
+      "id": "3EB084C037CC3EFE36795A",
+      "fromMe": true,
+      "remoteJid": "971564669930@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598035805_1921718568385430_5883155887010209535_n.enc?ccb=11-4&oh=01_Q5Aa3QGotCtnokey4FDrWIaY_x8DJcpuDCI34JY2YesPD49pVQ&oe=695F9857&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, My Number!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            46,
+            69,
+            223,
+            172,
+            39,
+            132,
+            182,
+            189,
+            144,
+            125,
+            70,
+            141,
+            14,
+            198,
+            147,
+            80,
+            16,
+            186,
+            90,
+            216,
+            66,
+            44,
+            230,
+            42,
+            109,
+            72,
+            212,
+            211,
+            125,
+            159,
+            30,
+            95
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598035805_1921718568385430_5883155887010209535_n.enc?ccb=11-4&oh=01_Q5Aa3QGotCtnokey4FDrWIaY_x8DJcpuDCI34JY2YesPD49pVQ&oe=695F9857&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            6,
+            92,
+            159,
+            188,
+            110,
+            23,
+            224,
+            178,
+            133,
+            253,
+            43,
+            39,
+            63,
+            27,
+            93,
+            209,
+            49,
+            15,
+            250,
+            72,
+            111,
+            184,
+            120,
+            89,
+            32,
+            171,
+            181,
+            95,
+            154,
+            232,
+            244,
+            217
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285025
+      }
+    },
+    "messageTimestamp": "1765285025",
+    "status": 2
+  },
+  "timestamp": 1765285076406
+}
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 22.52ms
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "97455460961@s.whatsapp.net",
+    "id": "3EB01E37067F586CE024D6",
+    "msgId": 15308967,
+    "key": {
+      "id": "3EB01E37067F586CE024D6",
+      "fromMe": true,
+      "remoteJid": "97455460961@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598198065_1593085591713836_8333962919923747062_n.enc?ccb=11-4&oh=01_Q5Aa3QEVc2AW_mRd7XylDb37PT2BzmolBSMXTDlHKfb0_Wr7Cg&oe=695F8588&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Abid Bro!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            254,
+            226,
+            47,
+            239,
+            40,
+            94,
+            25,
+            253,
+            78,
+            60,
+            3,
+            129,
+            225,
+            168,
+            19,
+            32,
+            25,
+            242,
+            208,
+            243,
+            159,
+            144,
+            59,
+            70,
+            138,
+            158,
+            28,
+            96,
+            98,
+            220,
+            124,
+            147
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598198065_1593085591713836_8333962919923747062_n.enc?ccb=11-4&oh=01_Q5Aa3QEVc2AW_mRd7XylDb37PT2BzmolBSMXTDlHKfb0_Wr7Cg&oe=695F8588&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            249,
+            28,
+            34,
+            142,
+            8,
+            52,
+            206,
+            70,
+            191,
+            99,
+            167,
+            68,
+            235,
+            49,
+            248,
+            54,
+            15,
+            195,
+            116,
+            77,
+            204,
+            220,
+            71,
+            86,
+            13,
+            128,
+            56,
+            78,
+            103,
+            7,
+            141,
+            12
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285046
+      }
+    },
+    "messageTimestamp": "1765285046",
+    "status": 2
+  },
+  "timestamp": 1765285076408
+}
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1528 - 📥 WEBHOOK RECEIVED | User: 2 | Event: messages.update | Session: d4a772e58b8225533ef6...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 26.80ms
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971589704800@s.whatsapp.net",
+    "id": "3EB01FA88B0DECEAF58EBB",
+    "msgId": 15308948,
+    "key": {
+      "id": "3EB01FA88B0DECEAF58EBB",
+      "fromMe": true,
+      "remoteJid": "971589704800@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/517177673_829765609683748_4127419106699807864_n.enc?ccb=11-4&oh=01_Q5Aa3QGRq1lP63i9cZzwd9N7HoJAaJ9dWZY9lSLeT1vks1E1QA&oe=695F843F&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Raheem!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            196,
+            48,
+            16,
+            244,
+            31,
+            216,
+            24,
+            28,
+            218,
+            21,
+            196,
+            204,
+            239,
+            218,
+            184,
+            23,
+            57,
+            197,
+            204,
+            46,
+            181,
+            53,
+            250,
+            166,
+            179,
+            35,
+            19,
+            142,
+            144,
+            153,
+            185,
+            8
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/517177673_829765609683748_4127419106699807864_n.enc?ccb=11-4&oh=01_Q5Aa3QGRq1lP63i9cZzwd9N7HoJAaJ9dWZY9lSLeT1vks1E1QA&oe=695F843F&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            180,
+            237,
+            233,
+            69,
+            106,
+            218,
+            23,
+            153,
+            187,
+            4,
+            205,
+            179,
+            142,
+            109,
+            255,
+            245,
+            235,
+            51,
+            230,
+            237,
+            187,
+            58,
+            161,
+            104,
+            88,
+            222,
+            79,
+            213,
+            96,
+            10,
+            138,
+            79
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285039
+      }
+    },
+    "messageTimestamp": "1765285039",
+    "status": 2
+  },
+  "timestamp": 1765285076407
+}
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1529 - 🔐 Webhook Signature: d8eed6b0705081fc3ff1...
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 109
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1530 - 📦 Webhook Payload: {
+  "event": "messages.update",
+  "sessionId": "d4a772e58b8225533ef6e739828f2e109b748957c26f6d1e0453990c46ddeec2",
+  "data": {
+    "remoteJid": "971569683136@s.whatsapp.net",
+    "id": "3EB040780AFB0C0167526D",
+    "msgId": 15308922,
+    "key": {
+      "id": "3EB040780AFB0C0167526D",
+      "fromMe": true,
+      "remoteJid": "971569683136@s.whatsapp.net"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/v/t62.7119-24/598417870_1568131590989242_7518587562551805728_n.enc?ccb=11-4&oh=01_Q5Aa3QHpvF9aSbUy-Bdlo5GWPpDALXLVH6Sgsq9v13eIxkjpNw&oe=695F8960&_nc_sid=5e03e0&mms3=true",
+        "caption": "\ud83d\udce3 *\ud83d\udce2*Exciting News*, Saleek!*\r\n\r\nWe're thrilled to announce our latest marketing campaign designed just for you! \r\n\r\n\u2705 Get exclusive insights\r\n\u2705 Boost your brand visibility\r\n\u2705 Connect with your audience effectively\r\n\r\nJoin us and take your marketing game to the next level! \r\n\r\n\ud83d\udc49 *Learn more:*\r\nhttps://example.com\r\n\r\nLooking forward to seeing you shine! \ud83c\udf89\n\n---\nReply *STOP* to opt-out",
+        "fileName": "Pasons_14_weekend_promo_05_to_07_2025_dec.pdf",
+        "mediaKey": {
+          "data": [
+            60,
+            235,
+            236,
+            250,
+            228,
+            125,
+            214,
+            77,
+            76,
+            181,
+            216,
+            119,
+            154,
+            8,
+            222,
+            193,
+            140,
+            17,
+            148,
+            137,
+            144,
+            144,
+            119,
+            209,
+            2,
+            181,
+            18,
+            4,
+            145,
+            92,
+            57,
+            76
+          ],
+          "type": "Buffer"
+        },
+        "mimetype": "application/pdf",
+        "directPath": "/v/t62.7119-24/598417870_1568131590989242_7518587562551805728_n.enc?ccb=11-4&oh=01_Q5Aa3QHpvF9aSbUy-Bdlo5GWPpDALXLVH6Sgsq9v13eIxkjpNw&oe=695F8960&_nc_sid=5e03e0",
+        "fileLength": 1913936,
+        "fileSha256": {
+          "data": [
+            215,
+            240,
+            202,
+            243,
+            88,
+            56,
+            161,
+            50,
+            41,
+            197,
+            139,
+            201,
+            99,
+            27,
+            41,
+            135,
+            247,
+            86,
+            31,
+            244,
+            105,
+            112,
+            101,
+            40,
+            188,
+            89,
+            115,
+            41,
+            198,
+            141,
+            80,
+            68
+          ],
+          "type": "Buffer"
+        },
+        "fileEncSha256": {
+          "data": [
+            227,
+            86,
+            150,
+            56,
+            41,
+            164,
+            186,
+            230,
+            162,
+            48,
+            233,
+            238,
+            111,
+            57,
+            14,
+            99,
+            207,
+            87,
+            126,
+            150,
+            54,
+            46,
+            133,
+            116,
+            165,
+            80,
+            106,
+            131,
+            53,
+            3,
+            1,
+            183
+          ],
+          "type": "Buffer"
+        },
+        "mediaKeyTimestamp": 1765285032
+      }
+    },
+    "messageTimestamp": "1765285032",
+    "status": 2
+  },
+  "timestamp": 1765285076405
+}
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 36.96ms
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 34.87ms
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:57:56 whatsappapi.views views.wasender_webhook:1572 - ✅ WEBHOOK PROCESSED | User: 2 | Event: messages.update | Time: 34.02ms
+[INFO] 2025-12-09 16:57:56 django.server log.log_message:249 - "POST /whatsappapi/webhook/2/ HTTP/1.1" 200 110
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 53902)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 53652)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 60869)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 58022)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 57891)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 53912)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 57031)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 57035)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 53911)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 53910)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 57861)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 53665)
+[INFO] 2025-12-09 16:58:00 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 53906)
+[INFO] 2025-12-09 16:58:04 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:58:04 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:58:04 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:58:04 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:58:04 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 16:58:04 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 17:51:13 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 17:51:14 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-09 17:51:23 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[WARNING] 2025-12-09 17:51:28 django.server log.log_message:249 - "GET /dashboard/ HTTP/1.1" 404 1975
+[INFO] 2025-12-09 17:51:52 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14509
+[INFO] 2025-12-09 17:51:54 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 200 8552
+[INFO] 2025-12-09 17:51:56 django.server log.log_message:249 - "GET /social-auth/login/google-oauth2/ HTTP/1.1" 302 0
+[INFO] 2025-12-09 17:52:03 django.server log.log_message:249 - "GET /social-auth/complete/google-oauth2/?state=qc5TQ50rQ0RUbKaafT3uXG2DuhihLrh3&code=4%2F0ATX87lPzQClPp4OR6fIMFglCMZ0kIdZL0Fh02puIg1rmE-YFbLSkvtiwzSjN9iifCY0pHQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=consent HTTP/1.1" 302 0
+[INFO] 2025-12-09 17:52:03 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 4207
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16410
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3935
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8052
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6308
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16371
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38234
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16012
+[INFO] 2025-12-09 17:52:05 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8137
+[INFO] 2025-12-09 17:52:06 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38234
+[INFO] 2025-12-09 17:52:06 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16044
+[INFO] 2025-12-09 17:52:06 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16342
+[INFO] 2025-12-09 17:53:27 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16035
+[INFO] 2025-12-09 17:53:27 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16420
+[INFO] 2025-12-09 17:53:27 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16369
+[INFO] 2025-12-09 17:53:28 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38250
+[INFO] 2025-12-09 17:53:28 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16071
+[INFO] 2025-12-09 17:53:28 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16426
+[INFO] 2025-12-09 17:53:38 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38265
+[INFO] 2025-12-09 17:53:38 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16072
+[INFO] 2025-12-09 17:53:38 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16347
+[INFO] 2025-12-09 17:53:54 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16025
+[INFO] 2025-12-09 17:53:54 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16088
+[INFO] 2025-12-09 17:53:55 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16041
+[INFO] 2025-12-09 17:53:56 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/5/ HTTP/1.1" 200 166
+[INFO] 2025-12-09 17:53:57 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 15997
+[INFO] 2025-12-09 17:53:58 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16037
+[INFO] 2025-12-09 17:53:58 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16021
+[INFO] 2025-12-09 17:53:58 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16025
+[INFO] 2025-12-09 17:53:58 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16378
+[WARNING] 2025-12-09 17:53:58 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1971
+[INFO] 2025-12-09 17:54:17 django.server log.log_message:249 - "GET /whatsappapi/contacts/5/export/excel/ HTTP/1.1" 200 4934
+[INFO] 2025-12-09 17:54:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16066
+[INFO] 2025-12-09 17:54:19 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16427
+[INFO] 2025-12-09 17:54:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16055
+[INFO] 2025-12-09 17:54:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16025
+[INFO] 2025-12-09 17:54:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16065
+[INFO] 2025-12-09 17:54:19 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16376
+[WARNING] 2025-12-09 17:54:20 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2041
+[INFO] 2025-12-09 17:54:35 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 126
+[INFO] 2025-12-09 17:54:36 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?list=7 HTTP/1.1" 200 38415
+[INFO] 2025-12-09 17:54:36 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16120
+[INFO] 2025-12-09 17:54:36 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16417
+[INFO] 2025-12-09 17:54:36 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/7/ HTTP/1.1" 200 159
+[INFO] 2025-12-09 17:54:37 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16170
+[INFO] 2025-12-09 17:55:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16122
+[INFO] 2025-12-09 17:55:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16207
+[INFO] 2025-12-09 17:55:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16137
+[INFO] 2025-12-09 17:55:19 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16428
+[WARNING] 2025-12-09 17:55:19 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1973
+[INFO] 2025-12-09 17:55:20 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16386
+[INFO] 2025-12-09 17:55:20 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16141
+[INFO] 2025-12-09 17:55:20 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16422
+[INFO] 2025-12-09 17:55:20 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16158
+[WARNING] 2025-12-09 17:55:21 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2038
+[INFO] 2025-12-09 17:55:29 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 126
+[INFO] 2025-12-09 17:55:30 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?list=8 HTTP/1.1" 200 38460
+[INFO] 2025-12-09 17:55:30 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16251
+[INFO] 2025-12-09 17:55:30 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16427
+[INFO] 2025-12-09 17:55:31 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/8/ HTTP/1.1" 200 159
+[INFO] 2025-12-09 17:55:47 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16382
+[INFO] 2025-12-09 17:55:47 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16198
+[INFO] 2025-12-09 17:55:48 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16228
+[INFO] 2025-12-09 17:55:48 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16293
+[INFO] 2025-12-09 17:55:48 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16438
+[WARNING] 2025-12-09 17:55:48 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2067
+[INFO] 2025-12-09 17:55:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16243
+[INFO] 2025-12-09 17:55:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16264
+[INFO] 2025-12-09 17:55:49 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16372
+[WARNING] 2025-12-09 17:55:49 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1979
+[INFO] 2025-12-09 17:55:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16265
+[INFO] 2025-12-09 17:55:50 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16265
+[INFO] 2025-12-09 17:55:50 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16393
+[WARNING] 2025-12-09 17:55:50 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2056
+[INFO] 2025-12-09 17:55:56 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 126
+[INFO] 2025-12-09 17:55:57 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?list=9 HTTP/1.1" 200 38429
+[INFO] 2025-12-09 17:55:57 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16374
+[INFO] 2025-12-09 17:55:57 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16357
+[INFO] 2025-12-09 17:55:57 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/9/ HTTP/1.1" 200 159
+[INFO] 2025-12-09 17:55:58 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16357
+[INFO] 2025-12-09 17:55:58 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16354
+[INFO] 2025-12-09 17:55:58 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16373
+[INFO] 2025-12-09 17:55:59 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?list=9 HTTP/1.1" 200 38451
+[INFO] 2025-12-09 17:55:59 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16325
+[INFO] 2025-12-09 17:55:59 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16398
+[INFO] 2025-12-09 17:56:04 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16311
+[INFO] 2025-12-09 17:56:04 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16334
+[INFO] 2025-12-09 17:56:04 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16306
+[INFO] 2025-12-09 17:56:04 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16377
+[WARNING] 2025-12-09 17:56:04 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2062
+[INFO] 2025-12-09 17:56:11 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 17:56:13 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?list=10 HTTP/1.1" 200 38438
+[INFO] 2025-12-09 17:56:13 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16430
+[INFO] 2025-12-09 17:56:13 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16410
+[INFO] 2025-12-09 17:56:13 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/10/ HTTP/1.1" 200 159
+[INFO] 2025-12-09 17:56:14 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16450
+[INFO] 2025-12-09 17:56:14 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16441
+[INFO] 2025-12-09 17:56:14 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16408
+[INFO] 2025-12-09 17:56:14 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16413
+[INFO] 2025-12-09 17:56:15 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16406
+[WARNING] 2025-12-09 17:56:15 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2066
+[INFO] 2025-12-09 17:56:43 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16411
+[INFO] 2025-12-09 17:56:44 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16398
+[INFO] 2025-12-09 17:56:44 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16441
+[INFO] 2025-12-09 17:56:46 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38291
+[INFO] 2025-12-09 17:56:46 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3925
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38338
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6346
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16385
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 7986
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16422
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 17:56:47 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8173
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38287
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3915
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38295
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16429
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8066
+[INFO] 2025-12-09 17:56:49 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 57196)
+[INFO] 2025-12-09 17:56:49 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 50265)
+[INFO] 2025-12-09 17:56:49 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 50778)
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 17:56:49 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 64440)
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3933
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16423
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16380
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8027
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6338
+[INFO] 2025-12-09 17:56:49 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38300
+[INFO] 2025-12-09 17:56:50 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 17:56:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8194
+[INFO] 2025-12-09 17:56:53 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16392
+[INFO] 2025-12-09 17:56:53 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16406
+[INFO] 2025-12-09 17:56:53 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16448
+[INFO] 2025-12-09 17:56:53 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16397
+[WARNING] 2025-12-09 17:56:53 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1990
+[INFO] 2025-12-09 17:56:55 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16402
+[INFO] 2025-12-09 17:56:55 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16438
+[INFO] 2025-12-09 17:57:38 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16453
+[INFO] 2025-12-09 17:58:03 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16434
+[INFO] 2025-12-09 17:58:04 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16436
+[INFO] 2025-12-09 17:58:44 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16420
+[INFO] 2025-12-09 17:58:44 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16418
+[INFO] 2025-12-09 17:58:44 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16374
+[INFO] 2025-12-09 17:58:44 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16361
+[WARNING] 2025-12-09 17:58:45 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1996
+[INFO] 2025-12-09 17:58:45 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16409
+[INFO] 2025-12-09 17:58:45 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16388
+[INFO] 2025-12-09 17:58:45 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16378
+[WARNING] 2025-12-09 17:58:46 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1969
+[INFO] 2025-12-09 17:58:53 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 17:58:55 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16544
+[INFO] 2025-12-09 17:58:55 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16513
+[INFO] 2025-12-09 17:58:55 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16423
+[WARNING] 2025-12-09 17:58:55 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2029
+[INFO] 2025-12-09 17:59:04 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 17:59:05 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16635
+[INFO] 2025-12-09 17:59:05 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16594
+[INFO] 2025-12-09 17:59:05 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16425
+[WARNING] 2025-12-09 17:59:05 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1978
+[INFO] 2025-12-09 17:59:14 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 17:59:16 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16733
+[INFO] 2025-12-09 17:59:16 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16719
+[INFO] 2025-12-09 17:59:16 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16441
+[WARNING] 2025-12-09 17:59:16 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2051
+[INFO] 2025-12-09 17:59:42 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16808
+[INFO] 2025-12-09 17:59:49 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 17:59:51 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 16966
+[INFO] 2025-12-09 17:59:51 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 16977
+[INFO] 2025-12-09 17:59:51 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16368
+[WARNING] 2025-12-09 17:59:51 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2035
+[INFO] 2025-12-09 17:59:59 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 18:00:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17044
+[INFO] 2025-12-09 18:00:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17101
+[INFO] 2025-12-09 18:00:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16385
+[WARNING] 2025-12-09 18:00:01 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2012
+[INFO] 2025-12-09 18:00:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17099
+[INFO] 2025-12-09 18:00:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16413
+[ERROR] 2025-12-09 18:00:04 django.request log.log_message:249 - Internal Server Error: /whatsappapi/send-campaign/
+Traceback (most recent call last):
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\whatsappapi\views.py", line 1160, in send_campaign
+    return render(request, 'whatsappapi/send_campaign.html', context)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\template\defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\venv\Lib\site-packages\django\urls\resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'api_contact_lists' not found. 'api_contact_lists' is not a valid view function or pattern name.
+[ERROR] 2025-12-09 18:00:04 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 500 21778
+[INFO] 2025-12-09 18:00:06 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17083
+[INFO] 2025-12-09 18:00:06 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16422
+[INFO] 2025-12-09 18:00:06 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17110
+[WARNING] 2025-12-09 18:00:07 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2049
+[INFO] 2025-12-09 18:00:13 django.utils.autoreload autoreload.trigger_reload:265 - C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\whatsappapi\urls.py changed, reloading.
+[INFO] 2025-12-09 18:00:15 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-09 18:01:47 django.utils.autoreload autoreload.trigger_reload:265 - C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\whatsappapi\views.py changed, reloading.
+[INFO] 2025-12-09 18:01:50 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-09 18:01:58 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 18:01:59 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-09 18:02:01 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14476
+[INFO] 2025-12-09 18:02:08 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 18:02:08 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 302 0
+[INFO] 2025-12-09 18:02:09 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3893
+[INFO] 2025-12-09 18:02:10 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16422
+[INFO] 2025-12-09 18:02:10 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8067
+[INFO] 2025-12-09 18:02:10 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16353
+[INFO] 2025-12-09 18:02:10 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38923
+[INFO] 2025-12-09 18:02:10 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17042
+[INFO] 2025-12-09 18:02:10 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6390
+[INFO] 2025-12-09 18:02:10 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8209
+[INFO] 2025-12-09 18:02:11 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38876
+[INFO] 2025-12-09 18:02:11 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17021
+[INFO] 2025-12-09 18:02:11 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16435
+[INFO] 2025-12-09 18:03:23 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17059
+[INFO] 2025-12-09 18:03:57 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 18:03:58 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-09 18:04:01 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14499
+[INFO] 2025-12-09 18:04:05 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 302 0
+[INFO] 2025-12-09 18:04:05 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3864
+[INFO] 2025-12-09 18:04:06 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16405
+[INFO] 2025-12-09 18:04:06 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17030
+[INFO] 2025-12-09 18:04:06 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16392
+[INFO] 2025-12-09 18:04:07 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8068
+[INFO] 2025-12-09 18:04:07 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38928
+[INFO] 2025-12-09 18:04:07 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6354
+[INFO] 2025-12-09 18:04:07 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8223
+[INFO] 2025-12-09 18:04:07 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38903
+[INFO] 2025-12-09 18:04:07 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 18:04:08 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16377
+[INFO] 2025-12-09 18:04:08 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17103
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38871
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3949
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16367
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17075
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8015
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6339
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38873
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8158
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38871
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3928
+[INFO] 2025-12-09 18:04:11 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38839
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6295
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17094
+[INFO] 2025-12-09 18:04:12 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 56991)
+[INFO] 2025-12-09 18:04:12 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 49667)
+[INFO] 2025-12-09 18:04:12 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 61884)
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38863
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:12 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 58839)
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3920
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38871
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3863
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38845
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3952
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16400
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38932
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8074
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6355
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17016
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8132
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38856
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3862
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16376
+[INFO] 2025-12-09 18:04:12 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38908
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 7990
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17079
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6363
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8194
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38856
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3915
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16409
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38882
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8216
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17058
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8046
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6354
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 38931
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3861
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16367
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6305
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38911
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8006
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17062
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8177
+[INFO] 2025-12-09 18:04:13 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 18:04:16 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17105
+[INFO] 2025-12-09 18:04:16 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17017
+[INFO] 2025-12-09 18:04:16 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17075
+[INFO] 2025-12-09 18:04:16 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16387
+[WARNING] 2025-12-09 18:04:17 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2061
+[INFO] 2025-12-09 18:04:17 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17101
+[INFO] 2025-12-09 18:04:27 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 18:04:29 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17106
+[INFO] 2025-12-09 18:04:29 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17145
+[INFO] 2025-12-09 18:04:29 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16339
+[WARNING] 2025-12-09 18:04:29 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1974
+[INFO] 2025-12-09 18:04:37 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 18:04:39 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17228
+[INFO] 2025-12-09 18:04:39 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17207
+[INFO] 2025-12-09 18:04:39 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16348
+[WARNING] 2025-12-09 18:04:39 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2038
+[INFO] 2025-12-09 18:04:46 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 18:04:48 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17270
+[INFO] 2025-12-09 18:04:48 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17241
+[INFO] 2025-12-09 18:04:48 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16371
+[WARNING] 2025-12-09 18:04:48 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1977
+[INFO] 2025-12-09 18:04:49 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17294
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3906
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17282
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3923
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17297
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3929
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16360
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8080
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17252
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6371
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 38867
+[WARNING] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1981
+[INFO] 2025-12-09 18:04:50 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8132
+[INFO] 2025-12-09 18:04:51 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 18:04:51 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16407
+[INFO] 2025-12-09 18:04:52 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17265
+[INFO] 2025-12-09 18:04:52 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16358
+[INFO] 2025-12-09 18:04:54 django.server log.log_message:249 - "GET /whatsappapi/api/contact-lists/ HTTP/1.1" 200 197
+[INFO] 2025-12-09 18:05:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17253
+[INFO] 2025-12-09 18:05:02 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17248
+[INFO] 2025-12-09 18:05:02 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17314
+[INFO] 2025-12-09 18:05:02 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16380
+[WARNING] 2025-12-09 18:05:02 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2035
+[INFO] 2025-12-09 18:05:09 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 18:05:11 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17350
+[INFO] 2025-12-09 18:05:11 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17351
+[INFO] 2025-12-09 18:05:11 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16396
+[WARNING] 2025-12-09 18:05:11 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 1970
+[INFO] 2025-12-09 18:05:20 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 18:05:22 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17397
+[INFO] 2025-12-09 18:05:22 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17373
+[INFO] 2025-12-09 18:05:22 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16395
+[WARNING] 2025-12-09 18:05:22 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2035
+[INFO] 2025-12-09 18:05:30 django.server log.log_message:249 - "POST /whatsappapi/contacts/upload/ HTTP/1.1" 200 127
+[INFO] 2025-12-09 18:05:32 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17439
+[INFO] 2025-12-09 18:05:32 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17461
+[INFO] 2025-12-09 18:05:32 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16353
+[WARNING] 2025-12-09 18:05:32 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2038
+[INFO] 2025-12-09 18:05:33 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17487
+[INFO] 2025-12-09 18:05:33 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17495
+[INFO] 2025-12-09 18:05:34 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17473
+[INFO] 2025-12-09 18:05:35 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17476
+[INFO] 2025-12-09 18:05:36 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17460
+[INFO] 2025-12-09 18:05:36 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16354
+[INFO] 2025-12-09 18:10:33 whatsappapi.apps apps.ready:91 - 🔄 Scheduled auto-resume check for stuck campaigns...
+[INFO] 2025-12-09 18:10:34 django.utils.autoreload autoreload.run_with_reloader:681 - Watching for file changes with StatReloader
+[INFO] 2025-12-09 18:10:36 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14474
+[INFO] 2025-12-09 18:10:38 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 302 0
+[INFO] 2025-12-09 18:10:38 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3929
+[INFO] 2025-12-09 18:10:39 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16344
+[INFO] 2025-12-09 18:10:40 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8024
+[INFO] 2025-12-09 18:10:40 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17436
+[INFO] 2025-12-09 18:10:40 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6324
+[INFO] 2025-12-09 18:10:40 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 40471
+[INFO] 2025-12-09 18:10:40 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16377
+[INFO] 2025-12-09 18:10:40 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8182
+[INFO] 2025-12-09 18:10:41 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40490
+[INFO] 2025-12-09 18:10:41 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17467
+[INFO] 2025-12-09 18:10:41 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16395
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40440
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40521
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8011
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16418
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3947
+[INFO] 2025-12-09 18:10:42 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 57393)
+[INFO] 2025-12-09 18:10:42 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 50261)
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:10:42 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 61593)
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40439
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:10:42 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 58166)
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3948
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40526
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3919
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40537
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3887
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16344
+[INFO] 2025-12-09 18:10:42 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 40520
+[INFO] 2025-12-09 18:10:43 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8021
+[INFO] 2025-12-09 18:10:43 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6379
+[INFO] 2025-12-09 18:10:43 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17507
+[INFO] 2025-12-09 18:10:43 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8195
+[INFO] 2025-12-09 18:10:43 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 18:10:43 whatsappapi.apps apps.auto_resume_stuck_campaigns:83 - ✅ No stuck campaigns found on startup
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40478
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3933
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16416
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17515
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8011
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 40555
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6317
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40482
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:12:01 django.server basehttp.handle_error:82 - - Broken pipe from ('127.0.0.1', 54045)
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3861
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16350
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17433
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6318
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8078
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 40461
+[INFO] 2025-12-09 18:12:01 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8198
+[INFO] 2025-12-09 18:12:02 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 18:15:20 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40526
+[INFO] 2025-12-09 18:15:20 django.server log.log_message:249 - "GET /static/image/logo.png HTTP/1.1" 200 76933
+[INFO] 2025-12-09 18:15:20 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3891
+[INFO] 2025-12-09 18:15:21 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6389
+[INFO] 2025-12-09 18:15:21 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16413
+[INFO] 2025-12-09 18:15:21 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8002
+[INFO] 2025-12-09 18:15:21 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 40490
+[INFO] 2025-12-09 18:15:21 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17428
+[INFO] 2025-12-09 18:15:21 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8193
+[INFO] 2025-12-09 18:15:21 django.server log.log_message:249 - "GET /static/image/title.png HTTP/1.1" 200 64520
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40529
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40575
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16426
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17507
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16344
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16371
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17482
+[INFO] 2025-12-09 18:15:33 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16432
+[INFO] 2025-12-09 18:15:34 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16379
+[INFO] 2025-12-09 18:15:34 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17446
+[INFO] 2025-12-09 18:15:34 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16393
+[INFO] 2025-12-09 18:15:34 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17482
+[INFO] 2025-12-09 18:15:34 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17523
+[INFO] 2025-12-09 18:15:34 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17526
+[INFO] 2025-12-09 18:15:43 django.server log.log_message:249 - "GET /whatsappapi/api/contact-list-fields/20/ HTTP/1.1" 200 160
+[INFO] 2025-12-09 18:15:47 django.server log.log_message:249 - "GET / HTTP/1.1" 200 14528
+[INFO] 2025-12-09 18:15:49 django.server log.log_message:249 - "GET /login/ HTTP/1.1" 302 0
+[INFO] 2025-12-09 18:15:49 django.server log.log_message:249 - "GET /userpanel/ HTTP/1.1" 200 3877
+[INFO] 2025-12-09 18:15:53 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16412
+[INFO] 2025-12-09 18:15:53 django.server log.log_message:249 - "GET /whatsappapi/drafts/ HTTP/1.1" 200 8067
+[INFO] 2025-12-09 18:15:53 django.server log.log_message:249 - "GET /whatsappapi/sessions/ HTTP/1.1" 200 6305
+[INFO] 2025-12-09 18:15:53 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/ HTTP/1.1" 200 40559
+[INFO] 2025-12-09 18:15:53 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16355
+[INFO] 2025-12-09 18:15:53 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17478
+[INFO] 2025-12-09 18:15:53 django.server log.log_message:249 - "GET /whatsappapi/campaigns/ HTTP/1.1" 200 8134
+[INFO] 2025-12-09 18:15:55 django.server log.log_message:249 - "GET /whatsappapi/send-campaign/?session=15 HTTP/1.1" 200 40520
+[INFO] 2025-12-09 18:15:55 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17510
+[INFO] 2025-12-09 18:15:55 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16421
+[INFO] 2025-12-09 18:16:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17493
+[INFO] 2025-12-09 18:16:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/?nocache=1 HTTP/1.1" 200 17433
+[INFO] 2025-12-09 18:16:19 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17508
+[INFO] 2025-12-09 18:16:19 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16376
+[WARNING] 2025-12-09 18:16:20 django.server log.log_message:249 - "GET /ws/updates/ HTTP/1.1" 404 2058
+[INFO] 2025-12-09 18:16:22 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16428
+[INFO] 2025-12-09 18:16:22 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16405
+[INFO] 2025-12-09 18:16:23 django.server log.log_message:249 - "GET /whatsappapi/contacts/ HTTP/1.1" 200 17450
+[INFO] 2025-12-09 18:16:23 django.server log.log_message:249 - "GET /whatsappapi/ HTTP/1.1" 200 16368

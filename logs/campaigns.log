@@ -1,0 +1,45 @@
+[WARNING] 2025-12-09 16:46:02 whatsappapi.tasks tasks.send_campaign_async:73 - Campaign 19 status is 'paused', not 'pending'. Skipping.
+[INFO] 2025-12-09 16:56:07 whatsappapi.tasks tasks.send_campaign_async:80 - Campaign 25 status changed: pending → running
+[INFO] 2025-12-09 16:56:07 whatsappapi.tasks tasks.send_campaign_async:84 - Starting background campaign: test_campign (ID: 25)
+[INFO] 2025-12-09 16:56:07 whatsappapi.tasks tasks.send_campaign_async:97 - Uploading attachment from temp: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\ca1fe5a2-aa95-46f5-a342-94957a3a60c4_Pasons 14 weekend promo 05& to 07 2025 dec.pdf
+[INFO] 2025-12-09 16:56:11 whatsappapi.tasks tasks.send_campaign_async:145 - Attachment uploaded to Cloudinary: https://res.cloudinary.com/dfucqg40q/raw/upload/v1765283988/wa_campaigns/2/Pasons_14_weekend_promo_05_to_07_2025_dec.pdf
+[INFO] 2025-12-09 16:56:12 whatsappapi.tasks tasks.send_campaign_async:177 - Temp file deleted: C:\Users\Hakeem1\OneDrive\Desktop\WA Campaign Sender30-09-2025\wa_campiagn_sender-main\wa_campiagn_sender\media\temp_uploads\ca1fe5a2-aa95-46f5-a342-94957a3a60c4_Pasons 14 weekend promo 05& to 07 2025 dec.pdf
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:223 - ✅ Session 39850 verified via API (status: connected)
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:224 - 📱 Session phone: +919008715802
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:225 - 👤 User: abdulhakeemph@gmail.com
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:285 - Processing 10 unique contacts out of 10 total contacts
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:450 - 🎯 STANDARD MODE: Fixed delays based on session protection
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:451 -    Protection: ON
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:452 -    Delay: 5s
+[INFO] 2025-12-09 16:56:13 whatsappapi.tasks tasks.send_campaign_async:453 -    No batching, no cooldowns
+[INFO] 2025-12-09 16:56:17 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 217 with campaign_id=25
+[ERROR] 2025-12-09 16:56:17 whatsappapi.tasks tasks.send_campaign_async:641 - ❌ Message failed to +91900871580: status=failed, error=JID does not exist on WhatsApp
+[INFO] 2025-12-09 16:56:17 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:56:24 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 218 with campaign_id=25
+[INFO] 2025-12-09 16:56:24 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +919008715802
+[INFO] 2025-12-09 16:56:24 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:56:32 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 219 with campaign_id=25
+[ERROR] 2025-12-09 16:56:32 whatsappapi.tasks tasks.send_campaign_async:641 - ❌ Message failed to +919102222222222: status=failed, error=JID does not exist on WhatsApp
+[INFO] 2025-12-09 16:56:32 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:56:40 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 220 with campaign_id=25
+[INFO] 2025-12-09 16:56:40 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +919744359433
+[INFO] 2025-12-09 16:56:40 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:56:48 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 221 with campaign_id=25
+[INFO] 2025-12-09 16:56:48 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +919961557713
+[INFO] 2025-12-09 16:56:48 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:56:55 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 222 with campaign_id=25
+[INFO] 2025-12-09 16:56:55 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +971501464078
+[INFO] 2025-12-09 16:56:55 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:57:04 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 223 with campaign_id=25
+[INFO] 2025-12-09 16:57:04 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +971564669930
+[INFO] 2025-12-09 16:57:04 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:57:11 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 224 with campaign_id=25
+[INFO] 2025-12-09 16:57:11 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +971569683136
+[INFO] 2025-12-09 16:57:11 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:57:18 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 225 with campaign_id=25
+[INFO] 2025-12-09 16:57:18 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +971589704800
+[INFO] 2025-12-09 16:57:18 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:57:25 whatsappapi.tasks tasks.send_campaign_async:632 - ✅ Tagged message 226 with campaign_id=25
+[INFO] 2025-12-09 16:57:25 whatsappapi.tasks tasks.send_campaign_async:637 - ✅ Message sent successfully to +97455460961
+[INFO] 2025-12-09 16:57:25 whatsappapi.tasks tasks.send_campaign_async:675 - ⏱️ STANDARD DELAY: 5s (Protection: True)
+[INFO] 2025-12-09 16:57:30 whatsappapi.tasks tasks.send_campaign_async:726 - Campaign test_campign completed: 8 sent, 2 failed

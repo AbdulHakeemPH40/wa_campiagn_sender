@@ -1144,9 +1144,9 @@ document.getElementById('importForm').addEventListener('submit', function(e) {
             // Show message with duplicate info if any
             const message = data.message || `Imported ${data.total_contacts} contacts successfully`;
             showToast('Success!', message);
-            // Redirect to send campaign with the new list preselected
+            // Reload contacts page to show the new list
             setTimeout(() => {
-                window.location.href = '{% url "whatsappapi:send_campaign" %}?list=' + data.list_id;
+                window.location.reload();
             }, 1500);
         } else {
             showError(data.error || 'Failed to import contacts');

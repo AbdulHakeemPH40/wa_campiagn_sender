@@ -214,7 +214,7 @@
                 </div>
                 
                 <!-- Contact List Selection Card -->
-                <div class="bg-white rounded-xl sm:rounded-2xl shadow-md border border-blue-200 overflow-hidden">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-md border border-blue-200" style="overflow: visible;">
                     <div class="bg-gradient-to-r from-blue-50 to-sky-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-blue-200">
                         <h2 class="text-base sm:text-lg font-bold text-neutral-800 flex items-center">
                             <i class="ri-contacts-line mr-2 text-blue-600"></i>
@@ -225,8 +225,8 @@
                         <label for="contactList" class="block text-sm font-bold text-neutral-800 mb-3">
                             Choose Contact List <span class="text-red-500">*</span>
                         </label>
-                        <select id="contactList" name="contact_list_id" required
-                            class="w-full px-4 sm:px-5 py-3 border-2 border-neutral-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm sm:text-base">
+                        <!-- Hidden select for form submission -->
+                        <select id="contactList" name="contact_list_id" required class="hidden">
                             <option value="">-- Select Contact List --</option>
                             {% for list in contact_lists %}
                             <option value="{{ list.id }}" data-contacts="{{ list.total_contacts }}" {% if selected_contact_list_id == list.id %}selected{% endif %}>
@@ -234,10 +234,40 @@
                             </option>
                             {% endfor %}
                         </select>
+                        <!-- Custom scrollable dropdown -->
+                        <div class="relative" id="customDropdownContainer">
+                            <button type="button" id="dropdownButton" onclick="toggleContactDropdown()"
+                                class="w-full px-4 sm:px-5 py-3.5 border-2 border-neutral-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all text-sm sm:text-base bg-white cursor-pointer hover:border-blue-300 text-left flex items-center justify-between">
+                                <span id="dropdownButtonText" class="text-neutral-500">-- Select Contact List --</span>
+                                <i class="ri-arrow-down-s-line text-xl text-neutral-400 transition-transform" id="dropdownArrow"></i>
+                            </button>
+                            <!-- Dropdown list - displays outside card -->
+                            <div id="contactDropdownList" class="hidden absolute left-0 right-0 z-[100] mt-1 bg-white border border-neutral-200 rounded-xl shadow-2xl" style="max-height: 380px;">
+                                <div class="overflow-y-auto custom-scrollbar" style="max-height: 380px;">
+                                    <div class="dropdown-option px-4 py-3 hover:bg-blue-50 cursor-pointer text-neutral-500 border-b border-neutral-100" data-value="" data-contacts="0">
+                                        -- Select Contact List --
+                                    </div>
+                                    {% for list in contact_lists %}
+                                    <div class="dropdown-option px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center gap-2 border-b border-neutral-100 transition-colors" 
+                                         data-value="{{ list.id }}" data-contacts="{{ list.total_contacts }}"
+                                         {% if selected_contact_list_id == list.id %}data-selected="true"{% endif %}>
+                                        <span class="text-base">📋</span>
+                                        <span class="text-neutral-700 font-medium">{{ list.name }}</span>
+                                        <span class="text-neutral-400 text-sm">({{ list.total_contacts }} contacts)</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
-                            <a href="{% url 'whatsappapi:contacts' %}" class="text-xs text-blue-600 hover:underline flex items-center">
-                                <i class="ri-add-line mr-1"></i>Import New Contact List
-                            </a>
+                            <div class="flex items-center gap-3">
+                                <a href="{% url 'whatsappapi:contacts' %}" class="text-xs text-blue-600 hover:underline flex items-center font-medium">
+                                    <i class="ri-add-line mr-1"></i>Import New Contact List
+                                </a>
+                                <button type="button" onclick="refreshContactLists()" class="text-xs text-neutral-500 hover:text-blue-600 flex items-center transition-colors" title="Refresh contact lists">
+                                    <i class="ri-refresh-line mr-1" id="refreshIcon"></i>Refresh
+                                </button>
+                            </div>
                             <div id="selectedContacts" class="px-3 py-1.5 bg-blue-100 rounded-lg">
                                 <span class="text-xs font-bold text-blue-700">0 contacts selected</span>
                             </div>
@@ -1089,6 +1119,35 @@
 </div>
 
 <style>
+/* Custom scrollbar for contact list dropdown */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+/* Firefox scrollbar */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+/* Dropdown option selected state */
+.dropdown-option.selected {
+    background-color: #dbeafe;
+}
+.dropdown-option:hover {
+    background-color: #eff6ff;
+}
+
 /* Spinner animation for loading modal */
 @keyframes spin {
     from { transform: rotate(0deg); }
@@ -1406,7 +1465,100 @@ document.getElementById('message').addEventListener('input', function() {
     }
 });
 
-// Contact list selection
+// Custom dropdown functionality
+let dropdownOpen = false;
+
+function toggleContactDropdown() {
+    const dropdown = document.getElementById('contactDropdownList');
+    const arrow = document.getElementById('dropdownArrow');
+    dropdownOpen = !dropdownOpen;
+    
+    if (dropdownOpen) {
+        dropdown.classList.remove('hidden');
+        arrow.style.transform = 'rotate(180deg)';
+    } else {
+        dropdown.classList.add('hidden');
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+function selectContactList(value, text, contacts) {
+    const select = document.getElementById('contactList');
+    const buttonText = document.getElementById('dropdownButtonText');
+    
+    // Update hidden select
+    select.value = value;
+    
+    // Update button text
+    if (value) {
+        buttonText.innerHTML = `<span class="text-lg mr-2">📋</span><span class="text-neutral-700">${text}</span>`;
+        buttonText.classList.remove('text-neutral-500');
+    } else {
+        buttonText.textContent = '-- Select Contact List --';
+        buttonText.classList.add('text-neutral-500');
+    }
+    
+    // Update selected state in dropdown
+    document.querySelectorAll('.dropdown-option').forEach(opt => {
+        opt.classList.remove('selected', 'bg-blue-50');
+        if (opt.dataset.value === value) {
+            opt.classList.add('selected', 'bg-blue-50');
+        }
+    });
+    
+    // Update contacts display
+    document.getElementById('selectedContacts').innerHTML = 
+        `<span class="text-xs font-bold text-blue-700">${contacts} contacts selected</span>`;
+    document.getElementById('statsRecipients').textContent = contacts;
+    
+    // Close dropdown
+    toggleContactDropdown();
+    
+    // Trigger change event for other listeners
+    select.dispatchEvent(new Event('change'));
+}
+
+// Initialize dropdown options click handlers
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.dropdown-option').forEach(option => {
+        option.addEventListener('click', function() {
+            const value = this.dataset.value;
+            const contacts = this.dataset.contacts || 0;
+            // Get text without emoji
+            const textSpan = this.querySelector('span.text-neutral-700');
+            const text = textSpan ? textSpan.textContent : this.textContent.trim();
+            selectContactList(value, text, contacts);
+        });
+    });
+    
+    // Set initial selected value if any
+    const select = document.getElementById('contactList');
+    if (select.value) {
+        const selectedOption = document.querySelector(`.dropdown-option[data-value="${select.value}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('selected', 'bg-blue-50');
+            const textSpan = selectedOption.querySelector('span.text-neutral-700');
+            const text = textSpan ? textSpan.textContent : '';
+            const buttonText = document.getElementById('dropdownButtonText');
+            buttonText.innerHTML = `<span class="text-lg mr-2">📋</span><span class="text-neutral-700">${text}</span>`;
+            buttonText.classList.remove('text-neutral-500');
+            
+            const contacts = selectedOption.dataset.contacts || 0;
+            document.getElementById('selectedContacts').innerHTML = 
+                `<span class="text-xs font-bold text-blue-700">${contacts} contacts selected</span>`;
+        }
+    }
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const container = document.getElementById('customDropdownContainer');
+    if (container && !container.contains(e.target) && dropdownOpen) {
+        toggleContactDropdown();
+    }
+});
+
+// Contact list selection (for hidden select changes)
 document.getElementById('contactList').addEventListener('change', function() {
     const option = this.options[this.selectedIndex];
     const contacts = option.dataset.contacts || 0;
@@ -1414,6 +1566,76 @@ document.getElementById('contactList').addEventListener('change', function() {
         `<span class="text-xs font-bold text-blue-700">${contacts} contacts selected</span>`;
     document.getElementById('statsRecipients').textContent = contacts;
 });
+
+// Refresh contact lists from server
+async function refreshContactLists() {
+    const refreshIcon = document.getElementById('refreshIcon');
+    const select = document.getElementById('contactList');
+    const dropdownList = document.getElementById('contactDropdownList').querySelector('.max-h-56');
+    const currentValue = select.value;
+    
+    // Add spinning animation
+    refreshIcon.classList.add('animate-spin');
+    
+    try {
+        const response = await fetch('{% url "whatsappapi:api_contact_lists" %}');
+        const data = await response.json();
+        
+        if (data.success && data.lists) {
+            // Clear existing options except the first one
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+            
+            // Clear dropdown options except first
+            const firstOption = dropdownList.querySelector('.dropdown-option');
+            dropdownList.innerHTML = '';
+            dropdownList.appendChild(firstOption);
+            
+            // Add new options
+            data.lists.forEach(list => {
+                // Add to hidden select
+                const option = document.createElement('option');
+                option.value = list.id;
+                option.dataset.contacts = list.total_contacts;
+                option.textContent = `${list.name} (${list.total_contacts} contacts)`;
+                if (list.id == currentValue) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+                
+                // Add to custom dropdown
+                const div = document.createElement('div');
+                div.className = 'dropdown-option px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center gap-2 border-b border-neutral-50 last:border-0';
+                div.dataset.value = list.id;
+                div.dataset.contacts = list.total_contacts;
+                if (list.id == currentValue) {
+                    div.classList.add('selected', 'bg-blue-50');
+                }
+                div.innerHTML = `
+                    <span class="text-lg">📋</span>
+                    <span class="text-neutral-700">${list.name}</span>
+                    <span class="text-neutral-400 text-sm">(${list.total_contacts} contacts)</span>
+                `;
+                div.addEventListener('click', function() {
+                    selectContactList(list.id.toString(), list.name, list.total_contacts);
+                });
+                dropdownList.appendChild(div);
+            });
+            
+            // Update selected contacts display
+            const selectedOption = select.options[select.selectedIndex];
+            const contacts = selectedOption?.dataset?.contacts || 0;
+            document.getElementById('selectedContacts').innerHTML = 
+                `<span class="text-xs font-bold text-blue-700">${contacts} contacts selected</span>`;
+        }
+    } catch (error) {
+        console.error('Failed to refresh contact lists:', error);
+    } finally {
+        // Remove spinning animation
+        refreshIcon.classList.remove('animate-spin');
+    }
+}
 
 // File upload handling
 function handleFileSelect(input) {

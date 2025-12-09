@@ -2368,6 +2368,36 @@ def delete_contact_list(request, list_id):
 
 
 @login_required
+def api_contact_lists(request):
+    """
+    AJAX endpoint to get all contact lists for current user
+    Used for refreshing the contact list dropdown
+    """
+    from django.http import JsonResponse
+    from .models import ContactList
+    
+    try:
+        contact_lists = ContactList.objects.filter(user=request.user).order_by('-created_at')
+        
+        lists_data = [
+            {
+                'id': cl.id,
+                'name': cl.name,
+                'total_contacts': cl.total_contacts,
+            }
+            for cl in contact_lists
+        ]
+        
+        return JsonResponse({
+            'success': True,
+            'lists': lists_data
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+
+@login_required
 def get_contact_list_fields(request, list_id):
     """
     AJAX endpoint to get available fields from a contact list

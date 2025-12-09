@@ -36,6 +36,7 @@ urlpatterns = [
     
     # API Endpoints
     path('api/contact-list-fields/<int:list_id>/', views.get_contact_list_fields, name='get_contact_list_fields'),
+    path('api/contact-lists/', views.api_contact_lists, name='api_contact_lists'),
     path('api/check-moderation/', views.check_moderation, name='check_moderation'),
     
     # Session Management  

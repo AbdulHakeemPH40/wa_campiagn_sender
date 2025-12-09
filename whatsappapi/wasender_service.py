@@ -2272,11 +2272,12 @@ class WASenderService:
         - STOP, stop, Stop
         - UNSUBSCRIBE, unsubscribe, Unsubscribe
         - OPT-OUT, opt-out, optout, OPTOUT, Opt-Out
-        - NO, no, No (only if it's the entire message)
-        - REMOVE, remove, Remove
-        - CANCEL, cancel, Cancel
         - END, end, End
         - QUIT, quit, Quit
+        - NOT INTERESTED, not interested, Not Interested
+        
+        Removed (too common in normal conversation):
+        - NO, CANCEL, REMOVE (these cause false positives)
         """
         if not message_text:
             return None
@@ -2286,27 +2287,41 @@ class WASenderService:
         text_lower = text.lower()
         
         # Exact match keywords (message is just the keyword)
-        # Note: "NO" removed - too common in normal conversation
-        exact_keywords = ['stop', 'unsubscribe', 'remove', 'cancel', 'end', 'quit']
+        # Removed: 'no', 'cancel', 'remove' - too common in normal conversation
+        exact_keywords = ['stop', 'unsubscribe', 'end', 'quit']
         if text_lower in exact_keywords:
             return text_lower.upper()
         
+        # Check for "not interested" as exact or near-exact match
+        # Handles: "not interested", "Not Interested", "NOT INTERESTED", "not intrested" (typo)
+        import re
+        
+        # "Not interested" variations (with common typos)
+        not_interested_patterns = [
+            r'^not\s+interested\.?$',      # Exact: "not interested" or "not interested."
+            r'^not\s+intrested\.?$',       # Typo: "not intrested"
+            r'^not\s+intersted\.?$',       # Typo: "not intersted"
+            r'^im\s+not\s+interested\.?$', # "im not interested"
+            r"^i'?m\s+not\s+interested\.?$", # "i'm not interested"
+            r'^no\s+interest\.?$',         # "no interest"
+        ]
+        
+        for pattern in not_interested_patterns:
+            if re.match(pattern, text_lower):
+                return 'NOT_INTERESTED'
+        
         # Partial match keywords (keyword appears in message)
         # These are checked with word boundaries to avoid false positives
-        import re
         partial_keywords = [
             r'\bstop\b',
             r'\bunsubscribe\b',
             r'\bopt[-\s]?out\b',
-            r'\bremove\s*me\b',
-            r'\bcancel\b',
-            r'\bno\s+more\b',
-            r'\bno\s+thanks\b',
-            r'\bnot\s+interested\b',
-            r'\bno\s+send\b',        # "no send"
-            r'\bno\s+sent\b',        # "no sent"
-            r'\bdont\s+send\b',      # "dont send"
-            r"\bdon'?t\s+send\b",    # "don't send"
+            r'\bno\s+more\s+messages?\b',  # "no more messages"
+            r'\bstop\s+sending\b',         # "stop sending"
+            r'\bdont\s+send\b',            # "dont send"
+            r"\bdon'?t\s+send\b",          # "don't send"
+            r'\bplease\s+stop\b',          # "please stop"
+            r'\bstop\s+please\b',          # "stop please"
         ]
         
         for pattern in partial_keywords:
