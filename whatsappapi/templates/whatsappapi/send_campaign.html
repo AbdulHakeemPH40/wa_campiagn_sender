@@ -1305,14 +1305,22 @@
 
 let deleteDraftId = null;
 
+// Decode JavaScript escape sequences from data attributes
+function decodeJsEscapes(str) {
+    if (!str) return '';
+    return str.replace(/\\u([0-9A-Fa-f]{4})/g, (match, hex) => {
+        return String.fromCharCode(parseInt(hex, 16));
+    }).replace(/\\r\\n|\\n|\\r/g, '\n');
+}
+
 // Auto-load draft if selected (using data attributes)
 window.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('campaignForm');
     
     // Check if draft data exists in form attributes
     if (form.dataset.draftName) {
-        document.getElementById('campaignName').value = form.dataset.draftName;
-        document.getElementById('message').value = form.dataset.draftMessage || '';
+        document.getElementById('campaignName').value = decodeJsEscapes(form.dataset.draftName);
+        document.getElementById('message').value = decodeJsEscapes(form.dataset.draftMessage) || '';
         
         if (form.dataset.draftContactList) {
             document.getElementById('contactList').value = form.dataset.draftContactList;
